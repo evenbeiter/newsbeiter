@@ -65,7 +65,7 @@ openMediaList();
   
 function openMediaList(){
   tabs=allSites;
-  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">媒體總覽</button><br>`;
+  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">媒體總覽</button><hr>`;
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}')">${tab[1]}</button>`;
   }
@@ -80,7 +80,7 @@ function openOptions(){
 }
 
 function createBtnGroup(site,siteName){
-  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">媒體總覽</button><br>`;
+  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">媒體總覽</button><hr>`;
   for (let tab of site){
     if(Array.isArray(tab[0])){
     var ti=tab[0].join('\',\'')}else{var ti=tab[0]};
