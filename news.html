@@ -55,7 +55,7 @@ var list=document.getElementById('list');
 const proxyUrl = 'https://newsbeiter.onrender.com/api/fetch?url=';
   
 const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊']];
-const videoSites=[['cnbcVideo','CNBC'],['yahooVideo','Yahoo Video']];
+const videoSites=[['cnbcVideo','CNBC'],['yahooVideo','Yahoo Video'],['msnVideo','MSN Video'],['wsjVideo','WSJ']];
 const searchSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']];
   
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],
@@ -750,6 +750,138 @@ async function yahooVideoGetContent(clickedId,id,url){
   }
 }
 
+async function msnVideoGet1stList(){
+rr=0;
+msnVideoGetList(t);
+}
+
+async function msnVideoGetList(){
+siteName='msnVideo';
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+var url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query=WATCH&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
+let res=await fetch(url);
+let str=await res.json();
+for (let h of str.value[0].subCards){
+  items.push([h.sourceId,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url]);
+}
+items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
+
+var html='';
+for (let h of items){
+  html+=`<div onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src='${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function getContent(clickedId,id,url,m3u8Url){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    var nuxtDataItem = '<video id="video-'+id+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
+    cEl.innerHTML=nuxtDataItem;
+
+    const video = document.getElementById('video-'+id);
+
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = m3u8Url;
+        video.play();
+    } else if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(m3u8Url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play();
+        });
+    } else {
+        console.error("HLS is not supported in this browser.");
+    }
+
+    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
+      cEl.style.display='none';
+      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+}
+
+async function wsjVideoGet1stList(t){
+rr=0;
+wsjVideoGetList(t);
+}
+
+async function wsjVideoGetList(t){
+siteName='wsjVideo';
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+var url='https://video-api.shdsvc.dowjones.io/api/legacy/find-all-videos?lang=en-us&count=50'+t+'&page='+(rr-1);
+let res=await fetch(url);
+let str=await res.json();
+for (let h of str.items){
+  var thumbnail=h.thumbnailList[0].url;
+  items.push([h.id.replace('{','').replace('}',''),h.name,h.formattedCreationDate,h.duration,thumbnail.slice(0,thumbnail.indexOf('?')),h.linkURL,h.hls])
+}
+items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
+
+var html='';
+for (let h of items){
+  html+=`<div onclick="wsjVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="wsjVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function getContent(clickedId,id,url,hls){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    var nuxtDataItem = '<video id="video-'+id+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
+    cEl.innerHTML=nuxtDataItem;
+
+    const video = document.getElementById('video-'+id);
+    const m3u8Url = hls;
+
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = m3u8Url;
+        video.play();
+    } else if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(m3u8Url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play();
+        });
+    } else {
+        console.error("HLS is not supported in this browser.");
+    }
+
+    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
+      cEl.style.display='none';
+      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+}
+  
 function cvtS2MMSS(s) {
     s = Math.max(0, Math.floor(s));
     const minutes = Math.floor(s / 60);
