@@ -326,6 +326,65 @@ if (rr==1){
     }
   }
 
+const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
+
+async function cteeGet1stList(t){
+rr=0;
+cteeGetList(t);
+}
+
+async function cteeGetList(t){
+siteName='ctee';
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+var url=proxyUrl+'https://www.ctee.com.tw/api/'+t+rr;console.log(url);
+let res=await fetch(url);
+let str=await res.json();
+for (let h of str){
+  items.push([h.hyperLink,h.title])
+}
+var html='';
+for (let h of items){
+  html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function cteeGetContent(clickedId,id){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    const res = await fetch(proxyUrl+'https://www.ctee.com.tw'+id);
+    const str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    const t=doc.querySelector('.news-credit');
+    const a = doc.querySelector('article');
+
+    if (a) {
+      var nuxtDataItem = '<p class="fs10">'+t.innerText+'</p>'+a.outerHTML + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
+      cEl.innerHTML=nuxtDataItem;
+      var ads=cEl.querySelectorAll('.ad');
+      for (let ad of ads){ad.remove()};
+      cEl.style.display='block';
+    }
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+}
+
+
+  
 function cvtTime(unixTimestamp) {
   const date = new Date(unixTimestamp);
   const year = date.getFullYear();
