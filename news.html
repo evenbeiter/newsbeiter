@@ -355,7 +355,7 @@ for (let h of str){
 }
 var html='';
 for (let h of items){
-  html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"></div><hr>`
+  html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h.publishDatetime)}</p></div><hr>`
 }
 document.getElementById('list').innerHTML+=html;
 }
@@ -364,18 +364,16 @@ async function cteeGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch('https://www.ctee.com.tw'+id);
-    const str=await res.text();
+    const res = await fetch('https://www.ctee.com.tw/api'+id);
+    const str=await res.json();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
     const t=doc.querySelector('.news-credit');
     const a = doc.querySelector('article');
 
     if (a) {
-      var nuxtDataItem = '<p class="fs10">'+t.innerText+'</p>'+a.outerHTML + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
-      cEl.innerHTML=nuxtDataItem;
-      var ads=cEl.querySelectorAll('.ad');
-      for (let ad of ads){ad.remove()};
+      var nuxtDataItem = '<p class="fs10">'+t.innerText+'</p>'+str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
+      cEl.innerHTML+=nuxtDataItem;
       cEl.style.display='block';
     }
   } else {
