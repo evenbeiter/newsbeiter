@@ -713,7 +713,7 @@ var payload={
     "snippetCount": 50
   }
 };
-var url=proxyUrl+'https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
+var url='https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
 var res = await fetch(url, {
   method: 'POST',
   headers: {'Content-Type': 'text/plain;charset=UTF-8',},
@@ -737,7 +737,7 @@ async function yahooVideoGetContent(clickedId,id,url){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    var nuxtDataItem = '<iframe id="video-'+id+'" src="'+proxyUrl+url+'?format=embed" style="width:100%;height:auto"></iframe>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
+    var nuxtDataItem = '<iframe id="video-'+id+'" src="'+url+'?format=embed" style="width:100%;height:auto"></iframe>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
     cEl.innerHTML=nuxtDataItem;
 
     document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
