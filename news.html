@@ -430,8 +430,10 @@ async function cteeGetContent(clickedId,id){
     cEl.style.display='block';
     const res = await fetch('https://www.ctee.com.tw/api'+id);
     const str=await res.json();
-    var nuxtDataItem = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
-    cEl.innerHTML+=nuxtDataItem;
+    if (cEl.innerText.length<30){
+      var nuxtDataItem = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
+      cEl.innerHTML+=nuxtDataItem;
+    }
     cEl.style.display='block';
   } else {
     if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
