@@ -75,8 +75,8 @@ function openMediaList(){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}')">${tab[1]}</button>`;
   }
   tabs=videoSites;
+  btn.innerHTML+='<hr>';
   for (let tab of tabs){
-    btn.innerHTML+='<hr>';
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}GetList('')">${tab[1]}</button>`;
   }
   options.style.display='block';
