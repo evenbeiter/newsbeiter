@@ -434,6 +434,7 @@ async function cteeGetContent(clickedId,id){
     if (cEl.innerText.length<30){
       var nuxtDataItem = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
       cEl.innerHTML+=nuxtDataItem;
+      cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
     }
     cEl.style.display='block';
   } else {
