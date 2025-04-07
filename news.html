@@ -26,6 +26,7 @@ img{display:block !important;margin:auto;width:100%;height:auto}
 </style>
 </head>
 <body>
+
 <div style="max-width:600px;margin:auto">
 <button type="button" class="sticky-top m-2 btn btn-light position-fixed top-0 end-0 sepia-contrast opacity-25" style="z-index:1030" onclick="openOptions()">
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
@@ -38,11 +39,14 @@ img{display:block !important;margin:auto;width:100%;height:auto}
 <div id="list" class="mx-3 pt-3"></div>
 </div>
 
-<script>
+<script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
+<script>
 var tabs=[];
 var siteName='';
 var t='';
+var uuids='';
 var rt=[];
 var rr=0;
 var options=document.getElementById('btn-group');
@@ -51,7 +55,8 @@ var list=document.getElementById('list');
 const proxyUrl = 'https://newsbeiter.onrender.com/api/fetch?url=';
   
 const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊']];
-const searchSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊']];
+const vedioSites=[['cnbcVideo','CNBC'],['yahooVideo','Yahoo Video']];
+const searchSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']];
   
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],
 [['102394','103101'],'經濟工商'],[['103214','100267'],'M平方'],['100295','今周刊'],['101131','CMoney'],[['100422','100421','100423'],'商周'],['101170','路透社'],[['104453','101006'],'財訊'],[['100150','103088'],'鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],[['100004','101886'],'風傳媒'],[['100275','101201'],'關鍵評論網'],['global','國際'],['100003','中央社'],[['TOPIC-USelection','2024election'],'川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],[['100568','100158'],'天下雜誌'],['101031','地球圖輯隊'],[['101934','100394'],'閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
@@ -69,7 +74,10 @@ function openMediaList(){
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}')">${tab[1]}</button>`;
   }
-
+  tabs=videoSites;
+  for (let tab of tabs){
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}')">${tab[1]}</button>`;
+  }
   options.style.display='block';
 }
 
@@ -566,6 +574,185 @@ for (let h of hh){
     html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
   }
     document.getElementById('list').innerHTML+=html;
+}
+
+async function cnbcVideoGetList(t){
+var t='100004038';
+siteName='cnbcVideo';
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+var url='https://webql-redesign.cnbcfm.com/graphql?operationName=getAssetList&variables={"id":"'+t+'","offset":'+(rr-1)*30+',"pageSize":30,"nonFilter":false,"includeNative":true,"include":[]}&extensions={"persistedQuery":{"version":1,"sha256Hash":"43ed5bcff58371b2637d1f860e593e2b56295195169a5e46209ba0abb85288b7"}}';console.log(url);
+
+let res=await fetch(url);
+let str=await res.json();
+for (let h of str.data.assetList.assets){
+  items.push([h.url,h.title,h.datePublished,h.duration,h.promoImage.url])
+}
+var html='';
+for (let h of items){
+  html+=`<div onclick="cnbcVideoGetContent(this.id,'${h[0]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2MMSS(h[3])}</span></div><div id="${h[0]}" class="content" onclick="cnbcVideoGetContent(this.id,'${h[0]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function cnbcVideoGetContent(clickedId,id){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    const res = await fetch(proxyUrl+id);
+    const str=await res.text();
+    var videoSrc=str.match(/"playbackURL":"[\s\S]*?.m3u8/g)[0].replace('"playbackURL":"','');
+    var m3u8Url='https:'+JSON.parse(`"${videoSrc}"`);console.log(m3u8Url);
+    var des=str.match(/"description":"[\s\S]*?"/g)[0].replace('"description":"','');
+    
+    videoSrc=str.match(/"playbackURL":"[\s\S]*?.m3u8/g)[0].replace('"playbackURL":"','');
+    var nuxtDataItem = '<video id="video-'+id+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'+'<p class="text-end"><a href="' + id + '" target="_blank">Share</a></p><br>';
+    cEl.innerHTML=nuxtDataItem;
+    cEl.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
+    var video=document.getElementById('video-'+id); 
+      
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = m3u8Url;
+          video.play();
+    } else if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(m3u8Url);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play();
+      });
+    }      
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
+      cEl.style.display='none';
+      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+}
+
+async function cnbcVideoGet1stSearchResults(){
+rr=0;
+cnbcVideoGetSearchResults();
+}
+
+async function cnbcVideoGetSearchResults(){
+  siteName='cnbcVideo';
+  rt='s';
+  rr++;
+  var items=[];
+  if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+  t=document.getElementById('search-term').value;
+}
+  var html = '';
+  var url='';
+
+  url='https://api.queryly.com/cnbc/json.aspx?queryly_key=31a35d40a9a64ab3&callback=&showfaceted=false&timezoneoffset=-480&facetedfields=formats&facetedkey=formats|&facetedvalue=Video|&needtoptickers=0&additionalindexes=4cd6f71fbf22424d,937d600b0d0d4e23,3bfbe40caee7443e,626fdfcd96444f28&query='+'100004038'+'&endindex='+(rr-1)*30+'&batchsize=30&sort=';
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str.results){
+    items.push([h.url,h['cn:title'],h._pubDate,h.duration,h['cn:promoImage']])
+  }
+  var html='';
+  for (let h of items){
+    html+=`<div onclick="cnbcVideoGetContent(this.id,'${h[0]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[2]} | </span><span class="fs10 fw-bold">${cvtS2MMSS(h[3])}</span></div><div id="${h[0]}" class="content" onclick="cnbcVideoGetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  document.getElementById('list').innerHTML+=html;
+}
+
+async function yahooVideoGet1stList(t){
+var t='00390a14-17cc-49d2-9e32-79365335f0ca';
+rr=0;
+uuids='';
+yahooVideoGetList(t);
+}
+
+async function yahooVideoGetList(t){
+siteName='yahooVideo';
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+  uuids='paginationString={}';
+}
+
+var payload={
+  "payload":{
+    "gqlVariables": {
+        "main": {
+            "pagination": {
+                "uuids": uuids
+            }
+        }
+    }
+},
+  "serviceConfig": {
+    "listId": t,
+    "count": 200,
+    "snippetCount": 50
+  }
+};
+var url=proxyUrl+'https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
+var res = await fetch(url, {
+  method: 'POST',
+  headers: {'Content-Type': 'text/plain;charset=UTF-8',},
+  body: JSON.stringify(payload),
+  });
+var str=await res.json();
+uuids=str.data.main.pagination.uudis;
+
+for (let h of str.data.main.stream){
+  items.push([h.id,h.content.title,h.content.pubDate,h.content.duration,h.content.thumbnail.originalUrl,h.content.canonicalUrl.url])
+}
+
+var html='';
+for (let h of items){
+  html+=`<div onclick="yahooVideoGetContent(this.id,'${h[0]}','${h[5]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="yahooVideoGetContent(this.id,'${h[0]}','\${h[5]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function yahooVideoGetContent(clickedId,id,url){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    var nuxtDataItem = '<iframe id="video-'+id+'" src="'+proxyUrl+url+'?format=embed" style="width:100%;height:auto"></iframe>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
+    cEl.innerHTML=nuxtDataItem;
+
+    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
+      cEl.style.display='none';
+      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+}
+
+function cvtS2MMSS(s) {
+    s = Math.max(0, Math.floor(s));
+    const minutes = Math.floor(s / 60);
+    const remainingSeconds = s % 60;
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(remainingSeconds).padStart(2, '0');
+    return mm+':'+ss;
 }
   
 function cvtTime(unixTimestamp) {
