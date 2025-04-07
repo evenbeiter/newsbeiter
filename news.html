@@ -53,7 +53,7 @@ var btn=document.getElementById('btn');
 var list=document.getElementById('list');
 const proxyUrl = 'https://newsbeiter.onrender.com/api/fetch?url=';
   
-const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商']];
+const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊']];
   
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],
 [['102394','103101'],'經濟工商'],[['103214','100267'],'M平方'],['100295','今周刊'],['101131','CMoney'],[['100422','100421','100423'],'商周'],['101170','路透社'],[['104453','101006'],'財訊'],[['100150','103088'],'鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],[['100004','101886'],'風傳媒'],[['100275','101201'],'關鍵評論網'],['global','國際'],['100003','中央社'],[['TOPIC-USelection','2024election'],'川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],[['100568','100158'],'天下雜誌'],['101031','地球圖輯隊'],[['101934','100394'],'閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
@@ -383,7 +383,68 @@ async function cteeGetContent(clickedId,id){
   }
 }
 
+var businessToday=[['news/','最新'],['catalog/183007/list/page/','投資理財'],['catalog/183020/list/page/','保險稅制'],['catalog/183014/list/page/','產業時事'],['catalog/183028/list/page/','職場生活']];
 
+async function businessTodayGet1stList(t){
+rr=0;
+businessTodayGetList(t);
+}
+
+async function businessTodayGetList(t){
+siteName='businessToday';
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+
+var url=proxyUrl+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
+var res = await fetch(url);
+var str=await res.text();
+var parser = new DOMParser();
+var doc = parser.parseFromString(str, "text/html");
+var hh=doc.querySelectorAll('a.article__item');
+for (let h of hh){
+  items.push([h.href,h.children[1].children[1].innerText])
+}
+var html='';
+for (let h of items){
+  html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function getContent(clickedId,id){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    const res = await fetch(proxyUrl+id);
+    const str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    const img=doc.querySelector('.article__mainbanner');
+    const t=doc.querySelector('.context__info-item--date');
+    const au=doc.querySelector('.context__info-item--author');
+    const a = doc.querySelector('.Zi_ad_ar_iR');
+
+    if (a) {
+      var nuxtDataItem = '<p class="fs10">'+t.innerText+' | '+au.innerText+'</p>'+a.outerHTML.replaceAll('<p>&nbsp;</p>','') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+      cEl.innerHTML=nuxtDataItem;
+      var ads=cEl.querySelectorAll('iframe');
+      for (let ad of ads){ad.remove()};
+      cEl.style.display='block';
+    }
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+}
   
 function cvtTime(unixTimestamp) {
   const date = new Date(unixTimestamp);
