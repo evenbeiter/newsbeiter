@@ -62,7 +62,7 @@ var btn=document.getElementById('btn');
 var list=document.getElementById('list');
 const proxyUrl = 'https://newsbeiter.onrender.com/api/fetch?url=';
   
-const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊']];
+const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['businessWeekly','商業周刊']];
 const videoSites=[['cnbcVideo','CNBC'],['yahooVideo','Yahoo Video'],['msnVideo','MSN Video'],['wsjVideo','WSJ']];
 const searchSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']];
   
@@ -77,6 +77,8 @@ const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['categor
 
 const businessToday=[['news/','最新'],['catalog/183007/list/page/','投資理財'],['catalog/183020/list/page/','保險稅制'],['catalog/183014/list/page/','產業時事'],['catalog/183028/list/page/','職場生活']];
 
+const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['0000000319','財經'],['0000000326','管理'],['0000000312','焦點'],['0000000342','CEO學院']];
+  
 //    LANDING PAGE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -613,6 +615,87 @@ for (let h of hh){
 }
 
 
+//    BUSINESS WEEKLY
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function businessWeeklyGet1stList(t){
+rr=0;
+businessWeeklyGetList(t);
+}
+
+async function businessWeeklyGetList(t){
+siteName='businessWeekly';
+rr++;
+rt=t;
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+
+var items = [];
+if (t=='0000000000'){
+  var res = await fetch(proxyUrl+'https://www.businessweekly.com.tw/latest/SearchList', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
+    body: 'CurPage='+20*(rr-1),
+    });
+  
+  var str=await res.json();
+  str=str.Content;
+
+} else {
+
+var res = await fetch(proxyUrl+'https://www.businessweekly.com.tw/ChannelAction/LoadBlock/', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
+  body: 'Start='+(50*rr-1)+'&End='+50*(rr)+'&ID='+t,
+  });
+
+var str=await res.text();
+}
+var parser = new DOMParser();
+var doc = parser.parseFromString(str, "text/html");
+var titles=doc.querySelectorAll('.Article-content a');
+for (let tl of titles){
+  items.push([tl.href,tl.textContent.replace('                    ','')]);
+}
+
+var html='';
+for (let h of items){
+  html+=`<p class="title" onclick="businessWeeklyGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessWeeklyGetContent(this.id,'${h[0]}')"></div><hr>`
+}
+console.log(items);
+document.getElementById('list').innerHTML+=html;
+}
+
+async function businessWeeklyGetContent(clickedId,id){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    const res = await fetch(proxyUrl+id);
+    const str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    const p=doc.querySelectorAll('.Border-right')[1] ?? '';
+    const t=doc.querySelector('#AppGetDate') ?? '';
+    const s=doc.querySelector('.Single-summary') ?? '';  
+    const a=doc.querySelector('.Single-article') ?? '';
+    a.querySelectorAll('.Google-special').forEach(e => e.remove());
+    if (a) {
+        var nuxtDataItem = '<p class="fs10">'+(p.textContent ?? '')+' '+(t.textContent ?? '')+'</p>'+(s.outerHTML ?? '')+(a.outerHTML ?? '')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+        cEl.innerHTML=nuxtDataItem;
+        cEl.style.display='block';
+    }
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+}
+  
+  
 //    CNBC VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
