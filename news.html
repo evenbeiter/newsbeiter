@@ -63,7 +63,7 @@ var list=document.getElementById('list');
 const proxyUrl = 'https://newsbeiter.onrender.com/api/fetch?url=';
   
 const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['businessWeekly','商業周刊']];
-const videoSites=[['cnbcVideo','CNBC'],['yahooVideo','Yahoo Video'],['msnVideo','MSN Video'],['wsjVideo','WSJ']];
+const videoSites=[['msnCnbcVideo','CNBC'],['yahooVideo','Yahoo Video'],['msnVideo','MSN Video'],['wsjVideo','WSJ']];
 const searchSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']];
   
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],
@@ -696,6 +696,79 @@ async function businessWeeklyGetContent(clickedId,id){
 }
   
   
+//    CNBC VIDEO FROM MSN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+async function msnCnbcVideoGet1stList(){
+rr=0;
+msnCnbcVideoGetList(t);
+}
+
+async function msnCnbcVideoGetList(){
+siteName='msnCnbcVideo';
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+for (var i=0;i<2;k++){
+  var url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId=vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str.sections[0].cards){
+    if(h.type=='video'){
+      items.push([h.id,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url]);
+    }
+  }
+}
+items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
+
+var html='';
+for (let h of items){
+  html+=`<div onclick="msnCnbcVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="msnCnbcVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function msnCnbcVideoGetContent(clickedId,id,url,m3u8Url){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    var nuxtDataItem = '<video id="video-'+id+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
+    cEl.innerHTML=nuxtDataItem;
+
+    const video = document.getElementById('video-'+id);
+
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = m3u8Url;
+        video.play();
+    } else if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(m3u8Url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play();
+        });
+    } else {
+        console.error("HLS is not supported in this browser.");
+    }
+
+    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
+      cEl.style.display='none';
+      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+}
+  
+
 //    CNBC VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
