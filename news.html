@@ -28,11 +28,19 @@ img{display:block !important;margin:auto;width:100%;height:auto}
 <body>
 
 <div style="max-width:600px;margin:auto">
-<button type="button" class="sticky-top m-2 btn btn-light position-fixed top-0 end-0 sepia-contrast opacity-25" style="z-index:1030" onclick="openOptions()">
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-  </svg>
+<div class="sticky-top position-fixed m-2 top-0 end-0">
+  <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" style="z-index:1030" onclick="openOptions()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"></path>
+    </svg>
+  </button>
+  <br>
+  <button type="button" class="btn btn-light mt-1 sepia-contrast opacity-25" style="z-index:1030" onclick="pingServer()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+      <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
+    </svg>
 </button>
+</div>
   <form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
     <div id="btn"></div>
   </form>
@@ -96,6 +104,10 @@ function openOptions(){
     if (options.style.display=='none'){
     options.style.display='block';
   }else{options.style.display='none'}
+}
+
+function pingServer(){
+  var res=await fetch('https://newsbeiter.onrender.com/api/fetch?url=https://date.nager.at/api/v3/publicholidays/2025/US');
 }
 
 function createBtnGroup(site,siteName){
@@ -881,7 +893,21 @@ async function getContent(clickedId,id,url,hls){
     }
   }
 }
-  
+
+function cvtS2HHMMSS(sec,rescale) {
+    s = Math.max(0, Math.floor(sec/rescale));
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    const remainingSeconds = s % 60;
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(remainingSeconds).padStart(2, '0');
+    if (hours > 0) {
+        const hh = String(hours).padStart(2, '0');
+        return hh+':'+mm+':'+ss;
+    }
+    return mm+':'+ss;
+}
+
 function cvtS2MMSS(s) {
     s = Math.max(0, Math.floor(s));
     const minutes = Math.floor(s / 60);
