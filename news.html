@@ -82,7 +82,8 @@ const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['00000003
   
 //    LANDING PAGE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
+
+pingServer();
 openMediaList();
 
 function showTop(t){
@@ -138,7 +139,7 @@ function createBtnGroup(site,siteName){
     var ti=tab[0].join('\',\'')}else{var ti=tab[0]};
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList(['${ti}'])">${tab[1]}</button>`;
   }
-  window[`${siteName}Get1stList`](['${ti}']);
+  window[`${siteName}Get1stList`](['`${ti}`']);
 }
 
 
