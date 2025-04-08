@@ -41,6 +41,7 @@ img{display:block !important;margin:auto;width:100%;height:auto}
     </svg>
 </button>
 </div>
+<div id="top" class="fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:none"></div>
   <form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
     <div id="btn"></div>
   </form>
@@ -83,6 +84,11 @@ const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['00000003
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 openMediaList();
+
+function showTop(t){
+  document.getElementById('top').innerText=t;
+  document.getElementById('top').style.display='block';
+}
   
 function openMediaList(){
   btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">新聞</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
@@ -99,6 +105,7 @@ function openMediaList(){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="msnVideoGet1stList('${tab[0]}')">${tab[1]}</button>`;
   }
   options.style.display='block';
+  document.getElementById('top').style.display='none';
 }
 
 function openSearchList(){
@@ -108,12 +115,14 @@ function openSearchList(){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stSearchResults()">${tab[1]}</button>`;
   }
   options.style.display='block';
+  document.getElementById('top').style.display='none';
 }
   
 function openOptions(){
   var options=document.getElementById('btn-group');
     if (options.style.display=='none'){
     options.style.display='block';
+    document.getElementById('top').style.display='none';
   }else{options.style.display='none'}
 }
 
@@ -137,6 +146,7 @@ function createBtnGroup(site,siteName){
 async function lineTodayGet1stList(tt){
 rr=0;
 lineTodayGetList(tt);
+showTop('LINE TODAY');
 }
 
 async function lineTodayGetList(tt){
@@ -245,6 +255,7 @@ document.getElementById('search-term').value='';
 async function yahooTWGet1stList(t){
 rr=0;
 yahooTWGetList(t);
+showTop('YAHOO');
 }
 
 async function yahooTWGetList(t){
@@ -313,6 +324,7 @@ async function yahooTWGetContent(clickedId,id,coun){
 async function anueGet1stList(t){
 rr=0;
 anueGetList(t);
+showTop('鉅亨');
 }
 
 async function anueGetList(t){
@@ -435,6 +447,7 @@ async function anueGetSearchResults(){
 async function cteeGet1stList(t){
 rr=0;
 cteeGetList(t);
+showTop('工商');
 }
 
 async function cteeGetList(t){
@@ -521,6 +534,7 @@ async function cteeGetSearchResults(){
 async function businessTodayGet1stList(t){
 rr=0;
 businessTodayGetList(t);
+showTop('今周刊');
 }
 
 async function businessTodayGetList(t){
@@ -624,6 +638,7 @@ for (let h of hh){
 async function businessWeeklyGet1stList(t){
 rr=0;
 businessWeeklyGetList(t);
+showTop('商業周刊');
 }
 
 async function businessWeeklyGetList(t){
@@ -705,6 +720,7 @@ async function businessWeeklyGetContent(clickedId,id){
 async function msnCnbcVideoGet1stList(){
 rr=0;
 msnCnbcVideoGetList(t);
+showTop('CNBC Video');
 }
 
 async function msnCnbcVideoGetList(){
@@ -880,6 +896,7 @@ var t='00390a14-17cc-49d2-9e32-79365335f0ca';
 rr=0;
 uuids='';
 yahooVideoGetList(t);
+showTop('Yahoo Video');
 }
 
 async function yahooVideoGetList(t){
@@ -956,6 +973,7 @@ async function yahooVideoGetContent(clickedId,id,url){
 async function msnVideoGet1stList(t){
 rr=0;
 msnVideoGetList(t);
+showTop('MSN Video');
 }
 
 async function msnVideoGetList(t){
@@ -1025,6 +1043,7 @@ async function msnVideoGetContent(clickedId,id,url,m3u8Url){
 async function wsjVideoGet1stList(t){
 rr=0;
 wsjVideoGetList(t);
+showTop('WSJ Video');
 }
 
 async function wsjVideoGetList(t){
