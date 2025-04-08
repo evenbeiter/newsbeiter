@@ -73,6 +73,9 @@ const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8
 
 const anue=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
 
+const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
+
+const businessToday=[['news/','最新'],['catalog/183007/list/page/','投資理財'],['catalog/183020/list/page/','保險稅制'],['catalog/183014/list/page/','產業時事'],['catalog/183028/list/page/','職場生活']];
 
 //    LANDING PAGE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +83,7 @@ const anue=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['
 openMediaList();
   
 function openMediaList(){
-  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
+  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">新聞</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
   tabs=allSites;
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}')">${tab[1]}</button>`;
@@ -88,7 +91,7 @@ function openMediaList(){
   tabs=videoSites;
   btn.innerHTML+='<hr>';
   for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}GetList('')">${tab[1]}</button>`;
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stList('')">${tab[1]}</button>`;
   }
   options.style.display='block';
 }
@@ -423,8 +426,6 @@ async function anueGetSearchResults(){
 
 //    CTEE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
 
 async function cteeGet1stList(t){
 rr=0;
@@ -511,8 +512,6 @@ async function cteeGetSearchResults(){
 
 //    BUSINESS TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-var businessToday=[['news/','最新'],['catalog/183007/list/page/','投資理財'],['catalog/183020/list/page/','保險稅制'],['catalog/183014/list/page/','產業時事'],['catalog/183028/list/page/','職場生活']];
 
 async function businessTodayGet1stList(t){
 rr=0;
