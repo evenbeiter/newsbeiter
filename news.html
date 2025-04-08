@@ -716,7 +716,7 @@ if (rr==1){
   document.documentElement.scrollTop = 0;
   document.getElementById('list').innerHTML='';
 }
-for (var i=0;i<2;k++){
+for (var i=0;i<2;i++){
   var url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId=vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
   let res=await fetch(url);
   let str=await res.json();
