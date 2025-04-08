@@ -63,7 +63,7 @@ var list=document.getElementById('list');
 const proxyUrl = 'https://newsbeiter.onrender.com/api/fetch?url=';
   
 const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['businessWeekly','商業周刊']];
-const videoSites=[['msnCnbcVideo','CNBC'],['yahooVideo','Yahoo Video'],['msnVideo','MSN Video'],['wsjVideo','WSJ']];
+const videoSites={'msn':[['WATCH','MSN Video'],['money video','MSN Money'],['lifestyle video','MSN Lifestyle'],['entertainment video','MSN Entertainment']],'others':[['msnCnbcVideo','CNBC'],['wsjVideo','WSJ'],['yahooVideo','Yahoo Video']]};
 const searchSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']];
   
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],
@@ -92,8 +92,11 @@ function openMediaList(){
   }
   tabs=videoSites;
   btn.innerHTML+='<hr>';
-  for (let tab of tabs){
+  for (let tab of tabs.others){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stList('')">${tab[1]}</button>`;
+  }
+  for (let tab of tabs.msn){
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="msnVideoGet1stList('${tab[0]}')">${tab[1]}</button>`;
   }
   options.style.display='block';
 }
@@ -950,12 +953,12 @@ async function yahooVideoGetContent(clickedId,id,url){
 //    MSN VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function msnVideoGet1stList(){
+async function msnVideoGet1stList(t){
 rr=0;
 msnVideoGetList(t);
 }
 
-async function msnVideoGetList(){
+async function msnVideoGetList(t){
 siteName='msnVideo';
 var items = [];
 rr++;
@@ -967,7 +970,7 @@ if (rr==1){
   document.documentElement.scrollTop = 0;
   document.getElementById('list').innerHTML='';
 }
-var url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query=WATCH&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
+var url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
 let res=await fetch(url);
 let str=await res.json();
 for (let h of str.value[0].subCards){
@@ -1052,7 +1055,7 @@ for (let h of items){
 document.getElementById('list').innerHTML+=html;
 }
 
-async function getContent(clickedId,id,url,hls){
+async function wsjVideoGetContent(clickedId,id,url,hls){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
