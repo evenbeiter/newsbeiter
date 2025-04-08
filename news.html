@@ -91,7 +91,7 @@ function showTop(t){
 }
   
 function openMediaList(){
-  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">新聞</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
+  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
   tabs=allSites;
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}')">${tab[1]}</button>`;
@@ -101,7 +101,7 @@ function openMediaList(){
   for (let tab of tabs.others){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stList('')">${tab[1]}</button>`;
   }
-  btn.innerHTML+='<hr>';
+  btn.innerHTML+='<br>';
   for (let tab of tabs.msn){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="msnVideoGet1stList('${tab[0]}')">${tab[1]}</button>`;
   }
@@ -110,7 +110,7 @@ function openMediaList(){
 }
 
 function openSearchList(){
-  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">新聞</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr><input type="text" id="search-term" class="form-control mb-2">`;
+  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr><input type="text" id="search-term" class="form-control mb-2">`;
   tabs=searchSites;
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stSearchResults()">${tab[1]}</button>`;
@@ -132,12 +132,14 @@ async function pingServer(){
 }
 
 function createBtnGroup(site,siteName){
-  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">新聞</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
+  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
   for (let tab of site){
     if(Array.isArray(tab[0])){
     var ti=tab[0].join('\',\'')}else{var ti=tab[0]};
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList(['${ti}'])">${tab[1]}</button>`;
   }
+  {siteName}Get1stList(['${ti}']);
+  `{siteName}`Get1stList(['${ti}']);
 }
 
 
@@ -693,7 +695,7 @@ async function businessWeeklyGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch(proxyUrl+id);
+    const res = await fetch(proxyUrl+'https://www.businessweekly.com.tw'+id);
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
