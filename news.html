@@ -976,7 +976,9 @@ async function yahooVideoGetContent(clickedId,id,url){
 async function msnVideoGet1stList(t){
 rr=0;
 msnVideoGetList(t);
-showTop('MSN Video');
+var cat=t.split(' ')[0];
+cat=cat.charAt(0).toUpperCase() + cat.slice(1);
+showTop('MSN '+cat);
 }
 
 async function msnVideoGetList(t){
