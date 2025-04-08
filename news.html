@@ -695,7 +695,7 @@ async function businessWeeklyGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch(proxyUrl+'https://www.businessweekly.com.tw'+id);
+    const res = await fetch((proxyUrl+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
