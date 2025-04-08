@@ -995,13 +995,13 @@ var url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkT
 let res=await fetch(url);
 let str=await res.json();
 for (let h of str.value[0].subCards){
-  items.push([h.sourceId,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url]);
+  items.push([h.sourceId,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url],h.provider.name);
 }
 items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
 
 var html='';
 for (let h of items){
-  html+=`<div onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+  html+=`<div onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]} | ${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
 }
 document.getElementById('list').innerHTML+=html;
 }
