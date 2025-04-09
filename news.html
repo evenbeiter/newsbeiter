@@ -125,17 +125,19 @@ function openOptions(){
 }
 
 async function ping(){
-  var res=await fetch('https://newsbeiter.onrender.com/api/fetch?url=https://date.nager.at/api/v3/publicholidays/2025/US');
+  var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');
 }
 
 function createBtnGroup(site,siteName){
   btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
   for (let tab of site){
     if(Array.isArray(tab[0])){
-    var ti=tab[0].join('\',\'')}else{var ti=tab[0]};
+    var ti=tab[0].join('|')}else{var ti=tab[0]};
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList(['${ti}'])">${tab[1]}</button>`;
   }
-  window[`${siteName}Get1stList`](site[0][0]);
+  if(Array.isArray(site[0][0])){
+    var ti=tab[0].join('|')}else{var ti=tab[0]};
+  window[`${siteName}Get1stList`](ti);
 }
 
 
