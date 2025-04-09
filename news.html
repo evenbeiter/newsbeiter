@@ -17,7 +17,7 @@ h1 a {color: navy; font-weight: bold; text-decoration:none;cursor:pointer}
 img{display:block !important;margin:auto;width:100%;height:auto}
 @media (min-width:768px){
   @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
-  body {background-color:#F8F8F8;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
+  body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
   .sepia{background-color:#F8F8F8;color:#3B3B3B}
   .sepia-contrast{background-color:#3B3B3B;color:#F8F8F8}
   #list{font-weight:bold}
@@ -27,7 +27,7 @@ img{display:block !important;margin:auto;width:100%;height:auto}
 </head>
 <body>
 
-<div style="max-width:600px;margin:auto">
+<div style="min-height:100vh;max-width:600px;margin:auto">
 <div class="sticky-top position-fixed m-2 top-0 end-0" style="z-index:1030">
   <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="openOptions()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
@@ -61,7 +61,8 @@ var rr=0;
 var options=document.getElementById('btn-group');
 var btn=document.getElementById('btn');
 var list=document.getElementById('list');
-const proxyUrl = 'https://newsbeiter.onrender.com/api/fetch?url=';
+const base = ['htt','ps:','//new','sbeit','er.on','rend','er.co','m/ap','i/fet','ch?u','rl='];
+const preStr = base.join('');
   
 const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['businessWeekly','商業周刊']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'others':[['msnCnbcVideo','CNBC'],['wsjVideo','WSJ'],['yahooVideo','Yahoo']]};
@@ -164,14 +165,14 @@ var items = [];
 var url='';
 for (let t of tt) {
   if (/[0-9]/.test(t)){
-    url=proxyUrl+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+rr*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
+    url=preStr+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+rr*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
     let res=await fetch(url);
     let str=await res.json();
     for (let a of str.items){
       items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
     }
   } else {
-    url=proxyUrl+'https://today.line.me/_next/data/v1/tw/v3/page/'+t+'.json';
+    url=preStr+'https://today.line.me/_next/data/v1/tw/v3/page/'+t+'.json';
     let res=await fetch(url);
     let str=await res.json();
     var data=str.pageProps.fallback['getPageData,'+t].modules;
@@ -179,7 +180,7 @@ for (let t of tt) {
     data=data.map(d=>d.listings[0].id);
     
     for (let d of data){
-      res=await fetch(proxyUrl+'https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+rr*20+'&length=20');
+      res=await fetch(preStr+'https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+rr*20+'&length=20');
       str=await res.json();
       for (let a of str.items){
           items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
@@ -204,7 +205,7 @@ async function lineTodayGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch(proxyUrl+'https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id);
+    const res = await fetch(preStr+'https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id);
     const str=await res.json();
     const a = str.data;
     if (a) {
@@ -230,7 +231,7 @@ document.body.scrollTop = 0;
 document.documentElement.scrollTop = 0;
 var items = [];
 var url='';
-    url=proxyUrl+'https://today.line.me/webapi/listing/search?country=tw&query='+document.getElementById('search-term').value;
+    url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+document.getElementById('search-term').value;
     let res=await fetch(url);
     let str=await res.json();
     for (let a of str.items){
@@ -274,7 +275,7 @@ if (rr==1){
   document.documentElement.scrollTop = 0;
   document.getElementById('list').innerHTML='';
 }
-var url=proxyUrl+'https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t;
+var url=preStr+'https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t;
 let res=await fetch(url);
 let str=await res.json();
 var data=str.data.main.stream.slice((rr-1)*50,rr*50);
@@ -295,7 +296,7 @@ async function yahooTWGetContent(clickedId,id,coun){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch(proxyUrl+id);
+    const res = await fetch(preStr+id);
     const str=await res.text();
     var au=cEl.querySelector('.caas-attr-item-author');
     var t=cEl.querySelector('.caas-attr-time-style');
@@ -343,7 +344,7 @@ if (rr==1){
   var html = '';
   var url='';
   if (t=='topics'){
-      url=proxyUrl+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
+      url=preStr+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
       let res=await fetch(url);
       let str=await res.json();
       for (let a of str.items.data){
@@ -351,7 +352,7 @@ if (rr==1){
       }
     
   } else {
-        url=proxyUrl+'https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr;
+        url=preStr+'https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr;
         let res=await fetch(url);
         let str=await res.json();
         for (let a of str.items.data){
@@ -376,7 +377,7 @@ if (rr==1){
     if (cEl.style.display=='none' || cEl.style.display==''){
       cEl.style.display='block';
       if (id.length<5){
-        const res = await fetch(proxyUrl+id+',{mode: "no-cors"}');
+        const res = await fetch(preStr+id+',{mode: "no-cors"}');
         const str=await res.text();
         var parser = new DOMParser();
         var doc = parser.parseFromString(str, "text/html");
@@ -410,7 +411,7 @@ async function anueGetSearchResults(){
     var html = '';
     var url='';
 
-      url=proxyUrl+'https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr;
+      url=preStr+'https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr;
       let res=await fetch(url);
       let str=await res.json();
       if(str.items.data!==null && str.items.data!==undefined){
@@ -426,7 +427,7 @@ async function anueGetSearchResults(){
     var contentEl=document.getElementById('content-'+id);
     if (cEl.style.display=='none' || cEl.style.display==''){
       cEl.style.display='block';
-      let res=await fetch(proxyUrl+'https://news.cnyes.com/news/id/'+id);
+      let res=await fetch(preStr+'https://news.cnyes.com/news/id/'+id);
       let str=await res.text();
       var parser = new DOMParser();
       var doc = parser.parseFromString(str, "text/html");
@@ -552,7 +553,7 @@ if (rr==1){
   document.getElementById('list').innerHTML='';
 }
 
-var url=proxyUrl+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
+var url=preStr+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
 var res = await fetch(url);
 var str=await res.text();
 var parser = new DOMParser();
@@ -572,7 +573,7 @@ async function businessTodayGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch(proxyUrl+id);
+    const res = await fetch(preStr+id);
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
@@ -615,7 +616,7 @@ async function businessTodayGetSearchResults(){
   var html = '';
   var url='';
 
-url=proxyUrl+'https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr;console.log(url);
+url=preStr+'https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr;console.log(url);
 var res = await fetch(url);
 var str=await res.text();
 var parser = new DOMParser();
@@ -656,7 +657,7 @@ if (rr==1){
 
 var items = [];
 if (t=='0000000000'){
-  var res = await fetch(proxyUrl+'https://www.businessweekly.com.tw/latest/SearchList', {
+  var res = await fetch(preStr+'https://www.businessweekly.com.tw/latest/SearchList', {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
     body: 'CurPage='+20*(rr-1),
@@ -667,7 +668,7 @@ if (t=='0000000000'){
 
 } else {
 
-var res = await fetch(proxyUrl+'https://www.businessweekly.com.tw/ChannelAction/LoadBlock/', {
+var res = await fetch(preStr+'https://www.businessweekly.com.tw/ChannelAction/LoadBlock/', {
   method: 'POST',
   headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
   body: 'Start='+(50*rr-1)+'&End='+50*(rr)+'&ID='+t,
@@ -694,7 +695,7 @@ async function businessWeeklyGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch((proxyUrl+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));
+    const res = await fetch((preStr+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
@@ -824,7 +825,7 @@ async function cnbcVideoGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch(proxyUrl+id);
+    const res = await fetch(preStr+id);
     const str=await res.text();
     var videoSrc=str.match(/"playbackURL":"[\s\S]*?.m3u8/g)[0].replace('"playbackURL":"','');
     var m3u8Url='https:'+JSON.parse(`"${videoSrc}"`);console.log(m3u8Url);
@@ -1002,7 +1003,7 @@ items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(
 
 var html='';
 for (let h of items){
-  html+=`<div onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]} ${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+  html+=`<div onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
 }
 document.getElementById('list').innerHTML+=html;
 }
