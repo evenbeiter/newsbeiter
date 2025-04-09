@@ -226,13 +226,17 @@ async function lineTodayGetContent(clickedId,id){
 }
 
 async function lineToday1stSearchResults(){
+rr=0;
+t=document.getElementById('search-term').value;
+showTop('LINE TODAY - 搜尋：'+t);
+
 siteName='lineToday';
 document.getElementById('btn-group').style.display='none';
 document.body.scrollTop = 0;
 document.documentElement.scrollTop = 0;
 var items = [];
 var url='';
-    url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+document.getElementById('search-term').value;
+    url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
     let res=await fetch(url);
     let str=await res.json();
     for (let a of str.items){
