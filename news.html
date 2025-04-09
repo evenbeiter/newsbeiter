@@ -400,6 +400,7 @@ if (rr==1){
 async function anueGet1stSearchResults(){
 rr=0;
 anueGetSearchResults();
+showTop('鉅亨 - 搜尋：'+t);
 document.getElementById('search-term').value='';
 }
 
@@ -505,6 +506,7 @@ async function cteeGetContent(clickedId,id){
 async function cteeGet1stSearchResults(){
 rr=0;
 cteeGetSearchResults();
+showTop('工商 - 搜尋：'+t);
 document.getElementById('search-term').value='';
 }
 
@@ -604,6 +606,7 @@ async function businessTodayGetContent(clickedId,id){
 async function businessTodayGet1stSearchResults(){
 rr=0;
 businessTodayGetSearchResults();
+showTop('今周刊 - 搜尋：'+t);
 document.getElementById('search-term').value='';
 }
 
