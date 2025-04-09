@@ -132,7 +132,7 @@ function createBtnGroup(site,siteName){
   btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
   for (let tab of site){
     var ti=getParam(tab[0]);
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList(['${ti}'])">${tab[1]}</button>`;
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${ti}')">${tab[1]}</button>`;
   }
   console.log(site[0][0]);
   window[`${siteName}Get1stList`](getParam(site[0][0]));
@@ -163,6 +163,7 @@ if (rr==0){
 }
 var items = [];
 var url='';
+tt=tt.split('|');
 for (let t of tt) {
   if (/[0-9]/.test(t)){
     url=preStr+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+rr*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
