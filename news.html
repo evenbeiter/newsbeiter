@@ -134,6 +134,7 @@ function createBtnGroup(site,siteName){
     var ti=getParam(tab[0]);
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList(['${ti}'])">${tab[1]}</button>`;
   }
+  console.log(site[0][0]);
   window[`${siteName}Get1stList`](getParam(site[0][0]));
 }
 
