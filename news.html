@@ -208,7 +208,7 @@ for (var i=0;i<2;i++){
     for (let d of items){
       html+=`<p class="${coun} t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
     }
-    document.getElementById('list').innerHTML=html;
+    document.getElementById('list').innerHTML+=html;
 
   if (coun==='en-us'){
     var all=document.querySelectorAll('.t-tl');
