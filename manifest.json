@@ -1,6 +1,6 @@
 {
-  "name": "NewsBEIter",
-  "short_name": "NewsBEIter",
+  "name": "규스베이터",
+  "short_name": "규스베이터",
   "start_url": "./news.html",
   "display": "standalone",
   "icons": [
