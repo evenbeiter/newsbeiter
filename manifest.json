@@ -1,0 +1,8 @@
+{
+  "name": "NewsBEIter",
+  "short_name": "NewsBEIter",
+  "start_url": "/news.html",
+  "display": "standalone",
+  "icons": [
+  ]
+}
