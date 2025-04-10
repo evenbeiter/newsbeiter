@@ -219,7 +219,7 @@ async function msnGetContent(clickedId,id,coun){
     if (clickedId=='') {
       cEl.style.display='block';
       if (d.type==='article'){
-        var nuxtDataItem = '<p class="fs10">'+(d.updatedDateTime?d.updatedDateTime:'')+' | '+(d.provider.name ? d.provider.name:'')+'</p>' +(d.body?d.body:'')+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
+        var nuxtDataItem = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</p>' +(d.body?d.body:'')+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
         cEl.innerHTML=nuxtDataItem.replaceAll('\/>','\/><br>');
         var images=cEl.querySelectorAll('img');
         var imgSrc=d.imageResources;
@@ -232,7 +232,7 @@ async function msnGetContent(clickedId,id,coun){
           for (let s of slides){
             slidesHtml+='<img src="'+(s.image.url?s.image.url:'')+'"><br><p>'+(s.title?s.title:'')+'</p>'+(s.body?s.body:'');
           }
-          var nuxtDataItem = '<p class="fs10">'+(d.updatedDateTime?d.updatedDateTime:'')+' | '+(d.provider.name ? d.provider.name:'')+'</p>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
+          var nuxtDataItem = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</p>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
           cEl.innerHTML=nuxtDataItem.replaceAll('\/>','\/><br>');
 
       }
