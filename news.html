@@ -14,6 +14,7 @@ body {background-color:#F4ECD8;color:#3B2D20;font-size:1.4rem}
 h1,h2,h3,h4,h5,h6,.title{font-size:1.4rem;color:#3B2D20 !important;font-weight:bold}
 a,figcaption{word-wrap:break-word;white-space:normal;overflow-wrap:break-word;word-break:break-word}
 h1 a {color: navy; font-weight: bold; text-decoration:none;cursor:pointer}
+.en-us{font-size:1.2rem}
 .fs10, .time, figcaption{font-size:1rem}
 img{display:block !important;margin:auto;width:100%;height:auto}
 @media (min-width:768px){
@@ -200,7 +201,7 @@ for (var i=0;i<2;i++){
 
     var html ='';
     for (let d of items){
-      html+=`<p class="t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
+      html+=`<p class="${coun} t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
     }
     document.getElementById('list').innerHTML=html;
 
