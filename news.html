@@ -191,16 +191,9 @@ for (var i=0;i<2;i++){
   }
 }
 
-items=items.reduce((accumulator,current)=>{
-  if (!accumulator.some(item=>item.id===current.id)){
-    accumulator.push(current);
-  }
-  return accumulator
-},[]);
-
     var html ='';
     for (let d of items){
-      html+=`<p class="t-tl fw-bold" onclick="msnGetContent(this.id,'${d.id}','${coun}')">${d.title}</p><div id="${d.id}" class="content" onclick="msnGetContent(this.id,'${d.id}','${coun}')"></div><hr>`;
+      html+=`<p class="t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
     }
     document.getElementById('list').innerHTML=html;
     var all=document.querySelectorAll('.t-tl');
