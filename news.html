@@ -154,17 +154,17 @@ function getParam(a){
 
 async function msnTWGet1stList(t){
 rr=0;
-msnGetList('zh-tw',t);
+msnGetList(t,'zh-tw');
 showTop('MSN台灣');
 }
 
 async function msnUSGet1stList(t){
 rr=0;
-msnGetList('en-us',t);
+msnGetList(t,'en-us');
 showTop('MSN');
 }
 
-async function msnGetList(coun,t){
+async function msnGetList(t,coun){
 siteName='msn';
 rr++;
 rt=t;
@@ -196,6 +196,8 @@ for (var i=0;i<2;i++){
       html+=`<p class="t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
     }
     document.getElementById('list').innerHTML=html;
+
+  if (coun==='en-us'){
     var all=document.querySelectorAll('.t-tl');
     for (let a of all){
       if (a.innerText!=='' && cnTest(a.innerText)!==true){
@@ -203,6 +205,7 @@ for (var i=0;i<2;i++){
         if (t!==''){a.outerHTML+='<p class="fs10">'+t+'</p>'};
       }
     }
+  }
 }
 
 async function msnGetContent(clickedId,id,coun){
@@ -233,7 +236,8 @@ async function msnGetContent(clickedId,id,coun){
           cEl.innerHTML=nuxtDataItem.replaceAll('\/>','\/><br>');
 
       }
-  
+
+  if (coun==='en-us'){
         var all=[];
         var pg=cEl.getElementsByTagName('p');all.push(...pg);
         var h2=cEl.getElementsByTagName('h2');all.push(...h2);
@@ -244,6 +248,7 @@ async function msnGetContent(clickedId,id,coun){
             if (t!==''){a.outerHTML+='<p class="fs10">'+t+'</p>'};
           }
         }
+  }
   } else {
     if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
       cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()
