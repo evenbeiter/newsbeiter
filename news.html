@@ -74,6 +74,7 @@ const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['00000003
 const preStr=sCC(uLi,iOd);
 var tabs=[];
 var siteName='';
+var coun='';
 var t='';
 var uuids='';
 var rt=[];
@@ -169,8 +170,9 @@ msnGetList(t,'en-us');
 showTop('MSN');
 }
 
-async function msnGetList(t,coun){
+async function msnGetList(t,c){
 siteName='msn';
+coun=c;
 rr++;
 rt=t;
 document.getElementById('btn-group').style.display='none';
@@ -1316,7 +1318,13 @@ window.onscroll = function () {
     const documentHeight = document.documentElement.scrollHeight;
     if (scrollTop + windowHeight >= documentHeight - 5) {
       if(rt!=='s'){
-        if (typeof window[`${siteName}GetList`] === "function") {window[`${siteName}GetList`](rt)}
+        if (typeof window[`${siteName}GetList`] === "function") {
+          if (siteName!=='msn'){
+            window[`${siteName}GetList`](rt)
+          } else {
+            window[`${siteName}GetList`](rt,coun)
+          }
+        }
       }else{
         if (typeof window[`${siteName}GetSearchResults`] === "function") {window[`${siteName}GetSearchResults`]()}
       }
