@@ -54,11 +54,17 @@ img{display:block !important;margin:auto;width:100%;height:auto}
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <script>
-const allSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['businessWeekly','商業周刊']];
+const allSites=[['msn','MSN'],['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['businessWeekly','商業周刊']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'others':[['msnCnbcVideo','CNBC'],['wsjVideo','WSJ'],['yahooVideo','Yahoo']]};
 const uLi = ['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const searchSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']]; 
 const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6,15];
+const msn=[['Y_321db332-7d5a-4672-96b5-2d342ca554fb', '焦點'],['Y_ab001b84-62eb-4605-96c4-12221f946e94', '新聞'],['Y_5993abc4-f49c-49ce-bed0-a5b4b61dd9f6', '財經'],['Y_a484713e-0cec-4003-8fac-a629da5bcf3d', '兩岸國際'],['Y_a0268fb1-402c-48ec-8946-c31ddd7751da', '即時新聞'],['Y_b4ddc302-8189-44e9-b136-9682cc7e3746', '即時財經'],['Y_fef3ac37-3667-4a34-92c0-3e373c55d307', '理財'],['Y_aced43e9-95ab-4e5c-a0c5-d035aeb2133b', '科技'],['Y_da100b0d-55ac-49d4-beae-84ffdcbf3da9', '生活'],['Y_e2c684a5-a8fe-4879-91b9-8d5dc50b5488', '居家設計'],['Y_b77e5da5-aea6-4ee3-8890-91990040926a', '健康'],['Y_57552325-541f-4702-b61e-f307056e39b1', '旅遊'],['Y_95fdd1de-0e14-47b2-a213-6edf24542702', '娛樂'],['Y_f3ddd032-c606-4c7f-b11f-cb16a3596ae2', '台灣'],['Y_7a50bf00-ca7e-4699-ac07-b31e1c3ae01f', '房地產'],['Y_fb97b38c-1cf6-445a-b579-f7b9b35f6590', '職場求職'],['Y_54b11fc3-6cd6-45d6-a669-1c0168275125', '職場焦點'],
+  ['vid-y9reuyeu7hkimpnrdtqpruibsfa4wd4bxxxip6dasjgrby33vd0a', '中央社'],['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', '彭博'],['vid-hvwu6j8yi9b0huc8bkawy5qhvdf3scbniqc8scbbbp6xvj6ftrda', '商周'],['vid-rh9wrnpgtjfx7dbmc38h4xkf6j00me2e9amvgkeqtmanw40mw36s', '天下'],['vid-xj7qtb3g69dr6auu9p8ueq57gnarhrxd5ej05gtswdmnwi02xxia', '德國之聲'],['vid-jwkt4swyp9iyjy43f5cbhi02ttt8enb5t6yms0ppdx869vubmasa', '東森'],['vid-nvte086i8a39iuemvaxwsicfmc2j6tvixtcu9uxbfwqrgaw857rs', 'TVBS新聞'],['vid-n0sumxg56bwh3bguneg5ynixqc3qyiacjst3idsyus5rkrjs3pts', '中時'],['vid-e8mmyirx39xyms90cigfcgdn9p7vdy6u0xe243c7tdm2hgwiypas', '遠見'],['vid-9eqa8gpyscx8v293p3hsyxipqngqd3j7wexky6y09d7eye90m9ya', '風傳媒'],['vid-ctia0d3wuyutasjyriw3uvt8vaa0u4pmwkv0fqpgiciaf5r54m5a', '鏡週刊'],['vid-caqxm27w0p49tmy0ar5urvpar0ccx2b0xdaatyw2nxfqkgab7bds', '早安健康'],['vid-pui6vcpvju95tisme52646g2d79dvjt7akm8cg8ahmrbi8u7a2xa', '康健'],
+  ['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e-4a75-ba34-6460811ccfe3','Tech'],['Y_99096e96-6d4f-401c-832b-461e08143a5a','Lifestyle'],
+  ['Y_69fcfcf0-f686-4b19-9901-0a4ce35b823d', 'Business'],['Y_ce1fe19d-4d60-4312-b4d6-8cba9aa76413', 'Stocks'],['Y_8c7b0706-a0d1-49f1-8603-5c33a3dadd73', 'Economics'],['Y_d6433e0a-2be3-4106-839c-5a40a5375514', 'AI'],       ['Y_dc6dc645-d63a-4c97-8812-3ecdf27695b8', 'SMID'],['Y_f457eae0-84c0-4d35-b1dc-8435b7b6c140', 'Generative AI'],
+  ['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', 'Bloomberg'],['vid-mpxsw8rp392wedf25t8tfhk7r3b364q8dj75ks43nimmf06qg2es', 'Reuters'],['vid-r0r09b3muc6xnf5tv2est5f5ukjbkk67i9svrhyu3jy2pskkbems', 'MarketWatch'],['vid-y572a3ryyddhuiujs0xe2j4m4b6c3n2fp5hnux4jpsdand8h09ys', 'The Wall Street Journal'],['vid-bpwfbvkfudq92wksju4upi9jrx2pn0ax46vrw0vkst93vpwr5pva', 'CNN'],['vid-v3atkpesfykfx7084fbu0cpbtx0jne99kctychfsn9ry96wsmbba', 'BBC'],['vid-r4du2vx0u9h0kr9tx7iyx55w7sneq7e6tg934epuehq3grvn05aa', 'Fortune'],['vid-n3h9ssyxg550pryvt4287xynyckhu84k5vc6n3tdqwsvtvmn2p0s', 'USA TODAY'],['vid-27xbtchrc5gpxe8uhvw9f24q2kqi9f0ppk7ptb8xw9v9sscheg6s', 'The Motley Fool'],['vid-i3g0qyhrtn28biukcpyvsrmhccmv8k8ugtmtr6kqhb9dkf6ccrua', 'FOX News'],['vid-rvn4g4busxh65p6kgfvhye9atw9n8ebd46ut057ypkbm5n6xa5ts', 'BuzzFeed']];
+const msnNewsVideo=[['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS News - Video'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'The Washington Post - Video'],['Y_3446ecaf-77f7-4503-955f-f908510ac476', 'TikTok']];
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],[['102394','103101'],'經濟工商'],[['103214','100267'],'M平方'],['100295','今周刊'],['101131','CMoney'],[['100422','100421','100423'],'商周'],['101170','路透社'],[['104453','101006'],'財訊'],[['100150','103088'],'鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],[['100004','101886'],'風傳媒'],[['100275','101201'],'關鍵評論網'],['global','國際'],['100003','中央社'],[['TOPIC-USelection','2024election'],'川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],[['100568','100158'],'天下雜誌'],['101031','地球圖輯隊'],[['101934','100394'],'閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
 const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8-47bd-b0d8-96b89a20d817','即時'],['a8a208bf-23e1-4950-8aba-8a8d1c0c2da5','財經'],['f10835b8-98fe-48b4-a506-023937ab0a4b','Yahoo 特派'],['4e1fb4b1-9bf1-4d00-81a1-64001c935310','股匯市'],['cdbe8dd0-22d4-11ea-bbfb-7e2fb6871bd3','台股盤勢'],['9f0e62c0-22d5-11ea-bede-345eb8f1edf4','國際財經'],['e9628320-22d4-11ea-9ef0-2fabb53ab0e9','基金動態'],['381351b0-6d8c-11e9-bb53-0fc098ecd9a1','雜誌'],['ad05d340-22d5-11ea-9db1-fe39a6582c47','研究報告'],['70394000-22d5-11ea-bef4-114a94a8f820','小資理財'],['875b56b0-22d5-11ea-95cf-d43d8a1a8360','專家專欄'],['ebb0818f-c3e6-4c43-ab06-7fabe34c02f5','產業'],['65c6fa3b-b4c8-42e7-afed-c468a927d71f','國際'],['9336b431-7f5d-4dba-b06d-0dce56fb3f8f','娛樂'],['47409191-3f19-48a5-b99a-b7a19c5152f1','Yahoo'],['1af9d85f-9f45-4f07-a290-d6116fcd7e94','BBC'],['fbe20d0c-5704-4a52-a6dd-862b105734a8','中時'],['e9162370-a63f-41e1-b6ab-a2ca4bc88aa3','三立'],['841ae727-aaf4-4d96-89e8-6023380a5f0d','TVBS'],['d1c5195f-8c50-441f-8d4f-192505ff481a','公視'],['616c3db4-1af4-4d9a-90c2-e8d5b61fdca8','中天'],['24a219a6-e124-4d54-85c0-da53c42dad3f','聯合'],['1eeeee88-4e98-49f5-9283-d95b59faa8d0','東森'],['92e62bbd-f6b0-4ff2-ae60-da5e92602b8b','CWANT'],['15344921-beff-4849-8c1e-799f00eb6104','壹蘋'],['15fd91e7-7935-439f-a2a9-caea96a5c3db','鏡週刊'],['81870ef4-46f4-4ed2-a2b3-d436b9b85c06','NOWNews'],['80c8c637-4f0d-4df0-8c2e-d66523148f6d','台視'],['"75f58300-9102-4339-a493-1e2f3e31313c"','民視'],['f0caaf82-30b3-4e6c-a2eb-aa9577dbe7d4','華視'],['483b66c7-0238-411e-be93-53e1478272d3','新頭殻'],['71b213f3-88c4-41fe-b9f0-a59e9045e2d0','風傳媒'],['bd00c410-4b30-4245-abf8-d23656709efa__','Latest'],['db1d46e0-a969-11e9-bff5-6dfdb80d79cf__','Stock Market News'],['04d9350a-bbd1-4787-95be-740cc5ee8852__','Earnings'],['0897608a-7d79-47df-9377-b07bd22b0fde__','Yahoo Finance'],['ed5c8883-d951-4e70-87b3-9f8f375fb410__','Premium News'],['dffbd430-02a2-11e7-bcfc-437e9432ca73__','Tech'],['b1f0c990-db7a-11e7-a937-0d92c86f9da1__','Crypto']];
 const anue=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
@@ -140,6 +146,143 @@ function createBtnGroup(site,siteName){
 
 function getParam(a){
   if(Array.isArray(a)){return a.join('|')}else{return a};
+}
+
+
+//    MSN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function msnGet1stList(tt){
+rr=0;
+msnGetList(tt);
+showTop('MSN');
+}
+
+async function msnGetList(tt){
+siteName='msn';
+rr++;
+rt=t;
+document.getElementById('btn-group').style.display='none';
+document.body.scrollTop = 0;
+document.documentElement.scrollTop = 0;
+var items = [];
+var url='';
+
+if (tt[0].slice(0,2)==='Y_'){
+  var srvc='channelfeed';
+  t='InterestIds='+t;
+} else {
+  var srvc='providerfullpage';
+  t='CommunityProfileId='+t;
+}
+
+if (cnTest(t)){
+  var coun='zh-tw'
+} else {
+  var coun='en-us';
+}
+
+for (var i=0;i<2;i++){
+  var url='https://assets.msn.com/service/news/feed/pages/'+srvc+'?ocid=social-peregrine&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&User=m-00A80177A097658A10770F1FA15F64FF&cm='+coun+'&'+t+'&newsSkip='+12*((rr-1)*2+i)+'&$skip='+((rr-1)*2+i);
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str.sections[0].cards){
+    items.push([h.id,h.title]);
+  }
+}
+
+
+
+  if (tt[0].slice(0,2)==='Y_'){
+    var data=[];
+    for (var j=0;j<25;j+=24){
+    url='https://assets.msn.com/service/news/feed/pages/channelfeed?activityId=9A01CE02-E872-455B-886E-33FDD2356C81&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&it=web&memory=4&ocid=social-peregrine&scn=ANON&timeOut=2000&user=m-33F2CFF15E3C64722104DCA55FF065E0&InterestIds='+tt[0]+'&newsSkip='+j;
+    let res=await fetch(url);
+    let str=await res.json();
+      var cards=str.sections[0].cards;
+      for (let c of cards){
+        if (c.type=='ProfileCarousel'){data.push(...c.subCards)}else{data.push(c)}
+      }
+    }
+  } else {
+  var data=[];
+  for (var j=0;j<37;j+=12){
+    url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&activityId=5E00C24B-F12D-4436-AB12-C9567B4939F2&timeOut=10000&ocid=social-peregrine&scn=ANON&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&query=newest&CommunityProfileId=vid-'+tt[0]+'&cm=en-us&User=m-33F2CFF15E3C64722104DCA55FF065E0&newsSkip='+j;
+    let res=await fetch(url);
+    let str=await res.json();
+    var cards=str.sections[0].cards;
+      for (let c of cards){
+        if (c.type=='ProfileCarousel'){data.push(...c.subCards)}else{data.push(c)}
+      }
+    }
+    data=data.reduce((accumulator,current)=>{
+      if (!accumulator.some(item=>item.id===current.id)){
+        accumulator.push(current);
+      }
+      return accumulator
+    },[]);console.log(data);
+}
+
+
+    var html ='';
+    for (let d of data){
+      html+=\`<p class="t-tl fw-bold" onclick="getContent(this.id,'\${d.id}')">\${d.title}</p><div id="\${d.id}" class="content" onclick="getContent(this.id,'\${d.id}')"></div><hr>\`;
+    }
+    document.getElementById('list').innerHTML=html;
+    var all=document.querySelectorAll('.t-tl');
+    for (let a of all){
+      if (a.innerText!=='' && cnTest(a.innerText)!==true){
+        var t=await translate(a.textContent);
+        if (t!==''){a.innerHTML+='<br>'+t};
+      }
+    }
+}
+
+async function getContent(clickedId,id){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' && cEl.textContent!==''){cEl.style.display='block'}
+  else if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    var res = await fetch('https://assets.msn.com/content/view/v2/Detail/en-us/'+id);
+    var d=await res.json();
+        
+    if (clickedId=='') {
+      cEl.style.display='block';
+      if (d.type==='article'){
+        var nuxtDataItem = '<span class="fs10">'+(d.updatedDateTime?d.updatedDateTime:'')+' | '+(d.provider.name ? d.provider.name:'')+'</span><br>' +(d.body?d.body:'')+ '<p class="text-end"><a href="' + (d.jsonDataMap.displayValue ? JSON.parse(d.jsonDataMap.displayValue).Url:'') + '" target="_blank">分享</a></p><br>';
+        cEl.innerHTML=nuxtDataItem.replaceAll('\/>','\/><br>');
+        var images=cEl.querySelectorAll('img');
+        var imgSrc=d.imageResources;
+        for (let img of images){
+          img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img';
+        }
+      } else if (d.type==='slideshow'){
+          var slides=d.slides;
+          var slidesHtml='';
+          for (let s of slides){
+            slidesHtml+='<img src="'+(s.image.url?s.image.url:'')+'"><br><p>'+(s.title?s.title:'')+'</p>'+(s.body?s.body:'');
+          }
+          var nuxtDataItem = '<span class="fs10">'+(d.updatedDateTime?d.updatedDateTime:'')+' | '+(d.provider.name ? d.provider.name:'')+'</span><br>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
+          cEl.innerHTML=nuxtDataItem.replaceAll('\/>','\/><br>');
+
+      }
+  
+        var all=[];
+        var pg=cEl.getElementsByTagName('p');all.push(...pg);
+        var h2=cEl.getElementsByTagName('h2');all.push(...h2);
+        var li=cEl.getElementsByTagName('li');all.push(...li);
+        for (let a of all){
+          if (a.innerText!=='' && cnTest(a.innerText)!==true){
+            var t=await translate(a.textContent);
+            if (t!==''){a.outerHTML+='<p class="zh">'+t+'</p>'};
+          }
+        }
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
+      cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+} else {cEl.style.display='none';cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()}
 }
 
 
