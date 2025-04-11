@@ -135,6 +135,20 @@ function isRunningAsPWA() {
          window.navigator.standalone === true;
 }
 
+function getUserInput() {
+  if (isRunningAsPWA()) {
+    // In iOS PWA – use prompt
+    const input = prompt("Type your note:");
+    if (input !== null) {
+      handleInput(input);
+    }
+  } else {
+    // In browser – use modal input box
+    document.getElementById('inputModal').style.display = 'block';
+    setTimeout(() => document.getElementById('userInput').focus(), 100);
+  }
+}
+
 function openOptions(){
   var options=document.getElementById('btn-group');
     if (options.style.display=='none'){
