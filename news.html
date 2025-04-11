@@ -128,7 +128,8 @@ function openSearchList(){
   }
   options.style.display='block';
   document.getElementById('top').style.display='none';
-  getUserInput();
+  document.getElementById('search-term').focus();
+  //getUserInput();
 }
 
 function isRunningAsPWA() {
