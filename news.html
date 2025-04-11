@@ -420,6 +420,7 @@ for (let h of items){
 }
 document.getElementById('list').innerHTML=html;
 document.getElementById('search-term').value='';
+search.style.display='none';
 list.style.display='block';
 }
 
@@ -569,6 +570,8 @@ rr=0;
 anueGetSearchResults();
 showTop('鉅亨 - 搜尋：'+t);
 document.getElementById('search-term').value='';
+search.style.display='none';
+list.style.display='block';
 }
 
 async function anueGetSearchResults(){
@@ -676,6 +679,7 @@ rr=0;
 cteeGetSearchResults();
 showTop('工商 - 搜尋：'+t);
 document.getElementById('search-term').value='';
+search.style.display='none';
 list.style.display='block';
 }
 
