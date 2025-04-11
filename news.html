@@ -48,6 +48,7 @@ img{display:block !important;margin:auto;width:100%;height:auto}
 </button>
 </div>
 <div id="top" class="fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:none"></div>
+<div id="search" style="display:none"></div>
   <form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
     <div id="btn"></div>
   </form>
@@ -86,8 +87,10 @@ var payload={};
 var rt=[];
 var rr=0;
 var options=document.getElementById('btn-group');
+var search=document.getElementById('search');
 var btn=document.getElementById('btn');
 var list=document.getElementById('list');
+var top=document.getElementById('top');
 
   
 //    LANDING PAGE
@@ -95,10 +98,19 @@ var list=document.getElementById('list');
 
 ping();
 openMediaList();
+createSearchEl();
+
+function createSearchEl(){
+  search.innerHTML=`<input type="text" id="search-term" class="form-control mb-2">`;
+  tabs=searchSites;
+  for (let tab of tabs){
+    search.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stSearchResults()">${tab[1]}</button>`;
+  }
+}
 
 function showTop(t){
-  document.getElementById('top').innerText=t;
-  document.getElementById('top').style.display='block';
+  top.innerText=t;
+  top.style.display='block';
 }
   
 function openMediaList(){
@@ -117,10 +129,19 @@ function openMediaList(){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="msnVideoGet1stList('${tab[0]}')">${tab[1]}</button>`;
   }
   options.style.display='block';
-  document.getElementById('top').style.display='none';
+  list.style.display='block';
+  top.style.display='none';
 }
 
 function openSearchList(){
+  if (isRunningAsPWA()) {
+    options.style.display='none';
+  list.style.display='none';
+  top.style.display='none';
+    search.style.display='block';
+  //document.getElementById('search-term').focus();
+  //getUserInput();
+  } else {
   btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr><input type="text" id="search-term" class="form-control mb-2">`;
   tabs=searchSites;
   for (let tab of tabs){
@@ -128,8 +149,7 @@ function openSearchList(){
   }
   options.style.display='block';
   document.getElementById('top').style.display='none';
-  document.getElementById('search-term').focus();
-  //getUserInput();
+}
 }
 
 function isRunningAsPWA() {
@@ -399,6 +419,7 @@ for (let h of items){
 }
 document.getElementById('list').innerHTML=html;
 document.getElementById('search-term').value='';
+list.style.display='block';
 }
 
 
@@ -571,6 +592,7 @@ async function anueGetSearchResults(){
       }
     }
     document.getElementById('list').innerHTML+=html;
+    list.style.display='block';
   }
 
   async function anueGetSearchContent(clickedId,id){
@@ -653,6 +675,7 @@ rr=0;
 cteeGetSearchResults();
 showTop('工商 - 搜尋：'+t);
 document.getElementById('search-term').value='';
+list.style.display='block';
 }
 
 async function cteeGetSearchResults(){
