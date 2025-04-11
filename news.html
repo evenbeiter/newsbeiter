@@ -129,7 +129,12 @@ function openSearchList(){
   options.style.display='block';
   document.getElementById('top').style.display='none';
 }
-  
+
+function isRunningAsPWA() {
+  return window.matchMedia('(display-mode: standalone)').matches ||
+         window.navigator.standalone === true;
+}
+
 function openOptions(){
   var options=document.getElementById('btn-group');
     if (options.style.display=='none'){
