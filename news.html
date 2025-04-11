@@ -58,7 +58,7 @@ img{display:block !important;margin:auto;width:100%;height:auto}
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <script>
-const allSites=[['msnTW','MSN 台灣'],['msnUS','MSN'],['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['businessWeekly','商周']];
+const allSites=[['msnTW','MSN 台灣'],['msnUS','MSN'],['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'others':[['msnCnbcVideo','CNBC'],['wsjVideo','WSJ'],['yahooVideo','Yahoo']]};
 const uLi = ['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const searchSites=[['lineToday','LINE'],['yahooTW','Yahoo'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']]; 
@@ -73,6 +73,7 @@ const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],['102
 const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8-47bd-b0d8-96b89a20d817','即時'],['a8a208bf-23e1-4950-8aba-8a8d1c0c2da5','財經'],['f10835b8-98fe-48b4-a506-023937ab0a4b','Yahoo 特派'],['4e1fb4b1-9bf1-4d00-81a1-64001c935310','股匯市'],['cdbe8dd0-22d4-11ea-bbfb-7e2fb6871bd3','台股盤勢'],['9f0e62c0-22d5-11ea-bede-345eb8f1edf4','國際財經'],['e9628320-22d4-11ea-9ef0-2fabb53ab0e9','基金動態'],['381351b0-6d8c-11e9-bb53-0fc098ecd9a1','雜誌'],['ad05d340-22d5-11ea-9db1-fe39a6582c47','研究報告'],['70394000-22d5-11ea-bef4-114a94a8f820','小資理財'],['875b56b0-22d5-11ea-95cf-d43d8a1a8360','專家專欄'],['ebb0818f-c3e6-4c43-ab06-7fabe34c02f5','產業'],['65c6fa3b-b4c8-42e7-afed-c468a927d71f','國際'],['9336b431-7f5d-4dba-b06d-0dce56fb3f8f','娛樂'],['47409191-3f19-48a5-b99a-b7a19c5152f1','Yahoo'],['1af9d85f-9f45-4f07-a290-d6116fcd7e94','BBC'],['fbe20d0c-5704-4a52-a6dd-862b105734a8','中時'],['e9162370-a63f-41e1-b6ab-a2ca4bc88aa3','三立'],['841ae727-aaf4-4d96-89e8-6023380a5f0d','TVBS'],['d1c5195f-8c50-441f-8d4f-192505ff481a','公視'],['616c3db4-1af4-4d9a-90c2-e8d5b61fdca8','中天'],['24a219a6-e124-4d54-85c0-da53c42dad3f','聯合'],['1eeeee88-4e98-49f5-9283-d95b59faa8d0','東森'],['92e62bbd-f6b0-4ff2-ae60-da5e92602b8b','CWANT'],['15344921-beff-4849-8c1e-799f00eb6104','壹蘋'],['15fd91e7-7935-439f-a2a9-caea96a5c3db','鏡週刊'],['81870ef4-46f4-4ed2-a2b3-d436b9b85c06','NOWNews'],['80c8c637-4f0d-4df0-8c2e-d66523148f6d','台視'],['75f58300-9102-4339-a493-1e2f3e31313c','民視'],['f0caaf82-30b3-4e6c-a2eb-aa9577dbe7d4','華視'],['483b66c7-0238-411e-be93-53e1478272d3','新頭殻'],['71b213f3-88c4-41fe-b9f0-a59e9045e2d0','風傳媒'],['bd00c410-4b30-4245-abf8-d23656709efa__','Latest'],['db1d46e0-a969-11e9-bff5-6dfdb80d79cf__','Stock Market News'],['04d9350a-bbd1-4787-95be-740cc5ee8852__','Earnings'],['0897608a-7d79-47df-9377-b07bd22b0fde__','Yahoo Finance'],['ed5c8883-d951-4e70-87b3-9f8f375fb410__','Premium News'],['dffbd430-02a2-11e7-bcfc-437e9432ca73__','Tech'],['b1f0c990-db7a-11e7-a937-0d92c86f9da1__','Crypto']];
 const anue=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
 const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
+const wealth=[['','最新','Articles'],['bd088d2c-f76a-4187-8673-1ae412cd6356','謝金河','Articles'],['95f4329c-bcf4-47c4-b133-879bb862b479','財經茶水間','Category'],['2c6379e9-7527-442b-880a-bb9552689e06','國際','Category'],['87259978-8ff6-465c-b552-c33f69f6432e','投資理財','Category'],['450cbbed-c577-4d8e-a689-8e90b4f8bac7','財經指標','Category'],['d1354fa3-82bf-42e6-84ad-9e36d7615892','金融圈','Category'],['79c03f3f-d546-4551-a05f-c6d38e5579ca','科技','Category'],['3187845b-57fb-4336-bc4b-4f30cbeb642c','企業','Category'],['dd2b5859-96aa-42bb-b5cc-08e6c7c8728e','生醫','Category'],['800e2b3c-0352-4fba-aea2-01fff6b16015','地產','Category'],['352be1d4-7ce8-42b8-9a84-0f491f7927ea','政經','Category'],['de408237-667e-4594-abd8-8106ba567324','健康醫療','Category'],['2eb0f6be-d8bb-447d-b067-e17601f44056','美食旅遊','Category'],['2492cf34-afd8-40ee-95de-6f340988ab22','品味人生','Category']];
 const businessToday=[['news/','最新'],['catalog/183007/list/page/','投資理財'],['catalog/183020/list/page/','保險稅制'],['catalog/183014/list/page/','產業時事'],['catalog/183028/list/page/','職場生活']];
 const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['0000000319','財經'],['0000000326','管理'],['0000000312','焦點'],['0000000342','CEO學院']];
 const preStr=sCC(uLi,iOd);
@@ -81,6 +82,7 @@ var siteName='';
 var coun='';
 var t='';
 var uuids='';
+var payload={};
 var rt=[];
 var rr=0;
 var options=document.getElementById('btn-group');
@@ -142,9 +144,17 @@ async function ping(){
 function createBtnGroup(site,siteName){
   btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
   for (let tab of site){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${tab[0]}')">${tab[1]}</button>`;
+    if (siteName!=='wealth'){
+      btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${tab[0]}')">${tab[1]}</button>`;
+    } else {
+      btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${tab[2]}','${tab[0]}')">${tab[1]}</button>`;
+    }
   }
-  window[`${siteName}Get1stList`](site[0][0]);
+    if (siteName!=='wealth'){
+      window[`${siteName}Get1stList`](site[0][0]);
+    } else {
+      wealthGet1stList('Category','2c6379e9-7527-442b-880a-bb9552689e06')
+    }
 }
 
 
@@ -655,6 +665,128 @@ async function cteeGetSearchResults(){
     html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
   }
     document.getElementById('list').innerHTML+=html;
+}
+  
+
+//    WEALTH
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+
+
+async function wealthGet1stList(op,t){
+rr=0;
+wealthGetList(op,t);
+showTop('財訊');
+}
+
+async function wealthGetList(op,t){
+siteName='wealth';
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+
+if (op=='Articles'){
+  payload={
+    "operationName": "Articles",
+    "variables": {
+      "authorID": t,
+      "offset": (rr-1)*50,
+      "limit": 50,
+      "type": "ARTICLE",
+      "viewOrderType": null
+    },
+    "query": "query Articles($offset: Int, $limit: Int, $type: ArticleType, $vipOnly: Boolean, $searchTerm: String, $isFameColumn: Boolean, $magazineId: ID, $authorId: ID, $viewOrderType: ArticleViewOrderType) {\n  articles(\n    offset: $offset\n    limit: $limit\n    type: $type\n    vipOnly: $vipOnly\n    searchTerm: $searchTerm\n    isFameColumn: $isFameColumn\n    magazineId: $magazineId\n    authorId: $authorId\n    viewOrderType: $viewOrderType\n  ) {\n    ...ArticleBaseFields\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  cover\n  coverText\n  content\n  authors {\n    name\n  }\n  releasedAt\n}\n"
+  }
+} else if (op=='Category'){
+  payload={
+    "operationName": "Category",
+    "variables": {
+      "id": t,
+      "type": null,
+      "offset": (rr-1)*50,
+      "limit": 50,
+      "viewOrderType": null
+    },
+    "query": "query Category($id: ID!, $offset: Int, $limit: Int, $type: ArticleType, $viewOrderType: ArticleViewOrderType) {\n  category(id: $id) {\n    id\n    name\n    articles(\n      offset: $offset\n      limit: $limit\n      type: $type\n      viewOrderType: $viewOrderType\n    ) {\n      ...ArticleBaseFields\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  content\n}\n"
+  }
+} else if (op=='LatestMagazine'){
+  payload={
+    "operationName": "LatestMagazine",
+    "variables": {},
+    "query": "query LatestMagazine {\n  latestMagazine {\n    id\n    title\n  }\n}\n"
+  }
+}
+
+var url='https://www.wealth.com.tw/graphql';
+var res = await fetch(url, {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json',},
+  body: JSON.stringify(payload),
+  });
+var str=await res.json();
+
+if (op=='Category'){var data=str.data.category.articles}else{var data=str.data.articles};
+for (let h of data){
+  items.push([h.id,h.title])
+}
+var html='';
+for (let h of items){
+  html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function getContent(clickedId,id){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+
+    var payload={
+      "operationName": "Article",
+      "variables": {
+        "id": id
+      },
+      "query": "query Article($id: ID!, $token: String) {\n  article(id: $id, token: $token) {\n    ...ArticleBaseFields\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  cover\n  coverText\n  content\n  releasedAt\n  authors {\n    name\n  }\n}\n"
+    };
+
+    var url='https://www.wealth.com.tw/graphql';
+    var res = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json',},
+      body: JSON.stringify(payload),
+      });
+    var str=await res.json();
+    var data=str.data.article;
+    var content=JSON.parse(str.data.article.content);
+
+    var nuxtDataItem = '<p class="fs10">'+cvt2Timezone(data.releasedAt)+' | '+data.authors[0].name+'</p><img src="https://static.wealth.com.tw/'+data.cover+'"><p class="fs10">'+data.coverText+'</p><div id="'+id+'__"></div><p class="text-end"><a href="https://www.wealth.com.tw/articles/' + id + '" target="_blank">分享</a></p><br>';
+    cEl.innerHTML=nuxtDataItem;
+    var body='';    
+    for (let c of content){console.log(c);
+      if (c.type=='p'){
+        body+='<p>';
+        for (let a of c.children){if (a.type=='link'){body+='<a href="'+a.url+'">'+a.children[0].text+'</a>'} else {body+=a.text}};
+        body+='</p>';
+      } else if (c.type=='image_figure'){
+        for (let a of c.children){
+          if (a.type=='image'){body+='<img src="https://static.wealth.com.tw/'+a.src+'">'} else if (a.type=='image_caption'){body+='<p class="fs10">'+a.children[0].text+'</p>'}
+        }
+      }
+    }
+    document.getElementById(id+'__').innerHTML=body;
+    
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
 }
 
 
