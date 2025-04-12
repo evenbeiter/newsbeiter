@@ -979,7 +979,104 @@ async function businessWeeklyGetContent(clickedId,id){
     }
   }
 }
+
+
+//    BNEXT
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
+async function bnextGet1stList(t){
+rr=0;
+bnextGetList(t);
+showTop('數位時代');
+}
+
+async function bnexrGetList(t){
+var items = [];
+rr++;
+rt=t;
+console.log(rr);
+if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  document.getElementById('list').innerHTML='';
+}
+
+var url='https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
+var res = await fetch(url);
+var str=await res.text();
+var parser = new DOMParser();
+var doc = parser.parseFromString(str, "text/html");
+
+if(t!=='topics'){
+  var hh=doc.querySelectorAll('h2.three-line-text');
+  for (let h of hh){
+    items.push([h.parentElement.parentElement.children[0].href,h.innerText])
+  }
+} else {
+  var hh=doc.querySelectorAll('h2.text-white');
+  for (let h of hh){
+    var a=h.parentElement.parentElement.nextElementSibling.href;
+    a=a.slice(-(a.length-a.lastIndexOf('/'))+1);
+    items.push([a,h.innerText])
+  }
+}
+
+var html='';
+for (let h of items){
+  html+=`<p class="title" onclick="bnextGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="bnextGetContent(this.id,'${h[0]}')"></div><hr>`
+}
+document.getElementById('list').innerHTML+=html;
+}
+
+async function bnextGetContent(clickedId,id){
+  if(id.length>10){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    const res = await fetch(id);
+    const str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    var t=doc.querySelector('div.flex.gap-4.text-sm.items-center.flex-wrap');
+    if (t==null){t=doc.querySelector('div.flex.gap-2.text-sm.items-center')}
+    const a = doc.querySelector('[data-cat=article]');
+
+    if (a) {
+      var nuxtDataItem = '<p class="fs10">'+t.innerText+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+      cEl.innerHTML=nuxtDataItem;
+      var ads=cEl.querySelector('#pumpkin_159');
+      if(ads){ads.remove()};
+      console.log('2: '+cEl.innerHTML);
+    }
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+    }
+  }
+  } else {
+     var cEl=document.getElementById(id);
+     var items=[];
+      var url='https://www.bnext.com.tw/topic/view/'+id;
+      var res = await fetch(url);
+      var str=await res.text();
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(str, "text/html");
+      
+      var hh=doc.querySelectorAll('a.absolute.inset-0');
+      for (let h of hh){console.log(h.parentElement.children[2].children[1]);
+        if(h.parentElement.children[2].children[1]!==undefined){items.push([h.href,h.parentElement.children[2].children[1].innerText.replaceAll('\n','')])}
+      }
+      console.log(items);
+      var html='';
+      for (let h of items){
+        html+=`<p class="title" onclick="bnextGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="bnextetContent(this.id,'${h[0]}')"></div><hr>`
+      }
+      cEl.innerHTML=html;
+      cEl.style.display='block';
+
+  }
+}
   
 //    CNBC VIDEO FROM MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
