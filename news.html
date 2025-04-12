@@ -88,7 +88,7 @@ var rr=0;
 var options=document.getElementById('btn-group');
 var btn=document.getElementById('btn');
 var list=document.getElementById('list');
-var top=document.getElementById('top');
+var topdiv=document.getElementById('top');
 
   
 //    LANDING PAGE
@@ -98,8 +98,8 @@ ping();
 openMediaList();
 
 function showTop(t){
-  top.innerText=t;
-  top.style.display='block';
+  topdiv.innerText=t;
+  topdiv.style.display='block';
 }
   
 function openMediaList(){
@@ -118,7 +118,7 @@ function openMediaList(){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="msnVideoGet1stList('${tab[0]}')">${tab[1]}</button>`;
   }
   options.style.display='block';
-  document.getElementById('top').style.display='none';
+  topdiv.style.display='none';
 }
 
 function openSearchList(){
@@ -128,16 +128,16 @@ function openSearchList(){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stSearchResults()">${tab[1]}</button>`;
   }
   options.style.display='block';
-  top.style.display='none';
+  topdiv.style.display='none';
 }
   
 function openOptions(){
-  var options=document.getElementById('btn-group');
     if (options.style.display=='none'){
-    options.style.display='block';
-  top.style.display='none';
-  }else{options.style.display='none';
-  top.style.display='block';
+      options.style.display='block';
+      topdiv.style.display='none';
+    }else{
+      options.style.display='none';
+      topdiv.style.display='block';
   }
 }
 
