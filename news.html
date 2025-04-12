@@ -1004,7 +1004,7 @@ if (rr==1){
   document.getElementById('list').innerHTML='';
 }
 
-var url='https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
+var url=preStr+'https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
 var res = await fetch(url);
 var str=await res.text();
 var parser = new DOMParser();
@@ -1036,7 +1036,7 @@ async function bnextGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    const res = await fetch(id);
+    const res = await fetch(preStr+id);
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
@@ -1059,7 +1059,7 @@ async function bnextGetContent(clickedId,id){
   } else {
      var cEl=document.getElementById(id);
      var items=[];
-      var url='https://www.bnext.com.tw/topic/view/'+id;
+      var url=preStr+'https://www.bnext.com.tw/topic/view/'+id;
       var res = await fetch(url);
       var str=await res.text();
       var parser = new DOMParser();
@@ -1100,7 +1100,7 @@ if (rr==1){
   document.documentElement.scrollTop = 0;
   document.getElementById('list').innerHTML='';
 }
-var url='https://cdn.'+t+'page/'+rr;console.log(url);
+var url=preStr+'https://cdn.'+t+'page/'+rr;console.log(url);
 let res=await fetch(url);
 let str=await res.text();
 var parser = new DOMParser();
@@ -1122,7 +1122,7 @@ async function technewsGetContent(clickedId,id){
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
     
-    const res = await fetch(id.replace('https://','https://cdn.').replace('finance.',''));
+    const res = await fetch(preStr+id.replace('https://','https://cdn.').replace('finance.',''));
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
