@@ -10,7 +10,7 @@
 <title>News</title>
 <style>
 body {background-color:#F4ECD8;color:#3B2D20;font-size:1.4rem}
-#container{min-height:100vh;max-width:600px;margin:auto}
+#container{min-height:100vh;margin:auto}
 .content{display:none;cursor:pointer}
 .sepia{background-color:#F4ECD8;color:#3B2D20}
 .sepia-contrast{background-color:#3B2D20;color:#F4ECD8}
@@ -20,7 +20,19 @@ h1 a {color: navy; font-weight: bold; text-decoration:none;cursor:pointer}
 .en-us{font-size:1.2rem}
 .fs10, .time, figcaption{font-size:1rem}
 img{display:block !important;margin:auto;width:100%;height:auto}
-@media (min-width:768px){
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 2) {
+  body{font-size:2rem} h1,h2,h3,h4,h5,h6,.title{font-size:2rem} .en-us{font-size:1.6rem} .fs10, .time, figcaption{font-size:1.3rem}
+}
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1366px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+  body{font-size:4rem} h1,h2,h3,h4,h5,h6,.title{font-size:4rem} .en-us{font-size:3.6rem} .fs10, .time, figcaption{font-size:2.5rem}
+}
+@media (min-width:1366px){
   @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
   body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
   #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8}
