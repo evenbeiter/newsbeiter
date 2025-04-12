@@ -933,6 +933,7 @@ showTop('數位時代');
 }
 
 async function bnextGetList(t){
+siteName='bnext';
 var items = [];
 rr++;
 rt=t;
@@ -1030,6 +1031,7 @@ technewsGetList(t);
 }
 
 async function technewsGetList(t){
+siteName='technews';
 var items = [];
 rr++;
 rt=t;
