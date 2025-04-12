@@ -88,6 +88,7 @@ var rr=0;
 var options=document.getElementById('btn-group');
 var btn=document.getElementById('btn');
 var list=document.getElementById('list');
+var top=document.getElementById('top');
 
   
 //    LANDING PAGE
@@ -97,8 +98,8 @@ ping();
 openMediaList();
 
 function showTop(t){
-  document.getElementById('top').innerText=t;
-  document.getElementById('top').style.display='block';
+  top.innerText=t;
+  top.style.display='block';
 }
   
 function openMediaList(){
@@ -127,14 +128,17 @@ function openSearchList(){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stSearchResults()">${tab[1]}</button>`;
   }
   options.style.display='block';
-  document.getElementById('top').style.display='none';
+  top.style.display='none';
 }
   
 function openOptions(){
   var options=document.getElementById('btn-group');
     if (options.style.display=='none'){
     options.style.display='block';
-  }else{options.style.display='none'}
+  top.style.display='none';
+  }else{options.style.display='none';
+  top.style.display='block';
+  }
 }
 
 async function ping(){
