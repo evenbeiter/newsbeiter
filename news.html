@@ -58,19 +58,15 @@ img{display:block !important;margin:auto;width:100%;height:auto}
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="news.js"></script>
 <script>
-
-  
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(function(reg) {
+      console.log('Service Worker registered:', reg);
+    })
+    .catch(function(err) {
+      console.error('Service Worker registration failed:', err);
+    });
+}
 </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(function(reg) {
-          console.log('Service Worker registered:', reg);
-        })
-        .catch(function(err) {
-          console.error('Service Worker registration failed:', err);
-        });
-    }
-  </script>
 </body>
 </html>
