@@ -10,7 +10,6 @@ const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e
   ['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', 'Bloomberg'],['vid-mpxsw8rp392wedf25t8tfhk7r3b364q8dj75ks43nimmf06qg2es', 'Reuters'],['vid-r0r09b3muc6xnf5tv2est5f5ukjbkk67i9svrhyu3jy2pskkbems', 'MarketWatch'],['vid-y572a3ryyddhuiujs0xe2j4m4b6c3n2fp5hnux4jpsdand8h09ys', 'WSJ'],['vid-bpwfbvkfudq92wksju4upi9jrx2pn0ax46vrw0vkst93vpwr5pva', 'CNN'],['vid-v3atkpesfykfx7084fbu0cpbtx0jne99kctychfsn9ry96wsmbba', 'BBC'],['vid-r4du2vx0u9h0kr9tx7iyx55w7sneq7e6tg934epuehq3grvn05aa', 'Fortune'],['vid-n3h9ssyxg550pryvt4287xynyckhu84k5vc6n3tdqwsvtvmn2p0s', 'USA TODAY'],['vid-27xbtchrc5gpxe8uhvw9f24q2kqi9f0ppk7ptb8xw9v9sscheg6s', 'Motley Fool'],['vid-i3g0qyhrtn28biukcpyvsrmhccmv8k8ugtmtr6kqhb9dkf6ccrua', 'FOX News'],['vid-rvn4g4busxh65p6kgfvhye9atw9n8ebd46ut057ypkbm5n6xa5ts', 'BuzzFeed']];
 const msnNewsVideo=[['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS News - Video'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'The Washington Post - Video'],['Y_3446ecaf-77f7-4503-955f-f908510ac476', 'TikTok']];
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],['102394|103101','經濟工商'],['103214|100267','M平方'],['100295','今周刊'],['101131','CMoney'],['100422|100421|100423','商周'],['101170','路透社'],['104453|101006','財訊'],['100150|103088','鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],['100004|101886','風傳媒'],['100275|101201','關鍵評論網'],['global','國際'],['100003','中央社'],['TOPIC-USelection|2024election','川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],['100568|100158','天下雜誌'],['101031','地球圖輯隊'],['101934|100394','閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
-const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8-47bd-b0d8-96b89a20d817','即時'],['a8a208bf-23e1-4950-8aba-8a8d1c0c2da5','財經'],['f10835b8-98fe-48b4-a506-023937ab0a4b','Yahoo 特派'],['4e1fb4b1-9bf1-4d00-81a1-64001c935310','股匯市'],['cdbe8dd0-22d4-11ea-bbfb-7e2fb6871bd3','台股盤勢'],['9f0e62c0-22d5-11ea-bede-345eb8f1edf4','國際財經'],['e9628320-22d4-11ea-9ef0-2fabb53ab0e9','基金動態'],['381351b0-6d8c-11e9-bb53-0fc098ecd9a1','雜誌'],['ad05d340-22d5-11ea-9db1-fe39a6582c47','研究報告'],['70394000-22d5-11ea-bef4-114a94a8f820','小資理財'],['875b56b0-22d5-11ea-95cf-d43d8a1a8360','專家專欄'],['ebb0818f-c3e6-4c43-ab06-7fabe34c02f5','產業'],['65c6fa3b-b4c8-42e7-afed-c468a927d71f','國際'],['9336b431-7f5d-4dba-b06d-0dce56fb3f8f','娛樂'],['47409191-3f19-48a5-b99a-b7a19c5152f1','Yahoo'],['1af9d85f-9f45-4f07-a290-d6116fcd7e94','BBC'],['fbe20d0c-5704-4a52-a6dd-862b105734a8','中時'],['e9162370-a63f-41e1-b6ab-a2ca4bc88aa3','三立'],['841ae727-aaf4-4d96-89e8-6023380a5f0d','TVBS'],['d1c5195f-8c50-441f-8d4f-192505ff481a','公視'],['616c3db4-1af4-4d9a-90c2-e8d5b61fdca8','中天'],['24a219a6-e124-4d54-85c0-da53c42dad3f','聯合'],['1eeeee88-4e98-49f5-9283-d95b59faa8d0','東森'],['92e62bbd-f6b0-4ff2-ae60-da5e92602b8b','CWANT'],['15344921-beff-4849-8c1e-799f00eb6104','壹蘋'],['15fd91e7-7935-439f-a2a9-caea96a5c3db','鏡週刊'],['81870ef4-46f4-4ed2-a2b3-d436b9b85c06','NOWNews'],['80c8c637-4f0d-4df0-8c2e-d66523148f6d','台視'],['75f58300-9102-4339-a493-1e2f3e31313c','民視'],['f0caaf82-30b3-4e6c-a2eb-aa9577dbe7d4','華視'],['483b66c7-0238-411e-be93-53e1478272d3','新頭殻'],['71b213f3-88c4-41fe-b9f0-a59e9045e2d0','風傳媒'],['bd00c410-4b30-4245-abf8-d23656709efa__','Latest'],['db1d46e0-a969-11e9-bff5-6dfdb80d79cf__','Stock Market News'],['04d9350a-bbd1-4787-95be-740cc5ee8852__','Earnings'],['0897608a-7d79-47df-9377-b07bd22b0fde__','Yahoo Finance'],['ed5c8883-d951-4e70-87b3-9f8f375fb410__','Premium News'],['dffbd430-02a2-11e7-bcfc-437e9432ca73__','Tech'],['b1f0c990-db7a-11e7-a937-0d92c86f9da1__','Crypto']];
 const anue=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
 const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
 const wealth=[['','最新','Articles'],['bd088d2c-f76a-4187-8673-1ae412cd6356','謝金河','Articles'],['95f4329c-bcf4-47c4-b133-879bb862b479','財經茶水間','Category'],['2c6379e9-7527-442b-880a-bb9552689e06','國際','Category'],['87259978-8ff6-465c-b552-c33f69f6432e','投資理財','Category'],['450cbbed-c577-4d8e-a689-8e90b4f8bac7','財經指標','Category'],['d1354fa3-82bf-42e6-84ad-9e36d7615892','金融圈','Category'],['79c03f3f-d546-4551-a05f-c6d38e5579ca','科技','Category'],['3187845b-57fb-4336-bc4b-4f30cbeb642c','企業','Category'],['dd2b5859-96aa-42bb-b5cc-08e6c7c8728e','生醫','Category'],['800e2b3c-0352-4fba-aea2-01fff6b16015','地產','Category'],['352be1d4-7ce8-42b8-9a84-0f491f7927ea','政經','Category'],['de408237-667e-4594-abd8-8106ba567324','健康醫療','Category'],['2eb0f6be-d8bb-447d-b067-e17601f44056','美食旅遊','Category'],['2492cf34-afd8-40ee-95de-6f340988ab22','品味人生','Category']];
@@ -1164,185 +1163,6 @@ async function msnCnbcVideoGetContent(clickedId,id,url,m3u8Url){
     }
   }
 }
-  
-
-//    CNBC VIDEO
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function cnbcVideoGetList(t){
-var t='100004038';
-siteName='cnbcVideo';
-var items = [];
-rr++;
-rt=t;
-console.log(rr);
-if (rr==1){
-  document.getElementById('btn-group').style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  document.getElementById('list').innerHTML='';
-}
-var url='https://webql-redesign.cnbcfm.com/graphql?operationName=getAssetList&variables={"id":"'+t+'","offset":'+(rr-1)*30+',"pageSize":30,"nonFilter":false,"includeNative":true,"include":[]}&extensions={"persistedQuery":{"version":1,"sha256Hash":"43ed5bcff58371b2637d1f860e593e2b56295195169a5e46209ba0abb85288b7"}}';console.log(url);
-
-let res=await fetch(url);
-let str=await res.json();
-for (let h of str.data.assetList.assets){
-  items.push([h.url,h.title,h.datePublished,h.duration,h.promoImage.url])
-}
-var html='';
-for (let h of items){
-  html+=`<div onclick="cnbcVideoGetContent(this.id,'${h[0]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="cnbcVideoGetContent(this.id,'${h[0]}')"></div><hr>`
-}
-document.getElementById('list').innerHTML+=html;
-}
-
-async function cnbcVideoGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    cEl.style.display='block';
-    const res = await fetch(preStr+id);
-    const str=await res.text();
-    var videoSrc=str.match(/"playbackURL":"[\s\S]*?.m3u8/g)[0].replace('"playbackURL":"','');
-    var m3u8Url='https:'+JSON.parse(`"${videoSrc}"`);console.log(m3u8Url);
-    var des=str.match(/"description":"[\s\S]*?"/g)[0].replace('"description":"','');
-    
-    videoSrc=str.match(/"playbackURL":"[\s\S]*?.m3u8/g)[0].replace('"playbackURL":"','');
-    var nuxtDataItem = '<video id="video-'+id+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'+'<p class="text-end"><a href="' + id + '" target="_blank">Share</a></p><br>';
-    cEl.innerHTML=nuxtDataItem;
-    cEl.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
-    var video=document.getElementById('video-'+id); 
-      
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = m3u8Url;
-          video.play();
-    } else if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(m3u8Url);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          video.play();
-      });
-    }      
-  } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
-      cEl.style.display='none';
-      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
-    }
-  }
-}
-
-async function cnbcVideoGet1stSearchResults(){
-rr=0;
-cnbcVideoGetSearchResults();
-}
-
-async function cnbcVideoGetSearchResults(){
-  siteName='cnbcVideo';
-  rt='s';
-  rr++;
-  var items=[];
-  if (rr==1){
-  document.getElementById('btn-group').style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  document.getElementById('list').innerHTML='';
-  t=document.getElementById('search-term').value;
-}
-  var html = '';
-  var url='';
-
-  url='https://api.queryly.com/cnbc/json.aspx?queryly_key=31a35d40a9a64ab3&callback=&showfaceted=false&timezoneoffset=-480&facetedfields=formats&facetedkey=formats|&facetedvalue=Video|&needtoptickers=0&additionalindexes=4cd6f71fbf22424d,937d600b0d0d4e23,3bfbe40caee7443e,626fdfcd96444f28&query='+'100004038'+'&endindex='+(rr-1)*30+'&batchsize=30&sort=';
-  let res=await fetch(url);
-  let str=await res.json();
-  for (let h of str.results){
-    items.push([h.url,h['cn:title'],h._pubDate,h.duration,h['cn:promoImage']])
-  }
-  var html='';
-  for (let h of items){
-    html+=`<div onclick="cnbcVideoGetContent(this.id,'${h[0]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[2]} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="cnbcVideoGetContent(this.id,'${h[0]}')"></div><hr>`
-  }
-  document.getElementById('list').innerHTML+=html;
-}
-
-
-//    YAHOO VIDEO
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function yahooVideoGet1stList(t){
-var t='00390a14-17cc-49d2-9e32-79365335f0ca';
-rr=0;
-uuids='';
-yahooVideoGetList(t);
-showTop('Yahoo Video');
-}
-
-async function yahooVideoGetList(t){
-siteName='yahooVideo';
-var items = [];
-rr++;
-rt=t;
-console.log(rr);
-if (rr==1){
-  document.getElementById('btn-group').style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  document.getElementById('list').innerHTML='';
-  uuids='paginationString={}';
-}
-
-var payload={
-  "payload":{
-    "gqlVariables": {
-        "main": {
-            "pagination": {
-                "uuids": uuids
-            }
-        }
-    }
-},
-  "serviceConfig": {
-    "listId": t,
-    "count": 200,
-    "snippetCount": 50
-  }
-};
-var url='https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
-var res = await fetch(url, {
-  method: 'POST',
-  headers: {'Content-Type': 'text/plain;charset=UTF-8',},
-  body: JSON.stringify(payload),
-  });
-var str=await res.json();
-uuids=str.data.main.pagination.uudis;
-
-for (let h of str.data.main.stream){
-  items.push([h.id,h.content.title,h.content.pubDate,h.content.duration,h.content.thumbnail.originalUrl,h.content.canonicalUrl.url])
-}
-
-var html='';
-for (let h of items){
-  html+=`<div onclick="yahooVideoGetContent(this.id,'${h[0]}','${h[5]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="yahooVideoGetContent(this.id,'${h[0]}','\${h[5]}')"></div><hr>`
-}
-document.getElementById('list').innerHTML+=html;
-}
-
-async function yahooVideoGetContent(clickedId,id,url){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    cEl.style.display='block';
-    var nuxtDataItem = '<iframe id="video-'+id+'" src="'+url+'?format=embed" style="width:100%;height:auto"></iframe>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
-    cEl.innerHTML=nuxtDataItem;
-
-    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
-  } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
-      cEl.style.display='none';
-      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
-    }
-  }
-}
 
 
 //    MSN VIDEO
@@ -1504,14 +1324,6 @@ function cvtS2HHMMSS(sec,rescale) {
         return hh+':'+mm+':'+ss;
     }
     return mm+':'+ss;
-}
-  
-function cvtTime(unixTimestamp) {
-  const date = new Date(unixTimestamp);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
 }
 
 function cvt2Timezone(timestamp) {
