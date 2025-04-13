@@ -195,6 +195,8 @@ async function msnGetContent(clickedId,id,coun){
           var nuxtDataItem = '<span class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</span><br>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
           cEl.innerHTML=nuxtDataItem.replaceAll('\/>','\/><br>');
 
+      } else {
+        var nuxtDataItem = '<p><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">繼續閱讀</a></p><br>';
       }
 
   if (coun==='en-us'){
