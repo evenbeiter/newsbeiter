@@ -1,4 +1,4 @@
-const allSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周'],['bnext','數位科技'],['technews','科技新報'],['msnTW','MSN 台灣'],['msnUS','MSN']];
+const allSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周'],['bnext','數位時代'],['technews','科技新報'],['msnTW','MSN 台灣'],['msnUS','MSN']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'others':[['msnCnbcVideo','CNBC'],['wsjVideo','WSJ'],['yahooVideo','Yahoo']]};
 const uLi = ['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const searchSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']]; 
