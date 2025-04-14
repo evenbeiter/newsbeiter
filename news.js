@@ -102,21 +102,41 @@ function createBtnGroup(site,siteName){
     }
 }
 
+async function get1stList(siteName,top,op,t){
+rr=0;
+if (siteName=='msnTW'){
+  msnGetList(t,'zh-tw')
+} else if (siteName=='msnUS'){
+  msnGetList(t,'en-us')
+} else if (siteName=='wealth'){
+  wealthGetList(op,t);
+} else {
+  window[`${siteName}GetList`](t)
+}
+if (siteName=='msnVideo'){
+  var cat=t.split(' ')[0];
+  cat=cat.charAt(0).toUpperCase() + cat.slice(1);
+  showTop('MSN '+cat);
+} else {
+  showTop(top);
+}
+}
+
 
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function msnTWGet1stList(t){
-rr=0;
-msnGetList(t,'zh-tw');
-showTop('MSN 台灣');
-}
+// async function msnTWGet1stList(t){
+// rr=0;
+// msnGetList(t,'zh-tw');
+// showTop('MSN 台灣');
+// }
 
-async function msnUSGet1stList(t){
-rr=0;
-msnGetList(t,'en-us');
-showTop('MSN');
-}
+// async function msnUSGet1stList(t){
+// rr=0;
+// msnGetList(t,'en-us');
+// showTop('MSN');
+// }
 
 async function msnGetList(t,c){
 siteName='msn';
@@ -223,11 +243,11 @@ async function msnGetContent(clickedId,id,coun){
 //    LINE TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function lineTodayGet1stList(tt){
-rr=0;
-lineTodayGetList(tt);
-showTop('LINE TODAY');
-}
+// async function lineTodayGet1stList(tt){
+// rr=0;
+// lineTodayGetList(tt);
+// showTop('LINE TODAY');
+// }
 
 async function lineTodayGetList(tt){
 siteName='lineToday';
@@ -334,83 +354,14 @@ document.getElementById('search-term').value='';
 }
 
 
-//    YAHOO
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function yahooTWGet1stList(t){
-rr=0;
-yahooTWGetList(t);
-showTop('YAHOO');
-}
-
-async function yahooTWGetList(t){
-siteName='yahooTW';
-var coun='TW';
-if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='US'};
-var items = [];
-rr++;
-rt=t;
-console.log(rr);
-if (rr==1){
-  document.getElementById('btn-group').style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  document.getElementById('list').innerHTML='';
-}
-var url=preStr+'https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t;
-let res=await fetch(url);
-let str=await res.json();
-var data=str.data.main.stream.slice((rr-1)*50,rr*50);
-for (let h of data){
-  if(h.content){
-    h=h.content;
-    items.push([h.canonicalUrl.url,h.title])
-  }
-}
-var html='';
-for (let h of items){
-  html+=`<p class="title" onclick="yahooTWGetContent(this.id,'${h[0]}','${coun}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="yahooTWGetContent(this.id,'${h[0]}','${coun}')"></div><hr>`
-}
-document.getElementById('list').innerHTML+=html;
-}
-
-async function yahooTWGetContent(clickedId,id,coun){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    cEl.style.display='block';
-    const res = await fetch(preStr+id);
-    const str=await res.text();
-    var au=cEl.querySelector('.caas-attr-item-author');
-    var t=cEl.querySelector('.caas-attr-time-style');
-    var a=cEl.querySelector('.caas-body');
-    
-    var nuxtDataItem = '<p class="fs10">'+au.innerText+' | '+t.innerText+'</p>'+ a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
-    cEl.innerHTML=nuxtDataItem;
-
-    var all=[...cEl.querySelectorAll('li'),...cEl.querySelectorAll('p')];
-    for (let a of all){
-      if (a.innerText!=='' && cnTest(a.innerText)!==true){
-        var t=await translate(a.textContent);
-        if (t!==''){a.outerHTML+='<p class="fs10">'+t+'</p>'};
-      }
-    }
-    
-  } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
-    }
-  }
-}
-
-
 //    ANUE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function anueGet1stList(t){
-rr=0;
-anueGetList(t);
-showTop('鉅亨');
-}
+// async function anueGet1stList(t){
+// rr=0;
+// anueGetList(t);
+// showTop('鉅亨');
+// }
 
 async function anueGetList(t){
 siteName='anue';
@@ -530,11 +481,11 @@ async function anueGetSearchResults(){
 //    CTEE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function cteeGet1stList(t){
-rr=0;
-cteeGetList(t);
-showTop('工商');
-}
+// async function cteeGet1stList(t){
+// rr=0;
+// cteeGetList(t);
+// showTop('工商');
+// }
 
 async function cteeGetList(t){
 siteName='ctee';
@@ -620,11 +571,11 @@ async function cteeGetSearchResults(){
   
 
 
-async function wealthGet1stList(op,t){
-rr=0;
-wealthGetList(op,t);
-showTop('財訊');
-}
+// async function wealthGet1stList(op,t){
+// rr=0;
+// wealthGetList(op,t);
+// showTop('財訊');
+// }
 
 async function wealthGetList(op,t){
 siteName='wealth';
@@ -740,11 +691,11 @@ async function getContent(clickedId,id){
 //    BUSINESS TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function businessTodayGet1stList(t){
-rr=0;
-businessTodayGetList(t);
-showTop('今周刊');
-}
+// async function businessTodayGet1stList(t){
+// rr=0;
+// businessTodayGetList(t);
+// showTop('今周刊');
+// }
 
 async function businessTodayGetList(t){
 siteName='businessToday';
@@ -845,11 +796,11 @@ for (let h of hh){
 //    BUSINESS WEEKLY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function businessWeeklyGet1stList(t){
-rr=0;
-businessWeeklyGetList(t);
-showTop('商業周刊');
-}
+// async function businessWeeklyGet1stList(t){
+// rr=0;
+// businessWeeklyGetList(t);
+// showTop('商業周刊');
+// }
 
 async function businessWeeklyGetList(t){
 siteName='businessWeekly';
@@ -927,11 +878,11 @@ async function businessWeeklyGetContent(clickedId,id){
 //    BNEXT
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function bnextGet1stList(t){
-rr=0;
-bnextGetList(t);
-showTop('數位時代');
-}
+// async function bnextGet1stList(t){
+// rr=0;
+// bnextGetList(t);
+// showTop('數位時代');
+// }
 
 async function bnextGetList(t){
 siteName='bnext';
@@ -1026,10 +977,11 @@ async function bnextGetContent(clickedId,id){
 //    TECH NEWS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function technewsGet1stList(t){
-rr=0;
-technewsGetList(t);
-}
+// async function technewsGet1stList(t){
+// rr=0;
+// technewsGetList(t);
+// showTop('科技新報');
+// }
 
 async function technewsGetList(t){
 siteName='technews';
@@ -1096,11 +1048,11 @@ async function technewsGetContent(clickedId,id){
 //    CNBC VIDEO FROM MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function msnCnbcVideoGet1stList(){
-rr=0;
-msnCnbcVideoGetList(t);
-showTop('CNBC Video');
-}
+// async function msnCnbcVideoGet1stList(){
+// rr=0;
+// msnCnbcVideoGetList(t);
+// showTop('CNBC Video');
+// }
 
 async function msnCnbcVideoGetList(){
 siteName='msnCnbcVideo';
@@ -1170,13 +1122,13 @@ async function msnCnbcVideoGetContent(clickedId,id,url,m3u8Url){
 //    MSN VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function msnVideoGet1stList(t){
-rr=0;
-msnVideoGetList(t);
-var cat=t.split(' ')[0];
-cat=cat.charAt(0).toUpperCase() + cat.slice(1);
-showTop('MSN '+cat);
-}
+// async function msnVideoGet1stList(t){
+// rr=0;
+// msnVideoGetList(t);
+// var cat=t.split(' ')[0];
+// cat=cat.charAt(0).toUpperCase() + cat.slice(1);
+// showTop('MSN '+cat);
+// }
 
 async function msnVideoGetList(t){
 siteName='msnVideo';
@@ -1242,11 +1194,11 @@ async function msnVideoGetContent(clickedId,id,url,m3u8Url){
 //    WSJ VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function wsjVideoGet1stList(t){
-rr=0;
-wsjVideoGetList(t);
-showTop('WSJ Video');
-}
+// async function wsjVideoGet1stList(t){
+// rr=0;
+// wsjVideoGetList(t);
+// showTop('WSJ Video');
+// }
 
 async function wsjVideoGetList(t){
 siteName='wsjVideo';
