@@ -29,6 +29,7 @@ var options=document.getElementById('btn-group');
 var btn=document.getElementById('btn');
 var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
+var loading=document.getElementById('loading');
 
   
 //    LANDING PAGE
@@ -272,6 +273,7 @@ if(html!==''){list.innerHTML+=html;
 }
 
 async function lineTodayGetContent(clickedId,id){
+  loading.style.display='block';
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
@@ -285,6 +287,7 @@ async function lineTodayGetContent(clickedId,id){
         var html = '<span>' + a.publishTime + ' ' + a.publisher + '</span><br>' + '<video class="vjs-tech" style="width:100%" tabindex="-1" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+a.media.hash+'/270p.m3u8" muted="muted" type="application/x-mpegURL"></source></video>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
       }
         cEl.innerHTML=html;
+        loading.style.display='none';
     }
   } else {
     closeContent(cEl);
