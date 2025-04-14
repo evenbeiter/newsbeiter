@@ -290,7 +290,7 @@ async function lineTodayGetContent(clickedId,id){
         loading.style.display='none';
     }
   } else {
-    closeContent(cEl);
+    closeContent(cEl,clickedId);
   }
 }
 
@@ -384,7 +384,7 @@ var items=[];var url='';var html='';
         }
       }
     } else {
-      closeContent(cEl);
+      closeContent(cEl,clickedId);
     }
   }
 
@@ -431,7 +431,7 @@ async function anueGetSearchResults(){
       var a=doc.querySelector('#article-container');
       if(a){contentEl.innerHTML=a.outerHTML};
     } else {
-      closeContent(cEl);
+      closeContent(cEl,clickedId);
     }
   }
 
@@ -480,7 +480,7 @@ async function cteeGetContent(clickedId,id){
     }
     cEl.style.display='block';
   } else {
-    closeContent(cEl);
+    closeContent(cEl,clickedId);
   }
 }
 
@@ -624,7 +624,7 @@ async function wealthGetContent(clickedId,id){
     document.getElementById(id+'__').innerHTML=body;
     
   } else {
-    closeContent(cEl);
+    closeContent(cEl,clickedId);
   }
 }
 
@@ -680,7 +680,7 @@ async function businessTodayGetContent(clickedId,id){
       cEl.style.display='block';
     }
   } else {
-    closeContent(cEl);
+    closeContent(cEl,clickedId);
   }
 }
 
@@ -791,7 +791,7 @@ async function businessWeeklyGetContent(clickedId,id){
         cEl.style.display='block';
     }
   } else {
-    closeContent(cEl);
+    closeContent(cEl,clickedId);
   }
 }
 
@@ -857,7 +857,7 @@ async function bnextGetContent(clickedId,id){
       console.log('2: '+cEl.innerHTML);
     }
   } else {
-    closeContent(cEl);
+    closeContent(cEl,clickedId);
   }
   } else {
      var cEl=document.getElementById(id);
@@ -940,7 +940,7 @@ async function technewsGetContent(clickedId,id){
       cEl.style.display='block';
     }
   } else {
-    closeContent(cEl);
+    closeContent(cEl,clickedId);
   }
 }
 
@@ -1085,7 +1085,7 @@ function newNews(){
   list.innerHTML='';
 }
 
-function closeContent(cEl){
+function closeContent(cEl,clickedId){
   if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
     cEl.previousElementSibling.previousElementSibling.scrollIntoView();
   }
