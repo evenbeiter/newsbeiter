@@ -1302,7 +1302,7 @@ var payload={
 var url=preStr+'https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
 var res = await fetch(url, {
   method: 'POST',
-  headers: {'Content-Type': 'text/plain;charset=UTF-8',},
+  headers: {'Content-Type': 'text/plain;charset=UTF-8','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',},
   body: JSON.stringify(payload),
   });
 var str=await res.json();
