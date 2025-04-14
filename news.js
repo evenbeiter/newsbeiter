@@ -142,6 +142,7 @@ showTop('MSN');
 }
 
 async function msnGetList(t,c){
+loading.style.display='block';
 siteName='msn';coun=c;rr++;rt=t;console.log(rr);
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -167,6 +168,7 @@ for (let d of items){
   html+=`<p class="${coun} t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
 }
 list.innerHTML+=html;
+loading.style.display='none';
 
 if (coun==='en-us'){
   var all=document.querySelectorAll('.t-tl');
@@ -178,6 +180,7 @@ async function msnGetContent(clickedId,id,coun){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' && cEl.textContent!==''){cEl.style.display='block'}
   else if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
     var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
     var d=await res.json();
@@ -205,6 +208,8 @@ async function msnGetContent(clickedId,id,coun){
         var html = '<p><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">繼續閱讀</a></p><br>';
       }
 
+    loading.style.display='none';
+
   if (coun==='en-us'){
     var all=[];
     var pg=cEl.getElementsByTagName('p');all.push(...pg);
@@ -231,6 +236,7 @@ showTop('LINE TODAY');
 }
 
 async function lineTodayGetList(tt){
+loading.style.display='block';
 siteName='lineToday';rr++;rt=tt;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -268,8 +274,8 @@ items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
 for (let h of items){
   html+=`<p class="title" onclick="${siteName}GetContent(this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="${siteName}GetContent(this.id,'${h[0]}')"></div><hr>`
 }
-if(html!==''){list.innerHTML+=html;
-}
+if(html!==''){list.innerHTML+=html;}
+loading.style.display='none';
 }
 
 async function lineTodayGetContent(clickedId,id){
@@ -299,6 +305,7 @@ rr=0;
 t=document.getElementById('search-term').value;
 showTop('LINE TODAY - 搜尋：'+t);
 
+loading.style.display='block';
 siteName='lineToday';
 options.style.display='none';
 document.body.scrollTop = 0;
@@ -322,6 +329,7 @@ for (let h of items){
   html+=`<p class="title" onclick="${siteName}GetContent(this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="${siteName}GetContent(this.id,'${h[0]}')"></div><hr>`
 }
 list.innerHTML=html;
+loading.style.display='none';
 document.getElementById('search-term').value='';
 }
 
@@ -336,6 +344,7 @@ showTop('鉅亨');
 }
 
 async function anueGetList(t){
+loading.style.display='block';
 siteName='anue';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -361,6 +370,7 @@ var items=[];var url='';var html='';
     
   }
   list.innerHTML+=html;
+  loading.style.display='none';
 }
   
   function decodeHTMLEntities(str){
@@ -372,6 +382,7 @@ var items=[];var url='';var html='';
   async function anueGetContent(clickedId,id){
     var cEl=document.getElementById(id);
     if (cEl.style.display=='none' || cEl.style.display==''){
+      loading.style.display='block';
       cEl.style.display='block';
       if (id.length<5){
         const res = await fetch(preStr+id+',{mode: "no-cors"}');
@@ -383,6 +394,7 @@ var items=[];var url='';var html='';
           cEl.innerHTML+=c.innerHTML
         }
       }
+      loading.style.display='none';
     } else {
       closeContent(cEl,clickedId);
     }
@@ -396,6 +408,7 @@ document.getElementById('search-term').value='';
 }
 
 async function anueGetSearchResults(){
+  loading.style.display='block';
   rt='s';
   rr++;
   if (rr==1){
@@ -417,12 +430,14 @@ async function anueGetSearchResults(){
       }
     }
     list.innerHTML+=html;
+    loading.style.display='none';
   }
 
   async function anueGetSearchContent(clickedId,id){
     var cEl=document.getElementById(id);
     var contentEl=document.getElementById('content-'+id);
     if (cEl.style.display=='none' || cEl.style.display==''){
+      loading.style.display='block';
       cEl.style.display='block';
       let res=await fetch(preStr+'https://news.cnyes.com/news/id/'+id);
       let str=await res.text();
@@ -430,6 +445,7 @@ async function anueGetSearchResults(){
       var doc = parser.parseFromString(str, "text/html");
       var a=doc.querySelector('#article-container');
       if(a){contentEl.innerHTML=a.outerHTML};
+      loading.style.display='none';
     } else {
       closeContent(cEl,clickedId);
     }
@@ -450,6 +466,7 @@ showTop('工商');
 }
 
 async function cteeGetList(t){
+loading.style.display='block';
 siteName='ctee';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -465,11 +482,13 @@ for (let h of items){
   html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
 }
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 async function cteeGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
     const res = await fetch('https://www.ctee.com.tw/api'+id);
     const str=await res.json();
@@ -478,7 +497,7 @@ async function cteeGetContent(clickedId,id){
       cEl.innerHTML+=html;
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
     }
-    cEl.style.display='block';
+    loading.style.display='none';
   } else {
     closeContent(cEl,clickedId);
   }
@@ -492,6 +511,7 @@ document.getElementById('search-term').value='';
 }
 
 async function cteeGetSearchResults(){
+  loading.style.display='block';
   rt='s';
   rr++;
   var items=[];
@@ -515,7 +535,8 @@ async function cteeGetSearchResults(){
   for (let h of items){
     html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
   }
-    list.innerHTML+=html;
+  list.innerHTML+=html;
+  loading.style.display='none';
 }
   
 
@@ -529,6 +550,7 @@ showTop('財訊');
 }
 
 async function wealthGetList(op,t){
+loading.style.display='block';
 siteName='wealth';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -582,11 +604,13 @@ for (let h of items){
   html+=`<p class="title" onclick="wealthGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="wealthGetContent(this.id,'${h[0]}')"></div><hr>`
 }
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 async function wealthGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
 
     var payload={
@@ -622,7 +646,7 @@ async function wealthGetContent(clickedId,id){
       }
     }
     document.getElementById(id+'__').innerHTML=body;
-    
+    loading.style.display='none';
   } else {
     closeContent(cEl,clickedId);
   }
@@ -639,6 +663,7 @@ showTop('今周刊');
 }
 
 async function businessTodayGetList(t){
+loading.style.display='block';
 siteName='businessToday';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -657,11 +682,13 @@ for (let h of items){
   html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
 }
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 async function businessTodayGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
     const res = await fetch(preStr+id);
     const str=await res.text();
@@ -677,8 +704,8 @@ async function businessTodayGetContent(clickedId,id){
       cEl.innerHTML=html;
       var ads=cEl.querySelectorAll('iframe');
       for (let ad of ads){ad.remove()};
-      cEl.style.display='block';
     }
+    loading.style.display='none';
   } else {
     closeContent(cEl,clickedId);
   }
@@ -692,6 +719,7 @@ document.getElementById('search-term').value='';
 }
 
 async function businessTodayGetSearchResults(){
+  loading.style.display='block';
   rt='s';
   rr++;
   var items=[];
@@ -721,6 +749,7 @@ for (let h of hh){
     html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
   }
     list.innerHTML+=html;
+    loading.style.display='none';
 }
 
 
@@ -734,6 +763,7 @@ showTop('商業周刊');
 }
 
 async function businessWeeklyGetList(t){
+loading.style.display='block';
 siteName='businessWeekly';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -768,13 +798,14 @@ for (let tl of titles){
 for (let h of items){
   html+=`<p class="title" onclick="businessWeeklyGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessWeeklyGetContent(this.id,'${h[0]}')"></div><hr>`
 }
-console.log(items);
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 async function businessWeeklyGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
     const res = await fetch((preStr+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));
     const str=await res.text();
@@ -788,8 +819,8 @@ async function businessWeeklyGetContent(clickedId,id){
     if (a) {
         var html = '<p class="fs10">'+(p.textContent ?? '')+' '+(t.textContent ?? '')+'</p>'+(s.outerHTML ?? '')+(a.outerHTML ?? '')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
         cEl.innerHTML=html;
-        cEl.style.display='block';
     }
+    loading.style.display='none';
   } else {
     closeContent(cEl,clickedId);
   }
@@ -806,6 +837,7 @@ showTop('數位時代');
 }
 
 async function bnextGetList(t){
+loading.style.display='block';
 siteName='bnext';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -834,12 +866,14 @@ for (let h of items){
   html+=`<p class="title" onclick="bnextGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="bnextGetContent(this.id,'${h[0]}')"></div><hr>`
 }
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 async function bnextGetContent(clickedId,id){
-  if(id.length>10){
   var cEl=document.getElementById(id);
+  if(id.length>10){
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
     const res = await fetch(preStr+id);
     const str=await res.text();
@@ -854,13 +888,12 @@ async function bnextGetContent(clickedId,id){
       cEl.innerHTML=html;
       var ads=cEl.querySelector('#pumpkin_159');
       if(ads){ads.remove()};
-      console.log('2: '+cEl.innerHTML);
     }
+    loading.style.display='none';
   } else {
     closeContent(cEl,clickedId);
   }
   } else {
-     var cEl=document.getElementById(id);
      var items=[];
       var url=preStr+'https://www.bnext.com.tw/topic/view/'+id;
       var res = await fetch(url);
@@ -879,7 +912,6 @@ async function bnextGetContent(clickedId,id){
       }
       cEl.innerHTML=html;
       cEl.style.display='block';
-
   }
 }
 
@@ -894,6 +926,7 @@ showTop('科技新報');
 }
 
 async function technewsGetList(t){
+loading.style.display='block';
 siteName='technews';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -912,11 +945,13 @@ for (let h of items){
   html+=`<p class="title" onclick="technewsGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="technewsGetContent(this.id,'${h[0]}')"></div><hr>`
 }
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 async function technewsGetContent(clickedId,id){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
     
     const res = await fetch(preStr+id.replace('https://','https://cdn.').replace('finance.',''));
@@ -937,8 +972,8 @@ async function technewsGetContent(clickedId,id){
       ads.remove();
       ads=cEl.querySelectorAll('.googlenews_Content');
       for (let ad of ads){ad.remove()};
-      cEl.style.display='block';
     }
+    loading.style.display='none';
   } else {
     closeContent(cEl,clickedId);
   }
@@ -955,6 +990,7 @@ showTop(channel);
 }
 
 async function msnChannelVideoGetList(t){
+loading.style.display='block';
 siteName='msnChannelVideo';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -975,6 +1011,7 @@ for (let h of items){
   html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
 }
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 
@@ -990,6 +1027,7 @@ showTop('MSN '+cat);
 }
 
 async function msnVideoGetList(t){
+loading.style.display='block';
 siteName='msnVideo';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -1006,6 +1044,7 @@ for (let h of items){
   html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
 }
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 
@@ -1019,6 +1058,7 @@ showTop('WSJ Video');
 }
 
 async function wsjVideoGetList(t){
+loading.style.display='block';
 siteName='wsjVideo';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
@@ -1037,6 +1077,7 @@ for (let h of items){
   html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
 }
 list.innerHTML+=html;
+loading.style.display='none';
 }
 
 
@@ -1046,6 +1087,7 @@ list.innerHTML+=html;
 async function videoGetContent(clickedId,id,url,m3u8Url){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
     var html = '<video id="video-'+id+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
     cEl.innerHTML=html;
@@ -1065,6 +1107,7 @@ async function videoGetContent(clickedId,id,url,m3u8Url){
     }
 
     document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
+    loading.style.display='none';
   } else {
     if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
       cEl.style.display='none';
