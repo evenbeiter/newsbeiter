@@ -66,7 +66,7 @@ function openMediaList(){
 }
 
 function openSearchList(){
-  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr><input type="text" id="search-term" class="form-control mb-2">`;
+  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="padding-right:3rem"><input type="text" id="search-term" class="form-control mb-2">`;
   tabs=searchSites;
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stSearchResults()">${tab[1]}</button>`;
@@ -90,7 +90,7 @@ async function ping(){
 }
 
 function createBtnGroup(site,siteName){
-  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr>`;
+  btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="padding-right:3rem">`;
   for (let tab of site){
     if (siteName!=='wealth'){
       btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${tab[0]}')">${tab[1]}</button>`;
