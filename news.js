@@ -1,5 +1,5 @@
 const allSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周'],['bnext','數位時代'],['technews','科技新報'],['msnTW','MSN 台灣'],['msnUS','MSN']];
-const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'others':[['msnCnbcVideo','CNBC'],['wsjVideo','WSJ'],['yahooVideo','Yahoo']]};
+const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'others':[['msnCnbcVideo','CNBC'],['wsjVideo','WSJ']]};
 const uLi = ['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const searchSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['businessToday','今周刊'],['cnbcVideo','CNBC']]; 
 const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6,15];
@@ -1078,42 +1078,9 @@ items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(
 
 var html='';
 for (let h of items){
-  html+=`<div onclick="msnCnbcVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="msnCnbcVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+  html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
 }
 document.getElementById('list').innerHTML+=html;
-}
-
-async function msnCnbcVideoGetContent(clickedId,id,url,m3u8Url){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    cEl.style.display='block';
-    var nuxtDataItem = '<video id="video-'+id+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
-    cEl.innerHTML=nuxtDataItem;
-
-    const video = document.getElementById('video-'+id);
-
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = m3u8Url;
-        video.play();
-    } else if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(m3u8Url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play();
-        });
-    } else {
-        console.error("HLS is not supported in this browser.");
-    }
-
-    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
-  } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
-      cEl.style.display='none';
-      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
-    }
-  }
 }
 
 
@@ -1150,42 +1117,9 @@ items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(
 
 var html='';
 for (let h of items){
-  html+=`<div onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="msnVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+  html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
 }
 document.getElementById('list').innerHTML+=html;
-}
-
-async function msnVideoGetContent(clickedId,id,url,m3u8Url){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    cEl.style.display='block';
-    var nuxtDataItem = '<video id="video-'+id+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
-    cEl.innerHTML=nuxtDataItem;
-
-    const video = document.getElementById('video-'+id);
-
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = m3u8Url;
-        video.play();
-    } else if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(m3u8Url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play();
-        });
-    } else {
-        console.error("HLS is not supported in this browser.");
-    }
-
-    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
-  } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
-      cEl.style.display='none';
-      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
-    }
-  }
 }
 
 
@@ -1221,12 +1155,16 @@ items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(
 
 var html='';
 for (let h of items){
-  html+=`<div onclick="wsjVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="wsjVideoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+  html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
 }
 document.getElementById('list').innerHTML+=html;
 }
 
-async function wsjVideoGetContent(clickedId,id,url,hls){
+
+//    VIDEO GET CONTENT
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function videoGetContent(clickedId,id,url,m3u8Url){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
@@ -1234,7 +1172,6 @@ async function wsjVideoGetContent(clickedId,id,url,hls){
     cEl.innerHTML=nuxtDataItem;
 
     const video = document.getElementById('video-'+id);
-    const m3u8Url = hls;
 
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
         video.src = m3u8Url;
@@ -1260,81 +1197,6 @@ async function wsjVideoGetContent(clickedId,id,url,hls){
   }
 }
 
-
-//    YAHOO VIDEO
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-async function yahooVideoGet1stList(t){
-rr=0;
-uuids='';
-yahooVideoGetList(t);
-}
-
-async function yahooVideoGetList(t){
-var items = [];
-rr++;
-rt=t;
-console.log(rr);
-if (rr==1){
-  document.getElementById('btn-group').style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  document.getElementById('list').innerHTML='';
-  uuids='paginationString={}';
-}
-
-var payload={
-  "payload":{
-    "gqlVariables": {
-        "main": {
-            "pagination": {
-                "uuids": uuids
-            }
-        }
-    }
-},
-  "serviceConfig": {
-    "listId": '00390a14-17cc-49d2-9e32-79365335f0ca',
-    "count": 200,
-    "snippetCount": 50
-  }
-};
-var url=preStr+'https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
-var res = await fetch(url, {
-  method: 'POST',
-  headers: {'Content-Type': 'text/plain;charset=UTF-8','User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0',},
-  body: JSON.stringify(payload),
-  });
-var str=await res.json();
-uuids=str.data.main.pagination.uudis;
-
-for (let h of str.data.main.stream){
-  items.push([h.id,h.content.title,h.content.pubDate,h.content.duration,h.content.thumbnail.originalUrl,h.content.canonicalUrl.url])
-}
-
-var html='';
-for (let h of items){
-  html+=`<div onclick="yahooVideoGetContent(this.id,'${h[0]}','${h[5]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="yahooVideoGetContent(this.id,'${h[0]}','${h[5]}')"></div><hr>`
-}
-document.getElementById('list').innerHTML+=html;
-}
-
-async function getContent(clickedId,id,url){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    cEl.style.display='block';
-    var nuxtDataItem = '<iframe id="video-'+id+'" src="'+preStr.replace('api/fetch','embed')+url+'?format=embed" style="width:100%;height:auto"></iframe>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
-    cEl.innerHTML=nuxtDataItem;
-
-    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
-  } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
-      cEl.style.display='none';
-      cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
-    }
-  }
-}
 
 //    GLOBAL FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
