@@ -623,7 +623,6 @@ async function wealthGetContent(clickedId,id){
   } else {
     closeContent(cEl);
   }
-  }
 }
 
 
