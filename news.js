@@ -273,9 +273,9 @@ if(html!==''){list.innerHTML+=html;
 }
 
 async function lineTodayGetContent(clickedId,id){
-  loading.style.display='block';
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
     const res = await fetch(preStr+'https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id);
     const str=await res.json();
