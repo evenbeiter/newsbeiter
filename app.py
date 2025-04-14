@@ -29,6 +29,20 @@ def fetch():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/embed', methods=['GET'])
+def embed():
+    # Get the URL to proxy from the query parameters
+    url = request.args.get('url')
+    if not url:
+        return "No URL provided", 400
+    try:
+        response = requests.get(url)
+        # Pass through the content and headers for embedding in an iframe
+        return Response(response.content, headers=dict(response.headers))
+    except requests.exceptions.RequestException as e:
+        return f"Error fetching URL: {e}", 500
+
+
 @app.route("/")
 def home():
     return "Python API Proxy is running."
