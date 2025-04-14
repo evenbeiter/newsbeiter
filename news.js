@@ -126,17 +126,17 @@ if (siteName=='msnVideo'){
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// async function msnTWGet1stList(t){
-// rr=0;
-// msnGetList(t,'zh-tw');
-// showTop('MSN 台灣');
-// }
+async function msnTWGet1stList(t){
+rr=0;
+msnGetList(t,'zh-tw');
+showTop('MSN 台灣');
+}
 
-// async function msnUSGet1stList(t){
-// rr=0;
-// msnGetList(t,'en-us');
-// showTop('MSN');
-// }
+async function msnUSGet1stList(t){
+rr=0;
+msnGetList(t,'en-us');
+showTop('MSN');
+}
 
 async function msnGetList(t,c){
 siteName='msn';
@@ -243,11 +243,11 @@ async function msnGetContent(clickedId,id,coun){
 //    LINE TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-// async function lineTodayGet1stList(tt){
-// rr=0;
-// lineTodayGetList(tt);
-// showTop('LINE TODAY');
-// }
+async function lineTodayGet1stList(tt){
+rr=0;
+lineTodayGetList(tt);
+showTop('LINE TODAY');
+}
 
 async function lineTodayGetList(tt){
 siteName='lineToday';
@@ -357,11 +357,11 @@ document.getElementById('search-term').value='';
 //    ANUE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-// async function anueGet1stList(t){
-// rr=0;
-// anueGetList(t);
-// showTop('鉅亨');
-// }
+async function anueGet1stList(t){
+rr=0;
+anueGetList(t);
+showTop('鉅亨');
+}
 
 async function anueGetList(t){
 siteName='anue';
@@ -481,11 +481,11 @@ async function anueGetSearchResults(){
 //    CTEE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// async function cteeGet1stList(t){
-// rr=0;
-// cteeGetList(t);
-// showTop('工商');
-// }
+async function cteeGet1stList(t){
+rr=0;
+cteeGetList(t);
+showTop('工商');
+}
 
 async function cteeGetList(t){
 siteName='ctee';
@@ -569,13 +569,11 @@ async function cteeGetSearchResults(){
 //    WEALTH
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-
-
-// async function wealthGet1stList(op,t){
-// rr=0;
-// wealthGetList(op,t);
-// showTop('財訊');
-// }
+async function wealthGet1stList(op,t){
+rr=0;
+wealthGetList(op,t);
+showTop('財訊');
+}
 
 async function wealthGetList(op,t){
 siteName='wealth';
@@ -691,11 +689,11 @@ async function getContent(clickedId,id){
 //    BUSINESS TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// async function businessTodayGet1stList(t){
-// rr=0;
-// businessTodayGetList(t);
-// showTop('今周刊');
-// }
+async function businessTodayGet1stList(t){
+rr=0;
+businessTodayGetList(t);
+showTop('今周刊');
+}
 
 async function businessTodayGetList(t){
 siteName='businessToday';
@@ -796,11 +794,11 @@ for (let h of hh){
 //    BUSINESS WEEKLY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// async function businessWeeklyGet1stList(t){
-// rr=0;
-// businessWeeklyGetList(t);
-// showTop('商業周刊');
-// }
+async function businessWeeklyGet1stList(t){
+rr=0;
+businessWeeklyGetList(t);
+showTop('商業周刊');
+}
 
 async function businessWeeklyGetList(t){
 siteName='businessWeekly';
@@ -878,11 +876,11 @@ async function businessWeeklyGetContent(clickedId,id){
 //    BNEXT
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-// async function bnextGet1stList(t){
-// rr=0;
-// bnextGetList(t);
-// showTop('數位時代');
-// }
+async function bnextGet1stList(t){
+rr=0;
+bnextGetList(t);
+showTop('數位時代');
+}
 
 async function bnextGetList(t){
 siteName='bnext';
@@ -977,11 +975,11 @@ async function bnextGetContent(clickedId,id){
 //    TECH NEWS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-// async function technewsGet1stList(t){
-// rr=0;
-// technewsGetList(t);
-// showTop('科技新報');
-// }
+async function technewsGet1stList(t){
+rr=0;
+technewsGetList(t);
+showTop('科技新報');
+}
 
 async function technewsGetList(t){
 siteName='technews';
@@ -1048,11 +1046,11 @@ async function technewsGetContent(clickedId,id){
 //    CNBC VIDEO FROM MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-// async function msnCnbcVideoGet1stList(){
-// rr=0;
-// msnCnbcVideoGetList(t);
-// showTop('CNBC Video');
-// }
+async function msnCnbcVideoGet1stList(){
+rr=0;
+msnCnbcVideoGetList(t);
+showTop('CNBC Video');
+}
 
 async function msnCnbcVideoGetList(){
 siteName='msnCnbcVideo';
@@ -1122,13 +1120,13 @@ async function msnCnbcVideoGetContent(clickedId,id,url,m3u8Url){
 //    MSN VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-// async function msnVideoGet1stList(t){
-// rr=0;
-// msnVideoGetList(t);
-// var cat=t.split(' ')[0];
-// cat=cat.charAt(0).toUpperCase() + cat.slice(1);
-// showTop('MSN '+cat);
-// }
+async function msnVideoGet1stList(t){
+rr=0;
+msnVideoGetList(t);
+var cat=t.split(' ')[0];
+cat=cat.charAt(0).toUpperCase() + cat.slice(1);
+showTop('MSN '+cat);
+}
 
 async function msnVideoGetList(t){
 siteName='msnVideo';
@@ -1194,11 +1192,11 @@ async function msnVideoGetContent(clickedId,id,url,m3u8Url){
 //    WSJ VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-// async function wsjVideoGet1stList(t){
-// rr=0;
-// wsjVideoGetList(t);
-// showTop('WSJ Video');
-// }
+async function wsjVideoGet1stList(t){
+rr=0;
+wsjVideoGetList(t);
+showTop('WSJ Video');
+}
 
 async function wsjVideoGetList(t){
 siteName='wsjVideo';
