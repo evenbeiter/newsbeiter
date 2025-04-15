@@ -930,13 +930,16 @@ let res=await fetch(url);
 let str=await res.text();
 var parser = new DOMParser();
 var doc = parser.parseFromString(str, "text/html");
-// var hh=doc.querySelectorAll('h3.list_post_title');
-// for (let h of hh){
-//     items.push([h.firstChild.href,h.innerText]);
-// }
-var hh=doc.querySelectorAll('h1.entry-title');
-for (let h of hh){
+var hh=doc.querySelectorAll('h3.list_post_title'); //mobile
+if (hh.length!==0){
+  for (let h of hh){
+    items.push([h.firstChild.href,h.innerText]);
+  }
+} else {
+  var hh=doc.querySelectorAll('h1.entry-title'); //desktop
+  for (let h of hh){
     items.push([h.firstChild.href,h.firstChild.title]);
+  }
 }
 
 for (let h of items){
@@ -956,13 +959,16 @@ async function technewsGetContent(clickedId,id){
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
-    // const t=doc.querySelector('.date');
-    // const z = doc.querySelector('.copy').outerHTML;
-    
-    const t=doc.querySelectorAll('span.body')[1];
-    const a = doc.querySelector('.bigg');
-    const b = doc.querySelector('.indent');
-    const z=a.outerHTML+b.outerHTML;
+
+    if (doc.querySelector('.copy').length!==0){
+      const t=doc.querySelector('.date');
+      const z = doc.querySelector('.copy').outerHTML;
+    } else {
+      const t=doc.querySelectorAll('span.body')[1];
+      const a = doc.querySelector('.bigg');
+      const b = doc.querySelector('.indent');
+      const z=a.outerHTML+b.outerHTML;
+    }
     
     if (a) {
       var html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
