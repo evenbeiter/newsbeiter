@@ -598,12 +598,12 @@ async function udnGetContent(clickedId,id){
 
 async function udnGet1stSearchResults(){
 rr=0;
-cteeGetSearchResults();
+udnGetSearchResults();
 showTop('聯合 - 搜尋：'+t);
 document.getElementById('search-term').value='';
 }
 
-async function cteeGetSearchResults(){
+async function udnGetSearchResults(){
   loading.style.display='block';
   rt='s';
   rr++;
