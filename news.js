@@ -643,12 +643,12 @@ showTop('財訊');
 }
 
 async function wealthGetList(t){
-loading.style.display='block';
+loading.style.display='block';console.log(t);
 siteName='wealth';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
 var p=t.split('|');var op=t[0];var t=p[1];
-
+console.log(p);console.log(op);console.log(t);
 if (op=='Articles'){
   payload={
     "operationName": "Articles",
