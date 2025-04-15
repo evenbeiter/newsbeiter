@@ -344,28 +344,25 @@ siteName='anue';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
   
-  if (t=='topics'){
-      url=preStr+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
-      let res=await fetch(url);
-      let str=await res.json();
-      for (let a of str.items.data){
-        html+=`<p class="title" onclick="openUrl('${a.link}')">${a.title}</p><hr>`;
-      }
-    
-  } else {
-        url=preStr+'https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr;
-        let res=await fetch(url);
-        let str=await res.json();
-        for (let a of str.items.data){
-          html+=`<p class="title" onclick="anueGetContent(this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="anueGetContent(this.id,'${a.newsId}')">
-                <span class="time">${new Date(a.publishAt*1000)}</span><br>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
-                </div><hr>`;
-        }
-      
-    
+if (t=='topics'){
+  url=preStr+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let a of str.items.data){
+    html+=`<p class="title" onclick="openUrl('${a.link}')">${a.title}</p><hr>`;
   }
-  list.innerHTML+=html;
-  loading.style.display='none';
+} else {
+  url=preStr+'https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr;
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let a of str.items.data){
+    html+=`<p class="title" onclick="anueGetContent(this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="anueGetContent(this.id,'${a.newsId}')">
+          <span class="time">${new Date(a.publishAt*1000)}</span><br>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
+          </div><hr>`;
+  }
+}
+list.innerHTML+=html;
+loading.style.display='none';
 }
   
   function decodeHTMLEntities(str){
