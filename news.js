@@ -205,7 +205,7 @@ async function msnGetList(t,coun){
   }
   
   for (let d of items){
-    html+=`<p class="${coun} t-tl fw-bold" onclick="getContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="getContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
+    html+=`<p class="${coun} t-tl fw-bold" onclick="getContent(this.id,'${d[0]}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="getContent(this.id,'${d[0]}')"></div><hr>`;
   }
   return html;
 }
