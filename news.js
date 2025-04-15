@@ -798,6 +798,7 @@ async function businessTodayGetContent(clickedId,id){
       cEl.innerHTML=html;
       var ads=cEl.querySelectorAll('iframe');
       for (let ad of ads){ad.remove()};
+      cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
     }
     loading.style.display='none';
   } else {
