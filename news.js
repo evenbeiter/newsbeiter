@@ -118,7 +118,7 @@ async function getList(siteName,t){
   siteName=siteName;rr++;rt=t;
   if (rr==1){newNews()};
   items=[];html='';
-  list.innerHTML+=await window[`${siteName}GetList`](t);
+  list.innerHTML+=await window[`${siteName}GetList`](siteName,t);
   loading.style.display='none';
   if (coun==='en-us'){
     var all=document.querySelectorAll('.t-tl');
@@ -131,11 +131,11 @@ async function getSearchResults(siteName){
   siteName=siteName;rr++;rt='s';
   if (rr==1){newNews()};
   items=[];html='';
-  list.innerHTML+=await window[`${siteName}GetSearchResults`](document.getElementById('search-term').value);
+  list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
   loading.style.display='none';
 }
 
-async function getContent(clickedId,id){console.log(siteName);
+async function getContent(siteName,clickedId,id){console.log(siteName);
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
@@ -183,10 +183,10 @@ async function getContent(clickedId,id){console.log(siteName);
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function msnTWGetList(t){msnGetList(t,'zh-tw')}
-async function msnUSGetList(t){msnGetList(t,'en-us')}
+async function msnTWGetList(siteName,t){msnGetList(siteName,t,'zh-tw')}
+async function msnUSGetList(siteName,t){msnGetList(siteName,t,'en-us')}
 
-async function msnGetList(t,coun){
+async function msnGetList(siteName,t,coun){
   if (t.slice(0,2)==='Y_'){
     var srvc='channelfeed';
     t='InterestIds='+t;
@@ -205,7 +205,7 @@ async function msnGetList(t,coun){
   }
   
   for (let d of items){
-    html+=`<p class="${coun} t-tl fw-bold" onclick="getContent(this.id,'${d[0]}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="getContent(this.id,'${d[0]}')"></div><hr>`;
+    html+=`<p class="${coun} t-tl fw-bold" onclick="getContent('${siteName}',this.id,'${d[0]}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="getContent('${siteName}',this.id,'${d[0]}')"></div><hr>`;
   }
   return html;
 }
@@ -237,7 +237,7 @@ async function msnGetContent(id,coun){
 //    LINE TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function lineTodayGetList(tt){
+async function lineTodayGetList(siteName,tt){
   tt=tt.split('|');
   for (let t of tt) {
     if (/[0-9]/.test(t)){
@@ -270,7 +270,7 @@ async function lineTodayGetList(tt){
   items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
   
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -303,7 +303,7 @@ async function lineTodayGet1stSearchResults(t){
   items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
   
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -312,7 +312,7 @@ async function lineTodayGet1stSearchResults(t){
 //    ANUE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function anueGetList(t){
+async function anueGetList(siteName,t){
   if (t=='topics'){
     url=preStr+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
     let res=await fetch(url);
@@ -325,7 +325,7 @@ async function anueGetList(t){
     let res=await fetch(url);
     let str=await res.json();
     for (let a of str.items.data){
-      html+=`<p class="title" onclick="getContent(this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent(this.id,'${a.newsId}')">
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')">
             <span class="time">${new Date(a.publishAt*1000)}</span><br>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
             </div><hr>`;
     }
@@ -382,7 +382,7 @@ async function anueGetSearchResults(t){
 //    CTEE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function cteeGetList(t){
+async function cteeGetList(siteName,t){
   url='https://www.ctee.com.tw/api/'+t+rr;console.log(url);
   let res=await fetch(url);
   let str=await res.json();
@@ -390,7 +390,7 @@ async function cteeGetList(t){
     items.push([h.hyperLink,h.title,h.publishDatetime])
   }console.log(items);
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
   }console.log(html);
   return html;
 }
@@ -410,7 +410,7 @@ async function cteeGetSearchResults(t){
     items.push([h.articleUrl,h.title,h.publishDate])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
   }
   return html;
 }
@@ -419,7 +419,7 @@ async function cteeGetSearchResults(t){
 //    UDN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function udnGetList(t){
+async function udnGetList(siteName,t){
   url='https://udn.com/api/more?'+t+'&page='+(rr-1);console.log(url);
   let res=await fetch(url);
   let str=await res.json();
@@ -433,7 +433,7 @@ async function udnGetList(t){
     }
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -457,7 +457,7 @@ async function udnGetSearchResults(t){
     items.push([h.titleLink,h.title])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -466,7 +466,7 @@ async function udnGetSearchResults(t){
 //    WEALTH
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function wealthGetList(t){
+async function wealthGetList(siteName,t){
   var p=t.split('|');var op=p[0];var t=p[1];
   console.log(p);console.log(op);console.log(t);
   if (op=='Articles'){
@@ -515,7 +515,7 @@ async function wealthGetList(t){
   }
   
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -561,7 +561,7 @@ async function wealthGetContent(id){
 //    BUSINESS TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function businessTodayGetList(t){
+async function businessTodayGetList(siteName,t){
   url=preStr+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
   var res = await fetch(url);
   var str=await res.text();
@@ -572,7 +572,7 @@ async function businessTodayGetList(t){
     items.push([h.href,h.children[1].children[1].innerText])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -603,7 +603,7 @@ async function businessTodayGetSearchResults(t){
     items.push([href,h.children[1].innerText])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -612,7 +612,7 @@ async function businessTodayGetSearchResults(t){
 //    BUSINESS WEEKLY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function businessWeeklyGetList(t){
+async function businessWeeklyGetList(siteName,t){
   if (t=='0000000000'){
     var res = await fetch(preStr+'https://www.businessweekly.com.tw/latest/SearchList', {
       method: 'POST',
@@ -636,7 +636,7 @@ async function businessWeeklyGetList(t){
     items.push([tl.href,tl.textContent.replace('                    ','')]);
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -660,7 +660,7 @@ async function businessWeeklyGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-async function bnextGetList(t){
+async function bnextGetList(siteName,t){
   url=preStr+'https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
   var res = await fetch(url);
   var str=await res.text();
@@ -682,7 +682,7 @@ async function bnextGetList(t){
   }
   
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -705,7 +705,7 @@ async function bnextGetContent(id){
 //    TECH NEWS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function technewsGetList(t){
+async function technewsGetList(siteName,t){
   url=preStr+'https://cdn.'+t+'page/'+rr;console.log(url);
   let res=await fetch(url);
   let str=await res.text();
@@ -724,7 +724,7 @@ async function technewsGetList(t){
   }
 
   for (let h of items){
-    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
