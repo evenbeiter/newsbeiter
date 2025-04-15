@@ -67,7 +67,7 @@ function openMediaList(){
   }
   options.style.display='block';
   topdiv.style.display='none';
-  searchTerm.value='';
+  //searchTerm.value='';
 }
 
 function openSearchList(){
