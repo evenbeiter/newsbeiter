@@ -20,6 +20,7 @@ const bnext=[['articles','新聞'],['ranking','熱門'],['topics','專題'],['ta
 const technews=[['technews.tw/','最新'],['technews.tw/category/semiconductor/','半導體'],['technews.tw/category/component/','零組件'],['finance.technews.tw/','財經'],['technews.tw/category/internet/','網路'],['technews.tw/category/cutting-edge/','尖端科技'],['technews.tw/topics/','系列專題'],['technews.tw/category/natural-science/環境科學/','環境科學'],['technews.tw/category/能源科技/','能源科技']];
 const formHeader=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="margin-right:3rem">`;
 var tabs=[];
+var items=[];var url='';var html='';
 var siteName='';
 var coun='';
 var t='';
@@ -50,7 +51,7 @@ function openMediaList(){
   btn.innerHTML=formHeader;
   tabs=allSites;
   for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}')">${tab[1]}</button>`;
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
   }
   tabs=videoSites;
   btn.innerHTML+='<hr>';
@@ -73,7 +74,7 @@ function openSearchList(){
   btn.innerHTML=formHeader+`<input type="text" id="search-term" class="form-control mb-2">`;
   tabs=searchSites;
   for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stSearchResults()">${tab[1]}</button>`;
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
   }
   options.style.display='block';
   topdiv.style.display='none';
@@ -93,337 +94,272 @@ async function ping(){
   var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');
 }
 
-function createBtnGroup(site,siteName){
+function createBtnGroup(site,siteName,top){
   btn.innerHTML=formHeader;
   for (let tab of site){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${tab[0]}')">${tab[1]}</button>`;
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top}','${tab[0]}')">${tab[1]}</button>`;
   }
     window[`${siteName}Get1stList`](site[0][0]);
 }
 
-// async function get1stList(siteName,top,op,t){
-// rr=0;
-// if (siteName=='msnTW'){
-//   msnGetList(t,'zh-tw')
-// } else if (siteName=='msnUS'){
-//   msnGetList(t,'en-us')
-// } else if (siteName=='wealth'){
-//   wealthGetList(op,t);
-// } else {
-//   window[`${siteName}GetList`](t)
-// }
-// if (siteName=='msnVideo'){
-//   var cat=t.split(' ')[0];
-//   cat=cat.charAt(0).toUpperCase() + cat.slice(1);
-//   showTop('MSN '+cat);
-// } else {
-//   showTop(top);
-// }
-// }
+async function get1stList(siteName,top,t){
+  rr=0;
+  getList(siteName,t);
+  showTop(top);
+}
 
+async function get1stSearchResults(siteName,top){
+  rr=0;
+  getSearchResults(siteName);
+  showTop(top+' - 搜尋：'+searchTerm.value);
+}
+
+async function getList(siteName,t){
+  loading.style.display='block';
+  siteName=siteName;rr++;rt=t;
+  if (rr==1){newNews()};
+  items=[];html='';
+  list.innerHTML+=window[`${siteName}GetList`](t);
+  loading.style.display='none';
+  if (coun==='en-us'){
+    var all=document.querySelectorAll('.t-tl');
+    getTranslation(all);
+  }
+}
+
+async function getSearchResults(siteName){
+  loading.style.display='block';
+  siteName=siteName;rr++;rt='s';
+  if (rr==1){newNews()};
+  items=[];html='';
+  list.innerHTML+=window[`${siteName}GetSearchResults`](searchTerm.value);
+  loading.style.display='none';
+}
+
+async function getContent(clickedId,id){
+  var cEl=document.getElementById(id);
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
+    if (cEl.innerText.length<30){
+      cEl.innerHTML+=window[`${siteName}GetContent`](id);
+      cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
+      if (siteName=='udn'){
+        var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
+        for (let ad of ads){ad.remove()};
+      } else if (siteName=='businessToday'){
+        cEl.querySelectorAll('iframe').forEach(ifm => {ifm.remove()});
+      } else if (siteName=='technews'){
+        var ads=cEl.querySelector('#inside_AD');
+        ads.remove();
+        ads=cEl.querySelectorAll('.coffee-btn-wrapper');
+        for (let ad of ads){ad.remove()};
+        ads=cEl.querySelector('#bmc-tn-modal');
+        ads.remove();
+        ads=cEl.querySelectorAll('.googlenews_Content');
+        for (let ad of ads){ad.remove()};
+      } else if (siteName=='msnTW'||siteName=='msnUS'){
+        var images=cEl.querySelectorAll('img');
+        for (let img of images){
+          img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img';
+        }
+      }
+    }
+    loading.style.display='none';
+    if (coun==='en-us'){
+      var all=[];
+      var pg=cEl.getElementsByTagName('p');all.push(...pg);
+      var h2=cEl.getElementsByTagName('h2');all.push(...h2);
+      var li=cEl.getElementsByTagName('li');all.push(...li);
+      getTranslation(all);
+    }
+  } else {
+    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
+      cEl.style.display='none';
+      cEl.previousElementSibling.previousElementSibling.scrollIntoView();
+    }
+  }
+}
 
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function msnTWGet1stList(t){
-rr=0;
-msnGetList(t,'zh-tw');
-showTop('MSN 台灣');
-}
+async function msnTWGetList(t){msnGetList(t,'zh-tw')}
+async function msnUSGetList(t){msnGetList(t,'en-us')}
 
-async function msnUSGet1stList(t){
-rr=0;
-msnGetList(t,'en-us');
-showTop('MSN');
-}
-
-async function msnGetList(t,c){
-loading.style.display='block';
-siteName='msn';coun=c;rr++;rt=t;console.log(rr);
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-
-if (t.slice(0,2)==='Y_'){
-  var srvc='channelfeed';
-  t='InterestIds='+t;
-} else {
-  var srvc='providerfullpage';
-  t='CommunityProfileId='+t;
-}
-
-for (var i=0;i<2;i++){
-  var url='https://assets.msn.com/service/news/feed/pages/'+srvc+'?ocid=social-peregrine&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&User=m-00A80177A097658A10770F1FA15F64FF&cm='+coun+'&'+t+'&newsSkip='+12*((rr-1)*2+i)+'&$skip='+((rr-1)*2+i);
-  let res=await fetch(url);
-  let str=await res.json();
-  for (let h of str.sections[0].cards){
-    items.push([h.id,h.title]);
-  }
-}
-
-for (let d of items){
-  html+=`<p class="${coun} t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
-}
-list.innerHTML+=html;
-loading.style.display='none';
-
-if (coun==='en-us'){
-  var all=document.querySelectorAll('.t-tl');
-  getTranslation(all);
-}
-}
-
-async function msnGetContent(clickedId,id,coun){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' && cEl.textContent!==''){cEl.style.display='block'}
-  else if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
-    var d=await res.json();
-        
-    if (clickedId=='') {
-      cEl.style.display='block';
-      if (d.type==='article'){
-        var html = '<span class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</span><br>' +(d.body?d.body:'')+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
-        cEl.innerHTML=html.replaceAll('\/>','\/><br>');
-        var images=cEl.querySelectorAll('img');
-        var imgSrc=d.imageResources;
-        for (let img of images){
-          img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img';
-        }
-      } else if (d.type==='slideshow'){
-          var slides=d.slides;
-          var slidesHtml='';
-          for (let s of slides){
-            slidesHtml+='<img src="'+(s.image.url?s.image.url:'')+'"><br><p>'+(s.title?s.title:'')+'</p>'+(s.body?s.body:'');
-          }
-          var html = '<span class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</span><br>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
-          cEl.innerHTML=html.replaceAll('\/>','\/><br>');
-
-      } else {
-        var html = '<p><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">繼續閱讀</a></p><br>';
-      }
-
-    loading.style.display='none';
-
-  if (coun==='en-us'){
-    var all=[];
-    var pg=cEl.getElementsByTagName('p');all.push(...pg);
-    var h2=cEl.getElementsByTagName('h2');all.push(...h2);
-    var li=cEl.getElementsByTagName('li');all.push(...li);
-    getTranslation(all);
-  }
+async function msnGetList(t,coun){
+  if (t.slice(0,2)==='Y_'){
+    var srvc='channelfeed';
+    t='InterestIds='+t;
   } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
-        cEl.style.display='none';cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()
+    var srvc='providerfullpage';
+    t='CommunityProfileId='+t;
+  }
+  
+  for (var i=0;i<2;i++){
+    url='https://assets.msn.com/service/news/feed/pages/'+srvc+'?ocid=social-peregrine&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&User=m-00A80177A097658A10770F1FA15F64FF&cm='+coun+'&'+t+'&newsSkip='+12*((rr-1)*2+i)+'&$skip='+((rr-1)*2+i);
+    let res=await fetch(url);
+    let str=await res.json();
+    for (let h of str.sections[0].cards){
+      items.push([h.id,h.title]);
     }
   }
-} else {cEl.style.display='none';cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()}
+  
+  for (let d of items){
+    html+=`<p class="${coun} t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
+  }
+  return html;
+}
+
+async function msnTWGetContent(id){msnGetContent(id,'zh-tw')}
+async function msnUSGetContent(id){msnGetContent(id,'en-us')}
+
+async function msnGetContent(id,coun){
+  var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
+  var d=await res.json();
+
+  if (d.type==='article'){
+    html = '<span class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</span><br>' +(d.body?d.body.replaceAll('\/>','\/><br>'):'')+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
+
+  } else if (d.type==='slideshow'){
+    var slides=d.slides;
+    var slidesHtml='';
+    for (let s of slides){
+      slidesHtml+='<img src="'+(s.image.url?s.image.url:'')+'"><br><p>'+(s.title?s.title:'')+'</p>'+(s.body?s.body:'');
+    }
+    html = '<span class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</span><br>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
+  } else {
+    html = '<p><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">繼續閱讀</a></p><br>';
+  }
+  return html;
 }
 
 
 //    LINE TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function lineTodayGet1stList(tt){
-rr=0;
-lineTodayGetList(tt);
-showTop('LINE TODAY');
-}
 
 async function lineTodayGetList(tt){
-loading.style.display='block';
-siteName='lineToday';rr++;rt=tt;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-tt=tt.split('|');
-for (let t of tt) {
-  if (/[0-9]/.test(t)){
-    url=preStr+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+rr*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
-    let res=await fetch(url);
-    let str=await res.json();
-    for (let a of str.items){
-      items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
-    }
-  } else {
-    url=preStr+'https://today.line.me/_next/data/v1/tw/v3/page/'+t+'.json';
-    let res=await fetch(url);
-    let str=await res.json();
-    var data=str.pageProps.fallback['getPageData,'+t].modules;
-    data=data.filter(d=>d.source=='LISTING');
-    data=data.map(d=>d.listings[0].id);
-    
-    for (let d of data){
-      res=await fetch(preStr+'https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+rr*20+'&length=20');
-      str=await res.json();
+  tt=tt.split('|');
+  for (let t of tt) {
+    if (/[0-9]/.test(t)){
+      url=preStr+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+rr*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
+      let res=await fetch(url);
+      let str=await res.json();
       for (let a of str.items){
-          items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
+        items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
       }
-    } 
-  }
-}
-items=[...new Set(items)];
-items=items.map(i=>JSON.parse(i));
-items=items.filter(i=>i[0]!==null && i[0]!=='');
-items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
-
-for (let h of items){
-  html+=`<p class="title" onclick="${siteName}GetContent(this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="${siteName}GetContent(this.id,'${h[0]}')"></div><hr>`
-}
-if(html!==''){list.innerHTML+=html;}
-loading.style.display='none';
-}
-
-async function lineTodayGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    const res = await fetch(preStr+'https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id);
-    const str=await res.json();
-    const a = str.data;
-    if (a) {
-      if (a.media==undefined){
-        var html = '<span>' + a.publishTime + ' ' + a.publisher + '</span><br>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
-      } else {
-        var html = '<span>' + a.publishTime + ' ' + a.publisher + '</span><br>' + '<video class="vjs-tech" style="width:100%" tabindex="-1" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+a.media.hash+'/270p.m3u8" muted="muted" type="application/x-mpegURL"></source></video>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
-      }
-        cEl.innerHTML=html;
-        loading.style.display='none';
+    } else {
+      url=preStr+'https://today.line.me/_next/data/v1/tw/v3/page/'+t+'.json';
+      let res=await fetch(url);
+      let str=await res.json();
+      var data=str.pageProps.fallback['getPageData,'+t].modules;
+      data=data.filter(d=>d.source=='LISTING');
+      data=data.map(d=>d.listings[0].id);
+      
+      for (let d of data){
+        res=await fetch(preStr+'https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+rr*20+'&length=20');
+        str=await res.json();
+        for (let a of str.items){
+            items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
+        }
+      } 
     }
-  } else {
-    closeContent(cEl,clickedId);
   }
+  items=[...new Set(items)];
+  items=items.map(i=>JSON.parse(i));
+  items=items.filter(i=>i[0]!==null && i[0]!=='');
+  items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
+  
+  for (let h of items){
+    html+=`<p class="title" onclick="${siteName}GetContent(this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="${siteName}GetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  return html;
 }
 
-async function lineTodayGet1stSearchResults(){
-rr=0;
-t=searchTerm.value;
-showTop('LINE TODAY - 搜尋：'+t);
-
-loading.style.display='block';
-siteName='lineToday';
-options.style.display='none';
-document.body.scrollTop = 0;
-document.documentElement.scrollTop = 0;
-var items = [];
-var url='';
-url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
-let res=await fetch(url);
-let str=await res.json();
-for (let a of str.items){
-  items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title,a.publisher]))
+async function lineTodayGetContent(id){
+  const res = await fetch(preStr+'https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id);
+  const str=await res.json();
+  const a = str.data;
+  if (a) {
+    if (a.media==undefined){
+      var html = '<span>' + a.publishTime + ' ' + a.publisher + '</span><br>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
+    } else {
+      html = '<span>' + a.publishTime + ' ' + a.publisher + '</span><br>' + '<video class="vjs-tech" style="width:100%" tabindex="-1" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+a.media.hash+'/270p.m3u8" muted="muted" type="application/x-mpegURL"></source></video>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
+    }
+  }
+  return html;
 }
 
-items=[...new Set(items)];
-items=items.map(i=>JSON.parse(i));
-items=items.filter(i=>i[0]!==null && i[0]!=='');
-items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
-
-var html ='';
-for (let h of items){
-  html+=`<p class="title" onclick="${siteName}GetContent(this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="${siteName}GetContent(this.id,'${h[0]}')"></div><hr>`
-}
-list.innerHTML=html;
-loading.style.display='none';
+async function lineTodayGet1stSearchResults(t){
+  url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let a of str.items){
+    items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title,a.publisher]))
+  }
+  
+  items=[...new Set(items)];
+  items=items.map(i=>JSON.parse(i));
+  items=items.filter(i=>i[0]!==null && i[0]!=='');
+  items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
+  
+  for (let h of items){
+    html+=`<p class="title" onclick="${siteName}GetContent(this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="${siteName}GetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  return html;
 }
 
 
 //    ANUE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function anueGet1stList(t){
-rr=0;
-anueGetList(t);
-showTop('鉅亨');
-}
 
 async function anueGetList(t){
-loading.style.display='block';
-siteName='anue';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-  
-if (t=='topics'){
-  url=preStr+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
-  let res=await fetch(url);
-  let str=await res.json();
-  for (let a of str.items.data){
-    html+=`<p class="title" onclick="openUrl('${a.link}')">${a.title}</p><hr>`;
-  }
-} else {
-  url=preStr+'https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr;
-  let res=await fetch(url);
-  let str=await res.json();
-  for (let a of str.items.data){
-    html+=`<p class="title" onclick="anueGetContent(this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="anueGetContent(this.id,'${a.newsId}')">
-          <span class="time">${new Date(a.publishAt*1000)}</span><br>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
-          </div><hr>`;
-  }
-}
-list.innerHTML+=html;
-loading.style.display='none';
-}
-  
-  function decodeHTMLEntities(str){
-    var ta=document.createElement('textarea');
-    ta.innerHTML = str;
-    return ta.value;
-  }
-
-  async function anueGetContent(clickedId,id){
-    var cEl=document.getElementById(id);
-    if (cEl.style.display=='none' || cEl.style.display==''){
-      loading.style.display='block';
-      cEl.style.display='block';
-      if (id.length<5){
-        const res = await fetch(preStr+id+',{mode: "no-cors"}');
-        const str=await res.text();
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(str, "text/html");
-        var tagList=doc.querySelector('.scrolling');
-        for (let c of tagList){
-          cEl.innerHTML+=c.innerHTML
-        }
-      }
-      loading.style.display='none';
-    } else {
-      closeContent(cEl,clickedId);
+  if (t=='topics'){
+    url=preStr+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
+    let res=await fetch(url);
+    let str=await res.json();
+    for (let a of str.items.data){
+      html+=`<p class="title" onclick="openUrl('${a.link}')">${a.title}</p><hr>`;
+    }
+  } else {
+    url=preStr+'https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr;
+    let res=await fetch(url);
+    let str=await res.json();
+    for (let a of str.items.data){
+      html+=`<p class="title" onclick="anueGetContent(this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="anueGetContent(this.id,'${a.newsId}')">
+            <span class="time">${new Date(a.publishAt*1000)}</span><br>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
+            </div><hr>`;
     }
   }
-
-async function anueGet1stSearchResults(){
-rr=0;
-anueGetSearchResults();
-showTop('鉅亨 - 搜尋：'+t);
+  return html;
 }
+  
 
-async function anueGetSearchResults(){
-  loading.style.display='block';
-  siteName='anue';
-  rt='s';
-  rr++;
-  if (rr==1){
-  options.style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  list.innerHTML='';
-  t=searchTerm.value;
-}
-    var html = '';
-    var url='';
-
-      url=preStr+'https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr;
-      let res=await fetch(url);
-      let str=await res.json();
-      if(str.items.data!==null && str.items.data!==undefined){
-      for (let a of str.items.data){
-        html+=`<p class="title" onclick="anueGetSearchContent(this.id,'${a.newsId}')">${a.title.replaceAll('<mark>','').replaceAll('</mark>','')}</p><div id="${a.newsId}" class="content" onclick="anueGetSearchContent(this.id,'${a.newsId}')"><span class="time">${new Date(a.publishAt*1000)}</span><br><div id="content-${a.newsId}"></div><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
-      }
+async function anueGetContent(id){
+  if (id.length<5){
+    const res = await fetch(preStr+id+',{mode: "no-cors"}');
+    const str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    var tagList=doc.querySelector('.scrolling');
+    for (let c of tagList){
+      html+=c.innerHTML
     }
-    list.innerHTML+=html;
-    loading.style.display='none';
   }
+  return html
+}
+
+async function anueGetSearchResults(t){
+  url=preStr+'https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr;
+  let res=await fetch(url);
+  let str=await res.json();
+  if(str.items.data!==null && str.items.data!==undefined){
+    for (let a of str.items.data){
+      html+=`<p class="title" onclick="anueGetSearchContent(this.id,'${a.newsId}')">${a.title.replaceAll('<mark>','').replaceAll('</mark>','')}</p><div id="${a.newsId}" class="content" onclick="anueGetSearchContent(this.id,'${a.newsId}')"><span class="time">${new Date(a.publishAt*1000)}</span><br><div id="content-${a.newsId}"></div><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
+    }
+  }
+  return html;
+}
 
   async function anueGetSearchContent(clickedId,id){
     var cEl=document.getElementById(id);
@@ -443,647 +379,375 @@ async function anueGetSearchResults(){
     }
   }
 
-  function openUrl(url){
-    window.open(url,'_blank')
-  }
-
 
 //    CTEE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function cteeGet1stList(t){
-rr=0;
-cteeGetList(t);
-showTop('工商');
-}
-
 async function cteeGetList(t){
-loading.style.display='block';
-siteName='ctee';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-
-url='https://www.ctee.com.tw/api/'+t+rr;console.log(url);
-let res=await fetch(url);
-let str=await res.json();
-for (let h of str){
-  items.push([h.hyperLink,h.title,h.publishDatetime])
-}
-var html='';
-for (let h of items){
-  html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
-}
-
-async function cteeGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    const res = await fetch('https://www.ctee.com.tw/api'+id);
-    const str=await res.json();
-    if (cEl.innerText.length<30){
-      var html = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
-      cEl.innerHTML+=html;
-      cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
-    }
-    loading.style.display='none';
-  } else {
-    closeContent(cEl,clickedId);
+  url='https://www.ctee.com.tw/api/'+t+rr;console.log(url);
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str){
+    items.push([h.hyperLink,h.title,h.publishDatetime])
   }
+  for (let h of items){
+    html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
+  }
+  return html;
 }
 
-async function cteeGet1stSearchResults(){
-rr=0;
-cteeGetSearchResults();
-showTop('工商 - 搜尋：'+t);
+async function cteeGetContent(id){
+  const res = await fetch('https://www.ctee.com.tw/api'+id);
+  const str=await res.json();
+  html = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
+  return html;
 }
 
-async function cteeGetSearchResults(){
-  loading.style.display='block';
-  siteName='ctee';
-  rt='s';
-  rr++;
-  var items=[];
-  if (rr==1){
-  document.getElementById('btn-group').style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  list.innerHTML='';
-  t=searchTerm.value;
-}
-  var html = '';
-  var url='';
-
+async function cteeGetSearchResults(t){
   url='https://www.ctee.com.tw/api/search/'+t+'?p='+rr;
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
     items.push([h.articleUrl,h.title,h.publishDate])
   }
-  var html='';
   for (let h of items){
     html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
   }
-  list.innerHTML+=html;
-  loading.style.display='none';
+  return html;
 }
 
 
 //    UDN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function udnGet1stList(t){
-rr=0;
-udnGetList(t);
-showTop('聯合');
-}
-
 async function udnGetList(t){
-loading.style.display='block';
-siteName='udn';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-
-url='https://udn.com/api/more?'+t+'&page='+(rr-1);console.log(url);
-let res=await fetch(url);
-let str=await res.json();
-if (str.lists.length<18){var k=5}else{var k=1};
-console.log(k);
-for (let i=0;i<k;i++){
-  var url='https://udn.com/api/more?'+t+'&page='+((rr-1)*k+i);console.log(url);
+  url='https://udn.com/api/more?'+t+'&page='+(rr-1);console.log(url);
   let res=await fetch(url);
   let str=await res.json();
-  for (let h of str.lists){
-    items.push([h.titleLink.slice(0,h.titleLink.indexOf('?')),h.title])
-  }
-}
-var html='';
-for (let h of items){
-  html+=`<p class="title" onclick="udnGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="udnGetContent(this.id,'${h[0]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
-}
-
-async function udnGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    const res = await fetch('https://udn.com/'+id);
-    const str=await res.text();
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(str, "text/html");
-    var t=doc.querySelector('.authors');
-    var a=doc.querySelector('.article-content');
-
-    if (a) {
-      var html = '<p class="fs10">'+t.innerText+'</p>'+a.outerHTML + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
-      cEl.innerHTML=html;
-      var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
-      for (let ad of ads){ad.remove()};
-    }
-    loading.style.display='none';
-  } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+  if (str.lists.length<18){var k=5}else{var k=1};
+  for (let i=0;i<k;i++){
+    var url='https://udn.com/api/more?'+t+'&page='+((rr-1)*k+i);console.log(url);
+    let res=await fetch(url);
+    let str=await res.json();
+    for (let h of str.lists){
+      items.push([h.titleLink.slice(0,h.titleLink.indexOf('?')),h.title])
     }
   }
+  for (let h of items){
+    html+=`<p class="title" onclick="udnGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="udnGetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  return html;
 }
 
-async function udnGet1stSearchResults(){
-rr=0;
-udnGetSearchResults();
-showTop('聯合 - 搜尋：'+t);
+async function udnGetContent(id){
+  const res = await fetch('https://udn.com/'+id);
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var t=doc.querySelector('.authors');
+  var a=doc.querySelector('.article-content');
+  html = '<p class="fs10">'+t.innerText+'</p>'+a.outerHTML + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
+  return html;
 }
 
-async function udnGetSearchResults(){
-  loading.style.display='block';
-  siteName='udn';
-  rt='s';
-  rr++;
-  var items=[];
-  if (rr==1){
-  document.getElementById('btn-group').style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  list.innerHTML='';
-  t=searchTerm.value;
-}
-  var html = '';
-  var url='';
-
+async function udnGetSearchResults(t){
   url='https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr;
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
     items.push([h.titleLink,h.title])
   }
-  var html='';
   for (let h of items){
     html+=`<p class="title" onclick="udnGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="udnGetContent(this.id,'${h[0]}')"></div><hr>`
   }
-  list.innerHTML+=html;
-  loading.style.display='none';
+  return html;
 }
 
 
 //    WEALTH
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function wealthGet1stList(t){
-rr=0;
-wealthGetList(t);
-showTop('財訊');
-}
 
 async function wealthGetList(t){
-loading.style.display='block';console.log(t);
-siteName='wealth';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-var p=t.split('|');var op=p[0];var t=p[1];
-console.log(p);console.log(op);console.log(t);
-if (op=='Articles'){
-  payload={
-    "operationName": "Articles",
-    "variables": {
-      "authorID": t,
-      "offset": (rr-1)*50,
-      "limit": 50,
-      "type": "ARTICLE",
-      "viewOrderType": null
-    },
-    "query": "query Articles($offset: Int, $limit: Int, $type: ArticleType, $vipOnly: Boolean, $searchTerm: String, $isFameColumn: Boolean, $magazineId: ID, $authorId: ID, $viewOrderType: ArticleViewOrderType) {\n  articles(\n    offset: $offset\n    limit: $limit\n    type: $type\n    vipOnly: $vipOnly\n    searchTerm: $searchTerm\n    isFameColumn: $isFameColumn\n    magazineId: $magazineId\n    authorId: $authorId\n    viewOrderType: $viewOrderType\n  ) {\n    ...ArticleBaseFields\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  cover\n  coverText\n  content\n  authors {\n    name\n  }\n  releasedAt\n}\n"
-  }
-} else if (op=='Category'){
-  payload={
-    "operationName": "Category",
-    "variables": {
-      "id": t,
-      "type": null,
-      "offset": (rr-1)*50,
-      "limit": 50,
-      "viewOrderType": null
-    },
-    "query": "query Category($id: ID!, $offset: Int, $limit: Int, $type: ArticleType, $viewOrderType: ArticleViewOrderType) {\n  category(id: $id) {\n    id\n    name\n    articles(\n      offset: $offset\n      limit: $limit\n      type: $type\n      viewOrderType: $viewOrderType\n    ) {\n      ...ArticleBaseFields\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  content\n}\n"
-  }
-} else if (op=='LatestMagazine'){
-  payload={
-    "operationName": "LatestMagazine",
-    "variables": {},
-    "query": "query LatestMagazine {\n  latestMagazine {\n    id\n    title\n  }\n}\n"
-  }
-}
-
-var url='https://www.wealth.com.tw/graphql';
-var res = await fetch(url, {
-  method: 'POST',
-  headers: {'Content-Type': 'application/json',},
-  body: JSON.stringify(payload),
-  });
-var str=await res.json();
-
-if (op=='Category'){var data=str.data.category.articles}else{var data=str.data.articles};
-for (let h of data){
-  items.push([h.id,h.title])
-}
-
-for (let h of items){
-  html+=`<p class="title" onclick="wealthGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="wealthGetContent(this.id,'${h[0]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
-}
-
-async function wealthGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-
-    var payload={
-      "operationName": "Article",
+  var p=t.split('|');var op=p[0];var t=p[1];
+  console.log(p);console.log(op);console.log(t);
+  if (op=='Articles'){
+    payload={
+      "operationName": "Articles",
       "variables": {
-        "id": id
+        "authorID": t,
+        "offset": (rr-1)*50,
+        "limit": 50,
+        "type": "ARTICLE",
+        "viewOrderType": null
       },
-      "query": "query Article($id: ID!, $token: String) {\n  article(id: $id, token: $token) {\n    ...ArticleBaseFields\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  cover\n  coverText\n  content\n  releasedAt\n  authors {\n    name\n  }\n}\n"
-    };
+      "query": "query Articles($offset: Int, $limit: Int, $type: ArticleType, $vipOnly: Boolean, $searchTerm: String, $isFameColumn: Boolean, $magazineId: ID, $authorId: ID, $viewOrderType: ArticleViewOrderType) {\n  articles(\n    offset: $offset\n    limit: $limit\n    type: $type\n    vipOnly: $vipOnly\n    searchTerm: $searchTerm\n    isFameColumn: $isFameColumn\n    magazineId: $magazineId\n    authorId: $authorId\n    viewOrderType: $viewOrderType\n  ) {\n    ...ArticleBaseFields\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  cover\n  coverText\n  content\n  authors {\n    name\n  }\n  releasedAt\n}\n"
+    }
+  } else if (op=='Category'){
+    payload={
+      "operationName": "Category",
+      "variables": {
+        "id": t,
+        "type": null,
+        "offset": (rr-1)*50,
+        "limit": 50,
+        "viewOrderType": null
+      },
+      "query": "query Category($id: ID!, $offset: Int, $limit: Int, $type: ArticleType, $viewOrderType: ArticleViewOrderType) {\n  category(id: $id) {\n    id\n    name\n    articles(\n      offset: $offset\n      limit: $limit\n      type: $type\n      viewOrderType: $viewOrderType\n    ) {\n      ...ArticleBaseFields\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  content\n}\n"
+    }
+  } else if (op=='LatestMagazine'){
+    payload={
+      "operationName": "LatestMagazine",
+      "variables": {},
+      "query": "query LatestMagazine {\n  latestMagazine {\n    id\n    title\n  }\n}\n"
+    }
+  }
+  
+  url='https://www.wealth.com.tw/graphql';
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: JSON.stringify(payload),
+    });
+  var str=await res.json();
+  
+  if (op=='Category'){var data=str.data.category.articles}else{var data=str.data.articles};
+  for (let h of data){
+    items.push([h.id,h.title])
+  }
+  
+  for (let h of items){
+    html+=`<p class="title" onclick="wealthGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="wealthGetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  return html;
+}
 
-    var url='https://www.wealth.com.tw/graphql';
-    var res = await fetch(url, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json',},
-      body: JSON.stringify(payload),
-      });
-    var str=await res.json();
-    var data=str.data.article;
-    var content=JSON.parse(str.data.article.content);
+async function wealthGetContent(id){
+  payload={
+    "operationName": "Article",
+    "variables": {
+      "id": id
+    },
+    "query": "query Article($id: ID!, $token: String) {\n  article(id: $id, token: $token) {\n    ...ArticleBaseFields\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  cover\n  coverText\n  content\n  releasedAt\n  authors {\n    name\n  }\n}\n"
+  };
 
-    var html = '<p class="fs10">'+cvt2Timezone(data.releasedAt)+' | '+data.authors[0].name+'</p><img src="https://static.wealth.com.tw/'+data.cover+'"><p class="fs10">'+data.coverText+'</p><div id="'+id+'__"></div><p class="text-end"><a href="https://www.wealth.com.tw/articles/' + id + '" target="_blank">分享</a></p><br>';
-    cEl.innerHTML=html;
-    var body='';    
-    for (let c of content){console.log(c);
-      if (c.type=='p'){
-        body+='<p>';
-        for (let a of c.children){if (a.type=='link'){body+='<a href="'+a.url+'">'+a.children[0].text+'</a>'} else {body+=a.text}};
-        body+='</p>';
-      } else if (c.type=='image_figure'){
-        for (let a of c.children){
-          if (a.type=='image'){body+='<img src="https://static.wealth.com.tw/'+a.src+'">'} else if (a.type=='image_caption'){body+='<p class="fs10">'+a.children[0].text+'</p>'}
-        }
+  url='https://www.wealth.com.tw/graphql';
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: JSON.stringify(payload),
+    });
+  var str=await res.json();
+  var data=str.data.article;
+  var content=JSON.parse(str.data.article.content);
+
+  html = '<p class="fs10">'+cvt2Timezone(data.releasedAt)+' | '+data.authors[0].name+'</p><img src="https://static.wealth.com.tw/'+data.cover+'"><p class="fs10">'+data.coverText+'</p><div id="'+id+'__">aaaaa</div><p class="text-end"><a href="https://www.wealth.com.tw/articles/' + id + '" target="_blank">分享</a></p><br>';
+  cEl.innerHTML=html;
+  var body='';    
+  for (let c of content){console.log(c);
+    if (c.type=='p'){
+      body+='<p>';
+      for (let a of c.children){if (a.type=='link'){body+='<a href="'+a.url+'">'+a.children[0].text+'</a>'} else {body+=a.text}};
+      body+='</p>';
+    } else if (c.type=='image_figure'){
+      for (let a of c.children){
+        if (a.type=='image'){body+='<img src="https://static.wealth.com.tw/'+a.src+'">'} else if (a.type=='image_caption'){body+='<p class="fs10">'+a.children[0].text+'</p>'}
       }
     }
-    document.getElementById(id+'__').innerHTML=body;
-    loading.style.display='none';
-  } else {
-    closeContent(cEl,clickedId);
   }
+  html.replace('aaaaa',body);
+  return html;
 }
 
 
 //    BUSINESS TODAY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function businessTodayGet1stList(t){
-rr=0;
-businessTodayGetList(t);
-showTop('今周刊');
-}
-
 async function businessTodayGetList(t){
-loading.style.display='block';
-siteName='businessToday';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-
-url=preStr+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
-var res = await fetch(url);
-var str=await res.text();
-var parser = new DOMParser();
-var doc = parser.parseFromString(str, "text/html");
-var hh=doc.querySelectorAll('a.article__item');
-for (let h of hh){
-  items.push([h.href,h.children[1].children[1].innerText])
-}
-
-for (let h of items){
-  html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
-}
-
-async function businessTodayGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    const res = await fetch(preStr+id);
-    const str=await res.text();
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(str, "text/html");
-    const img=doc.querySelector('.article__mainbanner');
-    const t=doc.querySelector('.context__info-item--date');
-    const au=doc.querySelector('.context__info-item--author');
-    const a = doc.querySelector('.Zi_ad_ar_iR');
-
-    if (a) {
-      var html = '<p class="fs10">'+t.innerText+' | '+au.innerText+'</p>'+a.outerHTML.replaceAll('<p>&nbsp;</p>','') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
-      cEl.innerHTML=html;
-      var ads=cEl.querySelectorAll('iframe');
-      for (let ad of ads){ad.remove()};
-      cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
-    }
-    loading.style.display='none';
-  } else {
-    closeContent(cEl,clickedId);
+  url=preStr+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
+  var res = await fetch(url);
+  var str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var hh=doc.querySelectorAll('a.article__item');
+  for (let h of hh){
+    items.push([h.href,h.children[1].children[1].innerText])
   }
-}
-
-async function businessTodayGet1stSearchResults(){
-rr=0;
-businessTodayGetSearchResults();
-showTop('今周刊 - 搜尋：'+t);
-}
-
-async function businessTodayGetSearchResults(){
-  loading.style.display='block';
-  siteName='businessToday';
-  rt='s';
-  rr++;
-  var items=[];
-  if (rr==1){
-  document.getElementById('btn-group').style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  list.innerHTML='';
-  t=searchTerm.value;
-}
-  var html = '';
-  var url='';
-
-url=preStr+'https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr;console.log(url);
-var res = await fetch(url);
-var str=await res.text();
-var parser = new DOMParser();
-var doc = parser.parseFromString(str, "text/html");
-var hh=doc.querySelectorAll('.searchitem__content');
-for (let h of hh){
-  var href=hh[0].children[1].children[0].href;
-  href= href.slice(0,href.indexOf('?'));
-  items.push([href,h.children[1].innerText])
-}
-  var html='';
   for (let h of items){
     html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
   }
-    list.innerHTML+=html;
-    loading.style.display='none';
+  return html;
+}
+
+async function businessTodayGetContent(id){
+  const res = await fetch(preStr+id);
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  const img=doc.querySelector('.article__mainbanner');
+  const t=doc.querySelector('.context__info-item--date');
+  const au=doc.querySelector('.context__info-item--author');
+  const a = doc.querySelector('.Zi_ad_ar_iR');
+  html = '<p class="fs10">'+t.innerText+' | '+au.innerText+'</p>'+a.outerHTML.replaceAll('<p>&nbsp;</p>','') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  return html;
+}
+
+async function businessTodayGetSearchResults(t){
+  url=preStr+'https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr;console.log(url);
+  var res = await fetch(url);
+  var str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var hh=doc.querySelectorAll('.searchitem__content');
+  for (let h of hh){
+    var href=hh[0].children[1].children[0].href;
+    href= href.slice(0,href.indexOf('?'));
+    items.push([href,h.children[1].innerText])
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  return html;
 }
 
 
 //    BUSINESS WEEKLY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function businessWeeklyGet1stList(t){
-rr=0;
-businessWeeklyGetList(t);
-showTop('商業周刊');
-}
-
 async function businessWeeklyGetList(t){
-loading.style.display='block';
-siteName='businessWeekly';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-
-if (t=='0000000000'){
-  var res = await fetch(preStr+'https://www.businessweekly.com.tw/latest/SearchList', {
+  if (t=='0000000000'){
+    var res = await fetch(preStr+'https://www.businessweekly.com.tw/latest/SearchList', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
+      body: 'CurPage='+20*(rr-1),
+      });
+    var str=await res.json();
+    str=str.Content;
+  } else {
+  var res = await fetch(preStr+'https://www.businessweekly.com.tw/ChannelAction/LoadBlock/', {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
-    body: 'CurPage='+20*(rr-1),
+    body: 'Start='+(50*rr-1)+'&End='+50*(rr)+'&ID='+t,
     });
-  
-  var str=await res.json();
-  str=str.Content;
-
-} else {
-
-var res = await fetch(preStr+'https://www.businessweekly.com.tw/ChannelAction/LoadBlock/', {
-  method: 'POST',
-  headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
-  body: 'Start='+(50*rr-1)+'&End='+50*(rr)+'&ID='+t,
-  });
-
-var str=await res.text();
-}
-var parser = new DOMParser();
-var doc = parser.parseFromString(str, "text/html");
-var titles=doc.querySelectorAll('.Article-content a');
-for (let tl of titles){
-  items.push([tl.href,tl.textContent.replace('                    ','')]);
-}
-
-for (let h of items){
-  html+=`<p class="title" onclick="businessWeeklyGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessWeeklyGetContent(this.id,'${h[0]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
-}
-
-async function businessWeeklyGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    const res = await fetch((preStr+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));
-    const str=await res.text();
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(str, "text/html");
-    const p=doc.querySelectorAll('.Border-right')[1] ?? '';
-    const t=doc.querySelector('#AppGetDate') ?? '';
-    const s=doc.querySelector('.Single-summary') ?? '';  
-    const a=doc.querySelector('.Single-article') ?? '';
-    a.querySelectorAll('.Google-special').forEach(e => e.remove());
-    if (a) {
-        var html = '<p class="fs10">'+(p.textContent ?? '')+' '+(t.textContent ?? '')+'</p>'+(s.outerHTML ?? '')+(a.outerHTML ?? '')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
-        cEl.innerHTML=html;
-    }
-    loading.style.display='none';
-  } else {
-    closeContent(cEl,clickedId);
+  var str=await res.text();
   }
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var titles=doc.querySelectorAll('.Article-content a');
+  for (let tl of titles){
+    items.push([tl.href,tl.textContent.replace('                    ','')]);
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="businessWeeklyGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessWeeklyGetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  return html;
+}
+
+async function businessWeeklyGetContent(id){
+  const res = await fetch((preStr+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  const p=doc.querySelectorAll('.Border-right')[1] ?? '';
+  const t=doc.querySelector('#AppGetDate') ?? '';
+  const s=doc.querySelector('.Single-summary') ?? '';  
+  const a=doc.querySelector('.Single-article') ?? '';
+  a.querySelectorAll('.Google-special').forEach(e => e.remove());
+  html = '<p class="fs10">'+(p.textContent ?? '')+' '+(t.textContent ?? '')+'</p>'+(s.outerHTML ?? '')+(a.outerHTML ?? '')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  return html;
 }
 
 
 //    BNEXT
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function bnextGet1stList(t){
-rr=0;
-bnextGetList(t);
-showTop('數位時代');
-}
+
 
 async function bnextGetList(t){
-loading.style.display='block';
-siteName='bnext';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-
-url=preStr+'https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
-var res = await fetch(url);
-var str=await res.text();
-var parser = new DOMParser();
-var doc = parser.parseFromString(str, "text/html");
-
-if(t!=='topics'){
-  var hh=doc.querySelectorAll('h2.three-line-text');
-  for (let h of hh){
-    items.push([h.parentElement.parentElement.children[0].href,h.innerText])
-  }
-} else {
-  var hh=doc.querySelectorAll('h2.text-white');
-  for (let h of hh){
-    var a=h.parentElement.parentElement.nextElementSibling.href;
-    a=a.slice(-(a.length-a.lastIndexOf('/'))+1);
-    items.push([a,h.innerText])
-  }
-}
-
-for (let h of items){
-  html+=`<p class="title" onclick="bnextGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="bnextGetContent(this.id,'${h[0]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
-}
-
-async function bnextGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if(id.length>10){
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    const res = await fetch(preStr+id);
-    const str=await res.text();
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(str, "text/html");
-    var t=doc.querySelector('div.flex.gap-4.text-sm.items-center.flex-wrap');
-    if (t==null){t=doc.querySelector('div.flex.gap-2.text-sm.items-center')}
-    const a = doc.querySelector('[data-cat=article]');
-
-    if (a) {
-      var html = '<p class="fs10">'+t.innerText+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
-      cEl.innerHTML=html;
-      var ads=cEl.querySelector('#pumpkin_159');
-      if(ads){ads.remove()};
+  url=preStr+'https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
+  var res = await fetch(url);
+  var str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  
+  if(t!=='topics'){
+    var hh=doc.querySelectorAll('h2.three-line-text');
+    for (let h of hh){
+      items.push([h.parentElement.parentElement.children[0].href,h.innerText])
     }
-    loading.style.display='none';
   } else {
-    closeContent(cEl,clickedId);
+    var hh=doc.querySelectorAll('h2.text-white');
+    for (let h of hh){
+      var a=h.parentElement.parentElement.nextElementSibling.href;
+      a=a.slice(-(a.length-a.lastIndexOf('/'))+1);
+      items.push([a,h.innerText])
+    }
   }
-  } else {
-     var items=[];
-      var url=preStr+'https://www.bnext.com.tw/topic/view/'+id;
-      var res = await fetch(url);
-      var str=await res.text();
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(str, "text/html");
-      
-      var hh=doc.querySelectorAll('a.absolute.inset-0');
-      for (let h of hh){console.log(h.parentElement.children[2].children[1]);
-        if(h.parentElement.children[2].children[1]!==undefined){items.push([h.href,h.parentElement.children[2].children[1].innerText.replaceAll('\n','')])}
-      }
-      console.log(items);
-      var html='';
-      for (let h of items){
-        html+=`<p class="title" onclick="bnextGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="bnextetContent(this.id,'${h[0]}')"></div><hr>`
-      }
-      cEl.innerHTML=html;
-      cEl.style.display='block';
+  
+  for (let h of items){
+    html+=`<p class="title" onclick="bnextGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="bnextGetContent(this.id,'${h[0]}')"></div><hr>`
   }
+  return html;
+}
+
+async function bnextGetContent(id){
+  const res = await fetch(preStr+id);
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var t=doc.querySelector('div.flex.gap-4.text-sm.items-center.flex-wrap');
+  if (t==null){t=doc.querySelector('div.flex.gap-2.text-sm.items-center')}
+  const a = doc.querySelector('[data-cat=article]');
+  var ads=a.querySelector('#pumpkin_159');
+  if(ads){ads.remove()};
+  html = '<p class="fs10">'+t.innerText+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  return html;
 }
 
   
 //    TECH NEWS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function technewsGet1stList(t){
-rr=0;
-technewsGetList(t);
-showTop('科技新報');
-}
 
 async function technewsGetList(t){
-loading.style.display='block';
-siteName='technews';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-  
-url=preStr+'https://cdn.'+t+'page/'+rr;console.log(url);
-let res=await fetch(url);
-let str=await res.text();
-var parser = new DOMParser();
-var doc = parser.parseFromString(str, "text/html");
-var hh=doc.querySelectorAll('h3.list_post_title'); //mobile
-if (hh.length!==0){
-  for (let h of hh){
-    items.push([h.firstChild.href,h.innerText]);
-  }
-} else {
-  var hh=doc.querySelectorAll('h1.entry-title'); //desktop
-  for (let h of hh){
-    items.push([h.firstChild.href,h.firstChild.title]);
-  }
-}
-
-for (let h of items){
-  html+=`<p class="title" onclick="technewsGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="technewsGetContent(this.id,'${h[0]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
-}
-
-async function technewsGetContent(clickedId,id){
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    
-    const res = await fetch(preStr+id.replace('https://','https://cdn.').replace('finance.',''));
-    const str=await res.text();
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(str, "text/html");
-
-    if (doc.querySelector('.copy')!==null){
-      const t=doc.querySelector('.date');
-      const z = doc.querySelector('.copy').outerHTML;
-    } else {
-      const t=doc.querySelectorAll('span.body')[1];
-      const a = doc.querySelector('.bigg');
-      const b = doc.querySelector('.indent');
-      const z=a.outerHTML+b.outerHTML;
+  url=preStr+'https://cdn.'+t+'page/'+rr;console.log(url);
+  let res=await fetch(url);
+  let str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var hh=doc.querySelectorAll('h3.list_post_title'); //mobile
+  if (hh.length!==0){
+    for (let h of hh){
+      items.push([h.firstChild.href,h.innerText]);
     }
-    
-    var html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
-    cEl.innerHTML=html;
-    var ads=cEl.querySelector('#inside_AD');
-    ads.remove();
-    ads=cEl.querySelectorAll('.coffee-btn-wrapper');
-    for (let ad of ads){ad.remove()};
-    ads=cEl.querySelector('#bmc-tn-modal');
-    ads.remove();
-    ads=cEl.querySelectorAll('.googlenews_Content');
-    for (let ad of ads){ad.remove()};
-    
-    loading.style.display='none';
   } else {
-    closeContent(cEl,clickedId);
+    var hh=doc.querySelectorAll('h1.entry-title'); //desktop
+    for (let h of hh){
+      items.push([h.firstChild.href,h.firstChild.title]);
+    }
   }
+
+  for (let h of items){
+    html+=`<p class="title" onclick="technewsGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="technewsGetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  return html;
+}
+
+async function technewsGetContent(id){
+  const res = await fetch(preStr+id.replace('https://','https://cdn.').replace('finance.',''));
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+
+  if (doc.querySelector('.copy')!==null){
+    const t=doc.querySelector('.date');
+    const z = doc.querySelector('.copy').outerHTML;
+  } else {
+    const t=doc.querySelectorAll('span.body')[1];
+    const a = doc.querySelector('.bigg');
+    const b = doc.querySelector('.indent');
+    const z=a.outerHTML+b.outerHTML;
+  }
+
+  html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  return html;
 }
 
 
@@ -1235,10 +899,15 @@ function newNews(){
   list.innerHTML='';
 }
 
-function closeContent(cEl,clickedId){
-  if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){cEl.style.display='none';
-    cEl.previousElementSibling.previousElementSibling.scrollIntoView();
-  }
+function openUrl(url){
+  window.open(url,'_blank')
+}
+
+function decodeHTMLEntities(str){
+  var ta=document.createElement('textarea');
+  ta.innerHTML = str;
+  return ta.value;
+  ta.remove();
 }
 
 function cvtS2HHMMSS(sec,rescale) {
