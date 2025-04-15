@@ -11,7 +11,7 @@ const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],['102394|103101','經濟工商'],['103214|100267','M平方'],['100295','今周刊'],['101131','CMoney'],['100422|100421|100423','商周'],['101170','路透社'],['104453|101006','財訊'],['100150|103088','鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],['100004|101886','風傳媒'],['100275|101201','關鍵評論網'],['global','國際'],['100003','中央社'],['TOPIC-USelection|2024election','川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],['100568|100158','天下雜誌'],['101031','地球圖輯隊'],['101934|100394','閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
 const anue=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
 const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
-const wealth=[['','最新','Articles'],['bd088d2c-f76a-4187-8673-1ae412cd6356','謝金河','Articles'],['95f4329c-bcf4-47c4-b133-879bb862b479','財經茶水間','Category'],['2c6379e9-7527-442b-880a-bb9552689e06','國際','Category'],['87259978-8ff6-465c-b552-c33f69f6432e','投資理財','Category'],['450cbbed-c577-4d8e-a689-8e90b4f8bac7','財經指標','Category'],['d1354fa3-82bf-42e6-84ad-9e36d7615892','金融圈','Category'],['79c03f3f-d546-4551-a05f-c6d38e5579ca','科技','Category'],['3187845b-57fb-4336-bc4b-4f30cbeb642c','企業','Category'],['dd2b5859-96aa-42bb-b5cc-08e6c7c8728e','生醫','Category'],['800e2b3c-0352-4fba-aea2-01fff6b16015','地產','Category'],['352be1d4-7ce8-42b8-9a84-0f491f7927ea','政經','Category'],['de408237-667e-4594-abd8-8106ba567324','健康醫療','Category'],['2eb0f6be-d8bb-447d-b067-e17601f44056','美食旅遊','Category'],['2492cf34-afd8-40ee-95de-6f340988ab22','品味人生','Category']];
+const wealth=[["Articles|","最新"],["Articles|bd088d2c-f76a-4187-8673-1ae412cd6356","謝金河"],["Category|95f4329c-bcf4-47c4-b133-879bb862b479","財經茶水間"],["Category|2c6379e9-7527-442b-880a-bb9552689e06","國際"],["Category|87259978-8ff6-465c-b552-c33f69f6432e","投資理財"],["Category|450cbbed-c577-4d8e-a689-8e90b4f8bac7","財經指標"],["Category|d1354fa3-82bf-42e6-84ad-9e36d7615892","金融圈"],["Category|79c03f3f-d546-4551-a05f-c6d38e5579ca","科技"],["Category|3187845b-57fb-4336-bc4b-4f30cbeb642c","企業"],["Category|dd2b5859-96aa-42bb-b5cc-08e6c7c8728e","生醫"],["Category|800e2b3c-0352-4fba-aea2-01fff6b16015","地產"],["Category|352be1d4-7ce8-42b8-9a84-0f491f7927ea","政經"],["Category|de408237-667e-4594-abd8-8106ba567324","健康醫療"],["Category|2eb0f6be-d8bb-447d-b067-e17601f44056","美食旅遊"],["Category|2492cf34-afd8-40ee-95de-6f340988ab22","品味人生"]];
 const businessToday=[['news/','最新'],['catalog/183007/list/page/','投資理財'],['catalog/183020/list/page/','保險稅制'],['catalog/183014/list/page/','產業時事'],['catalog/183028/list/page/','職場生活']];
 const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['0000000319','財經'],['0000000326','管理'],['0000000312','焦點'],['0000000342','CEO學院']];
 const preStr=sCC(uLi,iOd);
@@ -92,17 +92,9 @@ async function ping(){
 function createBtnGroup(site,siteName){
   btn.innerHTML=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="padding-right:3rem">`;
   for (let tab of site){
-    if (siteName!=='wealth'){
-      btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${tab[0]}')">${tab[1]}</button>`;
-    } else {
-      btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${tab[2]}','${tab[0]}')">${tab[1]}</button>`;
-    }
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${siteName}Get1stList('${tab[0]}')">${tab[1]}</button>`;
   }
-    if (siteName!=='wealth'){
-      window[`${siteName}Get1stList`](site[0][0]);
-    } else {
-      wealthGet1stList('Category','2c6379e9-7527-442b-880a-bb9552689e06')
-    }
+    window[`${siteName}Get1stList`](site[0][0]);
 }
 
 // async function get1stList(siteName,top,op,t){
@@ -543,17 +535,18 @@ async function cteeGetSearchResults(){
 //    WEALTH
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function wealthGet1stList(op,t){
+async function wealthGet1stList(t){
 rr=0;
-wealthGetList(op,t);
+wealthGetList(t);
 showTop('財訊');
 }
 
-async function wealthGetList(op,t){
+async function wealthGetList(t){
 loading.style.display='block';
 siteName='wealth';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
+var p=t.split('|');var op=t[0];var t=p[1];
 
 if (op=='Articles'){
   payload={
