@@ -203,10 +203,10 @@ async function msnGetList(siteName,t,coun){
       items.push([h.id,h.title]);
     }
   }
-  
+  console.log(items);
   for (let d of items){
     html+=`<p class="${coun} t-tl fw-bold" onclick="getContent('${siteName}',this.id,'${d[0]}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="getContent('${siteName}',this.id,'${d[0]}')"></div><hr>`;
-  }
+  }console.log(html);
   return html;
 }
 
