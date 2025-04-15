@@ -930,9 +930,13 @@ let res=await fetch(url);
 let str=await res.text();
 var parser = new DOMParser();
 var doc = parser.parseFromString(str, "text/html");
-var hh=doc.querySelectorAll('h3.list_post_title');
+// var hh=doc.querySelectorAll('h3.list_post_title');
+// for (let h of hh){
+//     items.push([h.firstChild.href,h.innerText]);
+// }
+var hh=doc.querySelectorAll('h1.entry-title');
 for (let h of hh){
-    items.push([h.firstChild.href,h.innerText]);
+    items.push([h.firstChild.href,h.firstChild.title]);
 }
 
 for (let h of items){
@@ -952,11 +956,16 @@ async function technewsGetContent(clickedId,id){
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
-    const t=doc.querySelector('.date');
-    const a = doc.querySelector('.copy');
-
+    // const t=doc.querySelector('.date');
+    // const z = doc.querySelector('.copy').outerHTML;
+    
+    const t=doc.querySelectorAll('span.body')[1];
+    const a = doc.querySelector('.bigg');
+    const b = doc.querySelector('.indent');
+    const z=a.outerHTML+b.outerHTML;
+    
     if (a) {
-      var html = '<p class="fs10">'+t.innerText+'</p>'+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+      var html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
       cEl.innerHTML=html;
       var ads=cEl.querySelector('#inside_AD');
       ads.remove();
