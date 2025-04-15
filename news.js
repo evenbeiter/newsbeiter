@@ -545,7 +545,7 @@ showTop('聯合');
 
 async function udnGetList(t){
 loading.style.display='block';
-siteName='wealth';rr++;rt=t;
+siteName='udn';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
 
