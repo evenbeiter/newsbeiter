@@ -32,7 +32,7 @@ var btn=document.getElementById('btn');
 var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
 var loading=document.getElementById('loading');
-var searchTerm=document.getElementById('search-term');
+//var searchTerm=document.getElementById('search-term');
 
   
 //    LANDING PAGE
@@ -66,7 +66,6 @@ function openMediaList(){
   }
   options.style.display='block';
   topdiv.style.display='none';
-  searchTerm.value='';
 }
 
 function openSearchList(){
@@ -298,7 +297,7 @@ async function lineTodayGetContent(clickedId,id){
 
 async function lineTodayGet1stSearchResults(){
 rr=0;
-t=searchTerm.value;
+t=document.getElementById('search-term').value;
 showTop('LINE TODAY - 搜尋：'+t);
 
 loading.style.display='block';
@@ -408,7 +407,7 @@ async function anueGetSearchResults(){
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   list.innerHTML='';
-  t=searchTerm.value;
+  t=document.getElementById('search-term').value;
 }
     var html = '';
     var url='';
@@ -512,7 +511,7 @@ async function cteeGetSearchResults(){
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   list.innerHTML='';
-  t=searchTerm.value;
+  t=document.getElementById('search-term').value;
 }
   var html = '';
   var url='';
@@ -611,7 +610,7 @@ async function udnGetSearchResults(){
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   list.innerHTML='';
-  t=searchTerm.value;
+  t=document.getElementById('search-term').value;
 }
   var html = '';
   var url='';
@@ -821,7 +820,7 @@ async function businessTodayGetSearchResults(){
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   list.innerHTML='';
-  t=searchTerm.value;
+  t=document.getElementById('search-term').value;
 }
   var html = '';
   var url='';
