@@ -135,7 +135,7 @@ async function getSearchResults(siteName){
   loading.style.display='none';
 }
 
-async function getContent(clickedId,id){
+async function getContent(clickedId,id){console.log(siteName);
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
@@ -972,15 +972,9 @@ window.onscroll = function () {
     const documentHeight = document.documentElement.scrollHeight;
     if (scrollTop + windowHeight >= documentHeight - 5) {
       if(rt!=='s'){
-        if (typeof window[`${siteName}GetList`] === "function") {
-          if (siteName!=='msn'){
-            window[`${siteName}GetList`](rt)
-          } else {
-            window[`${siteName}GetList`](rt,coun)
-          }
-        }
+        getList(siteName,rt);
       }else{
-        if (typeof window[`${siteName}GetSearchResults`] === "function") {window[`${siteName}GetSearchResults`]()}
+        getSearchResults(siteName);
       }
     }
   }, 1000);
