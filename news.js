@@ -389,10 +389,10 @@ async function cteeGetList(t){
   let str=await res.json();
   for (let h of str){
     items.push([h.hyperLink,h.title,h.publishDatetime])
-  }
+  }console.log(items);
   for (let h of items){
     html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
-  }
+  }console.log(html);
   return html;
 }
 
