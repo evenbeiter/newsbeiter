@@ -21,7 +21,7 @@ const technews=[['technews.tw/','最新'],['technews.tw/category/semiconductor/'
 const formHeader=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="margin-right:3rem">`;
 var tabs=[];
 var items=[];var url='';var html='';
-var siteName='';
+var siteNameVar='';
 var coun='';
 var t='';
 var uuids='';
@@ -115,7 +115,7 @@ async function get1stSearchResults(siteName,top){
 
 async function getList(siteName,t){
   loading.style.display='block';
-  siteName=siteName;rr++;rt=t;
+  siteNameVar=siteName;rr++;rt=t;
   if (rr==1){newNews()};
   items=[];html='';
   list.innerHTML+=await window[`${siteName}GetList`](siteName,t);
@@ -128,7 +128,7 @@ async function getList(siteName,t){
 
 async function getSearchResults(siteName){
   loading.style.display='block';
-  siteName=siteName;rr++;rt='s';
+  siteNameVar=siteName;rr++;rt='s';
   if (rr==1){newNews()};
   items=[];html='';
   list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
@@ -391,7 +391,7 @@ async function cteeGetList(siteName,t){
   }console.log(items);
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
-  }console.log(html);
+  }
   return html;
 }
 
@@ -761,7 +761,7 @@ showTop(channel);
 
 async function msnChannelVideoGetList(t){
 loading.style.display='block';
-siteName='msnChannelVideo';rr++;rt=t;
+siteNameVar='msnChannelVideo';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
 
@@ -798,7 +798,7 @@ showTop('MSN '+cat);
 
 async function msnVideoGetList(t){
 loading.style.display='block';
-siteName='msnVideo';rr++;rt=t;
+siteNameVar='msnVideo';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
   
@@ -829,7 +829,7 @@ showTop('WSJ Video');
 
 async function wsjVideoGetList(t){
 loading.style.display='block';
-siteName='wsjVideo';rr++;rt=t;
+siteNameVar='wsjVideo';rr++;rt=t;
 if (rr==1){newNews()};
 var items=[];var url='';var html='';
 
@@ -972,9 +972,9 @@ window.onscroll = function () {
     const documentHeight = document.documentElement.scrollHeight;
     if (scrollTop + windowHeight >= documentHeight - 5) {
       if(rt!=='s'){
-        getList(siteName,rt);
+        getList(siteNameVar,rt);
       }else{
-        getSearchResults(siteName);
+        getSearchResults(siteNameVar);
       }
     }
   }, 1000);
