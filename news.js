@@ -1060,7 +1060,7 @@ async function technewsGetContent(clickedId,id){
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
 
-    if (doc.querySelector('.copy').length!==0){
+    if (doc.querySelector('.copy')!==null){
       const t=doc.querySelector('.date');
       const z = doc.querySelector('.copy').outerHTML;
     } else {
