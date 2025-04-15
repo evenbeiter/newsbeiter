@@ -596,6 +596,42 @@ async function udnGetContent(clickedId,id){
   }
 }
 
+async function udnGet1stSearchResults(){
+rr=0;
+cteeGetSearchResults();
+showTop('聯合 - 搜尋：'+t);
+document.getElementById('search-term').value='';
+}
+
+async function cteeGetSearchResults(){
+  loading.style.display='block';
+  rt='s';
+  rr++;
+  var items=[];
+  if (rr==1){
+  document.getElementById('btn-group').style.display='none';
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+  list.innerHTML='';
+  t=document.getElementById('search-term').value;
+}
+  var html = '';
+  var url='';
+
+  url='https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr;
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str){
+    items.push([h.titleLink,h.title])
+  }
+  var html='';
+  for (let h of items){
+    html+=`<p class="title" onclick="udnGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="udnGetContent(this.id,'${h[0]}')"></div><hr>`
+  }
+  list.innerHTML+=html;
+  loading.style.display='none';
+}
+
 
 //    WEALTH
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
