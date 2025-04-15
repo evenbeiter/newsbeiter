@@ -1070,18 +1070,17 @@ async function technewsGetContent(clickedId,id){
       const z=a.outerHTML+b.outerHTML;
     }
     
-    if (a) {
-      var html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
-      cEl.innerHTML=html;
-      var ads=cEl.querySelector('#inside_AD');
-      ads.remove();
-      ads=cEl.querySelectorAll('.coffee-btn-wrapper');
-      for (let ad of ads){ad.remove()};
-      ads=cEl.querySelector('#bmc-tn-modal');
-      ads.remove();
-      ads=cEl.querySelectorAll('.googlenews_Content');
-      for (let ad of ads){ad.remove()};
-    }
+    var html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+    cEl.innerHTML=html;
+    var ads=cEl.querySelector('#inside_AD');
+    ads.remove();
+    ads=cEl.querySelectorAll('.coffee-btn-wrapper');
+    for (let ad of ads){ad.remove()};
+    ads=cEl.querySelector('#bmc-tn-modal');
+    ads.remove();
+    ads=cEl.querySelectorAll('.googlenews_Content');
+    for (let ad of ads){ad.remove()};
+    
     loading.style.display='none';
   } else {
     closeContent(cEl,clickedId);
