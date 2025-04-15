@@ -403,6 +403,7 @@ document.getElementById('search-term').value='';
 
 async function anueGetSearchResults(){
   loading.style.display='block';
+  siteName='anue';
   rt='s';
   rr++;
   if (rr==1){
@@ -506,6 +507,7 @@ document.getElementById('search-term').value='';
 
 async function cteeGetSearchResults(){
   loading.style.display='block';
+  siteName='ctee';
   rt='s';
   rr++;
   var items=[];
@@ -605,6 +607,7 @@ document.getElementById('search-term').value='';
 
 async function udnGetSearchResults(){
   loading.style.display='block';
+  siteName='udn';
   rt='s';
   rr++;
   var items=[];
@@ -815,6 +818,7 @@ document.getElementById('search-term').value='';
 
 async function businessTodayGetSearchResults(){
   loading.style.display='block';
+  siteName='businessToday';
   rt='s';
   rr++;
   var items=[];
