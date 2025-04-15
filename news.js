@@ -32,6 +32,7 @@ var btn=document.getElementById('btn');
 var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
 var loading=document.getElementById('loading');
+var searchTerm=document.getElementById('search-term');
 
   
 //    LANDING PAGE
@@ -65,6 +66,7 @@ function openMediaList(){
   }
   options.style.display='block';
   topdiv.style.display='none';
+  searchTerm.value='';
 }
 
 function openSearchList(){
@@ -296,7 +298,7 @@ async function lineTodayGetContent(clickedId,id){
 
 async function lineTodayGet1stSearchResults(){
 rr=0;
-t=document.getElementById('search-term').value;
+t=searchTerm.value;
 showTop('LINE TODAY - 搜尋：'+t);
 
 loading.style.display='block';
@@ -306,12 +308,12 @@ document.body.scrollTop = 0;
 document.documentElement.scrollTop = 0;
 var items = [];
 var url='';
-    url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
-    let res=await fetch(url);
-    let str=await res.json();
-    for (let a of str.items){
-      items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title,a.publisher]))
-    }
+url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
+let res=await fetch(url);
+let str=await res.json();
+for (let a of str.items){
+  items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title,a.publisher]))
+}
 
 items=[...new Set(items)];
 items=items.map(i=>JSON.parse(i));
@@ -324,7 +326,6 @@ for (let h of items){
 }
 list.innerHTML=html;
 loading.style.display='none';
-document.getElementById('search-term').value='';
 }
 
 
@@ -398,7 +399,6 @@ async function anueGet1stSearchResults(){
 rr=0;
 anueGetSearchResults();
 showTop('鉅亨 - 搜尋：'+t);
-document.getElementById('search-term').value='';
 }
 
 async function anueGetSearchResults(){
@@ -411,7 +411,7 @@ async function anueGetSearchResults(){
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   list.innerHTML='';
-  t=document.getElementById('search-term').value;
+  t=searchTerm.value;
 }
     var html = '';
     var url='';
@@ -502,7 +502,6 @@ async function cteeGet1stSearchResults(){
 rr=0;
 cteeGetSearchResults();
 showTop('工商 - 搜尋：'+t);
-document.getElementById('search-term').value='';
 }
 
 async function cteeGetSearchResults(){
@@ -516,7 +515,7 @@ async function cteeGetSearchResults(){
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   list.innerHTML='';
-  t=document.getElementById('search-term').value;
+  t=searchTerm.value;
 }
   var html = '';
   var url='';
@@ -602,7 +601,6 @@ async function udnGet1stSearchResults(){
 rr=0;
 udnGetSearchResults();
 showTop('聯合 - 搜尋：'+t);
-document.getElementById('search-term').value='';
 }
 
 async function udnGetSearchResults(){
@@ -616,7 +614,7 @@ async function udnGetSearchResults(){
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   list.innerHTML='';
-  t=document.getElementById('search-term').value;
+  t=searchTerm.value;
 }
   var html = '';
   var url='';
@@ -813,7 +811,6 @@ async function businessTodayGet1stSearchResults(){
 rr=0;
 businessTodayGetSearchResults();
 showTop('今周刊 - 搜尋：'+t);
-document.getElementById('search-term').value='';
 }
 
 async function businessTodayGetSearchResults(){
@@ -827,7 +824,7 @@ async function businessTodayGetSearchResults(){
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
   list.innerHTML='';
-  t=document.getElementById('search-term').value;
+  t=searchTerm.value;
 }
   var html = '';
   var url='';
