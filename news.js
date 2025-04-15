@@ -33,7 +33,6 @@ var btn=document.getElementById('btn');
 var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
 var loading=document.getElementById('loading');
-var searchTerm=document.getElementById('search-term');
 
   
 //    LANDING PAGE
@@ -67,7 +66,7 @@ function openMediaList(){
   }
   options.style.display='block';
   topdiv.style.display='none';
-  //searchTerm.value='';
+  //document.getElementById('search-term').value='';
 }
 
 function openSearchList(){
@@ -99,7 +98,7 @@ function createBtnGroup(site,siteName,top){
   for (let tab of site){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top}','${tab[0]}')">${tab[1]}</button>`;
   }
-    window[`${siteName}Get1stList`](site[0][0]);
+    get1stList(siteName,site[0][1],site[0][0]);
 }
 
 async function get1stList(siteName,top,t){
@@ -111,7 +110,7 @@ async function get1stList(siteName,top,t){
 async function get1stSearchResults(siteName,top){
   rr=0;
   getSearchResults(siteName);
-  showTop(top+' - 搜尋：'+searchTerm.value);
+  showTop(top+' - 搜尋：'+document.getElementById('search-term').value);
 }
 
 async function getList(siteName,t){
@@ -132,7 +131,7 @@ async function getSearchResults(siteName){
   siteName=siteName;rr++;rt='s';
   if (rr==1){newNews()};
   items=[];html='';
-  list.innerHTML+=await window[`${siteName}GetSearchResults`](searchTerm.value);
+  list.innerHTML+=await window[`${siteName}GetSearchResults`](document.getElementById('search-term').value);
   loading.style.display='none';
 }
 
