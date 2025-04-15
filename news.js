@@ -205,7 +205,7 @@ async function msnGetList(t,coun){
   }
   
   for (let d of items){
-    html+=`<p class="${coun} t-tl fw-bold" onclick="msnGetContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="msnGetContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
+    html+=`<p class="${coun} t-tl fw-bold" onclick="getContent(this.id,'${d[0]}','${coun}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="getContent(this.id,'${d[0]}','${coun}')"></div><hr>`;
   }
   return html;
 }
@@ -270,7 +270,7 @@ async function lineTodayGetList(tt){
   items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
   
   for (let h of items){
-    html+=`<p class="title" onclick="${siteName}GetContent(this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="${siteName}GetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -303,7 +303,7 @@ async function lineTodayGet1stSearchResults(t){
   items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
   
   for (let h of items){
-    html+=`<p class="title" onclick="${siteName}GetContent(this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="${siteName}GetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -325,7 +325,7 @@ async function anueGetList(t){
     let res=await fetch(url);
     let str=await res.json();
     for (let a of str.items.data){
-      html+=`<p class="title" onclick="anueGetContent(this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="anueGetContent(this.id,'${a.newsId}')">
+      html+=`<p class="title" onclick="getContent(this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent(this.id,'${a.newsId}')">
             <span class="time">${new Date(a.publishAt*1000)}</span><br>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
             </div><hr>`;
     }
@@ -390,7 +390,7 @@ async function cteeGetList(t){
     items.push([h.hyperLink,h.title,h.publishDatetime])
   }console.log(items);
   for (let h of items){
-    html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
   }console.log(html);
   return html;
 }
@@ -410,7 +410,7 @@ async function cteeGetSearchResults(t){
     items.push([h.articleUrl,h.title,h.publishDate])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="cteeGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="cteeGetContent(this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
   }
   return html;
 }
@@ -433,7 +433,7 @@ async function udnGetList(t){
     }
   }
   for (let h of items){
-    html+=`<p class="title" onclick="udnGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="udnGetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -457,7 +457,7 @@ async function udnGetSearchResults(t){
     items.push([h.titleLink,h.title])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="udnGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="udnGetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -515,7 +515,7 @@ async function wealthGetList(t){
   }
   
   for (let h of items){
-    html+=`<p class="title" onclick="wealthGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="wealthGetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -572,7 +572,7 @@ async function businessTodayGetList(t){
     items.push([h.href,h.children[1].children[1].innerText])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -603,7 +603,7 @@ async function businessTodayGetSearchResults(t){
     items.push([href,h.children[1].innerText])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="businessTodayGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessTodayGetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -636,7 +636,7 @@ async function businessWeeklyGetList(t){
     items.push([tl.href,tl.textContent.replace('                    ','')]);
   }
   for (let h of items){
-    html+=`<p class="title" onclick="businessWeeklyGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="businessWeeklyGetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -682,7 +682,7 @@ async function bnextGetList(t){
   }
   
   for (let h of items){
-    html+=`<p class="title" onclick="bnextGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="bnextGetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
@@ -724,7 +724,7 @@ async function technewsGetList(t){
   }
 
   for (let h of items){
-    html+=`<p class="title" onclick="technewsGetContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="technewsGetContent(this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent(this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}')"></div><hr>`
   }
   return html;
 }
