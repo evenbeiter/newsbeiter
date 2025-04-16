@@ -284,7 +284,7 @@ async function lineTodayGetContent(id){
   return html;
 }
 
-async function lineTodayGet1stSearchResults(siteName,t){
+async function lineTodayGetSearchResults(siteName,t){
   try{url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
   let res=await fetch(url);
   let str=await res.json();
