@@ -184,7 +184,7 @@ async function getContent(siteName,clickedId,id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function msnGetList(siteName,t,coun){
-  if (t.slice(0,2)==='Y_'){
+  try{if (t.slice(0,2)==='Y_'){
     var srvc='channelfeed';
     t='InterestIds='+t;
   } else {
@@ -203,11 +203,12 @@ async function msnGetList(siteName,t,coun){
   for (let d of items){
     html+=`<p class="${coun} t-tl fw-bold" onclick="getContent('${siteName}',this.id,'${d[0]}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="getContent('${siteName}',this.id,'${d[0]}')"></div><hr>`;
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function msnGetContent(id,coun){
-  var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
+  try{var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
   var d=await res.json();
 
   if (d.type==='article'){
@@ -219,9 +220,8 @@ async function msnGetContent(id,coun){
       slidesHtml+='<img src="'+(s.image.url?s.image.url:'')+'"><br><p>'+(s.title?s.title:'')+'</p>'+(s.body?s.body:'');
     }
     html = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</p>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
-  } else {
-    html = '<p><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">繼續閱讀</a></p><br>';
-  }
+  } 
+  }catch{html='<p><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
@@ -230,7 +230,7 @@ async function msnGetContent(id,coun){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function lineTodayGetList(siteName,tt){
-  tt=tt.split('|');
+  try{tt=tt.split('|');
   for (let t of tt) {
     if (/[0-9]/.test(t)){
       url=preStr+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+rr*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
@@ -264,11 +264,12 @@ async function lineTodayGetList(siteName,tt){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function lineTodayGetContent(id){
-  const res = await fetch(preStr+'https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id);
+  try{const res = await fetch(preStr+'https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id);
   const str=await res.json();
   const a = str.data;
   if (a) {
@@ -278,11 +279,12 @@ async function lineTodayGetContent(id){
       html = '<p class="fs10">' + a.publishTime + ' ' + a.publisher + '</p>' + '<video class="vjs-tech" style="width:100%" tabindex="-1" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+a.media.hash+'/270p.m3u8" muted="muted" type="application/x-mpegURL"></source></video>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
     }
   }
+  }catch{html='<p><a href="' + a.url.url + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
 async function lineTodayGet1stSearchResults(t){
-  url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
+  try{url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
   let res=await fetch(url);
   let str=await res.json();
   for (let a of str.items){
@@ -297,6 +299,7 @@ async function lineTodayGet1stSearchResults(t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
@@ -305,7 +308,7 @@ async function lineTodayGet1stSearchResults(t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function anueGetList(siteName,t){
-  if (t=='topics'){
+  try{if (t=='topics'){
     url=preStr+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
     let res=await fetch(url);
     let str=await res.json();
@@ -322,12 +325,12 @@ async function anueGetList(siteName,t){
             </div><hr>`;
     }
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
-  
 
 async function anueGetContent(id){
-  if (id.length<5){
+  try{if (id.length<5){
     const res = await fetch(preStr+id+',{mode: "no-cors"}');
     const str=await res.text();
     var parser = new DOMParser();
@@ -336,46 +339,36 @@ async function anueGetContent(id){
     for (let c of tagList){
       html+=c.innerHTML
     }
+  } else {
+    let res=await fetch(preStr+'https://news.cnyes.com/news/id/'+id);
+    let str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    html=doc.querySelector('#article-container').outerHTML;    
   }
+  }catch{html='<p><a href="https://news.cnyes.com/news/id/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html
 }
 
 async function anueGetSearchResults(t){
-  url=preStr+'https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr;
+  try{url=preStr+'https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr;
   let res=await fetch(url);
   let str=await res.json();
   if(str.items.data!==null && str.items.data!==undefined){
     for (let a of str.items.data){
-      html+=`<p class="title" onclick="anueGetSearchContent(this.id,'${a.newsId}')">${a.title.replaceAll('<mark>','').replaceAll('</mark>','')}</p><div id="${a.newsId}" class="content" onclick="anueGetSearchContent(this.id,'${a.newsId}')"><span class="time">${new Date(a.publishAt*1000)}</span><br><div id="content-${a.newsId}"></div><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
+      html+=`<p class="title" onclick="anueGetSearchContent(this.id,'${a.newsId}')">${a.title.replaceAll('<mark>','').replaceAll('</mark>','')}</p><div id="${a.newsId}" class="content" onclick="anueGetSearchContent(this.id,'${a.newsId}')"><p class="fs10">${new Date(a.publishAt*1000)}</p><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
     }
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
-
-  async function anueGetSearchContent(clickedId,id){
-    var cEl=document.getElementById(id);
-    var contentEl=document.getElementById('content-'+id);
-    if (cEl.style.display=='none' || cEl.style.display==''){
-      loading.style.display='block';
-      cEl.style.display='block';
-      let res=await fetch(preStr+'https://news.cnyes.com/news/id/'+id);
-      let str=await res.text();
-      var parser = new DOMParser();
-      var doc = parser.parseFromString(str, "text/html");
-      var a=doc.querySelector('#article-container');
-      if(a){contentEl.innerHTML=a.outerHTML};
-      loading.style.display='none';
-    } else {
-      closeContent(cEl,clickedId);
-    }
-  }
 
 
 //    CTEE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function cteeGetList(siteName,t){
-  url='https://www.ctee.com.tw/api/'+t+rr;console.log(url);
+  try{url='https://www.ctee.com.tw/api/'+t+rr;console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -384,18 +377,20 @@ async function cteeGetList(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function cteeGetContent(id){
-  const res = await fetch('https://www.ctee.com.tw/api'+id);
+  try{const res = await fetch('https://www.ctee.com.tw/api'+id);
   const str=await res.json();
   html = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="https://www.ctee.com.tw' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
 async function cteeGetSearchResults(t){
-  url='https://www.ctee.com.tw/api/search/'+t+'?p='+rr;
+  try{url='https://www.ctee.com.tw/api/search/'+t+'?p='+rr;
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -404,6 +399,7 @@ async function cteeGetSearchResults(t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
@@ -412,7 +408,7 @@ async function cteeGetSearchResults(t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function udnGetList(siteName,t){
-  url='https://udn.com/api/more?'+t+'&page='+(rr-1);console.log(url);
+  try{url='https://udn.com/api/more?'+t+'&page='+(rr-1);console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   if (str.lists.length<18){var k=5}else{var k=1};
@@ -427,22 +423,24 @@ async function udnGetList(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function udnGetContent(id){
-  const res = await fetch('https://udn.com/'+id);
+  try{const res = await fetch('https://udn.com/'+id);
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
   var t=doc.querySelector('.authors');
   var a=doc.querySelector('.article-content');
   html = '<p class="fs10">'+t.innerText+'</p>'+a.outerHTML + '<p class="text-end"><a href="https:/udn.com' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="https:/udn.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
 async function udnGetSearchResults(t){
-  url='https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr;
+  try{url='https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr;
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -451,6 +449,7 @@ async function udnGetSearchResults(t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
@@ -459,7 +458,7 @@ async function udnGetSearchResults(t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function wealthGetList(siteName,t){
-  var p=t.split('|');var op=p[0];var t=p[1];
+  try{var p=t.split('|');var op=p[0];var t=p[1];
   if (op=='Articles'){
     payload={
       "operationName": "Articles",
@@ -508,11 +507,12 @@ async function wealthGetList(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function wealthGetContent(id){
-  payload={
+  try{payload={
     "operationName": "Article",
     "variables": {
       "id": id
@@ -544,6 +544,7 @@ async function wealthGetContent(id){
     }
   }
   html=html.replace('aaaaa',body);
+  }catch{html='<p><a href="https://www.wealth.com.tw/articles/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
@@ -552,7 +553,7 @@ async function wealthGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function businessTodayGetList(siteName,t){
-  url=preStr+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
+  try{url=preStr+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
   var res = await fetch(url);
   var str=await res.text();
   var parser = new DOMParser();
@@ -565,10 +566,11 @@ async function businessTodayGetList(siteName,t){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   return html;
+  }catch{html='<p>尚無內容</p>'}
 }
 
 async function businessTodayGetContent(id){
-  const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+id);
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -577,11 +579,12 @@ async function businessTodayGetContent(id){
   const au=doc.querySelector('.context__info-item--author');
   const a = doc.querySelector('.Zi_ad_ar_iR');
   html = '<p class="fs10">'+t.innerText+' | '+au.innerText+'</p>'+a.outerHTML.replaceAll('<p>&nbsp;</p>','') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
 async function businessTodayGetSearchResults(t){
-  url=preStr+'https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr;console.log(url);
+  try{url=preStr+'https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr;console.log(url);
   var res = await fetch(url);
   var str=await res.text();
   var parser = new DOMParser();
@@ -595,6 +598,7 @@ async function businessTodayGetSearchResults(t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
@@ -603,7 +607,7 @@ async function businessTodayGetSearchResults(t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function businessWeeklyGetList(siteName,t){
-  if (t=='0000000000'){
+  try{if (t=='0000000000'){
     var res = await fetch(preStr+'https://www.businessweekly.com.tw/latest/SearchList', {
       method: 'POST',
       headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
@@ -628,11 +632,12 @@ async function businessWeeklyGetList(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function businessWeeklyGetContent(id){
-  const res = await fetch((preStr+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));
+  try{const res = await fetch((preStr+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -642,6 +647,7 @@ async function businessWeeklyGetContent(id){
   const a=doc.querySelector('.Single-article') ?? '';
   a.querySelectorAll('.Google-special').forEach(e => e.remove());
   html = '<p class="fs10">'+(p.textContent ?? '')+' '+(t.textContent ?? '')+'</p>'+(s.outerHTML ?? '')+(a.outerHTML ?? '')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
@@ -651,7 +657,7 @@ async function businessWeeklyGetContent(id){
 
 
 async function bnextGetList(siteName,t){
-  url=preStr+'https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
+  try{url=preStr+'https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
   var res = await fetch(url);
   var str=await res.text();
   var parser = new DOMParser();
@@ -674,11 +680,12 @@ async function bnextGetList(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function bnextGetContent(id){
-  const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+id);
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -688,6 +695,7 @@ async function bnextGetContent(id){
   var ads=a.querySelector('#pumpkin_159');
   if(ads){ads.remove()};
   html = '<p class="fs10">'+t.innerText+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
@@ -696,7 +704,7 @@ async function bnextGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function technewsGetList(siteName,t){
-  url=preStr+'https://cdn.'+t+'page/'+rr;console.log(url);
+  try{url=preStr+'https://cdn.'+t+'page/'+rr;console.log(url);
   let res=await fetch(url);
   let str=await res.text();
   var parser = new DOMParser();
@@ -716,11 +724,12 @@ async function technewsGetList(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function technewsGetContent(id){
-  const res = await fetch(preStr+id.replace('https://','https://cdn.').replace('finance.',''));
+  try{const res = await fetch(preStr+id.replace('https://','https://cdn.').replace('finance.',''));
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -735,8 +744,8 @@ async function technewsGetContent(id){
     var z=a.outerHTML+b.outerHTML;
   }
 
-  if (z){html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'}
-  else {html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
@@ -745,7 +754,7 @@ async function technewsGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 async function msnChannelVideoGetList(siteName,t){
-  for (var i=0;i<2;i++){
+  try{for (var i=0;i<2;i++){
     url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
     let res=await fetch(url);
     let str=await res.json();
@@ -761,6 +770,7 @@ async function msnChannelVideoGetList(siteName,t){
     html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
   }
   return html;
+  }catch{html='<p>尚無內容</p>'}
 }
 
 
@@ -768,7 +778,7 @@ async function msnChannelVideoGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function msnVideoGetList(siteName,t){
-  url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
+  try{url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str.value[0].subCards){
@@ -779,6 +789,7 @@ async function msnVideoGetList(siteName,t){
   for (let h of items){
     html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
@@ -787,7 +798,7 @@ async function msnVideoGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function wsjVideoGetList(siteName,t){
-  url='https://video-api.shdsvc.dowjones.io/api/legacy/find-all-videos?lang=en-us&count=50'+t+'&page='+(rr-1);
+  try{url='https://video-api.shdsvc.dowjones.io/api/legacy/find-all-videos?lang=en-us&count=50'+t+'&page='+(rr-1);
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str.items){
@@ -799,6 +810,7 @@ async function wsjVideoGetList(siteName,t){
   for (let h of items){
     html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
   }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
