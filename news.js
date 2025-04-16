@@ -118,7 +118,7 @@ async function getList(siteName,t){
   siteNameVar=siteName;rr++;rt=t;
   if (rr==1){newNews()};
   items=[];html='';
-  list.innerHTML+=await window[`${siteName}GetList`](siteName,t); console.log(list.innerHTML);
+  list.innerHTML+=await window[`${siteName}GetList`](siteName,t);
   loading.style.display='none';
   if (siteName==='msnUS'){
     var all=document.querySelectorAll('.t-tl');
@@ -196,10 +196,9 @@ async function msnGetList(siteName,t,coun){
       items.push([h.id,h.title]);
     }
   }
-  console.log(items);
   for (let d of items){
     html+=`<p class="${coun} t-tl fw-bold" onclick="getContent('${siteName}',this.id,'${d[0]}')">${d[1]}</p><div id="${d[0]}" class="content ${coun}" onclick="getContent('${siteName}',this.id,'${d[0]}')"></div><hr>`;
-  }console.log(html);
+  }
   return html;
 }
 
@@ -380,7 +379,7 @@ async function cteeGetList(siteName,t){
   let str=await res.json();
   for (let h of str){
     items.push([h.hyperLink,h.title,h.publishDatetime])
-  }console.log(items);
+  }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
   }
@@ -460,7 +459,6 @@ async function udnGetSearchResults(t){
 
 async function wealthGetList(siteName,t){
   var p=t.split('|');var op=p[0];var t=p[1];
-  console.log(p);console.log(op);console.log(t);
   if (op=='Articles'){
     payload={
       "operationName": "Articles",
@@ -533,7 +531,7 @@ async function wealthGetContent(id){
 
   html = '<p class="fs10">'+cvt2Timezone(data.releasedAt)+' | '+data.authors[0].name+'</p><img src="https://static.wealth.com.tw/'+data.cover+'"><p class="fs10">'+data.coverText+'</p><div id="'+id+'__">aaaaa</div><p class="text-end"><a href="https://www.wealth.com.tw/articles/' + id + '" target="_blank">分享</a></p><br>';
   var body='';    
-  for (let c of content){console.log(c);
+  for (let c of content){
     if (c.type=='p'){
       body+='<p>';
       for (let a of c.children){if (a.type=='link'){body+='<a href="'+a.url+'">'+a.children[0].text+'</a>'} else {body+=a.text}};
