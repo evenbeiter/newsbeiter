@@ -284,7 +284,7 @@ async function lineTodayGetContent(id){
   return html;
 }
 
-async function lineTodayGet1stSearchResults(t){
+async function lineTodayGet1stSearchResults(siteName,t){
   try{url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
   let res=await fetch(url);
   let str=await res.json();
@@ -351,7 +351,7 @@ async function anueGetContent(id){
   return html
 }
 
-async function anueGetSearchResults(t){
+async function anueGetSearchResults(siteName,t){
   try{url=preStr+'https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr;
   let res=await fetch(url);
   let str=await res.json();
@@ -390,7 +390,7 @@ async function cteeGetContent(id){
   return html;
 }
 
-async function cteeGetSearchResults(t){
+async function cteeGetSearchResults(siteName,t){
   try{url='https://www.ctee.com.tw/api/search/'+t+'?p='+rr;
   let res=await fetch(url);
   let str=await res.json();
@@ -440,7 +440,7 @@ async function udnGetContent(id){
   return html;
 }
 
-async function udnGetSearchResults(t){
+async function udnGetSearchResults(siteName,t){
   try{url='https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr;
   let res=await fetch(url);
   let str=await res.json();
@@ -584,7 +584,7 @@ async function businessTodayGetContent(id){
   return html;
 }
 
-async function businessTodayGetSearchResults(t){
+async function businessTodayGetSearchResults(siteName,t){
   try{url=preStr+'https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr;console.log(url);
   var res = await fetch(url);
   var str=await res.text();
