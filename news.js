@@ -118,9 +118,9 @@ async function getList(siteName,t){
   siteNameVar=siteName;rr++;rt=t;
   if (rr==1){newNews()};
   items=[];html='';
-  list.innerHTML+=await window[`${siteName}GetList`](siteName,t);
+  list.innerHTML+=await window[`${siteName}GetList`](siteName,t); console.log(list.innerHTML);
   loading.style.display='none';
-  if (coun==='en-us'){
+  if (siteName==='msnUS'){
     var all=document.querySelectorAll('.t-tl');
     getTranslation(all);
   }
@@ -141,7 +141,7 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='block';
     cEl.style.display='block';
     if (cEl.innerText.length<30){
-      cEl.innerHTML+=await window[`${siteName}GetContent`](id); console.log(cEl.innerHTML);
+      cEl.innerHTML+=await window[`${siteName}GetContent`](id);
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
