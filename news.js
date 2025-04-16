@@ -1,5 +1,8 @@
 const allSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周'],['bnext','數位時代'],['technews','科技新報'],['msnTW','MSN 台灣'],['msnUS','MSN']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'msnChannel':[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']],'others':[['wsjVideo','WSJ']]};
+const msnVideo=[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']];
+const msnChannelVideo=[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']];
+const otherVideo:[['wsjVideo','WSJ']];
 const uLi = ['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const searchSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['udn','聯合'],['businessToday','今周刊'],['cnbcVideo','CNBC']]; 
 const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6,15];
@@ -52,21 +55,21 @@ function openMediaList(){
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
   }
-  tabs=videoSites;
   btn.innerHTML+='<hr>';
-  for (let tab of tabs.msnChannel){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="msnChannelVideoGet1stList('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
+  tabs=msnVideo;
+  for (let tab of tabs){
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('msnVideo','${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
   }
-  for (let tab of tabs.others){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="${tab[0]}Get1stList('')">${tab[1]}</button>`;
+  tabs=msnChannelVideo;
+  for (let tab of tabs){
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('msnChannelVideo','${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
   }
-  btn.innerHTML+='<br>';
-  for (let tab of tabs.msn){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="msnVideoGet1stList('${tab[0]}')">${tab[1]}</button>`;
+  tabs=otherVideo;
+  for (let tab of tabs){
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('otherVideo','${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
   }
   options.style.display='block';
   topdiv.style.display='none';
-  //document.getElementById('search-term').value='';
 }
 
 function openSearchList(){
@@ -743,101 +746,62 @@ async function technewsGetContent(id){
 //    MSN VIDEO FROM CHANNEL
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-async function msnChannelVideoGet1stList(t,channel){
-rr=0;
-msnChannelVideoGetList(t);
-showTop(channel);
-}
-
-async function msnChannelVideoGetList(t){
-loading.style.display='block';
-siteNameVar='msnChannelVideo';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-
-for (var i=0;i<2;i++){
-  url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
-  let res=await fetch(url);
-  let str=await res.json();
-  for (let h of str.sections[0].cards){
-    if(h.type=='video'){
-      items.push([h.id,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url]);
+async function msnChannelVideoGetList(siteName,t){
+  for (var i=0;i<2;i++){
+    url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
+    let res=await fetch(url);
+    let str=await res.json();
+    for (let h of str.sections[0].cards){
+      if(h.type=='video'){
+        items.push([h.id,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url]);
+      }
     }
   }
-}
-items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
-
-for (let h of items){
-  html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
+  items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
+  
+  for (let h of items){
+    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+  }
+  return html;
 }
 
 
 //    MSN VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  
-async function msnVideoGet1stList(t){
-rr=0;
-msnVideoGetList(t);
-var cat=t.split(' ')[0];
-cat=cat.charAt(0).toUpperCase() + cat.slice(1);
-showTop('MSN '+cat);
-}
 
-async function msnVideoGetList(t){
-loading.style.display='block';
-siteNameVar='msnVideo';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
+async function msnVideoGetList(siteName,t){
+  url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str.value[0].subCards){
+    items.push([h.sourceId,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url,h.provider.name]);
+  }
+  items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
   
-url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
-let res=await fetch(url);
-let str=await res.json();
-for (let h of str.value[0].subCards){
-  items.push([h.sourceId,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url,h.provider.name]);
-}
-items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
-
-for (let h of items){
-  html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
+  for (let h of items){
+    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+  }
+  return html;
 }
 
 
 //    WSJ VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function wsjVideoGetList(siteName,t){
+  url='https://video-api.shdsvc.dowjones.io/api/legacy/find-all-videos?lang=en-us&count=50'+t+'&page='+(rr-1);
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str.items){
+    var thumbnail=h.thumbnailList[0].url;
+    items.push([h.id.replace('{','').replace('}',''),h.name,h.formattedCreationDate,h.duration,thumbnail.slice(0,thumbnail.indexOf('?')),h.linkURL,h.hls])
+  }
+  items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
   
-async function wsjVideoGet1stList(t){
-rr=0;
-wsjVideoGetList(t);
-showTop('WSJ Video');
-}
-
-async function wsjVideoGetList(t){
-loading.style.display='block';
-siteNameVar='wsjVideo';rr++;rt=t;
-if (rr==1){newNews()};
-var items=[];var url='';var html='';
-
-url='https://video-api.shdsvc.dowjones.io/api/legacy/find-all-videos?lang=en-us&count=50'+t+'&page='+(rr-1);
-let res=await fetch(url);
-let str=await res.json();
-for (let h of str.items){
-  var thumbnail=h.thumbnailList[0].url;
-  items.push([h.id.replace('{','').replace('}',''),h.name,h.formattedCreationDate,h.duration,thumbnail.slice(0,thumbnail.indexOf('?')),h.linkURL,h.hls])
-}
-items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
-
-var html='';
-for (let h of items){
-  html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
-}
-list.innerHTML+=html;
-loading.style.display='none';
+  for (let h of items){
+    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+  }
+  return html;
 }
 
 
