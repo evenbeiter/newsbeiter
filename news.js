@@ -149,19 +149,12 @@ async function getContent(siteName,clickedId,id){
       } else if (siteName=='businessToday'){
         cEl.querySelectorAll('iframe').forEach(ifm => {ifm.remove()});
       } else if (siteName=='technews'){
-        var ads=cEl.querySelector('#inside_AD');
-        ads.remove();
-        ads=cEl.querySelectorAll('.coffee-btn-wrapper');
-        for (let ad of ads){ad.remove()};
-        ads=cEl.querySelector('#bmc-tn-modal');
-        ads.remove();
-        ads=cEl.querySelectorAll('.googlenews_Content');
-        for (let ad of ads){ad.remove()};
+        cEl.querySelectorAll('#inside_AD').forEach(a => {a.remove()};
+        cEl.querySelectorAll('.coffee-btn-wrapper').forEach(a => {a.remove()};
+        cEl.querySelectorAll('#bmc-tn-modal').forEach(a => {a.remove()};
+        cEl.querySelectorAll('.googlenews_Content').forEach(a => {a.remove()};
       } else if (siteName=='msnTW'||siteName=='msnUS'){
-        var images=cEl.querySelectorAll('img');
-        for (let img of images){
-          img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img';
-        }
+        cEl.querySelectorAll('img').forEach(img => {img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'};
       }
     }
     loading.style.display='none';
