@@ -774,7 +774,7 @@ async function peInsightsGetList(siteName,t){
   return html;
 }
 
-async function peInsightsGetContent(siteName,clickedId,id){
+async function peInsightsGetContent(id){
   try{const res = await fetch(preStr+id);
   const str=await res.text();
   var parser = new DOMParser();
