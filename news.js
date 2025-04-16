@@ -734,16 +734,16 @@ async function technewsGetContent(id){
   var doc = parser.parseFromString(str, "text/html");
 
   if (doc.querySelector('.copy')!==null){
-    const t=doc.querySelector('.date');
-    const z = doc.querySelector('.copy').outerHTML;
+    var t=doc.querySelector('.date');
+    var z = doc.querySelector('.copy').outerHTML;
   } else {
-    const t=doc.querySelectorAll('span.body')[1];
-    const a = doc.querySelector('.bigg');
-    const b = doc.querySelector('.indent');
-    const z=a.outerHTML+b.outerHTML;
+    var t=doc.querySelectorAll('span.body')[1];
+    var a = doc.querySelector('.bigg');
+    var b = doc.querySelector('.indent');
+    var z=a.outerHTML+b.outerHTML;
   }
 
-  if (z!==undefined){html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'}
+  if (z){html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'}
   else {html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
