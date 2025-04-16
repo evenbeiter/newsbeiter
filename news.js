@@ -121,7 +121,9 @@ async function getList(siteName,t){
   siteNameVar=siteName;rr++;rt=t;
   if (rr==1){newNews()};
   items=[];html='';
-  list.innerHTML+=await window[`${siteName}GetList`](siteName,t);
+  if (siteName=='msnTW'){list.innerHTML+=await msnGetList(siteName,t,'zh-tw')}
+  else if (siteName=='msnUS'){list.innerHTML+=await msnGetList(siteName,t,'en-us')}
+  else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
   loading.style.display='none';
   if (siteName==='msnUS'){
     var all=document.querySelectorAll('.t-tl');
@@ -179,8 +181,8 @@ async function getContent(siteName,clickedId,id){
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function msnTWGetList(siteName,t){await msnGetList(siteName,t,'zh-tw')}
-async function msnUSGetList(siteName,t){await msnGetList(siteName,t,'en-us')}
+// async function msnTWGetList(siteName,t){await msnGetList(siteName,t,'zh-tw')}
+// async function msnUSGetList(siteName,t){await msnGetList(siteName,t,'en-us')}
 
 async function msnGetList(siteName,t,coun){
   if (t.slice(0,2)==='Y_'){
