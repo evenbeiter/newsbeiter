@@ -175,7 +175,7 @@ async function getContent(siteName,clickedId,id){
   } else {
     if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
       cEl.style.display='none';
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView();
+      if (siteName=='msnTW'||siteName=='msnUS'){cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()}else{cEl.previousElementSibling.previousElementSibling.scrollIntoView()};
     }
   }
 }
