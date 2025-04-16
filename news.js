@@ -551,7 +551,7 @@ async function wealthGetContent(id){
       }
     }
   }
-  html.replace('aaaaa',body);
+  html=html.replace('aaaaa',body);
   return html;
 }
 
@@ -743,7 +743,7 @@ async function technewsGetContent(id){
     const z=a.outerHTML+b.outerHTML;
   }
 
-  if (z){html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'}
+  if (z!==undefined){html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'}
   else {html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
