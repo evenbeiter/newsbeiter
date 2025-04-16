@@ -179,8 +179,8 @@ async function getContent(siteName,clickedId,id){
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function msnTWGetList(siteName,t){msnGetList(siteName,t,'zh-tw')}
-async function msnUSGetList(siteName,t){msnGetList(siteName,t,'en-us')}
+async function msnTWGetList(siteName,t){await msnGetList(siteName,t,'zh-tw')}
+async function msnUSGetList(siteName,t){await msnGetList(siteName,t,'en-us')}
 
 async function msnGetList(siteName,t,coun){
   if (t.slice(0,2)==='Y_'){
