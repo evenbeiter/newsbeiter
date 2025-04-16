@@ -148,7 +148,7 @@ async function getContent(siteName,clickedId,id){
     if (cEl.innerText.length<30){
       if (siteName=='msnTW'){list.innerHTML+=await msnGetContent(t,'zh-tw')}
       else if (siteName=='msnUS'){list.innerHTML+=await msnGetContent(t,'en-us')}
-      else (cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
+      else {(cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
