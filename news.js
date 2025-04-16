@@ -146,8 +146,8 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='block';
     cEl.style.display='block';
     if (cEl.innerText.length<30){
-      if (siteName=='msnTW'){list.innerHTML+=await msnGetContent(id,'zh-tw')}
-      else if (siteName=='msnUS'){list.innerHTML+=await msnGetContent(id,'en-us')}
+      if (siteName=='msnTW'){cEl.innerHTML+=await msnGetContent(id,'zh-tw')}
+      else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
       else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
       if (siteName=='udn'){
