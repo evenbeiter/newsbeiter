@@ -1,4 +1,4 @@
-const allSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周'],['bnext','數位時代'],['technews','科技新報'],['msnTW','MSN 台灣'],['msnUS','MSN']];
+const allSites=[['lineToday','LINE'],['anue','鉅亨'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周'],['bnext','數位時代'],['technews','科技新報'],['msnTW','MSN 台灣'],['msnUS','MSN'],['peInsights','PEI']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'msnChannel':[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']],'others':[['wsjVideo','WSJ']]};
 const msnVideo=[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']];
 const msnChannelVideo=[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']];
@@ -21,6 +21,7 @@ const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['00000003
 const preStr=sCC(uLi,iOd);
 const bnext=[['articles','新聞'],['ranking','熱門'],['topics','專題'],['tags/AI','AI'],['categories/semiconductor','半導體'],['categories/AI','AI與大數據'],['categories/5g','5G通訊'],['categories/car','電動車/交通科技'],['categories/manufacture','智慧製造'],['categories/media','影音新媒體'],['categories/fintech','金融科技'],['categories/digitalskill','職場工作術']];
 const technews=[['technews.tw/','最新'],['technews.tw/category/semiconductor/','半導體'],['technews.tw/category/component/','零組件'],['finance.technews.tw/','財經'],['technews.tw/category/internet/','網路'],['technews.tw/category/cutting-edge/','尖端科技'],['technews.tw/topics/','系列專題'],['technews.tw/category/natural-science/環境科學/','環境科學'],['technews.tw/category/能源科技/','能源科技']];
+const peInsights=[['','Latest']];
 const formHeader=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="margin-right:3rem">`;
 var tabs=[];
 var items=[];var url='';var html='';
@@ -165,13 +166,13 @@ async function getContent(siteName,clickedId,id){
       }
     }
     loading.style.display='none';
-    if (coun==='en-us'){
-      var all=[];
-      var pg=cEl.getElementsByTagName('p');all.push(...pg);
-      var h2=cEl.getElementsByTagName('h2');all.push(...h2);
-      var li=cEl.getElementsByTagName('li');all.push(...li);
-      getTranslation(all);
+    if (siteName==='msnUS'){
+      var all=[...cEl.querySelectorAll('p'),...cEl.querySelectorAll('h2'),...cEl.querySelectorAll('li')]
+      // var pg=cEl.getElementsByTagName('p');all.push(...pg);var h2=cEl.getElementsByTagName('h2');all.push(...h2);var li=cEl.getElementsByTagName('li');all.push(...li);
+    } else if (siteName=='peInsights'){
+      var all=cEl.querySelectorAll('.tl');
     }
+    getTranslation(all);
   } else {
     if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
       cEl.style.display='none';
@@ -746,6 +747,45 @@ async function technewsGetContent(id){
 
   html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
+//    PE INSIGHTS
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function peInsightsGetList(siteName,t){
+  try{var k=3;
+  for (let i=1;i<k;i++){
+    url=preStr+'https://pe-insights.com/page/'+((rr-1)*k+i)+'?s='+t+'&et_pb_searchform_submit=et_search_proccess&et_pb_include_posts=yes&et_pb_include_pages=yes';console.log(url);
+    let res=await fetch(url);
+    let str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    var hh=doc.querySelectorAll('h2.entry-title');
+    for (let h of hh){
+      items.push([h.children[0].href,h.innerText,h.nextElementSibling.innerText])
+    }
+  }
+  for (let h of items){
+    html+=`<div class="t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title">${h[1]}</p></div><span class="fs10">${h[2]}</span><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+async function peInsightsGetContent(siteName,clickedId,id){
+  try{const res = await fetch(id);
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var img=doc.querySelector('section[data-id="e95520d"]');
+  var a=doc.querySelector('section[data-id="4813b0f"]');
+
+  if (a) {
+    html = img.outerHTML+'<br>'+a.outerHTML.replaceAll('<h3','<p class="tl"').replaceAll('</h3>','</p>').replaceAll('<p','<p class="tl"').replaceAll(/<span[\s\S]*?">/g,'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
