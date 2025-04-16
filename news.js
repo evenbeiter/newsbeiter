@@ -145,7 +145,7 @@ async function getContent(siteName,clickedId,id){
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
     cEl.style.display='block';
-    if (cEl.innerText.length<30){
+    if (cEl.innerText.length<50){
       if (siteName=='msnTW'){cEl.innerHTML+=await msnGetContent(id,'zh-tw')}
       else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
       else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
