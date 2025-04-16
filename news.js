@@ -775,7 +775,7 @@ async function peInsightsGetList(siteName,t){
 }
 
 async function peInsightsGetContent(siteName,clickedId,id){
-  try{const res = await fetch(id);
+  try{const res = await fetch(preStr+id);
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
