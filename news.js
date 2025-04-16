@@ -66,7 +66,7 @@ function openMediaList(){
   }
   tabs=otherVideo;
   for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('otherVideo','${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${tab[0]}','${tab[1]}','')">${tab[1]}</button>`;
   }
   options.style.display='block';
   topdiv.style.display='none';
