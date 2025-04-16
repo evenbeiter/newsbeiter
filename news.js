@@ -203,8 +203,8 @@ async function msnGetList(siteName,t,coun){
   return html;
 }
 
-async function msnTWGetContent(id){msnGetContent(id,'zh-tw')}
-async function msnUSGetContent(id){msnGetContent(id,'en-us')}
+async function msnTWGetContent(id){await msnGetContent(id,'zh-tw')}
+async function msnUSGetContent(id){await msnGetContent(id,'en-us')}
 
 async function msnGetContent(id,coun){
   var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
