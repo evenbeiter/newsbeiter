@@ -141,7 +141,7 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='block';
     cEl.style.display='block';
     if (cEl.innerText.length<30){
-      cEl.innerHTML+=await window[`${siteName}GetContent`](id);
+      cEl.innerHTML+=await window[`${siteName}GetContent`](id); console.log(cEl.innerHTML);
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
