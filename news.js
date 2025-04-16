@@ -146,7 +146,9 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='block';
     cEl.style.display='block';
     if (cEl.innerText.length<30){
-      cEl.innerHTML+=await window[`${siteName}GetContent`](id);
+      if (siteName=='msnTW'){list.innerHTML+=await msnGetContent(t,'zh-tw')}
+      else if (siteName=='msnUS'){list.innerHTML+=await msnGetContent(t,'en-us')}
+      else (cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
@@ -181,9 +183,6 @@ async function getContent(siteName,clickedId,id){
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// async function msnTWGetList(siteName,t){await msnGetList(siteName,t,'zh-tw')}
-// async function msnUSGetList(siteName,t){await msnGetList(siteName,t,'en-us')}
-
 async function msnGetList(siteName,t,coun){
   if (t.slice(0,2)==='Y_'){
     var srvc='channelfeed';
@@ -206,9 +205,6 @@ async function msnGetList(siteName,t,coun){
   }
   return html;
 }
-
-async function msnTWGetContent(id){await msnGetContent(id,'zh-tw')}
-async function msnUSGetContent(id){await msnGetContent(id,'en-us')}
 
 async function msnGetContent(id,coun){
   var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
