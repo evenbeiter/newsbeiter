@@ -332,7 +332,7 @@ async function anueGetList(siteName,t){
 
 async function anueGetContent(id){
   try{if (id.length<5){
-    const res = await fetch(preStr+id+',{mode: "no-cors"}');
+    const res = await fetch(preStr+id);
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
@@ -441,7 +441,7 @@ async function udnGetContent(id){
 }
 
 async function udnGetSearchResults(siteName,t){
-  try{url='https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr;
+  try{url=preStr+'https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr;
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
