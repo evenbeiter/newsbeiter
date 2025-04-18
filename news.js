@@ -372,17 +372,17 @@ async function anueGetSearchResults(siteName,t){
 
 async function invtComGetList(siteName,t){
   try{url=preStr+'https://hk.investing.com/'+t+rr;console.log(url);
-  let res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0'}});
+  let res=await fetch(url,{headers:{'Cookie':'udid=; invab=; _imntz_error=; im_sharedid=; im_sharedid_cst=; user-browser-sessions=1; browser-session-counted=true; adBlockerNewUserDomains=; _hjSessionUser_174945=; _hjSession_174945=; __eventn_id=; hb_insticator_uid=; _cc_id=; panoramaId=; panoramaIdType=; panoramaId_expiry=; connectId=; r_p_s_n=; _lr_geo_location=; reg_trk_ep=; mm-user-id=; geoC=; gtmFired=; ccsid=; _lr_env_src_ats=; ccuid=; _lr_sampling_rate=; _pbjs_userid_consent_data=; _gid=; adsFreeSalePopUp=; pbjs-unifiedid=; pbjs-unifiedid_last=; _ga=; nyxDorf=; _ga_C4NDLGKVMK=; page_view_count=; lifetime_page_view_count=; invpc=; ses_num=; last_smd=; _hjHasCachedUserAttributes=; cto_bundle=; cto_bidid=; __gads=ID=; __gpi=; __eoi=; _dd_s='}});
   let str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  if (t.slice(0,8)!=='analysis'){var hh=doc.querySelectorAll('article')}else{var hh=doc.querySelector('#contentSection').querySelectorAll('article')};console.log(hh);
+  if (t.slice(0,8)!=='analysis'){var hh=doc.querySelectorAll('article')}else{var hh=doc.querySelector('#contentSection').querySelectorAll('article')};
   for (let h of hh){
     items.push([h.children[1].children[0].href,h.children[1].children[0].innerText,h.querySelector('time').getAttribute('datetime')+' GMT+0',h.children[1].children[2].querySelectorAll('span')[1].innerText]);
-  }console.log(items);
+  }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h3}</p></div><hr>`;console.log(html);
-  }console.log(html);
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`;
+  }
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
