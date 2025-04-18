@@ -372,7 +372,7 @@ async function anueGetSearchResults(siteName,t){
 
 async function invtComGetList(siteName,t){
   try{url=preStr+'https://hk.investing.com/'+t+rr;console.log(url);
-  let res=await fetch(url);
+  let res=await fetch(url,{headers:{'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36 Edg/134.0.0.0'}});
   let str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
