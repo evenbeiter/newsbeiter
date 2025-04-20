@@ -526,11 +526,11 @@ async function dwGetContent(id){
   d=JSON.parse(d[d.length-1].innerText.slice(22,-2));
   d=d[Object.keys(d)[1]].data.content;
   if(id.indexOf('video-')===-1){
-    html = '<p class="fs10">'+d.localizedContentDate+'</p>'+d.text.replace(/poster="data[\s\S]*?"/g,'') + '<p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
+    html = '<p class="fs10">'+d.localizedContentDate+'</p>'+d.text.replace(/poster="data[\s\S]*?"/g,'').replaceAll('${formatId}','900')+ '<p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
   }else{
     html = '<p class="fs10">'+d.localizedContentDate+'</p><p>'+d.teaser+'</p><video controls playsinline><source src="'+d.openGraphMetadata.url+'" type="video/mp4"></source></video><p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
   }
-  }catch{html='<p><a href="https:/www.dw.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  }catch{html='<p><a href="https://www.dw.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
