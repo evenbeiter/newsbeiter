@@ -14,7 +14,6 @@ const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],['102394|103101','經濟工商'],['103214|100267','M平方'],['100295','今周刊'],['101131','CMoney'],['100422|100421|100423','商周'],['101170','路透社'],['104453|101006','財訊'],['100150|103088','鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],['100004|101886','風傳媒'],['100275|101201','關鍵評論網'],['global','國際'],['100003','中央社'],['TOPIC-USelection|2024election','川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],['100568|100158','天下雜誌'],['101031','地球圖輯隊'],['101934|100394|103227','閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
 const anue=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
 const dw=[['經濟/s-1682','經濟'],['政治/s-1681','政治'],['科技創新/s-1686','科技創新'],['文化/s-1683','文化']];
-const dq=[['','最新']];
 const invtCom=[['news/forex-news/','匯市'],['rates-bonds/u.s.-10-year-bond-yield-news/','債市'],['news/commodities-news/','原物料'],['indices/japan-ni225-news/','日經'],['indices/topix-news/','東證'],['analysis/market-overview/','市場評論'],['analysis/editors-picks/','精選評論']];
 const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
 const udn=[['id=&channelId=1&cate_id=0&type=breaknews','最新'],['channelId=2&type=cate_latest_news&cate_id=6638','要聞'],['channelId=2&type=cate_latest_news&cate_id=6645','股市'],['channelId=2&type=cate_latest_news&cate_id=7225','全球'],['channelId=2&type=subcate_articles&cate_id=7225&sub_id=124373','美國關稅'],['channelId=2&type=subcate_articles&cate_id=7225&sub_id=6811','全球財經'],['channelId=2&type=cate_latest_news&cate_id=6644','產經'],['channelId=1015&type=cate_latest_news&cate_id=0','雜誌'],['channelId=2&type=cate_latest_news&cate_id=6649','生活']];
@@ -157,9 +156,7 @@ async function getContent(siteName,clickedId,id){
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
         for (let ad of ads){ad.remove()};
-      } else if (siteName=='dw'){
-        cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()});
-      }else if (siteName=='businessToday'){
+      } else if (siteName=='businessToday'){
         cEl.querySelectorAll('iframe').forEach(a => {a.remove()});
       } else if (siteName=='technews'){
         cEl.querySelectorAll('#inside_AD').forEach(a=>{a.remove()});
@@ -828,55 +825,6 @@ async function technewsGetContent(id){
 
   html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
-  return html;
-}
-
-
-//    DQ
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-async function dqGetList(siteName,t){
-  try{
-  var k=3;
-  for (let i=0;i<k;i++){
-    url=preStr+'https://dq-api.yam.com/f-system/get-post-list';console.log(url);
-    var res = await fetch(url, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json',},
-      body: '{"page":'+((rr-1)*k+i+1)+',"amount":10}',
-      });
-    var str=await res.json();
-    
-    for (let h of str.data.list){
-      items.push([h.Id,h.Title,h.PublishTime])
-    }
-  }
-  for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
-  }
-  }catch{html='<p>尚無內容</p>'}
-  return html;
-}
-
-async function dqGetContent(id){
-  try{
-  url=preStr+'https://dq-api.yam.com/f-system/get-single-post';console.log(url);
-  var res = await fetch(url, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json',},
-    body: '{"postId": "'+id+'"}',
-    });
-  var str=await res.json();
-  for (let h of str.data.contents){
-    if(h.Imgs.length>0){
-      html+=h.Value;
-      for (let img of h.Imgs){
-        html+='<img src="'+img.url+'">';
-      }
-    }else{html+=h.Value}
-  }
-  html+='<p class="text-end"><a href="https://dq.yam.com/post/' + id + '" target="_blank">分享</a></p><br>';
-  }catch{html='<p><a href="https://dq.yam.com/post/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
