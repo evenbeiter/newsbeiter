@@ -646,8 +646,8 @@ async function businessTodayGetList(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
-  return html;
   }catch{html='<p>尚無內容</p>'}
+  return html;
 }
 
 async function businessTodayGetContent(id){
