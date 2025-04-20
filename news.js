@@ -831,6 +831,45 @@ async function technewsGetContent(id){
 }
 
 
+//    DQ
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function dqGetList(siteName,t){
+  try{
+  var k=3;
+  for (let i=0;i<k;i++){
+    var url=preStr+'https://dq-api.yam.com/f-system/get-post-list'+((rr-1)*k+i);console.log(url);
+    var res = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json',},
+      body: '{"page":'+((rr-1)*k+i+1)+',"amount":10}',
+      });
+    var str=await res.json();
+    
+    for (let h of str.data.list){
+      items.push([h.Id,h.Title,h.PublishTime])
+    }
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function dqGetContent(id){
+  try{const res = await fetch('https://dq.yam.com/post/'+id);
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var a=doc.querySelector('article');
+  a=a.querySelector('.post__head').remove();
+  html = a.outerHTML + '<p class="text-end"><a href="https://dq.yam.com/post/' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="https://dq.yam.com/post/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
 //    PE INSIGHTS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
