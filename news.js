@@ -156,6 +156,8 @@ async function getContent(siteName,clickedId,id){
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
         for (let ad of ads){ad.remove()};
+      } else if (siteName=='dw'){
+        cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()});
       } else if (siteName=='businessToday'){
         cEl.querySelectorAll('iframe').forEach(a => {a.remove()});
       } else if (siteName=='technews'){
