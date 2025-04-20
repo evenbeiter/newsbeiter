@@ -839,7 +839,7 @@ async function dqGetList(siteName,t){
   try{
   var k=3;
   for (let i=0;i<k;i++){
-    var url=preStr+'https://dq-api.yam.com/f-system/get-post-list';console.log(url);
+    url=preStr+'https://dq-api.yam.com/f-system/get-post-list';console.log(url);
     var res = await fetch(url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json',},
@@ -859,13 +859,23 @@ async function dqGetList(siteName,t){
 }
 
 async function dqGetContent(id){
-  try{const res = await fetch(preStr+'https://dq.yam.com/post/'+id);
-  const str=await res.text();
-  var parser = new DOMParser();
-  var doc = parser.parseFromString(str, "text/html");
-  var a=doc.querySelector('article');
-  a=a.querySelector('.post__head').remove();
-  html = a.outerHTML + '<p class="text-end"><a href="https://dq.yam.com/post/' + id + '" target="_blank">分享</a></p><br>';
+  try{
+  url=preStr+'https://dq-api.yam.com/f-system/get-single-post';console.log(url);
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: '{"postId": "'+id+'"}',
+    });
+  var str=await res.json();
+  for (let h of str.data.contents){
+    if(h.Imgs.length>0){
+      html+=h.Value;
+      for (let img of h.Imgs){
+        html+='<img src="'+img.url+'">';
+      }
+    }else{html+=h.Value}
+  }
+  html+='<p class="text-end"><a href="https://dq.yam.com/post/' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://dq.yam.com/post/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
