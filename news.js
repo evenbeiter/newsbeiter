@@ -839,7 +839,7 @@ async function dqGetList(siteName,t){
   try{
   var k=3;
   for (let i=0;i<k;i++){
-    var url=preStr+'https://dq-api.yam.com/f-system/get-post-list'+((rr-1)*k+i);console.log(url);
+    var url=preStr+'https://dq-api.yam.com/f-system/get-post-list';console.log(url);
     var res = await fetch(url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json',},
