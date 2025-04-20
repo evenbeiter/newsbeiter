@@ -153,6 +153,7 @@ async function getContent(siteName,clickedId,id){
       else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
       else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
+      cEl.querySelectorAll('figure').forEach(f => {f.removeAttribute('style')});
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
         for (let ad of ads){ad.remove()};
