@@ -489,6 +489,49 @@ async function udnGetSearchResults(siteName,t){
 }
 
 
+//    DW
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function dwGetList(siteName,t){
+  try{url='https://www.dw.com/zh-hant/'+t+;console.log(url);
+  let res=await fetch(url);
+  let str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  var d=doc.querySelectorAll('script');
+  d=JSON.parse(d[d.length-1].innerText.slice(22,-2));
+  d=d[Object.keys(d)[1]].data.content.contentComposition.informationSpaces[0];
+  var hh=[...d.top_story_thematic_focus[0].contents,...d.stories_thematic_focus[0].contents];
+  for (let h of hh){
+    items.push([h.namedUrl,h.title])
+  }
+  
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function dwGetContent(id){
+  try{const res = await fetch('https://www.dw.com'+id);
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var d=doc.querySelectorAll('script');
+  d=JSON.parse(d[d.length-1].innerText.slice(22,-2));
+  if(id.indexOf('video-')===-1){
+    d=d[Object.keys(d)[1]].data.content;
+    html = '<p class="fs10">'+d.localizedContentDate+'</p>'+d.text + '<p class="text-end"><a href="https:/www.dw.com' + id + '" target="_blank">分享</a></p><br>';
+  }else{
+    d=d[Object.keys(d)[0]].data.content;
+    videoGetContent(id,id,'https:/www.dw.com'+id,d.hlsVideoSrc);  
+  }
+  }catch{html='<p><a href="https:/www.dw.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
 //    WEALTH
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
