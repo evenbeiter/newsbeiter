@@ -859,7 +859,7 @@ async function dqGetList(siteName,t){
 }
 
 async function dqGetContent(id){
-  try{const res = await fetch('https://dq.yam.com/post/'+id);
+  try{const res = await fetch(preStr+'https://dq.yam.com/post/'+id);
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
