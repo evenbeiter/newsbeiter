@@ -158,8 +158,7 @@ async function getContent(siteName,clickedId,id){
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
       cEl.querySelectorAll('figure').forEach(f => {f.removeAttribute('style')});
       if (siteName=='wscn'){
-        var lang=cEl.querySelectorAll('*');
-        for (let l of lang){l.innerText=converter(l.innerText)}
+        convertTextInsideTags(cEl);
       }
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
