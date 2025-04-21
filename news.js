@@ -393,7 +393,7 @@ async function wscnGetList(siteName,t){
 async function wscnGetContent(id){
   try{const res = await fetch('https://api-one-wscn.awtmt.com/apiv1/content/'+id+'?extract=0');
   const str=await res.json();
-  html = str.contents + '<p class="text-end"><a href="https://wallstreetcn.com/' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="fs10">'+cvt2Timezone(str.data.display_time)+'</p>'+str.data.contents + '<p class="text-end"><a href="https://wallstreetcn.com/' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://wallstreetcn.com/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
