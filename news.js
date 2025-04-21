@@ -40,6 +40,8 @@ var btn=document.getElementById('btn');
 var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
 var loading=document.getElementById('loading');
+const converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
+
 
   
 //    LANDING PAGE
@@ -155,6 +157,10 @@ async function getContent(siteName,clickedId,id){
       else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
       cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
       cEl.querySelectorAll('figure').forEach(f => {f.removeAttribute('style')});
+      if (siteName=='wscn'){
+        var lang=cEl.querySelectorAll('*');
+        for (let l of lang){l.innerText=converter(l.innerText)}
+      }
       if (siteName=='udn'){
         var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
         for (let ad of ads){ad.remove()};
