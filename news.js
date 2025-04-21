@@ -1063,6 +1063,18 @@ function cnTest(str) {
   const chineseCharRegex = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;
   return chineseCharRegex.test(str);
 }
+
+function convertTextInsideTags(element) {
+            for (let child of element.childNodes) {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    // Convert text content using OpenCC
+                    child.nodeValue = converter(child.nodeValue.trim());
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    // Recursively process child elements
+                    convertTextInsideTags(child);
+                }
+            }
+        }
   
 let scrollTimeout;
 window.onscroll = function () {
