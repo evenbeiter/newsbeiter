@@ -41,7 +41,7 @@ var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
 var loading=document.getElementById('loading');
 const converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
-
+const converter2SC = OpenCC.Converter({ from: 'tw', to: 'cn' });
 
   
 //    LANDING PAGE
@@ -142,7 +142,11 @@ async function getSearchResults(siteName){
   siteNameVar=siteName;rr++;rt='s';cursor='';
   if (rr==1){newNews()};
   items=[];html='';
-  list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
+  if(siteName!=='wscn'){
+    list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
+  } else {
+    list.innerHTML+=await wscnGetSearchResults(siteName,converter2SC(document.getElementById('search-term').value));    
+  };
   loading.style.display='none';
 }
 
@@ -1065,16 +1069,16 @@ function cnTest(str) {
 }
 
 function convertTextInsideTags(element) {
-            for (let child of element.childNodes) {
-                if (child.nodeType === Node.TEXT_NODE) {
-                    // Convert text content using OpenCC
-                    child.nodeValue = converter(child.nodeValue.trim());
-                } else if (child.nodeType === Node.ELEMENT_NODE) {
-                    // Recursively process child elements
-                    convertTextInsideTags(child);
-                }
-            }
-        }
+  for (let child of element.childNodes) {
+    if (child.nodeType === Node.TEXT_NODE) {
+      // Convert text content using OpenCC
+      child.nodeValue = converter(child.nodeValue.trim());
+    } else if (child.nodeType === Node.ELEMENT_NODE) {
+      // Recursively process child elements
+      convertTextInsideTags(child);
+    }
+  }
+}
   
 let scrollTimeout;
 window.onscroll = function () {
