@@ -381,8 +381,7 @@ async function wscnGetList(siteName,t){
   let str=await res.json();
   cursor=str.data.next_cursor;
   for (let h of str.data.items){
-    h=h.resource;
-    items.push([h.resource_type+'s/'+h.id,h.title])
+    items.push([h.resource_type+'s/'+h.resource.id,h.resource.title])
   }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
