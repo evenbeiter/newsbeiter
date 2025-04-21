@@ -137,7 +137,7 @@ async function getList(siteName,t){
 
 async function getSearchResults(siteName){
   loading.style.display='block';
-  siteNameVar=siteName;rr++;rt='s';
+  siteNameVar=siteName;rr++;rt='s';cursor='';
   if (rr==1){newNews()};
   items=[];html='';
   list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
@@ -395,6 +395,21 @@ async function wscnGetContent(id){
   const str=await res.json();
   html = str.contents + '<p class="text-end"><a href="https://wallstreetcn.com/' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://wallstreetcn.com/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+async function wscnGetSearchResults(siteName,t){
+  try{url='https://api-one-wscn.awtmt.com/apiv1/search/article?limit=20&query='+t+'&cursor='+cursor;
+  let res=await fetch(url);
+  let str=await res.json();
+  cursor=str.data.next_cursor;
+  for (let h of str.data.items){
+    items.push(['articles/'+h.id,h.title])
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
