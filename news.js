@@ -867,7 +867,7 @@ async function apolloGetList(siteName,t){
   for (let h of hh){
     var a=h.parentElement.previousElementSibling;
     var cid=a.querySelector('h2').children[0].href;
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="fs10">${a.querySelector('time').innerText}</p>${h.outerHTML}<p class="text-end"><a href="${cid}" target="_blank">分享</a></p><br></div><hr>`;
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${cid}" class="content" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="fs10">${a.querySelector('time').innerText}</p>${h.outerHTML}<p class="text-end"><a href="${cid}" target="_blank">分享</a></p><br></div><hr>`;
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
