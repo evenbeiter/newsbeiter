@@ -40,8 +40,8 @@ var btn=document.getElementById('btn');
 var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
 var loading=document.getElementById('loading');
-const converter = OpenCC.Converter({ from: 'cn', to: 'tw' });
-const converter2SC = OpenCC.Converter({ from: 'tw', to: 'cn' });
+const s2t = OpenCC.Converter({ from: 'cn', to: 'tw' });
+const t2s = OpenCC.Converter({ from: 'tw', to: 'cn' });
 
   
 //    LANDING PAGE
@@ -145,7 +145,7 @@ async function getSearchResults(siteName){
   if(siteName!=='wscn'){
     list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
   } else {
-    list.innerHTML+=await wscnGetSearchResults(siteName,converter2SC(document.getElementById('search-term').value));    
+    list.innerHTML+=await wscnGetSearchResults(siteName,t2s(document.getElementById('search-term').value));    
   };
   loading.style.display='none';
 }
@@ -400,7 +400,7 @@ async function wscnGetList(siteName,t){
     }
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${converter(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -424,7 +424,7 @@ async function wscnGetSearchResults(siteName,t){
     items.push(['articles/'+h.id,h.title])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${converter(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1079,7 +1079,7 @@ function convertTextInsideTags(element) {
   for (let child of element.childNodes) {
     if (child.nodeType === Node.TEXT_NODE) {
       // Convert text content using OpenCC
-      child.nodeValue = converter(child.nodeValue.trim());
+      child.nodeValue = s2t(child.nodeValue.trim());
     } else if (child.nodeType === Node.ELEMENT_NODE) {
       // Recursively process child elements
       convertTextInsideTags(child);
