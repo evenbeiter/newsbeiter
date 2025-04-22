@@ -150,29 +150,21 @@ async function getContent(siteName,clickedId,id){
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
     cEl.style.display='block';
-    if (cEl.innerText.length<50){
-      if (siteName=='msnTW'){cEl.innerHTML+=await msnGetContent(id,'zh-tw')}
-      else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
-      else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
-      cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
-      cEl.querySelectorAll('figure').forEach(f => {f.removeAttribute('style')});
-      if (siteName=='wscn'){
-        convertTextInsideTags(cEl);
-      }
-      if (siteName=='udn'){
-        var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];
-        for (let ad of ads){ad.remove()};
-      } else if (siteName=='dw'){
-        cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()});
-      } else if (siteName=='businessToday'){
-        cEl.querySelectorAll('iframe').forEach(a => {a.remove()});
-      } else if (siteName=='technews'){
-        cEl.querySelectorAll('#inside_AD').forEach(a=>{a.remove()});
-        cEl.querySelectorAll('.coffee-btn-wrapper').forEach(a=>{a.remove()});
-        cEl.querySelectorAll('#bmc-tn-modal').forEach(a=>{a.remove()});
-        cEl.querySelectorAll('.googlenews_Content').forEach(a=>{a.remove()});
-      } else if (siteName=='msnTW'||siteName=='msnUS'){
-        cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'});
+    if (siteName!=='apollo'){
+      if (cEl.innerText.length<50){
+        if (siteName=='msnTW'){cEl.innerHTML+=await msnGetContent(id,'zh-tw')}
+        else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
+        else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
+        cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
+        cEl.querySelectorAll('figure').forEach(f => {f.removeAttribute('style')});
+        if (siteName=='wscn'){
+          convertTextInsideTags(cEl);
+        }
+        if (siteName=='udn'){var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];for (let ad of ads){ad.remove()}}
+        else if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})}
+        else if (siteName=='businessToday'){cEl.querySelectorAll('iframe').forEach(a => {a.remove()})}
+        else if (siteName=='technews'){cEl.querySelectorAll('#inside_AD').forEach(a=>{a.remove()});cEl.querySelectorAll('.coffee-btn-wrapper').forEach(a=>{a.remove()});cEl.querySelectorAll('#bmc-tn-modal').forEach(a=>{a.remove()});cEl.querySelectorAll('.googlenews_Content').forEach(a=>{a.remove()})}
+        else if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})}
       }
     }
     loading.style.display='none';
@@ -850,6 +842,28 @@ async function technewsGetContent(id){
 
   html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
+//    APOLLO
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function apolloGetList(siteName,t){
+  try{
+    url=preStr+'https://www.apolloacademy.com/the-daily-spark/?query-15-page='+rr;console.log(url);
+    let res=await fetch(url);
+    let str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+    var hh=document.querySelectorAll('.entry-content.wp-block-post-content');
+  
+  for (let h of hh){
+    var a=h.parentElement.previousElementSibling;
+    var cid=a.querySelector('h2').children[0].href;
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="fs10">${a.querySelector('time').innerText}</p>${h.outerHTML}<p class="text-end"><a href="${cid}" target="_blank">分享</a></p><br></div><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
