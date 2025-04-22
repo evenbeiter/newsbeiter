@@ -390,7 +390,7 @@ async function wscnGetList(siteName,t){
     } else {
       var hh=h.resource.contents;
       for (let d of hh){
-        items.push([d.uri,'[ '+h.resource.title+' ] '+d.resource.title]);        
+        items.push([d.uri,'【'+h.resource.title+'】'+d.resource.title]);        
       }
     }
   }
