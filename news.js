@@ -151,24 +151,29 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='block';
     cEl.style.display='block';
     if (siteName!=='apollo'){
+      //need to get content for others (open div for apollo)
       if (cEl.innerText.length<50){
+        //get content
         if (siteName=='msnTW'){cEl.innerHTML+=await msnGetContent(id,'zh-tw')}
         else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
+        //remove image style
         cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
         cEl.querySelectorAll('figure').forEach(f => {f.removeAttribute('style')});
-        if (siteName=='wscn'){
-          convertTextInsideTags(cEl);
-        }
-        if (siteName=='udn'){var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];for (let ad of ads){ad.remove()}}
-        else if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})}
-        else if (siteName=='businessToday'){cEl.querySelectorAll('iframe').forEach(a => {a.remove()})}
-        else if (siteName=='technews'){cEl.querySelectorAll('#inside_AD').forEach(a=>{a.remove()});cEl.querySelectorAll('.coffee-btn-wrapper').forEach(a=>{a.remove()});cEl.querySelectorAll('#bmc-tn-modal').forEach(a=>{a.remove()});cEl.querySelectorAll('.googlenews_Content').forEach(a=>{a.remove()})}
-        else if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})}
+        //handle image src
+        if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
+        //convert sc to tc
+        if (siteName=='wscn'){convertTextInsideTags(cEl)};
+        //remove ads
+        if (siteName=='udn'){var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];for (let ad of ads){ad.remove()}};
+        if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})};
+        if (siteName=='businessToday'){cEl.querySelectorAll('iframe').forEach(a => {a.remove()})};
+        if (siteName=='technews'){cEl.querySelectorAll('#inside_AD').forEach(a=>{a.remove()});cEl.querySelectorAll('.coffee-btn-wrapper').forEach(a=>{a.remove()});cEl.querySelectorAll('#bmc-tn-modal').forEach(a=>{a.remove()});cEl.querySelectorAll('.googlenews_Content').forEach(a=>{a.remove()})};
       }
     }
     loading.style.display='none';
-    if (siteName==='msnUS'){
+    //handle translation
+    if (siteName==='msnUS'||siteName==='apollo'){
       var all=[...cEl.querySelectorAll('p'),...cEl.querySelectorAll('h2'),...cEl.querySelectorAll('li')];
       // var pg=cEl.getElementsByTagName('p');all.push(...pg);var h2=cEl.getElementsByTagName('h2');all.push(...h2);var li=cEl.getElementsByTagName('li');all.push(...li);
       getTranslation(all);
