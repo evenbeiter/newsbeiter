@@ -41,7 +41,6 @@ var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
 var loading=document.getElementById('loading');
 const s2t = OpenCC.Converter({ from: 'cn', to: 'tw' });
-const t2s = OpenCC.Converter({ from: 'tw', to: 'cn' });
 
   
 //    LANDING PAGE
@@ -142,11 +141,7 @@ async function getSearchResults(siteName){
   siteNameVar=siteName;rr++;rt='s';cursor='';
   if (rr==1){newNews()};
   items=[];html='';
-  if(siteName!=='wscn'){
-    list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
-  } else {
-    list.innerHTML+=await wscnGetSearchResults(siteName,t2s(document.getElementById('search-term').value));    
-  };
+  list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
   loading.style.display='none';
 }
 
