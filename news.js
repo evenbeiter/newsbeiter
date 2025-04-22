@@ -862,7 +862,7 @@ async function apolloGetList(siteName,t){
     let str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
-    var hh=document.querySelectorAll('.entry-content.wp-block-post-content');
+    var hh=doc.querySelectorAll('.entry-content.wp-block-post-content');
   
   for (let h of hh){
     var a=h.parentElement.previousElementSibling;
