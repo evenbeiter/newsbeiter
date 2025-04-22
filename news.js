@@ -1080,7 +1080,7 @@ async function getTranslation(all){
   for (let a of all){
     if (a.innerText!=='' && cnTest(a.innerText)!==true){
       var t=await translate(a.textContent);
-      if (t!==''){a.outerHTML+='<p class="fs10">'+t+'</p>'};
+      if (t!==''){a.innerHTML+='<br><span class="fs10">'+t+'</span><br>'};
     }
   }
 }
