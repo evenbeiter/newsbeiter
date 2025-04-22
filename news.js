@@ -386,11 +386,11 @@ async function wscnGetList(siteName,t){
   cursor=str.data.next_cursor;
   for (let h of str.data.items){
     if (h.resource_type!=='topic'&&h.resource_type!=='theme'){
-      items.push([h.uri,h.resource.title]);
+      items.push([h.resource.uri,h.resource.title]);
     } else {
       var hh=h.resource.contents;
       for (let d of hh){
-        items.push([d.uri,'【'+h.resource.title+'】'+d.resource.title]);        
+        items.push([d.resource.uri,'【'+h.resource.title+'】'+d.resource.title]);        
       }
     }
   }
