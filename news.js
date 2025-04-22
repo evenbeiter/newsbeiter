@@ -390,7 +390,14 @@ async function wscnGetList(siteName,t){
   let str=await res.json();
   cursor=str.data.next_cursor;
   for (let h of str.data.items){
-    items.push([h.resource_type+'s/'+h.resource.id,h.resource.title])
+    if (h.resource_type!=='topic'&&h.resource_type!=='theme'){
+      items.push([h.uri,h.resource.title]);
+    } else {
+      var hh=h.resource.contents;
+      for (let d of hh){
+        items.push([d.uri,'[ '+h.resource.title+' ] '+d.resource.title]);        
+      }
+    }
   }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${converter(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
