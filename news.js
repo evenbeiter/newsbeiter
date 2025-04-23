@@ -451,7 +451,7 @@ async function reutersGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html = '<p class="fs10">'+cvt2Timezone(doc.querySelector('time').dateTime)+' | '+querySelector('.timeAndSocialShare-pIO_GYwT').innerText+'</p>' +doc.querySelector('.body-KX2tCBZq.body-pIO_GYwT.content-pIO_GYwT').outerHTML+'<p class="text-end"><a href="https://tw.tradingview.com' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="fs10">'+cvt2Timezone(doc.querySelector('time').dateTime)+' | '+doc.querySelector('.timeAndSocialShare-pIO_GYwT').innerText+'</p>' +doc.querySelector('.body-KX2tCBZq.body-pIO_GYwT.content-pIO_GYwT').outerHTML+'<p class="text-end"><a href="https://tw.tradingview.com' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://tw.tradingview.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
