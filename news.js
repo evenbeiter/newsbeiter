@@ -431,7 +431,7 @@ async function wscnGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function reutersGetList(siteName,t){
-  try{url=preStr+'https://news-mediator.tradingview.com/news-flow/v2/news?filter=lang:zh-Hant&filter=provider:reuters&client=screener&filter='+t;console.log(url);
+  try{url=preStr+'https://news-mediator.tradingview.com/news-flow/v2/news?filter=lang:zh-Hant&filter='+t+'&filter=provider:reuters&client=screener';console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str.items){
