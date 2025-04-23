@@ -369,7 +369,7 @@ async function anueGetSearchResults(siteName,t){
   let str=await res.json();
   if(str.items.data!==null && str.items.data!==undefined){
     for (let a of str.items.data){
-      html+=`<p class="title" onclick="anueGetSearchContent(this.id,'${a.newsId}')">${a.title.replaceAll('<mark>','').replaceAll('</mark>','')}</p><div id="${a.newsId}" class="content" onclick="anueGetSearchContent(this.id,'${a.newsId}')"><p class="fs10">${new Date(a.publishAt*1000)}</p><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title.replaceAll('<mark>','').replaceAll('</mark>','')}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')"><p class="fs10">${new Date(a.publishAt*1000)}</p><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
@@ -431,7 +431,9 @@ async function wscnGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function reutersGetList(siteName,t){
-  try{url=preStr+'https://news-mediator.tradingview.com/news-flow/v2/news?filter=lang:zh-Hant&filter='+t+'&filter=provider:reuters&client=screener';console.log(url);
+  try{
+  if (t.slice(0,6)=='market'){url=preStr+'https://news-mediator.tradingview.com/news-flow/v2/news?filter=lang:zh-Hant&filter='+t+'&filter=provider:reuters&client=screener';console.log(url)}
+  else {url=preStr+'https://news-mediator.tradingview.com/news-flow/v2/news?filter='+t+'&filter=lang:zh-Hant&filter=provider:reuters&client=screener';console.log(url)}
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str.items){
