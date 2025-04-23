@@ -61,7 +61,17 @@ function showTop(t){
 
 function openMediaList(){
   btn.innerHTML=formHeader;
-  tabs=allSites;
+  // tabs=allSites;
+  // for (let tab of tabs){
+  //   btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
+  // }
+  // btn.innerHTML+='<hr>';
+  tabs=allSites1;
+  for (let tab of tabs){
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
+  }
+  btn.innerHTML+='<hr>';
+  tabs=allSites2;
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
   }
