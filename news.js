@@ -450,7 +450,7 @@ async function jinGetList(siteName,t){
   var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('.jin10-news-list-item-info');
   for (let h of hh){
-    items.push([h..querySelector('a').href,h.querySelector('.jin10-news-list-item-title').innerText])
+    items.push([h.querySelector('a').href,h.querySelector('.jin10-news-list-item-title').innerText])
   }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
