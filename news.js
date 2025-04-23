@@ -1,4 +1,4 @@
-const allSites=[['lineToday','LINE'],['anue','鉅亨'],['wscn','華爾街見聞'],['reuters','路透'],['ctee','工商'],['udnMoney','經濟日報'],['udn','聯合'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周'],['dw','德國之聲'],['bnext','數位時代'],['technews','科技新報'],['msnTW','MSN 台灣'],['msnUS','MSN'],['peInsights','PEI'],['apollo','Apollo']];
+const allSites=[['lineToday','LINE'],['anue','鉅亨'],['wscn','華爾街見聞'],['jin','金十'],['reuters','路透'],['ctee','工商'],['udnMoney','經濟日報'],['udn','聯合'],['wealth','財訊'],['businessToday','今周刊'],['businessWeekly','商周'],['dw','德國之聲'],['bnext','數位時代'],['technews','科技新報'],['msnTW','MSN 台灣'],['msnUS','MSN'],['peInsights','PEI'],['apollo','Apollo']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'msnChannel':[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']],'others':[['wsjVideo','WSJ']]};
 const msnVideo=[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']];
 const msnChannelVideo=[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']];
@@ -14,6 +14,7 @@ const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],['102394|103101','經濟工商'],['103214|100267','M平方'],['100295','今周刊'],['101131','CMoney'],['100422|100421|100423','商周'],['101170','路透社'],['104453|101006','財訊'],['100150|103088','鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],['100004|101886','風傳媒'],['100275|101201','關鍵評論網'],['global','國際'],['100003','中央社'],['TOPIC-USelection|2024election','川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],['100568|100158','天下雜誌'],['101031','地球圖輯隊'],['101934|100394|103227','閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
 const anue=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
 const wscn=[['global','最新'],['shares','股市'],['bonds','債市'],['commodities','商品'],['forex','外匯'],['tmt','科技'],['ai','AI']];
+const jin=[['','最新'],['topic/402/','精選圖表'],['topic/416','宏觀圖表'],['topic/415/','股市'],['topic/72/','金融大鰐'],['topic/20/','FED'],['topic/47/','ECB'],['topic/51/','BOJ'],['topic/31/','黃金'],['topic/388/','原油'],['topic/418/','川普'],['topic/373/','俄烏'],['topic/356/','中東'],['topic/352/','半導體']];
 const reuters=[['market:bond,crypto,economic,etf,forex,futures,index,stock','最新'],['market:forex','外匯'],['market:bond','債市'],['market:stock','股市'],['market:index','指數'],['market:futures','期貨'],['market:economic','經濟'],['market:crypto','加密貨幣'],['market:etf','ETF'],['area:WLD','全球'],['area:AME','美國'],['area:EUR','歐洲'],['area:ASI','亞洲'],['area:OCN','大洋洲'],['area:AFR','非洲']];
 const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
 const udnMoney=[['0','即時'],['10846','要聞'],['5588','國際'],['5590','證券'],['12017','金融'],['11111','期貨'],['5592','理財'],['5591','產業'],['5589','兩岸'],['5593','房市'],['5595','專欄'],['5596','品味'],['122327','OFF學']];
@@ -166,7 +167,7 @@ async function getContent(siteName,clickedId,id){
         //handle image src
         if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
         //convert sc to tc
-        if (siteName=='wscn'){convertTextInsideTags(cEl)};
+        if (siteName=='wscn'||siteName=='jin'){convertTextInsideTags(cEl)};
         //remove ads
         if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})};
         if (siteName=='businessToday'){cEl.querySelectorAll('iframe').forEach(a => {a.remove()})};
@@ -423,6 +424,37 @@ async function wscnGetSearchResults(siteName,t){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+
+//    JIN10
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function jinGetList(siteName,t){
+  try{url=preStr+'https://xnews.jin10.com/'+t+'page/'+rr;console.log(url);
+  let res=await fetch(url);
+  let str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  var hh=doc.querySelectorAll('.jin10-news-list-item-info');
+  for (let h of hh){
+    items.push([h..querySelector('a').href,h.querySelector('.jin10-news-list-item-title').innerText])
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function jinGetContent(id){
+  try{const res = await fetch(preStr+id);
+  const str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  html = '<p class="fs10">'+doc.querySelector('.jin10news__articleheader_time').innerText+' | '+doc.querySelector('.jin10news__articleheader_author_name').innerText+'</p>' +'<p>'+doc.querySelector('.jin10-cnews-introduction').innerText+'</p>'+doc.querySelector('.jin10vip-image-viewer.setWebViewConentHeight.upload-statics-links').outerHTML+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
