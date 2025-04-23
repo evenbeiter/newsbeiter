@@ -797,7 +797,7 @@ async function businessWeeklyGetContent(id){
   const t=doc.querySelector('#AppGetDate') ?? '';
   const s=doc.querySelector('.Single-summary') ?? '';  
   const a=doc.querySelector('.Single-article') ?? '';
-  a.querySelectorAll('.Google-special').forEach(e => e.remove());
+  //a.querySelectorAll('.Google-special').forEach(e => e.remove());
   html = '<p class="fs10">'+(p.textContent ?? '')+' '+(t.textContent ?? '')+'</p>'+(s.outerHTML ?? '')+(a.outerHTML ?? '')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -844,8 +844,8 @@ async function bnextGetContent(id){
   var t=doc.querySelector('div.flex.gap-4.text-sm.items-center.flex-wrap');
   if (t==null){t=doc.querySelector('div.flex.gap-2.text-sm.items-center')}
   const a = doc.querySelector('[data-cat=article]');
-  var ads=a.querySelector('#pumpkin_159');
-  if(ads){ads.remove()};
+  // var ads=a.querySelector('#pumpkin_159');
+  // if(ads){ads.remove()};
   html = '<p class="fs10">'+t.innerText+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
