@@ -464,7 +464,7 @@ async function jinGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html = '<p class="fs10">'+doc.querySelector('.jin10news__articleheader_time').innerText+' | '+doc.querySelector('.jin10news__articleheader_author_name').innerText+'</p>' +'<p>'+doc.querySelector('.jin10-cnews-introduction').innerText+'</p>'+doc.querySelector('.jin10vip-image-viewer.setWebViewConentHeight.upload-statics-links').outerHTML+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="fs10">'+(doc.querySelector('.jin10news__articleheader_time')?.innerText??'')+' | '+(doc.querySelector('.jin10news__articleheader_author_name')?.innerText??'')+'</p>' +'<p>'+(doc.querySelector('.jin10-cnews-introduction')?.innerText??'')+'</p>'+(doc.querySelector('.jin10vip-image-viewer.setWebViewConentHeight.upload-statics-links')?.outerHTML??'')+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
