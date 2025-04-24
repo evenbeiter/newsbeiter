@@ -162,6 +162,7 @@ async function getSearchResults(siteName){
 
 async function getContent(siteName,clickedId,id){
   var cEl=document.getElementById(id);
+  try{document.getElementById('dateAuthor-'+id).style.display='none'}catch{};
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
     cEl.style.display='block';
@@ -323,7 +324,7 @@ async function lineTodayGetSearchResults(siteName,t){
   items.sort((a, b) => {return Number(b[1]) - Number(a[1])});
   
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[2]}<br><span class="fs10 fw-normal">${h[3]} | ${cvt2Timezone(h[1])}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[2]}<br><span id="dateAuthor-${h[0]}" class="fs10 fw-normal">${cvt2Timezone(h[1])} | ${h[3]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
