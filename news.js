@@ -181,17 +181,12 @@ async function getContent(siteName,clickedId,id){
         if (siteName=='wscn'||siteName=='jin'){convertTextInsideTags(cEl)};
         //remove ads
         if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})};
-        // if (siteName=='businessToday'){cEl.querySelectorAll('iframe').forEach(a => {a.remove()})};
-        // if (siteName=='udnMoney'){cEl.querySelectorAll('.edn-ads--inlineAds.only_mobile').forEach(a=>{a.remove()})};
-        // if (siteName=='udn'){var ads=[...cEl.querySelectorAll('.inline-ads'),...cEl.querySelectorAll('.udn-ads')];for (let ad of ads){ad.remove()}};
-        // if (siteName=='technews'){cEl.querySelectorAll('#inside_AD').forEach(a=>{a.remove()});cEl.querySelectorAll('.coffee-btn-wrapper').forEach(a=>{a.remove()});cEl.querySelectorAll('#bmc-tn-modal').forEach(a=>{a.remove()});cEl.querySelectorAll('.googlenews_Content').forEach(a=>{a.remove()})};
       }
     }
     loading.style.display='none';
     //handle translation
     if (siteName==='msnUS'||siteName==='apollo'){
       var all=[...cEl.querySelectorAll('p'),...cEl.querySelectorAll('h2'),...cEl.querySelectorAll('li')];
-      // var pg=cEl.getElementsByTagName('p');all.push(...pg);var h2=cEl.getElementsByTagName('h2');all.push(...h2);var li=cEl.getElementsByTagName('li');all.push(...li);
       getTranslation(all);
     } else if (siteName=='peInsights'){
       var all=cEl.querySelectorAll('.tl');
@@ -200,7 +195,13 @@ async function getContent(siteName,clickedId,id){
   } else {
     if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
       cEl.style.display='none';
-      if (siteName=='msnTW'||siteName=='msnUS'){cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()}else{cEl.previousElementSibling.previousElementSibling.scrollIntoView()};
+      try{
+        if (siteName=='msnTW'||siteName=='msnUS'){
+          cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()
+        } else {
+          cEl.previousElementSibling.previousElementSibling.scrollIntoView()
+        }
+      } catch {document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
     }
   }
 }
