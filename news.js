@@ -1,5 +1,5 @@
 const allSites1=[['msnTW','MSN 台灣'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['wscn','華爾街見聞']];
-const allSites2=[['lineToday','LINE'],['anue','鉅亨'],['reuters','路透'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周'],['jin','金十'],['dw','德國之聲'],['bnext','數位時代'],['technews','科技新報'],['msnUS','MSN'],['peInsights','PEI'],['apollo','Apollo']];
+const allSites2=[['lineToday','LINE'],['anue','鉅亨'],['reuters','路透'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周'],['jin','金十'],['bbc','BBC'],['dw','德國之聲'],['bnext','數位時代'],['technews','科技新報'],['msnUS','MSN'],['peInsights','PEI'],['apollo','Apollo']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'msnChannel':[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']],'others':[['wsjVideo','WSJ']]};
 const msnVideo=[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']];
 const msnChannelVideo=[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']];
@@ -24,6 +24,7 @@ const wealth=[["Articles|","最新"],["Articles|bd088d2c-f76a-4187-8673-1ae412cd
 const businessToday=[['news/','最新'],['catalog/183007/list/page/','投資理財'],['catalog/183020/list/page/','保險稅制'],['catalog/183014/list/page/','產業時事'],['catalog/183028/list/page/','職場生活']];
 const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['0000000319','財經'],['0000000326','管理'],['0000000312','焦點'],['0000000342','CEO學院']];
 const preStr=sCC(uLi,iOd);
+const bbc=[['','首頁'],['topics/c83plve5vmjt','國際'],['topics/cd6qem06z92t','台灣'],['topics/cpydz21p2zmt','經濟'],['topics/cq8nqywy37yt','財經'],['topics/cgqny5mmrezt','股市'],['topics/cn05jy5nv81t','川普關稅']];
 const dw=[['經濟/s-1682','經濟'],['政治/s-1681','政治'],['科技創新/s-1686','科技創新'],['文化/s-1683','文化']];
 const bnext=[['articles','新聞'],['ranking','熱門'],['topics','專題'],['tags/AI','AI'],['categories/semiconductor','半導體'],['categories/AI','AI與大數據'],['categories/5g','5G通訊'],['categories/car','電動車/交通科技'],['categories/manufacture','智慧製造'],['categories/media','影音新媒體'],['categories/fintech','金融科技'],['categories/digitalskill','職場工作術']];
 const technews=[['technews.tw/','最新'],['technews.tw/category/semiconductor/','半導體'],['technews.tw/category/component/','零組件'],['finance.technews.tw/','財經'],['technews.tw/category/internet/','網路'],['technews.tw/category/cutting-edge/','尖端科技'],['technews.tw/topics/','系列專題'],['technews.tw/category/natural-science/環境科學/','環境科學'],['technews.tw/category/能源科技/','能源科技']];
@@ -636,6 +637,39 @@ async function udnGetSearchResults(siteName,t){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+
+//    BBC
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function bbcGetList(siteName,t){
+  try{url=preStr+'https://www.bbc.com/zhongwen/'+t+'/trad?page='+rr;console.log(url);
+  let res=await fetch(url);
+  let str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  var hh=doc.querySelectorAll('a.bbc-1i4ie53.e1d658bg0');
+  for (let h of hh){
+    items.push([h.href,h.innerText])
+  }
+  
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function bbcGetContent(id){
+  try{const res = await fetch(preStr+id);
+  const str=await res.text();
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(str, "text/html");
+  var a=doc.querySelectorAll('main');
+  html = a.outerHTML+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
