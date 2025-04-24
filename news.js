@@ -667,7 +667,7 @@ async function bbcGetContent(id){
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
-  var a=doc.querySelectorAll('main');
+  var a=doc.querySelector('main');
   html = a.outerHTML+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
