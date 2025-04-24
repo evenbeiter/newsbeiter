@@ -177,6 +177,7 @@ async function getContent(siteName,clickedId,id){
         //remove image style
         cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
         cEl.querySelectorAll('figure').forEach(f => {f.removeAttribute('style')});
+        cEl.querySelectorAll('.bbc-j1srjl').forEach(f => {f.removeAttribute('style')});
         //handle image src
         if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
         //convert sc to tc
