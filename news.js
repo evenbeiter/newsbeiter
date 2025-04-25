@@ -677,7 +677,7 @@ async function bbcGetContent(id){
   var a=doc.querySelector('main');
   var vdo=a.querySelectorAll('[data-e2e^="media-loader"]');
   for (let v=0;v<vdo.length;v++){
-    vdo[v].outerHTML=`<iframe src="${embeds[v]}" scrolling=no style="border:none;border-radius:0.375rem;aspect-ratio:16/9"></iframe>`;
+    vdo[v].outerHTML=`<iframe src="${embeds[v]}" scrolling=no allow="fullscreen" style="border:none;border-radius:0.375rem;aspect-ratio:16/9"></iframe>`;
   }
   html = a.outerHTML+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
