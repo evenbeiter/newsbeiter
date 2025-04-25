@@ -63,11 +63,6 @@ function showTop(t){
 
 function openMediaList(){
   btn.innerHTML=formHeader;
-  // tabs=allSites;
-  // for (let tab of tabs){
-  //   btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
-  // }
-  // btn.innerHTML+='<hr>';
   tabs=allSites1;
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
@@ -98,8 +93,7 @@ function openSearchList(){
   btn.innerHTML=formHeader;
   tabs=faq;
   for (let tab of tabs){
-    document.getElementById('search-term').value=tab[2];
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[2]}</button>`;
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}')">${tab[2]}</button>`;
   }  
   btn.innerHTML+=`<input type="text" id="search-term" class="form-control mb-2">`;
   tabs=searchSites;
@@ -109,7 +103,7 @@ function openSearchList(){
   options.style.display='block';
   topdiv.style.display='none';
 }
-  
+
 function openOptions(){
   if (options.style.display=='none'){
     options.style.display='block';
@@ -142,6 +136,11 @@ async function get1stSearchResults(siteName,top){
   rr=0;
   getSearchResults(siteName);
   showTop(top+' - 搜尋：'+document.getElementById('search-term').value);
+}
+
+function getFAQSearchResults(siteName,top){
+  document.getElementById('search-term').value=tab[2];
+  get1stSearchResults(siteName,top);
 }
 
 async function getList(siteName,t){
