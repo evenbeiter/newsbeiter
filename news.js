@@ -93,7 +93,7 @@ function openSearchList(){
   btn.innerHTML=formHeader;
   tabs=faq;
   for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}')">${tab[2]}</button>`;
+    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}','${tab[2]}')">${tab[2]}</button>`;
   }  
   btn.innerHTML+=`<input type="text" id="search-term" class="form-control mb-2">`;
   tabs=searchSites;
@@ -138,8 +138,8 @@ async function get1stSearchResults(siteName,top){
   showTop(top+' - 搜尋：'+document.getElementById('search-term').value);
 }
 
-function getFAQSearchResults(siteName,top){
-  document.getElementById('search-term').value=tab[2];
+function getFAQSearchResults(siteName,top,t){
+  document.getElementById('search-term').value=t;
   get1stSearchResults(siteName,top);
 }
 
