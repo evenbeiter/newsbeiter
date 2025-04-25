@@ -263,7 +263,8 @@ async function msnGetContent(id,coun){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function lineTodayGetList(siteName,tt){
-  try{tt=tt.split('|');
+  //try{
+  tt=tt.split('|');
   for (let t of tt) {
     if (/[0-9]/.test(t)){
       url=preStr+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+rr*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
@@ -297,7 +298,7 @@ async function lineTodayGetList(siteName,tt){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
-  }catch{html='<p>尚無內容</p>'}
+  //}catch{html='<p>尚無內容</p>'}
   return html;
 }
 
