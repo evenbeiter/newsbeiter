@@ -355,7 +355,7 @@ async function anueGetList(siteName,t){
     let str=await res.json();
     for (let a of str.items.data){
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')">
-            <p class="fs10">${new Date(a.publishAt*1000)}</p>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
+            <p class="fs10">${new Date(a.publishAt*1000).replace(' GMT+0800 (台北標準時)','')}</p>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
             </div><hr>`;
     }
   }
@@ -390,7 +390,7 @@ async function anueGetSearchResults(siteName,t){
   let str=await res.json();
   if(str.items.data!==null && str.items.data!==undefined){
     for (let a of str.items.data){
-      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title.replaceAll('<mark>','').replaceAll('</mark>','')}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')"><p class="fs10">${new Date(a.publishAt*1000)}</p><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title.replaceAll('<mark>','').replaceAll('</mark>','')}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')"><p class="fs10">${new Date(a.publishAt*1000).replace(' GMT+0800 (台北標準時)','')}</p><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
