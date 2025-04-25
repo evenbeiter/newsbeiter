@@ -175,21 +175,19 @@ async function getContent(siteName,clickedId,id){
         else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
         //remove image style
-        cEl.querySelectorAll('img').forEach(img => {img.removeAttribute('style')});
-        cEl.querySelectorAll('figure').forEach(f => {f.removeAttribute('style')});
-        cEl.querySelectorAll('.bbc-j1srjl').forEach(f => {f.removeAttribute('style')});
+        cEl.querySelectorAll('img, figure, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x').forEach(img => {img.removeAttribute('style')});
         //handle image src
         if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
         //convert sc to tc
         if (siteName=='wscn'||siteName=='jin'){convertTextInsideTags(cEl)};
-        //remove ads
+        //remove elements
         if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})};
       }
     }
     loading.style.display='none';
     //handle translation
     if (siteName==='msnUS'||siteName==='apollo'){
-      var all=[...cEl.querySelectorAll('p'),...cEl.querySelectorAll('h2'),...cEl.querySelectorAll('li')];
+      var all=cEl.querySelectorAll('p, h2, li');
       getTranslation(all);
     } else if (siteName=='peInsights'){
       var all=cEl.querySelectorAll('.tl');
