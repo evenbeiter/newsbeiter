@@ -95,7 +95,7 @@ function openSearchList(){
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}','${tab[2]}')">${tab[2]}</button>`;
   }  
-  btn.innerHTML+=`<input type="text" id="search-term" class="form-control mb-2">`;
+  btn.innerHTML+=`<input type="text" id="search-term" class="form-control my-2">`;
   tabs=searchSites;
   for (let tab of tabs){
     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
