@@ -152,7 +152,7 @@ async function getList(siteName,t){
   else if (siteName=='msnUS'){list.innerHTML+=await msnGetList(siteName,t,'en-us')}
   else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
   loading.style.display='none';
-  if (siteName==='msnUS'||siteName==='apollp'){
+  if (siteName==='msnUS'||siteName==='apollo'){
     var all=document.querySelectorAll('.t-tl');
     getTranslation(all);
   }
