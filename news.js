@@ -378,7 +378,7 @@ async function anueGetContent(id){
     let str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
-    html=doc.querySelector('#article-container').outerHTML;    
+    html=doc.querySelector('#article-container').outerHTML+ '<p class="text-end"><a href="https://news.cnyes.com/news/id/'+id + '" target="_blank">分享</a></p><br>';
   }
   }catch{html='<p><a href="https://news.cnyes.com/news/id/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html
@@ -390,7 +390,7 @@ async function anueGetSearchResults(siteName,t){
   let str=await res.json();
   if(str.items.data!==null && str.items.data!==undefined){
     for (let a of str.items.data){
-      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')"><p class="fs10">${cvt2Timezone(a.publishAt*1000)}</p><p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br></div><hr>`;
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')"><p class="fs10">${cvt2Timezone(a.publishAt*1000)}</p></div><hr>`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
