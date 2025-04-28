@@ -1195,7 +1195,7 @@ async function openBook(){
   var res=await fetch(`${preStr}https://github.com/hehonghui/awesome-english-ebooks/raw/master/01_economist/te_${date}/TheEconomist.${date}.epub`);
   var blob=await res.blob();
   var book=ePub(blob);
-    await book.open(arrayBuffer);
+    //await book.open(arrayBuffer);
 
     var jsonOutput = {
       metadata: book.packaging.metadata,
