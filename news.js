@@ -1186,6 +1186,66 @@ async function videoGetContent(clickedId,id,url,m3u8Url){
 }
 
 
+//    ECONOMIST
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function openBook(){
+  var date = prompt('Issue Date:');
+  date=date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1.$2.$3');
+  var res=await fetch(`${preStr}https://github.com/hehonghui/awesome-english-ebooks/raw/master/01_economist/te_${date}/TheEconomist.${date}.epub`);
+  var blob=await res.blob();
+  var book=ePub(blob);
+    await book.open(arrayBuffer);
+
+    var jsonOutput = {
+      metadata: book.packaging.metadata,
+      chapters: []
+    };
+
+    let spineItems = await book.loaded.spine.spineItems;
+    var i=0;
+    for (let item of spineItems) {
+      i=i+1;
+      let chapter = await item.load(book.load.bind(book));
+      let content = await item.render(); // Render the chapter to get its content
+
+      jsonOutput.chapters.push({
+        id: 'chapter_'+i,
+        href: item.href,
+        content: content.replace(/<html[\s\S]*?\<body>/g,'').replace(/<link [\s\S]*?\/>/g,'').replace('</body></html>','').replaceAll(' class="link_navbar"','') // Store the rendered content
+      });
+    }
+    console.log(jsonOutput);
+    var array=[];
+    for (let c of jsonOutput.chapters){
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(c.content, "text/html");
+      if(doc.querySelector('.te_section_title')){
+        c.section=doc.querySelector('.te_section_title').textContent;
+        array.push(c);
+      }
+    }
+    var tabs = [...new Set(array.map(item => item.section))];
+    content = Object.values(array.reduce((acc, item) => {
+      if (!acc[item.section]) {
+        acc[item.section] = { section: item.section, content: [] };
+      }
+      acc[item.section].content.push(item);
+      return acc;
+    }, {})
+    );
+  
+    for (let tab of tabs){
+    document.getElementById('btn-group').innerHTML+=`<button class="btn btn-sm sepia me-1 mb-1" type="button" onclick="getList('${tab}')">${tab}</button>`;
+    }
+      
+    getList('Leaders');
+
+  reader.readAsArrayBuffer(file);
+}
+
+
+
 //    GLOBAL FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
