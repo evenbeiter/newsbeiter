@@ -1096,7 +1096,7 @@ async function wikiGetList(siteName,t){
   var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('#column-dyk ul li');
   for (let h of hh){
-    items.push([h.querySelector('b').querySelector('a').href.replace('zh.wikipedia.org/wiki/','zh.wikipedia.org/zh-tw/'),h.innerText])
+    items.push([h.querySelector('b').querySelector('a').href.replace('https://zh.wikipedia.org/wiki/',''),h.innerText])
   }
   
   for (let h of items){
@@ -1107,7 +1107,7 @@ async function wikiGetList(siteName,t){
 }
 
 async function wikiGetContent(id){
-  try{const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+'https:/zh.wikipedia.org/zh-tw/'+id);
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
