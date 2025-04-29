@@ -1,6 +1,6 @@
 const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
 const allSites1=[['msnTW','MSN 台灣'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['dw','德國之聲'],['wscn','華爾街見聞']];
-const allSites2=[['lineToday','LINE'],['cnyes','鉅亨'],['reuters','路透'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周'],['bbc','BBC'],['bnext','數位時代'],['technews','科技新報'],['jin','金十'],['msnUS','MSN'],['peInsights','PEI'],['apollo','Apollo'],['wiki','維基百科']];
+const allSites2=[['lineToday','LINE'],['cnyes','鉅亨'],['reuters','路透'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周'],['bbc','BBC'],['bnext','數位時代'],['technews','科技新報'],['jin','金十'],['msnUS','MSN'],['peInsights','PEI'],['apollo','Apollo']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'msnChannel':[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']],'others':[['wsjVideo','WSJ']]};
 const msnVideo=[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']];
 const msnChannelVideo=[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']];
@@ -1096,7 +1096,7 @@ async function wikiGetList(siteName,t){
   var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('#column-dyk ul li');
   for (let h of hh){
-    items.push([h.querySelector('b').querySelector('a').href.replace('https://zh.wikipedia.org/wiki/','').replace('https://evenbeiter.github.io/wiki/',''),h.innerText])
+    items.push([h.querySelector('b').querySelector('a').href,h.innerText])
   }
   
   for (let h of items){
@@ -1107,14 +1107,14 @@ async function wikiGetList(siteName,t){
 }
 
 async function wikiGetContent(id){
-  try{const res = await fetch(preStr+'https:/zh.wikipedia.org/zh-tw/'+id);
+  try{const res = await fetch(preStr+id);
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
   var a=doc.querySelector('main');
   var vdo=a.querySelectorAll('[data-e2e^="media-loader"]');
-  html = doc.querySelector('.mw-page-title-main').outerHTML+doc.querySelector('#mw-content-text').outerHTML+ '<p class="text-end"><a href="https:/zh.wikipedia.org/zh-tw/' + id + '" target="_blank">分享</a></p><br>';
-  }catch{html='<p><a href="https:/zh.wikipedia.org/zh-tw/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  html = doc.querySelector('.mw-page-title-main').outerHTML+doc.querySelector('#mw-content-text').outerHTML+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
