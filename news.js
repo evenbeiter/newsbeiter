@@ -1096,7 +1096,7 @@ async function wikiGetList(siteName,t){
   var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('#column-dyk ul li');
   for (let h of hh){
-    items.push([h.querySelector('b').querySelector('a').href.replace('https://zh.wikipedia.org/wiki/',''),h.innerText])
+    items.push([h.querySelector('b').querySelector('a').href.replace('https://zh.wikipedia.org/wiki/','').replace('https://evenbeiter.github.io/wiki/',''),h.innerText])
   }
   
   for (let h of items){
