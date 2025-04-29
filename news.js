@@ -31,6 +31,7 @@ const bnext=[['articles','新聞'],['ranking','熱門'],['topics','專題'],['ta
 const technews=[['technews.tw/','最新'],['technews.tw/category/semiconductor/','半導體'],['technews.tw/category/component/','零組件'],['finance.technews.tw/','財經'],['technews.tw/category/internet/','網路'],['technews.tw/category/cutting-edge/','尖端科技'],['technews.tw/topics/','系列專題'],['technews.tw/category/natural-science/環境科學/','環境科學'],['technews.tw/category/能源科技/','能源科技']];
 const peInsights=[['','Latest']];
 const apollo=[['','Latest']];
+const wiki=[['','Did You Know...']];
 const formHeader=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="margin-right:3rem">`;
 var tabs=[];
 var items=[];var url='';var html='';
@@ -1080,6 +1081,40 @@ async function peInsightsGetContent(id){
     html = img.outerHTML+'<br>'+a.outerHTML.replaceAll('<h3','<p class="tl"').replaceAll('</h3>','</p>').replaceAll('<p','<p class="tl"').replaceAll(/<span[\s\S]*?">/g,'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }
   }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+
+//    WIKI
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function wikiGetList(siteName,t){
+  try{url=preStr+'https://zh.wikipedia.org/zh-tw/';console.log(url);
+  let res=await fetch(url);
+  let str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  var hh=doc.querySelectorAll('#column-dyk ul li');
+  for (let h of hh){
+    items.push([h.querySelector('b').querySelector('a').href,h.innerText])
+  }
+  
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function wikiGetContent(id){
+  try{const res = await fetch(preStr+id);
+  const str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  var a=doc.querySelector('main');
+  var vdo=a.querySelectorAll('[data-e2e^="media-loader"]');
+  html = doc.querySelector('.mw-page-title-main').outerHTML+doc.querySelector('#mw-content-text').outerHTML+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
