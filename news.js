@@ -1113,8 +1113,8 @@ async function wikiGetContent(id){
   var doc=parser.parseFromString(str, "text/html");
   var a=doc.querySelector('main');
   var vdo=a.querySelectorAll('[data-e2e^="media-loader"]');
-  html = doc.querySelector('.mw-page-title-main').outerHTML+doc.querySelector('#mw-content-text').outerHTML+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
-  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  html = doc.querySelector('.mw-page-title-main').outerHTML+doc.querySelector('#mw-content-text').outerHTML+ '<p class="text-end"><a href="https:/zh.wikipedia.org/zh-tw/' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="https:/zh.wikipedia.org/zh-tw/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
