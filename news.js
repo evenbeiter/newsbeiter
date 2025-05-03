@@ -202,7 +202,8 @@ async function getContent(siteName,clickedId,id){
       getTranslation(all);
     }
   } else {
-    if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
+      var e=window.event;
+      if (e && e.target.tagName==='VIDEO'){return}else{
       cEl.style.display='none';
       try{
         if (siteName=='msnTW'||siteName=='msnUS'){
