@@ -1,7 +1,7 @@
 const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
 const allSites1=[['msnTW','MSN 台灣'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['dw','德國之聲'],['wscn','華爾街見聞']];
 //,['wiki','維基百科']];
-const allSites2=[['lineToday','LINE'],['cnyes','鉅亨'],['reuters','路透'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周'],['bbc','BBC'],['bnext','數位時代'],['technews','科技新報'],['jin','金十'],['msnUS','MSN'],['peInsights','PEI'],['apollo','Apollo']];
+const allSites2=[['lineToday','LINE'],['cnyes','鉅亨'],['reuters','路透'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周'],['bbc','BBC'],['bnext','數位時代'],['technews','科技新報'],['jin','金十'],['msnUS','MSN'],['peInsights','PEI'],['apollo','Apollo'],['marie','美麗佳人']];
 const videoSites={'msn':[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']],'msnChannel':[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']],'others':[['wsjVideo','WSJ']]};
 const msnVideo=[['WATCH','MSN'],['money video','Money'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']];
 const msnChannelVideo=[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post']];
@@ -215,6 +215,40 @@ async function getContent(siteName,clickedId,id){
     }
   }
 }
+
+
+//    MARIE CLAIRE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function marieGetList(siteName,t){
+  try{
+    url='https://www.marieclaire.com.tw/author/'+t+'?page='+rr;console.log(url);
+    let res=await fetch(url);
+    let str=await res.text();
+    var parser=new DOMParser();
+    var doc=parser.parseFromString(str, "text/html");
+    var hh=doc.querySelectorAll('.card');
+    for (let h of hh){
+      items.push([h.querySelector('a').href,h.querySelector('.articleTitle').innerText]);
+    }
+    
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function marieGetContent(id){
+  try{const res = await fetch(id);
+  const str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  html='<p class="fs10">'+doc.querySelector('time').innerText+'</p>'+doc.querySelector('.articleContent').outerHTML + '<p class="text-end"><a href="https://www.marieclaire.com.tw' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="https://www.marieclaire.com.tw' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
 
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
