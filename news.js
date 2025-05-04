@@ -205,6 +205,7 @@ async function getContent(siteName,clickedId,id){
       var e=window.event;
       if (e && e.target.tagName==='VIDEO'){return}else{
       cEl.style.display='none';
+      if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
       try{
         if (siteName=='msnTW'||siteName=='msnUS'){
           cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()
