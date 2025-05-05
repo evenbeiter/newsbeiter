@@ -72,7 +72,8 @@ function createChannelList(site,siteName,top){
   for (let tab of site){
     channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top}','${tab[0]}')">${tab[1]}</button>`;
   }
-    get1stList(siteName,top,site[0][0]);
+  get1stList(siteName,top,site[0][0]);
+  openChannelList();
 }
 
 function createSearchListDiv(faqList,searchSiteList){
@@ -83,6 +84,7 @@ function createSearchListDiv(faqList,searchSiteList){
   for (let tab of searchSiteList){
     searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
   }
+  openSearchList();
 }
 
 function createUrlListDiv4Bml(sitesList){
@@ -91,6 +93,7 @@ function createUrlListDiv4Bml(sitesList){
     urlList.innerHTML+='<hr>';
   }
   if(urlList.lastElementChild){urlList.removeChild(urlList.lastElementChild)};
+  openSearchList();
 }
 
 async function get1stList(siteName,top,t){
