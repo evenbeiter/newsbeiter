@@ -68,7 +68,13 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
 </div>
 <div id="top" class="fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:none"></div>
   <form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
-    <div id="btn"></div>
+    <div id="btn">
+      <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
+      <hr style="margin-right:3rem">
+      <div id="channelList"></div>
+      <div id="searchList" style="display:none"></div>
+      <div id="urlList" style="display:none"></div>
+    </div>
   </form>
 <div id="list" class="mx-3 pt-3"></div>
 <div id="loading" class="position-fixed w-100 top-0 start-0" style="height:100vh;display:none"><div id="loading-gif" class="position-absolute top-50 start-50 translate-middle" style="z-index:1030;width:3rem;height:3rem">
@@ -101,6 +107,6 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
 <script src="js/fn-video-d.js"></script>
 <script src="js/def-var.js"></script>
 <script src="js/def-name.js"></script>
-<script>ping();openMediaList();</script>
+<script src="js/bml-render-js.js"></script>
 </body>
 </html>
