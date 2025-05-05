@@ -1,3 +1,17 @@
+//    DEFINE NAME OF ELEMENTS
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var options=document.getElementById('btn-group');
+var btn=document.getElementById('btn');
+if(document.getElementById('channelList')){var channelList=document.getElementById('channelList')};
+if(document.getElementById('searchList')){var searchList=document.getElementById('searchList')};
+if(document.getElementById('searchList')){var urlList=document.getElementById('urlList')};
+var list=document.getElementById('list');
+var topdiv=document.getElementById('top');
+var loading=document.getElementById('loading');
+const s2t = OpenCC.Converter({ from: 'cn', to: 'tw' });
+
+
 //    CREATE URL LIST & SEARCH LIST FOR NEWSBEITER
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -24,6 +38,7 @@ if (window.location.href.indexOf('evenbeiter.github.io')!==-1){
   topdiv.style.display='none';
   createSearchListDiv(faq,searchSites);
   openUrlList();
+
   
 //    CREATE CHANNEL, SEARCH & URL LIST FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
