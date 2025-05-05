@@ -19,6 +19,6 @@ for (let tab of allSitesB){
   urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
 }
 urlList.innerHTML+='<hr>';
-for (let tab of otherVideo){
+for (let tab of otherVideoB){
   urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
 }
