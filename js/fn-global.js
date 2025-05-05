@@ -6,30 +6,18 @@ function showTop(t){
   topdiv.style.display='block';
 }
 
-function openMediaList(){
-  btn.innerHTML=formHeader;
-  tabs=allSites1;
-  for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
-  }
-  btn.innerHTML+='<hr>';
-  tabs=allSites2;
-  for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createBtnGroup(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
-  }
-  btn.innerHTML+='<hr>';
-  tabs=msnVideo;
-  for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('msnVideo','${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
-  }
-  tabs=msnChannelVideo;
-  for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('msnChannelVideo','${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
-  }
-  tabs=otherVideo;
-  for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${tab[0]}','${tab[1]}','')">${tab[1]}</button>`;
-  }
+function openChannelList(){
+  channelList.style.display='block';
+  searchList.style.display='none';
+  urlList.style.display='none';
+  options.style.display='block';
+  topdiv.style.display='none';
+}
+
+function openSearchList(){
+  channelList.style.display='none';
+  searchList.style.display='block';
+  urlList.style.display='none';
   options.style.display='block';
   topdiv.style.display='none';
 }
@@ -38,21 +26,6 @@ function openUrlList(){
   channelList.style.display='none';
   searchList.style.display='none';
   urlList.style.display='block';
-  options.style.display='block';
-  topdiv.style.display='none';
-}
-
-function openSearchList(){
-  btn.innerHTML=formHeader;
-  tabs=faq;
-  for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}','${tab[2]}')">${tab[2]}</button>`;
-  }  
-  btn.innerHTML+=`<input type="text" id="search-term" class="form-control my-2">`;
-  tabs=searchSites;
-  for (let tab of tabs){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
-  }
   options.style.display='block';
   topdiv.style.display='none';
 }
@@ -71,12 +44,55 @@ async function ping(){
   var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');
 }
 
-function createBtnGroup(site,siteName,top){
-  btn.innerHTML=formHeader;
+// function createBtnGroup(site,siteName,top){
+//   btn.innerHTML=formHeader;
+//   for (let tab of site){
+//     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top}','${tab[0]}')">${tab[1]}</button>`;
+//   }
+//     get1stList(siteName,top,site[0][0]);
+// }
+
+// function openSearchList(){
+//   btn.innerHTML=formHeader;
+//   tabs=faq;
+//   for (let tab of tabs){
+//     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}','${tab[2]}')">${tab[2]}</button>`;
+//   }  
+//   btn.innerHTML+=`<input type="text" id="search-term" class="form-control my-2">`;
+//   tabs=searchSites;
+//   for (let tab of tabs){
+//     btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
+//   }
+//   options.style.display='block';
+//   topdiv.style.display='none';
+// }
+
+function createChannelList(site,siteName,top){
+  chennelList.innerHTML='';
   for (let tab of site){
-    btn.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top}','${tab[0]}')">${tab[1]}</button>`;
+    chennelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top}','${tab[0]}')">${tab[1]}</button>`;
   }
     get1stList(siteName,top,site[0][0]);
+}
+
+function createSearchListDiv(faqList,searchSiteList){
+  for (let tab of faqList){
+    searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}','${tab[2]}')">${tab[2]}</button>`;
+  }  
+  searchList.innerHTML+='<input type="text" id="search-term" class="form-control my-2">';
+  for (let tab of searchSiteList){
+    searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
+  }
+}
+
+function createUrlListDiv4Bml(sitesList){
+  for (let s of sitesList){
+    for (let tab of s){
+      urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
+      urlList.innerHTML+='<hr>';
+    }
+  }
+  if(urlList.lastElementChild){urlList.removeChild(urlList.lastElementChild)};
 }
 
 async function get1stList(siteName,top,t){
