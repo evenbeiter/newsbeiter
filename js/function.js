@@ -73,7 +73,6 @@ function createChannelList(site,siteName,top){
     channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
   }
   get1stList(siteName,site[0][1],site[0][0]);
-  openChannelList();
 }
 
 function createSearchListDiv(faqList,searchSiteList){
@@ -84,16 +83,17 @@ function createSearchListDiv(faqList,searchSiteList){
   for (let tab of searchSiteList){
     searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
   }
-  openSearchList();
 }
 
 function createUrlListDiv4Bml(sitesList){
-  for (let tab of sitesList){
-    urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
+  for (let s of sitesList){
+    for (let tab of s){
+      urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
+    }
     urlList.innerHTML+='<hr>';
   }
   if(urlList.lastElementChild){urlList.removeChild(urlList.lastElementChild)};
-  openSearchList();
+  openChannelList();
 }
 
 async function get1stList(siteName,top,t){
