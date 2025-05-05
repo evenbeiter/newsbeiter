@@ -34,6 +34,14 @@ function openMediaList(){
   topdiv.style.display='none';
 }
 
+function openUrlList(){
+  channelList.style.display='none';
+  searchList.style.display='none';
+  urlList.style.display='block';
+  options.style.display='block';
+  topdiv.style.display='none';
+}
+
 function openSearchList(){
   btn.innerHTML=formHeader;
   tabs=faq;
