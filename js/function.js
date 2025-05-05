@@ -151,7 +151,7 @@ async function getContent(siteName,clickedId,id){
         else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
         //remove image style
-        cEl.querySelectorAll('img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x').forEach(img => {img.removeAttribute('style')});
+        cEl.querySelectorAll('img, figure, figure.caas-figure div.caas-figure-with-pb, .caas-img-container, .caas-img-loader, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x').forEach(img => {img.removeAttribute('style')});
         //handle image src
         if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
         //convert sc to tc
