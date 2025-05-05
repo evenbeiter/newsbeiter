@@ -86,11 +86,9 @@ function createSearchListDiv(faqList,searchSiteList){
 }
 
 function createUrlListDiv4Bml(sitesList){
-  for (let s of sitesList){
-    for (let tab of s){
-      urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
-      urlList.innerHTML+='<hr>';
-    }
+  for (let tab of sitesList){
+    urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
+    urlList.innerHTML+='<hr>';
   }
   if(urlList.lastElementChild){urlList.removeChild(urlList.lastElementChild)};
 }
