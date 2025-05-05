@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function showTop(t){
-  topdiv.innerText=t;
+  topdiv.innerText='【'+topName+'】'+t;
   topdiv.style.display='block';
 }
 
@@ -68,12 +68,13 @@ async function ping(){
 // }
 
 function createChannelList(site,siteName,top){
+  topName=top;
   channelList.innerHTML='';
   for (let tab of site){
     channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
   }
   openChannelList();
-  get1stList(siteName,'【'+top+'】'+site[0][1],site[0][0]);
+  get1stList(siteName,site[0][1],site[0][0]);
 }
 
 function createSearchListDiv(faqList,searchSiteList){
