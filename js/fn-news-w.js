@@ -58,6 +58,72 @@ async function cnyeshaoGetList(siteName,t){
 }
 
 
+//    INVESTING.COM HK
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function invtComGetList(siteName,t){
+  try{
+  var k=2;
+  for (let i=0;i<k;i++){
+    url='https://hk.investing.com/'+t+((rr-1)*k+i+1);console.log(url);
+    let res=await fetch(url);
+    let str=await res.text();
+    var parser=new DOMParser();
+    var doc=parser.parseFromString(str, "text/html");
+    if (t.slice(0,8)!=='analysis'){var hh=doc.querySelectorAll('article')}else{var hh=doc.querySelector('#contentSection').querySelectorAll('article')};
+    for (let h of hh){
+      items.push([h.children[1].children[0].href,h.children[1].children[0].innerText,h.querySelector('time').getAttribute('datetime')+' GMT+0',h.children[1].children[2].querySelectorAll('span')[1].innerText]);
+    }
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function invtComGetContent(id){
+  try{const res = await fetch(id);
+  const str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  var a=doc.querySelector('#article');
+  html=a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
+//    ISABELNET
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function isblGetList(siteName,t){
+  try{
+    url='https://www.isabelnet.com/blog/page/'+rr;console.log(url);
+    var res=await fetch(url);
+    var str=await res.text();
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(str, "text/html");
+
+    let ts=doc.querySelectorAll('.entry-title');
+    for (let t of ts){
+      res=await fetch(t.firstChild.href);
+      str=await res.text();
+      parser = new DOMParser();
+      doc = parser.parseFromString(str, "text/html");
+      ss=doc.querySelectorAll('section');
+      var hh=doc.querySelector('h2');
+      var dt=doc.querySelector('.date-meta').innerText.replaceAll('\\n',' ');
+      var pg=doc.querySelector('.elementor-text-editor');
+      if (doc.querySelector('.gallery-icon')){var img=doc.querySelector('.gallery-icon')}else{var img=doc.querySelector('.elementor-image')};
+      html+='<p class="title">'+hh.textContent+'</p><p class="fs10">'+dt+'</p>'+pg.innerHTML+img.innerHTML+'<br><br><hr>';
+      html=html.replaceAll('<p>Image:','<p class=\"fs10\">Image:'); 
+    }
+  }catch{html='<p>No Content.</p>'}
+  return html;
+}
+
+
 //    YAHOO TW
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
