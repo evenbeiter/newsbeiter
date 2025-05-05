@@ -68,9 +68,9 @@ async function ping(){
 // }
 
 function createChannelList(site,siteName,top){
-  chennelList.innerHTML='';
+  channelList.innerHTML='';
   for (let tab of site){
-    chennelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top}','${tab[0]}')">${tab[1]}</button>`;
+    channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top}','${tab[0]}')">${tab[1]}</button>`;
   }
     get1stList(siteName,top,site[0][0]);
 }
