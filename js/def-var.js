@@ -59,7 +59,7 @@ const otherVideoB=[['bbgVideo','Bloomberg Video',bbgVideo,'bloomberg.com','https
 //    GLOBAL VARIABLES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const formHeader=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="margin-right:3rem">`;
+//const formHeader=`<button class="btn sepia me-1 mb-1" type="button" onclick="openMediaList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><hr style="margin-right:3rem">`;
 var tabs=[];
 var items=[];var url='';var html='';
 var siteNameVar='';
