@@ -94,7 +94,6 @@ function createUrlListDiv4Bml(sitesList){
     urlList.innerHTML+='<hr>';
   }
   if(urlList.lastElementChild){urlList.removeChild(urlList.lastElementChild)};
-  openChannelList();
 }
 
 async function get1stList(siteName,top,t){
