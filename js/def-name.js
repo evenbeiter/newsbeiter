@@ -6,3 +6,4 @@ if(document.getElementById('searchList')){var urlList=document.getElementById('u
 var list=document.getElementById('list');
 var topdiv=document.getElementById('top');
 var loading=document.getElementById('loading');
+const s2t = OpenCC.Converter({ from: 'cn', to: 'tw' });
