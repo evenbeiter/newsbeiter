@@ -1,4 +1,26 @@
-//    MSN, MSN CHANNEL, WSJ, VIDEO GET CONTENT
+//    d: MSN, MSN CHANNEL, WSJ, VIDEO GET CONTENT
+//    p: BBG
+
+//    BLOOMBERG VIDEO
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function bbgVideoGetList(siteName,t){
+  try{
+    url='https://personalization.bloomberg.com/user/recommendations/cfru?timezoneOffset=-28800000&limit=50&resourceTypes=Video&offset='+(rr-1)*50+'&includedSites='+t;
+    let res=await fetch(url);
+    let str=await res.json();
+    for (let h of str){
+      items.push([h.assetID,h.headline,h.publishedAt,h.duration,h.thumbnailUrl,h.url])
+    }
+    items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
+
+    for (let h of items){
+      html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://www.bloomberg.com/media-manifest/videos/android/WiFi/${h[0]}.m3u8')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="fs10">${cvt2Timezone(h[2])} | <span class="fw-bold">${cvtS2HHMMSS(h[3],1000)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://www.bloomberg.com/media-manifest/videos/android/WiFi/${h[0]}.m3u8')"></div><hr>`
+    }
+  }catch{html='<p>No Content.</p>'}
+  return html;
+}
+
 
 //    MSN VIDEO
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
