@@ -101,6 +101,7 @@ async function get1stList(siteName,top,t){
   rr=0;
   getList(siteName,t);
   showTop(top);
+  openOptions();
 }
 
 async function get1stSearchResults(siteName,top){
