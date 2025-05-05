@@ -97,6 +97,7 @@ function createUrlListDiv4Bml(sitesList){
 }
 
 async function get1stList(siteName,top,t){
+  openChannelList();
   rr=0;
   getList(siteName,t);
   showTop(top);
