@@ -80,7 +80,7 @@ function createSearchListDiv(faqList,searchSiteList){
   for (let tab of faqList){
     searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}','${tab[2]}')">${tab[2]}</button>`;
   }  
-  searchList.innerHTML+='<input type="text" id="search-term" class="form-control my-2">';
+  searchList.innerHTML+='<input type="search" id="search-term" class="form-control my-2">';
   for (let tab of searchSiteList){
     searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
   }
