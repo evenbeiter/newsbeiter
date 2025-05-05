@@ -1,5 +1,5 @@
 var siteNameVar='';var tabs;var docTitle='';
-for (let l of [...allSites1,...otherVideo]) {
+for (let l of [...allSitesB,...otherVideoB]) {
   var ss=l[3].split('|');
   for (let s of ss){if (window.location.href.indexOf(s) !== -1) {siteNameVar=l[0];docTitle=l[1];tabs=l[2];break}}};
   
