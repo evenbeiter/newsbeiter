@@ -85,7 +85,7 @@ var rr=0;
 if (window.location.href.indexOf('evenbeiter.github.io')==-1){
 
 //var siteNameVar='';var tabs;var docTitle='';
-for (let l of [...allSitesB,...allSites2,...otherVideoB]) {
+for (let l of [...allSitesB,...allSites2,...videoSitesB]) {
   var ss=l[3].split('|');
   for (let s of ss){if (window.location.href.indexOf(s) !== -1) {siteNameVar=l[0];docTitle=l[1];tabs=l[2];break}}};
   
