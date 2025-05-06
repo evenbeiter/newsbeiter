@@ -15,6 +15,7 @@ function openChannelList(){
 }
 
 function openSearchList(){
+  document.getElementById('search-term').value='';
   channelList.style.display='none';
   searchList.style.display='block';
   urlList.style.display='none';
@@ -86,15 +87,30 @@ function createSearchListDiv(faqList,searchSiteList){
   }
 }
 
-function createUrlListDiv4Bml(sitesList){
+function createUrlListDiv(sitesList){
+  if (window.location.href.indexOf('evenbeiter.github.io')!==-1){
+    var btnStr=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
+  } else {
+    var btnStr=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
+  }
   for (let s of sitesList){
     for (let tab of s){
-      urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
+      urlList.innerHTML+=btnStr;
     }
     urlList.innerHTML+='<hr>';
   }
   if(urlList.lastElementChild){urlList.removeChild(urlList.lastElementChild)};
 }
+
+// function createUrlListDiv4Bml(sitesList){
+//   for (let s of sitesList){
+//     for (let tab of s){
+//       urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
+//     }
+//     urlList.innerHTML+='<hr>';
+//   }
+//   if(urlList.lastElementChild){urlList.removeChild(urlList.lastElementChild)};
+// }
 
 async function get1stList(siteName,top,t){
   rr=0;
@@ -526,10 +542,27 @@ async function cnaGetList(siteName,t){
 async function cnaGetContent(id){
   try{const res = await fetch(id);
   const str=await res.text();
-  var parser = new DOMParser();
-  var doc = parser.parseFromString(str, "text/html");
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
   html= '<p class="fs10">'+doc.querySelector('.updatetime').innerText+'</p>'+doc.querySelector('.paragraph').outerHTML.replaceAll('</span></a><a','</span></a><br><a') + '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+async function cnaGetSearchResults(siteName,t){
+  try{url='https://www.cna.com.tw/search/hysearchws.aspx?q='+t;console.log(url);
+  let res=await fetch(url);
+  let str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  var hh=doc.querySelectorAll('ul#jsMainList li');
+  for (let h of hh){
+    items.push([h.querySelector('a').href,h.querySelector('h2').innerText,h.querySelector('.date').innerText])
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<br><span class="fs10">${h[2]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
@@ -1428,18 +1461,33 @@ async function bbgVideoGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function msnVideoGetList(siteName,t){
-  try{url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
-  let res=await fetch(url);
-  let str=await res.json();
-  for (let h of str.value[0].subCards){
-    items.push([h.sourceId,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url,h.provider.name]);
+  try{
+  if (t.slice(0,3)==='vid'){  // MSN VIDEO FROM CHANNEL
+    for (var i=0;i<2;i++){
+      url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
+      let res=await fetch(url);
+      let str=await res.json();
+      for (let h of str.sections[0].cards){
+        if(h.type=='video'){
+          items.push([h.id,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url]);
+        }
+      }
+    }
+  } else {  // MSN VIDEO FROM CATEGORY
+    url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
+    let res=await fetch(url);
+    let str=await res.json();
+    for (let h of str.value[0].subCards){
+      items.push([h.sourceId,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url,h.provider.name]);
+    }
   }
+  
   items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
   
   for (let h of items){
     html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | <span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
   }
-  }catch{html='<p>尚無內容</p>'}
+  }catch{html='<p>No Content.</p>'}
   return html;
 }
 
@@ -1448,7 +1496,8 @@ async function msnVideoGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 async function msnChannelVideoGetList(siteName,t){
-  try{for (var i=0;i<2;i++){
+  try{
+    for (var i=0;i<2;i++){
     url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
     let res=await fetch(url);
     let str=await res.json();
