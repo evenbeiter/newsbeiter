@@ -1030,6 +1030,34 @@ async function reutersGetContent(id){
 }
 
 
+//    SINA
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function sinaGetList(siteName,t){
+  try{url=preStr+'https://api.cj.sina.cn/transmit?pid=finance_wap_proxy_fl_1663832597&smartFlow='+t+'&up='+(rr-1)+'&pageSize=30';console.log(url);
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str.data){
+    items.push([h.wapurl,h.title]);
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function sinaGetContent(id){
+  try{const res = await fetch(preStr+id);
+  const str=await res.text();
+  var parser=new DOMParser();
+  var doc=parser.parseFromString(str, "text/html");
+  html = '<p class="fs10">'+doc.querySelector('time').innerText+'</p>'+doc.querySelector('section.art_pic_card.art_content').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
 //    TECH NEWS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
