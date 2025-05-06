@@ -89,15 +89,19 @@ function createSearchListDiv(faqList,searchSiteList){
 
 function createUrlListDiv(sitesList){
   if (window.location.href.indexOf('evenbeiter.github.io')!==-1){
-    var btnStr=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
-  } else {
-    var btnStr=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
-  }
-  for (let s of sitesList){
-    for (let tab of s){
-      urlList.innerHTML+=btnStr;
+    for (let s of sitesList){
+      for (let tab of s){
+        urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
+      }
+      urlList.innerHTML+='<hr>';
     }
-    urlList.innerHTML+='<hr>';
+  } else {
+    for (let s of sitesList){
+      for (let tab of s){
+        urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="openUrl('${tab[4]}')">${tab[1]}</button>`;
+      }
+      urlList.innerHTML+='<hr>';
+    }    
   }
   if(urlList.lastElementChild){urlList.removeChild(urlList.lastElementChild)};
 }
