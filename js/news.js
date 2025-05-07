@@ -1857,7 +1857,7 @@ async function msnChannelVideoGetList(siteName,t){
 
 async function reutersVideoGetList(siteName,t){
   try{
-    url='https://www.reuters.com/pf/api/v3/content/fetch/video-playlist-by-collection-v1?query={"collection_alias":"featured-video","offset":'+(rr-1)*30+',"size":30,"website":"reuters"}&d=278&mxId=00000000&_website=reuters';
+    url='https://www.reuters.com/pf/api/v3/content/fetch/video-playlist-by-collection-v1?query={"collection_alias":"featured-video","offset":'+(rr-1)*20+',"size":20,"website":"reuters"}&d=278&mxId=00000000&_website=reuters';
     let res=await fetch(url);
     let str=await res.json();
     let raw=str.result.channels.filter(s => s.id === t);
