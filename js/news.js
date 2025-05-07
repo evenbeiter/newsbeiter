@@ -1776,7 +1776,7 @@ async function yahooVideoGetContent(clickedId,id,url){
 
 async function bbgVideoGetList(siteName,t){
   try{
-    url='https://personalization.bloomberg.com/user/recommendations/cfru?timezoneOffset=-28800000&limit=50&resourceTypes=Video&offset='+(rr-1)*50+'&includedSites='+t;
+    url=preStr+'https://personalization.bloomberg.com/user/recommendations/cfru?timezoneOffset=-28800000&limit=50&resourceTypes=Video&offset='+(rr-1)*30+'&includedSites='+t;
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str){
