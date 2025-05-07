@@ -1282,7 +1282,7 @@ async function newslensGetList(siteName,t){
   var hh=doc.querySelectorAll('h3');
   if (hh.length==0){var hh=document.querySelectorAll('div.item-title.h6')};
   for (let h of hh){
-    items.push([h..querySelector('a').href,h..querySelector('a').innerText])
+    items.push([h.querySelector('a').href,h.querySelector('a').innerText])
   }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
