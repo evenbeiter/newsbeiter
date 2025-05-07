@@ -57,7 +57,7 @@ const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-c
 const faqB=[['yahooTW','Yahoo','私募'],['yahooTW','Yahoo','日股'],['yahooTW','Yahoo','美債']];
 const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday','LINE']]; 
 const allSitesB=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/']];
-const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.co','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
+const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
 
 //    GLOBAL VARIABLES
