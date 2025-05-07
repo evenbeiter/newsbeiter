@@ -1867,7 +1867,7 @@ async function reutersVideoGetList(siteName,t){
     items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
 
     for (let h of items){
-      html+=`<div onclick="getContent(this.id,'${h[0]}','https://www.reuters.com/video/watch/id'+'${h[0]}','${h[5]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="getContent(this.id,'${h[0]}','https://www.reuters.com/video/watch/id'+'${h[0]}','${h[5]}')"></div><hr>`
+      html+=`<div onclick="videoGetContent(this.id,'${h[0]}','https://www.reuters.com/video/watch/id'+'${h[0]}','${h[5]}')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','https://www.reuters.com/video/watch/id'+'${h[0]}','${h[5]}')"></div><hr>`
 
     }
   }catch{html='<p>No Content.</p>'}
