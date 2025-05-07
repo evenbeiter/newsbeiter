@@ -348,7 +348,7 @@ async function getList(siteName,t){
   else if (siteName=='msnUS'){list.innerHTML+=await msnGetList(siteName,t,'en-us')}
   else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
   loading.style.display='none';
-  if (siteName==='msnUS'||siteName==='apollo'){
+  if (siteName==='msnUS'||siteName==='apollo'||siteName==='substack'){
     var all=document.querySelectorAll('.t-tl');
     getTranslation(all);
   }
@@ -1308,7 +1308,7 @@ async function substackGetList(siteName,t){
     items.push([h.slug,h.title])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
