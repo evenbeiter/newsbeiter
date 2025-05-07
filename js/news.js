@@ -388,7 +388,7 @@ async function getContent(siteName,clickedId,id){
     }
     loading.style.display='none';
     //handle translation
-    if (siteName==='msnUS'||siteName==='apollo'){
+    if (siteName==='msnUS'||siteName==='apollo'||siteName==='substack'){
       var all=cEl.querySelectorAll('p, h2, li');
       getTranslation(all);
     } else if (siteName=='peInsights'){
