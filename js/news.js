@@ -1739,7 +1739,7 @@ async function msnVideoGetList(siteName,t){
       let str=await res.json();
       for (let h of str.sections[0].cards){
         if(h.type=='video'){
-          items.push([h.id,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url]);
+          items.push([h.id,h.title,h.publishedDateTime,h.videoMetadata.playTime,h.images[0].url,h.url,h.externalVideoFiles[1].url,h.provider.name]);
         }
       }
     }
