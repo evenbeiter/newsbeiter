@@ -283,7 +283,7 @@ if (window.location.href.indexOf('evenbeiter.github.io')==-1){
     createSearchListDiv(faqB,searchSitesB);
     createUrlListDiv([allSitesB,allSites2,videoSitesB]);
   } else {
-    chennelList.innerHTML='';
+    channelList.innerHTML='';
     searchList.innerHTML='';
     createUrlListDiv([allSitesB,allSites2,videoSitesB]);
     openUrlList();
