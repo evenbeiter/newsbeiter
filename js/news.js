@@ -276,7 +276,7 @@ var loading=document.getElementById('loading');
 
 if (window.location.href.indexOf('evenbeiter.github.io')==-1){
   if (siteNameVar!==''){
-    createChannelList(tabs,siteNameVar,docTitle)
+    createChannelList(tabs,siteNameVar,docTitle);
     createSearchListDiv(faqB,searchSitesB);
     createUrlListDiv([allSitesB,allSites2,videoSitesB]);
   } else {
