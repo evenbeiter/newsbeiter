@@ -35,12 +35,6 @@ const msnVideo=[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNB
 const reutersVideo=[['Editors_Picks','Editor\'s Picks'],['World_News_US','World News'],['Breakingviews','Breakingviews'],['MarketsNow','Markets Now'],['6ffc0233e09c26943b265ef3abd575b2d872818b','Business'],['Moments_Of_Innovation','Innovations'],['sustainable-business','Sustainable Business'],['5067a8733f8a8fe097f3098427c3b0acc6708a7b','Environment'],['d45538fb92ef02a065c15e16d3dd6a297c2ae7d7','Technology'],['lifestyleus','Lifestyle'],['4ccf1d535d893e464710e92b6722e47e8a3524df','Oddly Enough'],['189f8813eb619acad6694531e1004d4fcae3c097','Entertainment']];
 const wsjVideo=[['','Latest'],['&type=wsj-section&query=News','News'],['&type=wsj-subsection&query=World','World News'],['&type=wsj-section&query=Tech','Business'],['&type=wsj-subsection&query=Markets','Markets'],['&type=wsj-subsection&query=Economy','Economy'],['&type=wsj-subsection&query=Small+Business','Entrepreneurship'],['&type=wsj-section&query=Tech','Tech'],['&type=wsj-subsection&query=Management','Management'],['&type=wsj-section&query=Opinion','Opinion'],['&type=wsj-section&query=Lifestyle','Life & Culture'],['&type=playlist&query=Most+Viewed+WSJ+Videos','Most Popular']];
 
-const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
-const searchSites=[['lineToday','LINE'],['cnyes','鉅亨'],['wscn','華爾街見聞'],['ctee','工商'],['udnMoney','經濟日報'],['businessToday','今周刊']]; 
-const allSites1=[['msnTW','MSN 台灣'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['dw','德國之聲'],['wscn','華爾街見聞']];
-const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark']];
-const videoSites=[['msnVideo','MSN'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2'],['reutersVideo','Reuters']];
-
 
 //    FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,6 +48,12 @@ const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8
 
 const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-ce30-48f5-93ed-567dfcf3e07b','Editor\'s Picks'],['2d4617cb-4448-4bbe-be69-507820ee12be','Investing & Market Insights'],['9657ccb4-0423-4420-94de-024c54839a21','Trending Stocks'],['e799ec4c-02d3-477d-ba05-e8bb5c88bfc8','Tech News'],['aa2ec37b-b63e-4154-b9bd-18e0b14bb1e7','Asking for a Trend'],['d27bc0dd-04f8-4a61-8b08-9c7c6cc3169f','Catalysts'],['9a665a61-55bd-43bc-8657-6eb984ef9a37','Market Domination'],['0c9d1849-74a9-459f-9131-a9cee22acc8e','Morning Brief'],['739eb51e-bc2e-4bd2-99a8-6793977028ed','Market Domination Overtime']];
 
+const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
+const searchSites=[['lineToday','LINE'],['cnyes','鉅亨'],['wscn','華爾街見聞'],['ctee','工商'],['udnMoney','經濟日報'],['businessToday','今周刊']]; 
+const allSites1=[['msnTW','MSN 台灣'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['dw','德國之聲'],['wscn','華爾街見聞']];
+const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark']];
+const videoSites=[['msnVideo','MSN'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2'],['reutersVideo','Reuters']];
+
 const faqB=[['yahooTW','Yahoo','私募'],['yahooTW','Yahoo','日股'],['yahooTW','Yahoo','美債']];
 const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday','LINE']]; 
 const allSitesB=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/']];
@@ -63,18 +63,8 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 //    GLOBAL VARIABLES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var tabs=[];
-var items=[];var url='';var html='';
-var siteNameVar='';
-var docTitle='';
-var topName='';
-var coun='';
-var t='';
-var uuids='';
-var cursor='';
-var payload={};
-var rt='';
-var rr=0;
+var siteNameVar='',docTitle='',tabs=[];
+var items=[],url='',html='',coun='',t='',uuids='',cursor='',payload={},rt='',rr=0;
 
 
 //    RENDER HTML FOR BOOKMARKLET
@@ -82,7 +72,6 @@ var rr=0;
 
 if (window.location.href.indexOf('evenbeiter.github.io')==-1){
 
-//var siteNameVar='';var tabs;var docTitle='';
 for (let l of [...allSitesB,...allSites2,...videoSitesB]) {
   var ss=l[3].split('|');
   for (let s of ss){if (window.location.href.indexOf(s) !== -1) {siteNameVar=l[0];docTitle=l[1];tabs=l[2];break}}};
@@ -101,66 +90,7 @@ if (siteNameVar=='isabelnet'){
   }
   R("contextmenu");R("click");R("mousedown");R("mouseup");R("selectstart");
 }
-  
-var bstp='';
-if (siteNameVar=='yahooVideo'){bstp=`
-  iframe[id^="video"]{width:100%;aspect-ratio:1.78;height:auto;margin-top:0.5rem;border:none;border-radius:0.375rem}
-  hr{margin: 1rem 0;color: inherit;border: 0;border-top: 1px solid;opacity: 0.25;}
-  .pb-2{padding-bottom:0.5rem !important;}
-  .pt-2{padding-top:0.5rem !important;}
-  .pt-3{padding-top:0.75rem !important;}
-  .py-2{padding-top:0.5rem !important;padding-bottom:0.5rem !important;}
-  .p-2{padding:0.5rem !important}
-  .m-2{margin:0.5rem !important}
-  .me-1{margin-right:0.25rem !important}
-  .mb-1{margin-bottom:0.25rem !important}
-  .mb-3{margin-bottom:0.75rem !important}
-  .mx-3{margin-left:0.75rem !important;margin-right:0.75rem !important}
-  .fw-bold{font-weight:700 !important}
-  .sticky-top {position: sticky;top: 0;z-index: 1020;}
-  .position-fixed{position: fixed !important;} .top-0{top: 0 !important;} .end-0{right: 0 !important;}
-  .opacity-25 {opacity: 0.25 !important;}
-  .btn {
-    --bs-btn-padding-x: 0.75rem;
-    --bs-btn-padding-y: 0.375rem;
-    --bs-btn-font-family: ;
-    --bs-btn-font-size: 1rem;
-    --bs-btn-font-weight: 400;
-    --bs-btn-line-height: 1.5;
-    --bs-btn-color: var(--bs-body-color);
-    --bs-btn-bg: transparent;
-    --bs-btn-border-width: var(--bs-border-width);
-    --bs-btn-border-color: transparent;
-    --bs-btn-border-radius: 0.375rem;
-    --bs-btn-hover-border-color: transparent;
-    --bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-    --bs-btn-disabled-opacity: 0.65;
-    --bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), .5);
-    display: inline-block;
-    padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);
-    font-family: var(--bs-btn-font-family);
-    font-size: var(--bs-btn-font-size);
-    font-weight: var(--bs-btn-font-weight);
-    line-height: var(--bs-btn-line-height);
-    color: var(--bs-btn-color);
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
-    cursor: pointer;
-    user-select: none;
-    border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
-    border-radius: var(--bs-btn-border-radius);
-    background-color: var(--bs-btn-bg);
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-  }
-  .btn-light {
-    --bs-btn-color: #000;
-    --bs-btn-bg: #f8f9fa;
-    --bs-btn-border-color: #f8f9fa;
-  }
-  .text-end{text-align:right}
-`} else {bstp=''};
-  
+ 
 document.documentElement.innerHTML=`
 <!DOCTYPE html>
 <html>
@@ -175,7 +105,6 @@ document.documentElement.innerHTML=`
   }
   #container{min-height:100vh;margin:auto}
   .content{display:none;cursor:pointer}
-  ${bstp}
   iframe{width:100% !important;height:auto !important}
   video{width:100% !important;height:auto !important;border-radius:0.375rem}
   .sepia{background-color:#F4ECD8;color:#3B2D20}
@@ -186,7 +115,7 @@ document.documentElement.innerHTML=`
   .en-us{font-size:1.2rem}
   .fs10, .time, time, figcaption, table,div.inf,strong#article-byline.bbc-m04vo2,.bbc-1rvtlej,.bbc-1276odk {font-size:1rem}
   img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.375rem}
-  .caas-header,.caas-attr,.caas-readmore,.SubscriptionInner.mySubscriptionInner,.gmailNews, .raise_block,div[data-e2e^="youtube-embed"], .div-gpt-ad-cnyes_news_article_middle_2,.bbc-geybui,.bbc-1151pbn.ebmt73l0,img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.wrapper-TJ9ObuLF.skeleton-PsAlMQQF,img.logo-ocURKVwI.xxxsmall-ocURKVwI.skeleton-ocURKVwI.wrapper-TJ9ObuLF,.edn-ads--inlineAds,.inline-ads,.udn-ads,#sf_div-gpt-ad-1599104924568-0-1,.Google-special,#pumpkin_159,#inside_AD,.coffee-btn-wrapper,#bmc-tn-modal,.googlenews_Content,.reflist,.reflist.columns.references-column-width,#references-NoteFoot,.mw-editsection{display:none}
+  .bbc-geybui,.bbc-1151pbn.ebmt73l0,.caas-attr,.caas-header,.caas-readmore,.coffee-btn-wrapper,.div-gpt-ad-cnyes_news_article_middle_2,.edn-ads--inlineAds,.gmailNews,.googlenews_Content,.Google-special,.Google-special.d-md-block,.googlenews_Content,.inline-ads, img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.wrapper-TJ9ObuLF.skeleton-PsAlMQQF,img.logo-ocURKVwI.xxxsmall-ocURKVwI.skeleton-ocURKVwI.wrapper-TJ9ObuLF,img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.letter-PsAlMQQF,.js-advertise.ad-content,.mw-editsection,.raise_block,div[data-e2e^="youtube-embed"],.reflist,.reflist.columns.references-column-width,.SubscriptionInner.mySubscriptionInner,.udn-ads,#bmc-tn-modal,#inside_AD,#pumpkin_159,#references-NoteFoot,#sf_div-gpt-ad-1599104924568-0-1{display:none}
   .mw-heading1, .mw-heading2 {padding-top:3rem;color:#FF4D00;border-bottom:1px solid;border-color:#a2a9b1}
   .infobox.geography.vcard, .wikitable{max-width:100%!important}
   .bbc-2fjy3x{position:relative;height:0;width:5rem;height:5rem;} .bbc-1rvtlej{list-style:none;padding:0;margin:0;}
