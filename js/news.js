@@ -23,6 +23,7 @@ const peInsights=[['','Latest']];
 var preStr=''; if (window.location.href.indexOf('evenbeiter.github.io')!==-1){preStr=sCC(uLi,iOd)};
 const reuters=[['market:bond,crypto,economic,etf,forex,futures,index,stock','最新'],['market:forex','外匯'],['market:bond','債市'],['market:stock','股市'],['market:index','指數'],['market:futures','期貨'],['market:economic','經濟'],['market:crypto','加密貨幣'],['market:etf','ETF'],['area:WLD','全球'],['area:AME','美國'],['area:EUR','歐洲'],['area:ASI','亞洲'],['area:OCN','大洋洲'],['area:AFR','非洲']];
 const sina=[['sinago_finance_usstocks_feed','美股']];
+const substack=[['altgoesmainstream','Alt Goes Mainstream']];
 const technews=[['technews.tw/','最新'],['technews.tw/category/semiconductor/','半導體'],['technews.tw/category/component/','零組件'],['finance.technews.tw/','財經'],['technews.tw/category/internet/','網路'],['technews.tw/category/cutting-edge/','尖端科技'],['technews.tw/topics/','系列專題'],['technews.tw/category/natural-science/環境科學/','環境科學'],['technews.tw/category/能源科技/','能源科技']];
 const udn=[['id=&channelId=1&cate_id=0&type=breaknews','最新'],['channelId=2&type=cate_latest_news&cate_id=6638','要聞'],['channelId=2&type=cate_latest_news&cate_id=6645','股市'],['channelId=2&type=cate_latest_news&cate_id=7225','全球'],['channelId=2&type=subcate_articles&cate_id=7225&sub_id=124373','美國關稅'],['channelId=2&type=subcate_articles&cate_id=7225&sub_id=6811','全球財經'],['channelId=2&type=cate_latest_news&cate_id=6644','產經'],['channelId=1015&type=cate_latest_news&cate_id=0','雜誌'],['channelId=2&type=cate_latest_news&cate_id=6649','生活']];
 const udnMoney=[['0','即時'],['10846','要聞'],['5588','國際'],['5590','證券'],['12017','金融'],['11111','期貨'],['5592','理財'],['5591','產業'],['5589','兩岸'],['5593','房市'],['5595','專欄'],['5596','品味'],['122327','OFF學']];
@@ -57,7 +58,7 @@ const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-c
 const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
 const searchSites=[['lineToday','LINE'],['cnyes','鉅亨'],['wscn','華爾街見聞'],['ctee','工商'],['udnMoney','經濟日報'],['businessToday','今周刊']]; 
 const allSites1=[['msnTW','MSN 台灣'],['ctee','工商'],['udn','聯合'],['wealth','財訊'],['dw','德國之聲'],['wscn','華爾街見聞']];
-const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark']];
+const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['substack','Substack',substack,'substack.com','https://altgoesmainstream.substack.com/']];
 const videoSites=[['msnVideo','MSN'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2'],['reutersVideo','Reuters']];
 
 const faqB=[['yahooTW','Yahoo','私募'],['yahooTW','Yahoo','日股'],['yahooTW','Yahoo','美債']];
@@ -368,7 +369,7 @@ async function getContent(siteName,clickedId,id){
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
     cEl.style.display='block';
-    if (siteName!=='apollo'){
+    if (siteName!=='apollo'&&siteName!=='cnyeshao'&&cEl.innerText!=='繼續閱讀'){
       //need to get content for others (open div for apollo)
       if (cEl.innerText.length<50){
         //get content
@@ -1292,6 +1293,32 @@ async function sinaGetContent(id){
   var doc=parser.parseFromString(str, "text/html");
   html = '<p class="fs10">'+doc.querySelector('time').innerText.replace(/\s+/g,' ')+'</p>'+doc.querySelector('section.art_pic_card.art_content').outerHTML.replace(/src="data:image[\s\S]*?data-src/g,'src') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
+//    SUBSTACK
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function substackGetList(siteName,t){
+  try{url=preStr+'https://'+t+'.substack.com/api/v1/archive?sort=new&limit=20&offset='+(rr-1)*20;console.log(url);
+  let res=await fetch(url);
+  let str=await res.json();
+  for (let h of str){
+    items.push([h.slug,h.title])
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function substackGetContent(id){
+  try{const res = await fetch(preStr+'https://'+rt+'.substack.com/api/v1/posts/'+id);
+  const str=await res.json();
+  html = '<p class="fs10">'+cvt2Timezone(str.updated_at)+'</p><p>'+str.subtitle+'</p>'+str.body_html+'<p class="text-end"><a href="https://'+rt+'.substack.com/p/' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="https://'+rt+'.substack.com/p/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
