@@ -390,7 +390,7 @@ async function getContent(siteName,clickedId,id){
         //handle image src
         if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
         //convert sc to tc
-        if (siteName=='wscn'||siteName=='jin'||siteName=='sina'||siteName=='wiki'){convertTextInsideTags(cEl)};
+        if (siteName=='wscn'||siteName=='jin'||siteName=='sina'||siteName=='wiki'||siteName=='xueqiu'){convertTextInsideTags(cEl)};
         //remove elements
         if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})};
       }
