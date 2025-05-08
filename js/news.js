@@ -72,7 +72,7 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 
 const openContentDirectly=['apollo','cnyeshao'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const site2Translate=['msnUS','apollo','substack'];
+const sites2Translate=['apollo','msnUS','peInsights','substack'];
 
 
 //    GLOBAL VARIABLES
@@ -383,7 +383,7 @@ async function getContent(siteName,clickedId,id){
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
     cEl.style.display='block';
-    if (siteName!=='apollo'&&siteName!=='cnyeshao'&&cEl.innerText!=='繼續閱讀'){
+    if (!openContentDirectly.includes(siteName)&&cEl.innerText!=='繼續閱讀'){
       //need to get content for others (open div for apollo)
       if (cEl.innerText.length<50){
         //get content
@@ -395,18 +395,15 @@ async function getContent(siteName,clickedId,id){
         //handle image src
         if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
         //convert sc to tc
-        if (siteName=='wscn'||siteName=='jin'||siteName=='sina'||siteName=='wiki'||siteName=='xueqiu'){convertTextInsideTags(cEl)};
+        if (cvtSc2Tc.includes(siteName)){convertTextInsideTags(cEl)};
         //remove elements
         if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})};
       }
     }
     loading.style.display='none';
     //handle translation
-    if (siteName==='msnUS'||siteName==='apollo'||siteName==='substack'){
+    if (sites2Translate.includes(siteName)){
       var all=cEl.querySelectorAll('p, h2, li');
-      getTranslation(all);
-    } else if (siteName=='peInsights'){
-      var all=cEl.querySelectorAll('.tl');
       getTranslation(all);
     }
   } else {
