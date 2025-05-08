@@ -331,7 +331,9 @@ async function get1stList(siteName,top,t){
 
 async function get1stSearchResults(siteName,top){
   var checkUrl=[...allSitesB,...allSites2,...videoSitesB].find(pair=>pair[0]===siteName)?.[3];
-  if (onEVBT===true||window.location.href.indexOf(checkUrl)!==-1){
+  checkUrl=checkUrl.split('|');
+  for (let s of checkUrl){if (window.location.href.indexOf(s)!==-1){var onEXURL=true;break}else{var onEXURL=false}};
+  if (onEVBT===true||onEXURL===true){
     rr=0;
     getSearchResults(siteName);
     showTop(top+' | 搜尋：'+document.getElementById('search-term').value);
