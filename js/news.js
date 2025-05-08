@@ -1635,7 +1635,7 @@ async function xueqiuGetList(siteName,t){
   try{
   var k=3;
   for (let i=1;i<=k;i++){
-    url=preStr+'https://xueqiu.com/query/v1/search/status.json?sortId=2&q='t'+&page='+((rr-1)*k+i);console.log(url);
+    url=preStr+'https://xueqiu.com/query/v1/search/status.json?sortId=2&q='+t+'+&page='+((rr-1)*k+i);console.log(url);
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str.list){
