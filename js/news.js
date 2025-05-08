@@ -1,6 +1,8 @@
 //    FOR NEWSBEITER
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var onEVBT=true; if (window.location.href.indexOf('evenbeiter.github.io')==-1){onEVBT=false;}
+
 const apollo=[['','Latest']];
 const bbc=[['','首頁'],['topics/c83plve5vmjt','國際'],['topics/cd6qem06z92t','台灣'],['topics/cpydz21p2zmt','經濟'],['topics/cq8nqywy37yt','財經'],['topics/cgqny5mmrezt','股市'],['topics/cn05jy5nv81t','川普關稅'],['topics/cgvl47l38e1t','影片']];
 const bnext=[['articles','新聞'],['ranking','熱門'],['topics','專題'],['tags/AI','AI'],['categories/semiconductor','半導體'],['categories/AI','AI與大數據'],['categories/5g','5G通訊'],['categories/car','電動車/交通科技'],['categories/manufacture','智慧製造'],['categories/media','影音新媒體'],['categories/fintech','金融科技'],['categories/digitalskill','職場工作術']];
@@ -20,7 +22,7 @@ const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e
   ['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', 'Bloomberg'],['vid-mpxsw8rp392wedf25t8tfhk7r3b364q8dj75ks43nimmf06qg2es', 'Reuters'],['vid-r0r09b3muc6xnf5tv2est5f5ukjbkk67i9svrhyu3jy2pskkbems', 'MarketWatch'],['vid-y572a3ryyddhuiujs0xe2j4m4b6c3n2fp5hnux4jpsdand8h09ys', 'WSJ'],['vid-bpwfbvkfudq92wksju4upi9jrx2pn0ax46vrw0vkst93vpwr5pva', 'CNN'],['vid-v3atkpesfykfx7084fbu0cpbtx0jne99kctychfsn9ry96wsmbba', 'BBC'],['vid-r4du2vx0u9h0kr9tx7iyx55w7sneq7e6tg934epuehq3grvn05aa', 'Fortune'],['vid-n3h9ssyxg550pryvt4287xynyckhu84k5vc6n3tdqwsvtvmn2p0s', 'USA TODAY'],['vid-27xbtchrc5gpxe8uhvw9f24q2kqi9f0ppk7ptb8xw9v9sscheg6s', 'Motley Fool'],['vid-i3g0qyhrtn28biukcpyvsrmhccmv8k8ugtmtr6kqhb9dkf6ccrua', 'FOX News'],['vid-rvn4g4busxh65p6kgfvhye9atw9n8ebd46ut057ypkbm5n6xa5ts', 'BuzzFeed']];
 const newslens=[['latest-article/','最新'],['event-tag/380574-2025川普對等關稅/','對等關稅'],['tag/22338/','川普'],['category/economy/','經濟'],['category/business/','商業'],['category/personal-finance/','理財'],['tag/5260/','美債'],['category/tech/','科技'],['tag/3503/','供應鏈'],['tag/30/','台灣'],['category/world/','國際'],['category/us-canada/','美加'],['tag/83/','美國'],['category/europe/','歐洲'],['category/china/','中國'],['category/indo-pacific/','印太'],['tag/64/','日本'],['category/latin-america/','拉美'],['category/middle-east/','中東'],['category/africa/','非洲'],['author/BBC/','BBC中文'],['author/cnataiwan/','中央社'],['category/arts-culture/','藝文'],['category/literature/','文學'],['category/movie-tv/','影劇'],['category/health/','健康'],['category/lifestyle/','生活'],['category/psychology/','心理'],['category/language/','語文'],['author/bookdigest/','書摘'],['author/editor/','轉載']];
 const peInsights=[['','Latest']];
-var preStr=''; if (window.location.href.indexOf('evenbeiter.github.io')!==-1){preStr=sCC(uLi,iOd)};
+var preStr=''; if (onEVBT===true){preStr=sCC(uLi,iOd)};
 const reuters=[['market:bond,crypto,economic,etf,forex,futures,index,stock','最新'],['market:forex','外匯'],['market:bond','債市'],['market:stock','股市'],['market:index','指數'],['market:futures','期貨'],['market:economic','經濟'],['market:crypto','加密貨幣'],['market:etf','ETF'],['area:WLD','全球'],['area:AME','美國'],['area:EUR','歐洲'],['area:ASI','亞洲'],['area:OCN','大洋洲'],['area:AFR','非洲']];
 const sina=[['sinago_finance_usstocks_feed','美股']];
 const substack=[['altgoesmainstream','Alt Goes Mainstream']];
@@ -63,7 +65,7 @@ const videoSites=[['msnVideo','MSN'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',
 
 const faqB=[['yahooTW','Yahoo','私募'],['yahooTW','Yahoo','日股'],['yahooTW','Yahoo','美債']];
 const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday','LINE']]; 
-const allSitesB=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/']];
+const allSitesB=[['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/']];
 const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
 
@@ -73,11 +75,10 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 var siteNameVar='',docTitle='',tabs=[];
 var items=[],url='',html='',coun='',t='',uuids='',cursor='',payload={},rt='',rr=0;
 
-
 //    RENDER HTML FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (window.location.href.indexOf('evenbeiter.github.io')==-1){
+if (onEVBT===false){
 
 for (let l of [...allSitesB,...allSites2,...videoSitesB]) {
   var ss=l[3].split('|');
@@ -210,7 +211,7 @@ var loading=document.getElementById('loading');
 //    CREATE CHANNEL, SEARCH & URL LIST FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-if (window.location.href.indexOf('evenbeiter.github.io')==-1){
+if (onEVBT===false){
   if (siteNameVar!==''){
     createChannelList(tabs,siteNameVar,docTitle);
     createSearchListDiv(faqB,searchSitesB);
@@ -304,7 +305,7 @@ function createSearchListDiv(faqList,searchSiteList){
 }
 
 function createUrlListDiv(sitesList){
-  if (window.location.href.indexOf('evenbeiter.github.io')!==-1){
+  if (onEVBT===true){
     for (let s of sitesList){
       for (let tab of s){
         urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
@@ -329,9 +330,13 @@ async function get1stList(siteName,top,t){
 }
 
 async function get1stSearchResults(siteName,top){
-  rr=0;
-  getSearchResults(siteName);
-  showTop(top+' - 搜尋：'+document.getElementById('search-term').value);
+  if (onEVBT===true){
+    rr=0;
+    getSearchResults(siteName);
+    showTop(top+' | 搜尋：'+document.getElementById('search-term').value);
+  } else {
+    openUrl([...allSitesB,...allSites2,...videoSitesB].find(pair=>pair[0]===siteName)?.[4]);
+  }
 }
 
 function getFAQSearchResults(siteName,top,t){
@@ -1217,7 +1222,7 @@ async function newslensGetList(siteName,t){
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('h3');
-  if (hh.length==0){var hh=document.querySelectorAll('div.item-title.h6')};
+  if (hh.length==0){var hh=doc.querySelectorAll('div.item-title.h6')};
   for (let h of hh){
     items.push([h.querySelector('a').href,h.querySelector('a').innerText])
   }
@@ -1672,22 +1677,7 @@ async function yahooTWGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function yahooVideoGetList(siteName,t){
-  try{var payload={
-    "payload":{
-      "gqlVariables": {
-          "main": {
-              "pagination": {
-                  "uuids": uuids
-              }
-          }
-      }
-  },
-    "serviceConfig": {
-      "listId": t,
-      "count": 200,
-      "snippetCount": 50
-    }
-  };
+  try{var payload={"payload":{"gqlVariables": {"main": {"pagination": {"uuids": uuids}}}},"serviceConfig": {"listId": t,"count": 200,"snippetCount": 50}};
   var url='https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
   var res = await fetch(url, {
     method: 'POST',
