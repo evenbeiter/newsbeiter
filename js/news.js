@@ -47,7 +47,7 @@ const cnyeshao=[['W_1','最新'],['W_2','推薦'],['W_8','美股'],['W_40','台�
 const invtCom=[['rates-bonds/u.s.-10-year-bond-yield-news/','債市'],['news/forex-news/','匯市'],['news/latest-news/','最新'],['news/economy/','財經'],['news/economic-indicators/','經濟數據'],['news/commodities-news/','原物料'],['news/cryptocurrency-news/','加密貨幣'],['indices/japan-ni225-news/','日經'],['indices/topix-news/','東證'],['analysis/market-overview/','市場評論'],['analysis/editors-picks/','精選評論']];
 const isbl=[['','Latest']];
 const marie=[['160/Julia','Julia']];
-const xueqiu=[['巴菲特致股东的信原文精读','巴菲特致股東信']];
+const xueqiu=[['203','新聞'],['205','達人'],['巴菲特致股东的信原文精读','巴菲特致股東信']];
 const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8-47bd-b0d8-96b89a20d817','即時'],['a8a208bf-23e1-4950-8aba-8a8d1c0c2da5','財經'],['f10835b8-98fe-48b4-a506-023937ab0a4b','Yahoo 特派'],['4e1fb4b1-9bf1-4d00-81a1-64001c935310','股匯市'],['cdbe8dd0-22d4-11ea-bbfb-7e2fb6871bd3','台股盤勢'],['9f0e62c0-22d5-11ea-bede-345eb8f1edf4','國際財經'],['e9628320-22d4-11ea-9ef0-2fabb53ab0e9','基金動態'],['381351b0-6d8c-11e9-bb53-0fc098ecd9a1','雜誌'],['ad05d340-22d5-11ea-9db1-fe39a6582c47','研究報告'],['70394000-22d5-11ea-bef4-114a94a8f820','小資理財'],['875b56b0-22d5-11ea-95cf-d43d8a1a8360','專家專欄'],['ebb0818f-c3e6-4c43-ab06-7fabe34c02f5','產業'],['65c6fa3b-b4c8-42e7-afed-c468a927d71f','國際'],['9336b431-7f5d-4dba-b06d-0dce56fb3f8f','娛樂'],['47409191-3f19-48a5-b99a-b7a19c5152f1','Yahoo'],['1af9d85f-9f45-4f07-a290-d6116fcd7e94','BBC'],['fbe20d0c-5704-4a52-a6dd-862b105734a8','中時'],['e9162370-a63f-41e1-b6ab-a2ca4bc88aa3','三立'],['841ae727-aaf4-4d96-89e8-6023380a5f0d','TVBS'],['d1c5195f-8c50-441f-8d4f-192505ff481a','公視'],['616c3db4-1af4-4d9a-90c2-e8d5b61fdca8','中天'],['24a219a6-e124-4d54-85c0-da53c42dad3f','聯合'],['1eeeee88-4e98-49f5-9283-d95b59faa8d0','東森'],['92e62bbd-f6b0-4ff2-ae60-da5e92602b8b','CWANT'],['15344921-beff-4849-8c1e-799f00eb6104','壹蘋'],['15fd91e7-7935-439f-a2a9-caea96a5c3db','鏡週刊'],['81870ef4-46f4-4ed2-a2b3-d436b9b85c06','NOWNews'],['80c8c637-4f0d-4df0-8c2e-d66523148f6d','台視'],['"75f58300-9102-4339-a493-1e2f3e31313c"','民視'],['f0caaf82-30b3-4e6c-a2eb-aa9577dbe7d4','華視'],['483b66c7-0238-411e-be93-53e1478272d3','新頭殻'],['71b213f3-88c4-41fe-b9f0-a59e9045e2d0','風傳媒'],['275994b0-0e8a-11eb-9ffd-16766ba98f36','BBC中文'],['bd00c410-4b30-4245-abf8-d23656709efa__','Latest'],['db1d46e0-a969-11e9-bff5-6dfdb80d79cf__','Stock Market News'],['04d9350a-bbd1-4787-95be-740cc5ee8852__','Earnings'],['0897608a-7d79-47df-9377-b07bd22b0fde__','Yahoo Finance'],['ed5c8883-d951-4e70-87b3-9f8f375fb410__','Premium News'],['dffbd430-02a2-11e7-bcfc-437e9432ca73__','Tech'],['b1f0c990-db7a-11e7-a937-0d92c86f9da1__','Crypto']];
 
 
@@ -378,7 +378,7 @@ async function getContent(siteName,clickedId,id){
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
     cEl.style.display='block';
-    if (siteName!=='apollo'&&siteName!=='cnyeshao'&&siteName!=='xueqiu'&&cEl.innerText!=='繼續閱讀'){
+    if (siteName!=='apollo'&&siteName!=='cnyeshao'&&cEl.innerText!=='繼續閱讀'){
       //need to get content for others (open div for apollo)
       if (cEl.innerText.length<50){
         //get content
@@ -1633,19 +1633,42 @@ async function wscnGetSearchResults(siteName,t){
 
 async function xueqiuGetList(siteName,t){
   try{
-  var k=3;
-  for (let i=1;i<=k;i++){
-    url=preStr+'https://xueqiu.com/query/v1/search/status.json?sortId=2&q='+t+'+&page='+((rr-1)*k+i);console.log(url);
-    let res=await fetch(url);
-    let str=await res.json();
-    for (let h of str.list){
-      items.push([h.target,h.title?h.title:h.description,h.created_at,h.text,h.user.screen_name]);
+  if (/[0-9]/.test(t)){
+    var k=3;
+    for (let i=1;i<=k;i++){
+      url='https://xueqiu.com/recommend-proxy/anonymous_recommend.json?category='+t+'&page='+((rr-1)*k+i);console.log(url);
+      let res=await fetch(url);
+      let str=await res.json();
+      for (let h of str.list){
+        items.push([h.target,h.title]);
+      }    
+    }
+    for (let h of items){
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`;
+    }    
+  } else {
+    var k=3;
+    for (let i=1;i<=k;i++){
+      url='https://xueqiu.com/query/v1/search/status.json?sortId=2&q='+t+'+&page='+((rr-1)*k+i);console.log(url);
+      let res=await fetch(url);
+      let str=await res.json();
+      for (let h of str.list){
+        items.push([h.target,h.title?h.title:h.description,h.created_at,h.text,h.user.screen_name]);
+      }    
+    }
+    for (let h of items){
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3]}<p class="text-end"><a href="https://xueqiu.com${h[0]}" target="_blank">分享</a></p><br></div><hr>`;
     }    
   }
-  for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3]}<p class="text-end"><a href="https://xueqiu.com${h[0]}" target="_blank">分享</a></p><br></div><hr>`;
-  }
   }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function xueqiuGetContent(id){
+  try{const res=await fetch('https://xueqiu.com'+id);const str=await res.text();
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  html = '<p class="fs10">'+doc.querySelector('.avatar__subtitle').innerText+'</p>'+doc.querySelector('.article__bd__detail').outerHTML+ '<p class="text-end"><a href="https://xueqiu.com' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="https://xueqiu.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
