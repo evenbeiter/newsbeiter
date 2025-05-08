@@ -70,6 +70,10 @@ const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday',
 const allSitesB=[['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
+const openContentDirectly=['apollo','cnyeshao'];
+const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
+const site2Translate=['msnUS','apollo','substack'];
+
 
 //    GLOBAL VARIABLES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
