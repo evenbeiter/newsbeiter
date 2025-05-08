@@ -362,7 +362,7 @@ async function getList(siteName,t){
   else if (siteName=='msnUS'){list.innerHTML+=await msnGetList(siteName,t,'en-us')}
   else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
   loading.style.display='none';
-  if (siteName==='msnUS'||siteName==='apollo'||siteName==='substack'){
+  if (sites2Translate.includes(siteName)){
     var all=document.querySelectorAll('.t-tl');
     getTranslation(all);
   }
@@ -403,7 +403,7 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='none';
     //handle translation
     if (sites2Translate.includes(siteName)){
-      var all=cEl.querySelectorAll('p, h2, li');
+      var all=cEl.querySelectorAll('p, h2, h3, li');
       getTranslation(all);
     }
   } else {
@@ -1235,7 +1235,7 @@ async function peInsightsGetContent(id){
   var a=doc.querySelector('section[data-id="4813b0f"]');
 
   if (a) {
-    html = img.outerHTML+'<br>'+a.outerHTML.replaceAll('<h3','<p class="tl"').replaceAll('</h3>','</p>').replaceAll('<p','<p class="tl"').replaceAll(/<span[\s\S]*?">/g,'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+    html = img.outerHTML+'<br>'+a.outerHTML.replaceAll(/<span[\s\S]*?">/g,'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
