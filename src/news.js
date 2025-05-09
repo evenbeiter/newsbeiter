@@ -200,72 +200,20 @@ if (onEVBT===false){
 
 
 
-
-
 //    GLOBAL FUNCTIONS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function showTop(t){
-  topdiv.innerText=t;
-  topdiv.style.display='block';
-}
-
-function openChannelList(){
-  channelList.style.display='block';
-  searchList.style.display='none';
-  urlList.style.display='none';
-  options.style.display='block';
-  topdiv.style.display='none';
-}
-
-function openSearchList(){
-  document.getElementById('search-term').value='';
-  channelList.style.display='none';
-  searchList.style.display='block';
-  urlList.style.display='none';
-  options.style.display='block';
-  topdiv.style.display='none';
-}
-
-function openUrlList(){
-  channelList.style.display='none';
-  searchList.style.display='none';
-  urlList.style.display='block';
-  options.style.display='block';
-  topdiv.style.display='none';
-}
-
-function openOptions(){
-  if (options.style.display=='none'){
-    options.style.display='block';
-    topdiv.style.display='none';
-  } else {
-    options.style.display='none';
-    topdiv.style.display='block';
-  }
-}
-
-async function ping(){
-  var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');
-}
-
 function createChannelList(site,siteName,top){
   channelList.innerHTML='';
-  for (let tab of site){
-    channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top} | ${tab[1]}','${tab[0]}')">${tab[1]}</button>`;
-  }
+  for (let tab of site){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top} | ${tab[1]}','${tab[0]}')">${tab[1]}</button>`;}
   openChannelList();
   get1stList(siteName, top+' | '+site[0][1],site[0][0]);
 }
 
 function createSearchListDiv(faqList,searchSiteList){
-  for (let tab of faqList){
-    searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}','${tab[2]}')">${tab[2]}</button>`;
-  }  
+  for (let tab of faqList){searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getFAQSearchResults('${tab[0]}','${tab[1]}','${tab[2]}')">${tab[2]}</button>`;}  
   searchList.innerHTML+='<input type="search" id="search-term" class="form-control my-2">';
-  for (let tab of searchSiteList){
-    searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
-  }
+  for (let tab of searchSiteList){searchList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stSearchResults('${tab[0]}','${tab[1]}')">${tab[1]}</button>`;}
 }
 
 function createUrlListDiv(sitesList){
@@ -325,15 +273,6 @@ async function getList(siteName,t){
   }
 }
 
-async function getSearchResults(siteName){
-  loading.style.display='block';
-  siteNameVar=siteName;rr++;rt='s';cursor='';
-  if (rr==1){newNews()};
-  items=[];html='';
-  list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
-  loading.style.display='none';
-}
-
 async function getContent(siteName,clickedId,id){
   var cEl=document.getElementById(id);
   try{document.getElementById('dateAuthor-'+id).style.display='none'}catch{};
@@ -376,22 +315,13 @@ async function getContent(siteName,clickedId,id){
   }
 }
 
-function newNews(){
-  options.style.display='none';
-  document.body.scrollTop = 0;
-  document.documentElement.scrollTop = 0;
-  list.innerHTML='';
-}
-
-function openUrl(url){
-  window.open(url,'_blank')
-}
-
-function decodeHTMLEntities(str){
-  var ta=document.createElement('textarea');
-  ta.innerHTML = str;
-  return ta.value;
-  ta.remove();
+async function getSearchResults(siteName){
+  loading.style.display='block';
+  siteNameVar=siteName;rr++;rt='s';cursor='';
+  if (rr==1){newNews()};
+  items=[];html='';
+  list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
+  loading.style.display='none';
 }
 
 function cvtS2HHMMSS(sec,rescale) {
@@ -406,19 +336,6 @@ function cvtS2HHMMSS(sec,rescale) {
         return hh+':'+mm+':'+ss;
     }
     return mm+':'+ss;
-}
-
-function cvt2Timezone(timestamp) {
-  const date = new Date(timestamp);
-  return date.toLocaleString('zh-TW',{timeZone:'Asia/Taipei'});
-}
-
-function sCC(a,ii){
-  let result='';
-  for (const i of ii){
-    if (i>=0 && i<a.length){result+=a[i]}
-  }
-  return result;
 }
 
 async function translate(a){
@@ -442,23 +359,6 @@ async function getTranslation(all){
     }
   }
 }
-
-function cnTest(str) {
-  const chineseCharRegex = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;
-  return chineseCharRegex.test(str);
-}
-
-function convertTextInsideTags(element) {
-  for (let child of element.childNodes) {
-    if (child.nodeType === Node.TEXT_NODE) {
-      // Convert text content using OpenCC
-      child.nodeValue = s2t(child.nodeValue.trim());
-    } else if (child.nodeType === Node.ELEMENT_NODE) {
-      // Recursively process child elements
-      convertTextInsideTags(child);
-    }
-  }
-}
   
 let scrollTimeout;
 window.onscroll = function () {
@@ -477,6 +377,19 @@ window.onscroll = function () {
   }, 1000);
 };
 
+function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
+function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
+function openChannelList(){channelList.style.display='block';searchList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
+function openSearchList(){document.getElementById('search-term').value='';channelList.style.display='none';searchList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
+function openUrlList(){channelList.style.display='none';searchList.style.display='none';urlList.style.display='block';options.style.display='block';topdiv.style.display='none';}
+function openOptions(){if (options.style.display=='none'){options.style.display='block';topdiv.style.display='none';} else {options.style.display='none';topdiv.style.display='block';}}
+async function ping(){var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');}
+function cvt2Timezone(timestamp) {const date = new Date(timestamp);return date.toLocaleString('zh-TW',{timeZone:'Asia/Taipei'});}
+function sCC(a,ii){let result='';for (const i of ii){if (i>=0 && i<a.length){result+=a[i]}}return result;}
+function openUrl(url){window.open(url,'_blank')}
+function decodeHTMLEntities(str){var ta=document.createElement('textarea');ta.innerHTML = str;return ta.value;}
+function cnTest(str) {const chineseCharRegex = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;return chineseCharRegex.test(str);}
+function convertTextInsideTags(element) {for (let child of element.childNodes) {if (child.nodeType === Node.TEXT_NODE) {child.nodeValue = s2t(child.nodeValue.trim());} else if (child.nodeType === Node.ELEMENT_NODE) {convertTextInsideTags(child);}}}
 
 
 //    FETCH FUNCTIONS
