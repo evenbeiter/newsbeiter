@@ -1534,7 +1534,7 @@ async function xueqiuGetList(siteName,t){
     for (let i=1;i<=k;i++){
       url='https://xueqiu.com/recommend-proxy/anonymous_recommend.json?category='+t+'&page='+((rr-1)*k+i)+'&last_id='+lastId;console.log(url);
       const res=await fetch(url);const str=await res.json();lastId=str.list[str.list.length-1].id;
-      for (let h of str.list){items.push([h.target,h.title]);}    
+      for (let h of str.list){items.push([h.target,(h.title===undefined||h.title===null||h.title==='')?h.description:h.title]);}    
     }
     for (let h of items){
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`;
@@ -1544,7 +1544,7 @@ async function xueqiuGetList(siteName,t){
     for (let i=1;i<=k;i++){
       url='https://xueqiu.com/query/v1/search/status.json?sortId=2&q='+t+'+&page='+((rr-1)*k+i);console.log(url);
       const res=await fetch(url);const str=await res.json();
-      for (let h of str.list){items.push([h.target,h.title?h.title:h.description,h.created_at,h.text,h.user.screen_name]);}    
+      for (let h of str.list){items.push([h.target,(h.title===undefined||h.title===null||h.title==='')?h.description:h.title,h.created_at,h.text,h.user.screen_name]);}    
     }
     for (let h of items){
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3]}<p class="text-end"><a href="https://xueqiu.com${h[0]}" target="_blank">分享</a></p><br></div><hr>`;
