@@ -1145,16 +1145,16 @@ async function msnGetContent(id){
   var d=await res.json();
 
   if (d.type==='article'){
-    html = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</p>' +(d.body?d.body.replaceAll('\/>','\/><br>'):'')+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
+    html = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name||'')+'</p>' +(d.body?d.body.replaceAll('\/>','\/><br>'):'')+ '<p class="text-end"><a href="' + (d.sourceHref||'') + '" target="_blank">分享</a></p><br>';
   } else if (d.type==='slideshow'){
     var slides=d.slides;
     var slidesHtml='';
     for (let s of slides){
       slidesHtml+='<img src="'+(s.image.url?s.image.url:'')+'"><br><p>'+(s.title?s.title:'')+'</p>'+(s.body?s.body:'');
     }
-    html = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name ? d.provider.name:'')+'</p>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">分享</a></p><br>';
+    html = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name||'')+'</p>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref||'') + '" target="_blank">分享</a></p><br>';
   } 
-  }catch{html='<p><a href="' + (d.sourceHref ? d.sourceHref:'') + '" target="_blank">繼續閱讀</a></p><br>'}
+  }catch{html='<p><a href="' + ((d && d.sourceHref)||'') + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
