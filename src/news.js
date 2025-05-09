@@ -73,6 +73,8 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 const openContentDirectly=['apollo','cnyeshao'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
 const sites2Translate=['apollo','msnUS','peInsights','substack'];
+const msnALL=['msnTW','msnUS'];
+const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader';
 
 
 //    GLOBAL VARIABLES
@@ -314,8 +316,7 @@ async function getList(siteName,t){
   siteNameVar=siteName;rr++;rt=t;cursor='';
   if (rr==1){newNews()};
   items=[];html='';
-  if (siteName=='msnTW'){list.innerHTML+=await msnGetList(siteName,t,'zh-tw')}
-  else if (siteName=='msnUS'){list.innerHTML+=await msnGetList(siteName,t,'en-us')}
+  if (msnALL.includes(siteName)){list.innerHTML+=await msnGetList(siteName,t)}
   else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
   loading.style.display='none';
   if (sites2Translate.includes(siteName)){
@@ -343,17 +344,14 @@ async function getContent(siteName,clickedId,id){
       //need to get content for others (open div for apollo)
       if (cEl.innerText.length<50){
         //get content
-        if (siteName=='msnTW'){cEl.innerHTML+=await msnGetContent(id,'zh-tw')}
-        else if (siteName=='msnUS'){cEl.innerHTML+=await msnGetContent(id,'en-us')}
+        if (msnALL.includes(siteName)){cEl.innerHTML+=await msnGetContent(id)}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
         //remove image style
-        cEl.querySelectorAll('img, figure, figure.caas-figure div.caas-figure-with-pb, .caas-img-container, .caas-img-loader, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x').forEach(img => {img.removeAttribute('style')});
+        cEl.querySelectorAll(rmImgStyle).forEach(img => {img.removeAttribute('style')});
         //handle image src
-        if (siteName=='msnTW'||siteName=='msnUS'){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
+        if (msnALL.includes(siteName)){cEl.querySelectorAll('img').forEach(img=>{img.src='https://img-s-msn-com.akamaized.net/tenant/amp/entityid/'+img.getAttribute('data-document-id').slice(18)+'.img'})};
         //convert sc to tc
         if (cvtSc2Tc.includes(siteName)){convertTextInsideTags(cEl)};
-        //remove elements
-        if (siteName=='dw'){cEl.querySelectorAll('h2 svg').forEach(a=>{a.remove()})};
       }
     }
     loading.style.display='none';
@@ -368,7 +366,7 @@ async function getContent(siteName,clickedId,id){
       cEl.style.display='none';
       if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
       try{
-        if (siteName=='msnTW'||siteName=='msnUS'){
+        if (msnALL.includes(siteName)){
           cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()
         } else {
           cEl.previousElementSibling.previousElementSibling.scrollIntoView()
@@ -1068,7 +1066,8 @@ async function lineTodayGetContent(id){
 }
 
 async function lineTodayGetSearchResults(siteName,t){
-  try{url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
+ //try{
+  url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
   let res=await fetch(url);
   let str=await res.json();
   for (let a of str.items){
@@ -1083,7 +1082,7 @@ async function lineTodayGetSearchResults(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[2]}<br><span id="dateAuthor-${h[0]}" class="fs10 fw-normal">${cvt2Timezone(h[1])} | ${h[3]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
-  }catch{html='<p>尚無內容</p>'}
+  //}catch{html='<p>尚無內容</p>'}
   return html;
 }
 
@@ -1116,7 +1115,8 @@ async function mindiGetContent(id){
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function msnGetList(siteName,t,coun){
+async function msnGetList(siteName,t){
+  if(siteName.slice(-2)=='TW'){coun='zh-tw'}else{coun='en-us'};
   try{if (t.slice(0,2)==='Y_'){
     var srvc='channelfeed';
     t='InterestIds='+t;
@@ -1140,7 +1140,7 @@ async function msnGetList(siteName,t,coun){
   return html;
 }
 
-async function msnGetContent(id,coun){
+async function msnGetContent(id){
   try{var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
   var d=await res.json();
 
