@@ -242,7 +242,7 @@ async function get1stList(siteName,top,t){
 }
 
 async function get1stSearchResults(siteName,top){
-  var checkUrl=[...allSitesB,...allSites2,...videoSitesB].find(pair=>pair[0]===siteName)?.[3];
+  var checkUrl=[...allSites1,...allSites2,...allSitesB,...videoSitesB].find(pair=>pair[0]===siteName)?.[3];
   checkUrl=checkUrl.split('|');
   for (let s of checkUrl){if (window.location.href.indexOf(s)!==-1){var onEXURL=true;break}else{var onEXURL=false}};
   if (onEVBT===true||onEXURL===true){
@@ -250,7 +250,7 @@ async function get1stSearchResults(siteName,top){
     getSearchResults(siteName);
     showTop(top+' | 搜尋：'+document.getElementById('search-term').value);
   } else {
-    openUrl([...allSitesB,...allSites2,...videoSitesB].find(pair=>pair[0]===siteName)?.[4]);
+    openUrl([...allSites1,...allSites2,...allSitesB,...videoSitesB].find(pair=>pair[0]===siteName)?.[4]);
   }
 }
 
