@@ -112,52 +112,8 @@ document.documentElement.innerHTML=`
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link href="src/news.css" rel="stylesheet">
 <title>${docTitle}</title>
-<style>
-  body {background-color:#F4ECD8;color:#3B2D20;font-size:1.5rem;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  }
-  #container{min-height:100vh;margin:auto}
-  .content{display:none;cursor:pointer}
-  iframe{width:100% !important;height:auto !important}
-  video{width:100% !important;height:auto !important;border-radius:0.375rem}
-  .sepia{background-color:#F4ECD8;color:#3B2D20}
-  .sepia-contrast{background-color:#3B2D20;color:#F4ECD8}
-  h1,h2,h3,h4,h5,h6,.title{font-size:1.5rem;color:#3B2D20 !important;font-weight:bold}
-  a,figcaption{word-wrap:break-word;white-space:normal;overflow-wrap:break-word;word-break:break-word}
-  h1 a {color: navy; font-weight: bold; text-decoration:none;cursor:pointer}
-  .en-us{font-size:1.2rem}
-  .fs10, .time, time, figcaption, table,div.inf,strong#article-byline.bbc-m04vo2,.bbc-1rvtlej,.bbc-1276odk {font-size:1rem}
-  img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.375rem}
-  .bbc-geybui,.bbc-1151pbn.ebmt73l0,.caas-attr,.caas-header,.caas-readmore,.coffee-btn-wrapper,.div-gpt-ad-cnyes_news_article_middle_2,.edn-ads--inlineAds,.gmailNews,.googlenews_Content,.Google-special,.Google-special.d-md-block,.googlenews_Content,.inline-ads, img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.wrapper-TJ9ObuLF.skeleton-PsAlMQQF,img.logo-ocURKVwI.xxxsmall-ocURKVwI.skeleton-ocURKVwI.wrapper-TJ9ObuLF,img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.letter-PsAlMQQF,.js-advertise.ad-content,.mw-editsection,.raise_block,div[data-e2e^="youtube-embed"],.reflist,.reflist.columns.references-column-width,.SubscriptionInner.mySubscriptionInner,.udn-ads,#bmc-tn-modal,#inside_AD,#pumpkin_159,#references-NoteFoot,#sf_div-gpt-ad-1599104924568-0-1{display:none}
-  .mw-heading1, .mw-heading2 {padding-top:3rem;color:#FF4D00;border-bottom:1px solid;border-color:#a2a9b1}
-  .infobox.geography.vcard, .wikitable{max-width:100%!important}
-  .bbc-2fjy3x{position:relative;height:0;width:5rem;height:5rem;} .bbc-1rvtlej{list-style:none;padding:0;margin:0;}
-  #loading{position:fixed !important;width:100% !important;top:0% !important;left:0% !important}
-  #loading-gif{position:absolute !important;top:50% !important;left:50% !important;transform: translate(-50%, -50%);}
-  @media only screen 
-    and (min-device-width: 768px) 
-    and (max-device-width: 1023px) 
-    and (-webkit-min-device-pixel-ratio: 2) {
-    body{font-size:2rem} h1,h2,h3,h4,h5,h6,.title{font-size:2rem} .en-us{font-size:1.6rem} .fs10, .time, figcaption, .btn{font-size:1.3rem} #list{padding:2rem} svg.bi{height:2.8rem !important;width:2.8rem !important}
-  }
-  @media only screen 
-    and (min-device-width: 1024px) 
-    and (max-device-width: 1365px)
-    and (-webkit-min-device-pixel-ratio: 2) {
-    body{font-size:2rem} h1,h2,h3,h4,h5,h6,.title{font-size:2rem} .en-us{font-size:1.6rem} .fs10, .time, figcaption, .btn{font-size:1.3rem} #list{padding:2rem} svg.bi{height:2.8rem !important;width:2.8rem !important}
-  }
-  @media (min-width:1200px){
-    @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
-    body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
-    #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8}
-    .sepia{background-color:#F8F8F8;color:#3B3B3B}
-    .sepia-contrast{background-color:#3B3B3B;color:#F8F8F8}
-    #list, .btn {font-weight:bold}
-    h1,h2,h3,h4,h5,h6,.title{font-size:1.2rem;color:#3B3B3B !important;font-weight:bold}
-    #loading{width:5rem;height:5rem}
-  }
-</style>
 </head>
 <body style="margin:0">
 <div id="container">
@@ -170,7 +126,7 @@ document.documentElement.innerHTML=`
 </div>
 <div id="top" class="fs10 p-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:none"></div>
   <form id="btn-group" class="p-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
-    <div id="btn">
+    <div id="btn" class="p-2">
       <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
       <hr style="margin-right:3rem">
       <div id="channelList"></div>
