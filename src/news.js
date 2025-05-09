@@ -115,7 +115,7 @@ document.documentElement.innerHTML=`
 <link href="src/news.css" rel="stylesheet">
 <title>${docTitle}</title>
 </head>
-<body style="margin:0">
+<body>
 <div id="container">
 <div class="sticky-top position-fixed m-2 top-0 end-0" style="z-index:1030;padding-top:3rem">
   <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="openOptions()">
