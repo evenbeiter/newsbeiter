@@ -1644,9 +1644,8 @@ async function yahooVideoGetContent(clickedId,id,url){
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    var nuxtDataItem = '<iframe id="video-'+id+'" src="'+url+'?format=embed" scrolling=no style="width:100%;height:auto"></iframe>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
-    cEl.innerHTML=nuxtDataItem;
-
+    html='<iframe id="video-'+id+'" src="'+url+'?format=embed" scrolling=no style="width:100%;height:auto"></iframe>'+'<p class="text-end"><a href="' + url + '" target="_blank">Share</a></p><br>';
+    cEl.innerHTML=html;
     document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
   } else {
     if (clickedId=='' || cEl.innerHTML.indexOf('<video')==-1){
