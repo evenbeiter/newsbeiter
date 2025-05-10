@@ -1530,7 +1530,7 @@ async function wscnGetSearchResults(siteName,t){
 async function xueqiuGetList(siteName,t){
   try{
   if (/[0-9]/.test(t)){
-    var k=3;
+    var k=3;lastId='';
     for (let i=1;i<=k;i++){
       url='https://xueqiu.com/recommend-proxy/anonymous_recommend.json?category='+t+'&page='+((rr-1)*k+i)+'&last_id='+lastId;console.log(url);
       const res=await fetch(url);const str=await res.json();lastId=str.list[str.list.length-1].id;
