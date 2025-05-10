@@ -528,11 +528,7 @@ async function businessTodayGetContent(id){
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
-  const img=doc.querySelector('.article__mainbanner');
-  const t=doc.querySelector('.context__info-item--date');
-  const au=doc.querySelector('.context__info-item--author');
-  const a = doc.querySelector('.Zi_ad_ar_iR');
-  html = '<p class="fs10">'+t.innerText+' | '+au.innerText+'</p>'+a.outerHTML.replaceAll('<p>&nbsp;</p>','') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="fs10">'+(doc.querySelector('.context__info-item--date')?doc.querySelector('.context__info-item--date').innerText:'')+' | '+(doc.querySelector('.context__info-item--author')?doc.querySelector('.context__info-item--author').innerText:'')+'</p>'+(doc.querySelector('.Zi_ad_ar_iR')?doc.querySelector('.Zi_ad_ar_iR').outerHTML.replaceAll('<p>&nbsp;</p>',''):'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
