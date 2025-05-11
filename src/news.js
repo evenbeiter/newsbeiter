@@ -541,7 +541,7 @@ async function businessTodayGetSearchResults(siteName,t){
   var doc = parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('.searchitem__content');
   for (let h of hh){
-    var href=hh[0].children[1].children[0].href;
+    var href=h.children[1].children[0].href;
     href= href.slice(0,href.indexOf('?'));
     items.push([href,h.children[1].innerText])
   }
