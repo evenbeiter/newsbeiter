@@ -595,9 +595,32 @@ async function businessWeeklyGetContent(id){
   const t=doc.querySelector('#AppGetDate') ?? '';
   const s=doc.querySelector('.Single-summary') ?? '';  
   const a=doc.querySelector('.Single-article') ?? '';
-  //a.querySelectorAll('.Google-special').forEach(e => e.remove());
   html = '<p class="fs10">'+(p.textContent ?? '')+' '+(t.textContent ?? '')+'</p>'+(s.outerHTML ?? '')+(a.outerHTML ?? '')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+async function businessWeeklyGetSearchResults(siteName,t){
+  try{
+  var k=3;
+  for (let i=1;i<=k;i++){
+    var res = await fetch(preStr+'https://www.businessweekly.com.tw/Search/GetSolrSearchData', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
+      body: 'wd='+t+'&page='+((rr-1)*k+i)}
+    );
+    var str=await res.text();str=str.replaceAll('\\"','"').replaceAll('\\r','\r').replaceAll('\\n','\n');
+    var parser=new DOMParser();
+    var doc=parser.parseFromString(str, "text/html");
+    var hh=doc.querySelectorAll('li');
+    for (let h of hh){
+      items.push([h.querySelector('a').href,JSON.parse('"'+h.querySelector('a').innerText.replace(/\s+/g,'')+'"')]);
+    }
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
