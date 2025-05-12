@@ -60,7 +60,7 @@ const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8
 const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-ce30-48f5-93ed-567dfcf3e07b','Editor’s Picks'],['2d4617cb-4448-4bbe-be69-507820ee12be','Investing & Market Insights'],['9657ccb4-0423-4420-94de-024c54839a21','Trending Stocks'],['e799ec4c-02d3-477d-ba05-e8bb5c88bfc8','Tech News'],['aa2ec37b-b63e-4154-b9bd-18e0b14bb1e7','Asking for a Trend'],['d27bc0dd-04f8-4a61-8b08-9c7c6cc3169f','Catalysts'],['9a665a61-55bd-43bc-8657-6eb984ef9a37','Market Domination'],['0c9d1849-74a9-459f-9131-a9cee22acc8e','Morning Brief'],['739eb51e-bc2e-4bd2-99a8-6793977028ed','Market Domination Overtime']];
 
 const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
-const searchSites=[['lineToday','LINE'],['cnyes','鉅亨'],['wscn','華爾街見聞'],['ctee','工商'],['udnMoney','經濟日報'],['businessToday','今周刊']]; 
+const searchSites=[['lineToday','LINE'],['cnyes','鉅亨'],['wscn','華爾街見聞'],['ctee','工商'],['wealth','財訊'],['udnMoney','經濟日報'],['businessToday','今周刊']]; 
 const allSites1=[['msnTW','MSN 台灣',msnTW,'msn.com/zh-tw','https://www.msn.com/zh-tw'],['ctee','工商',ctee,'ctee.com.tw','https://www.ctee.com.tw/'],['udn','聯合',udn,'udn.com','https://udn.com/'],['wealth','財訊',wealth,'wealth.com.tw','https://www.wealth.com.tw/'],['dw','德國之聲',dw,'dw.com/zh-hant','https://www.dw.com/zh-hant/'],['wscn','華爾街見聞',wscn,'wallstreetcn.com','https://wallstreetcn.com/']];
 const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['substack','Substack',substack,'substack.com','https://altgoesmainstream.substack.com/']];
 const videoSites=[['msnVideo','MSN'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2'],['reutersVideo','Reuters']];
@@ -1466,6 +1466,37 @@ async function wealthGetContent(id){
   }
   html=html.replace('aaaaa',body);
   }catch{html='<p><a href="https://www.wealth.com.tw/articles/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+async function wealthGetSearchResults(siteName,t){
+  try{
+    payload={
+      "operationName": "Articles",
+      "variables": {
+        "offset": (rr-1)*50,
+        "limit": 50,
+        "searchTerm": t,
+        "viewOrderType": null
+      },
+      "query": "query Articles($offset: Int, $limit: Int, $type: ArticleType, $vipOnly: Boolean, $searchTerm: String, $isFameColumn: Boolean, $magazineId: ID, $authorId: ID, $viewOrderType: ArticleViewOrderType) {\n  articles(\n    offset: $offset\n    limit: $limit\n    type: $type\n    vipOnly: $vipOnly\n    searchTerm: $searchTerm\n    isFameColumn: $isFameColumn\n    magazineId: $magazineId\n    authorId: $authorId\n    viewOrderType: $viewOrderType\n  ) {\n    ...ArticleBaseFields\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  state\n  title\n  subtitle\n  cover\n  coverText\n  coverAlt\n  content\n  contents\n  type\n  vipOnly\n  views\n  video {\n    id\n    youtubeId\n    playlistId\n    __typename\n  }\n  authors {\n    id\n    name\n    state\n    fameColumn {\n      id\n      avatar\n      description\n      __typename\n    }\n    __typename\n  }\n  directors\n  organizers {\n    id\n    name\n    state\n    fameColumn {\n      id\n      avatar\n      description\n      __typename\n    }\n    __typename\n  }\n  hashtags {\n    id\n    name\n    __typename\n  }\n  categories {\n    id\n    name\n    __typename\n  }\n  releasedAt\n  createdAt\n  updatedAt\n  deletedAt\n  isHeadline\n  isPinned\n  isSponsored\n  __typename\n}\n"
+    }
+
+  url='https://www.wealth.com.tw/graphql';
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: JSON.stringify(payload),
+    });
+  var str=await res.json();  
+  for (let h of str.data.articles){
+    items.push([h.id,h.title])
+  }
+  
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
