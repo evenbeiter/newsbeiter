@@ -279,9 +279,9 @@ async function getContent(siteName,clickedId,id){
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
     cEl.style.display='block';
-    if (!openContentDirectly.includes(siteName)&&cEl.innerText!=='繼續閱讀'){
+    if (!openContentDirectly.includes(siteName)){
       //need to get content for others (open div for apollo)
-      if (cEl.innerText.length<50){
+      if (cEl.querySelector('a')!==null){
         //get content
         if (msnALL.includes(siteName)){cEl.innerHTML+=await msnGetContent(id)}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
@@ -399,14 +399,10 @@ function convertTextInsideTags(element) {for (let child of element.childNodes) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function apolloGetList(siteName,t){
-  try{
-    url=preStr+'https://www.apolloacademy.com/the-daily-spark/?query-15-page='+rr;console.log(url);
-    let res=await fetch(url);
-    let str=await res.text();
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(str, "text/html");
-    var hh=doc.querySelectorAll('.entry-content.wp-block-post-content');
-  
+  try{url=preStr+'https://www.apolloacademy.com/the-daily-spark/?query-15-page='+rr;console.log(url);
+  const res=await fetch(url);const str=await res.text();
+  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+  var hh=doc.querySelectorAll('.entry-content.wp-block-post-content');
   for (let h of hh){
     var a=h.parentElement.previousElementSibling;
     var cid=a.querySelector('h2').children[0].href;
@@ -422,18 +418,11 @@ async function apolloGetList(siteName,t){
 
 async function bbcGetList(siteName,t){
   try{url=preStr+'https://www.bbc.com/zhongwen/'+t+'/trad?page='+rr;console.log(url);
-  let res=await fetch(url);
-  let str=await res.text();
-  var parser=new DOMParser();
-  var doc=parser.parseFromString(str, "text/html");
+  const res=await fetch(url);const str=await res.text();
+  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('a.bbc-1i4ie53.e1d658bg0');
-  for (let h of hh){
-    items.push([h.href,h.innerText])
-  }
-  
-  for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
-  }
+  for (let h of hh){items.push([h.href,h.innerText])};
+  for (let h of items){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`}
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
