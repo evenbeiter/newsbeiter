@@ -57,6 +57,7 @@ const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8
 
 //var apollo,bbc,bnext,businessToday,businessWeekly,cnyes,ctee,dw,jin,lineToday,msnTW,msnUS,newslens,peInsights,reuters,sina,substack,technews,udn,udnMoney,wealth,wiki,wscn,msnVideo,wsjVideo,bbgVideo,reutersVideo;
 //var cna,cnyeshao,invtCom,isbl,marie,mindi,xueqiu,yahooTW;
+const twt=[['WinfieldSmart','Win Smart'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
 const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-ce30-48f5-93ed-567dfcf3e07b','Editor’s Picks'],['2d4617cb-4448-4bbe-be69-507820ee12be','Investing & Market Insights'],['9657ccb4-0423-4420-94de-024c54839a21','Trending Stocks'],['e799ec4c-02d3-477d-ba05-e8bb5c88bfc8','Tech News'],['aa2ec37b-b63e-4154-b9bd-18e0b14bb1e7','Asking for a Trend'],['d27bc0dd-04f8-4a61-8b08-9c7c6cc3169f','Catalysts'],['9a665a61-55bd-43bc-8657-6eb984ef9a37','Market Domination'],['0c9d1849-74a9-459f-9131-a9cee22acc8e','Morning Brief'],['739eb51e-bc2e-4bd2-99a8-6793977028ed','Market Domination Overtime']];
 
 const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
@@ -67,7 +68,7 @@ const videoSites=[['msnVideo','MSN'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',
 
 const faqB=[['yahooTW','Yahoo','私募'],['yahooTW','Yahoo','日股'],['yahooTW','Yahoo','美債']];
 const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday','LINE']]; 
-const allSitesB=[['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
+const allSitesB=[['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
 const openContentDirectly=['apollo','cnyeshao'];
@@ -236,7 +237,7 @@ function createUrlListDiv(sitesList){
 }
 
 async function get1stList(siteName,top,t){
-  rr=0;
+  rr=0;cursor='';
   getList(siteName,t);
   showTop(top);
 }
@@ -1279,6 +1280,27 @@ async function technewsGetContent(id){
 
   html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
+//    TWT
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function twtGetList(siteName,t){
+  try{
+  const res=await fetch('https://nitter.poast.org/'+t+cursor);const str=await res.text();
+  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+  const sm=doc.querySelector('.show-more').children[0].href;cursor=sm.slice(sm.indexOf('?'));
+  items=doc.querySelectorAll('.tweet-body');
+  for (let h of items){
+    html+='<p class="fs10">'+(h.querySelector('.tweet-date')?.innerText??'')+' | '+(h.querySelector('.fullname')?.innerText??'')+' '+(h.querySelector('.username')?.innerText??'')+'</p>'+(h.querySelector('.tweet-content.media-body')?.outerHTML.replaceAll('<div','<p').replaceAll('</div>','</p>')??'');
+    try{var img=h.querySelector('.attachments').querySelectorAll('img');
+    if (img){for (let i of img){html+='<img src="'+i.src+'">';}}
+   }catch{};
+   html+='<br><hr>';
+  }
+  }catch{html='<p>No Content.</p>'}
   return html;
 }
 
