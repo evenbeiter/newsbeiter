@@ -281,7 +281,7 @@ async function getContent(siteName,clickedId,id){
     cEl.style.display='block';
     if (!openContentDirectly.includes(siteName)){
       //need to get content for others (open div for apollo)
-      if (cEl.querySelector('a')!==null){
+      if (cEl.querySelector('a')==null){
         //get content
         if (msnALL.includes(siteName)){cEl.innerHTML+=await msnGetContent(id)}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
