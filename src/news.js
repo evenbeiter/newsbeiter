@@ -82,7 +82,7 @@ const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var siteNameVar='',docTitle='',tabs=[];
-var items=[],url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0;
+var items=[],ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0;
 
 //    RENDER HTML FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1935,14 +1935,14 @@ async function openBook(){
       }
     }console.log(array);
     var tabs = [...new Set(array.map(item => item.section))];console.log(tabs);
-    content = Object.values(array.reduce((acc, item) => {
+    ecoMagContent = Object.values(array.reduce((acc, item) => {
       if (!acc[item.section]) {
         acc[item.section] = { section: item.section, content: [] };
       }
       acc[item.section].content.push(item);
       return acc;
     }, {})
-    );console.log(content);
+    );console.log(ecoMagContent);
   
     for (let tab of tabs){ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;}
     get1stList('ecoMag','The Economist | Leaders','Leaders');
@@ -1950,8 +1950,8 @@ async function openBook(){
   reader.readAsArrayBuffer(file);
 };
 
-async function ecoMagGetList(a){
-  try{var hh = content.find(item => item.section === a);
+async function ecoMagGetList(siteName,t){
+  try{var hh = ecoMagContent.find(item => item.section === t);
   for (let h of hh.content){html+=h.content.replace(/ class="[\s\S]*?"/g,'').replace('<h1>',`<p class="title t-tl" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p>').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'')+'</div><hr>'}
   }catch{html='<p>No Content.</p>'}
   return html;
