@@ -57,7 +57,7 @@ const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8
 
 //var apollo,bbc,bnext,businessToday,businessWeekly,cnyes,ctee,dw,jin,lineToday,msnTW,msnUS,newslens,peInsights,reuters,sina,substack,technews,udn,udnMoney,wealth,wiki,wscn,msnVideo,wsjVideo,bbgVideo,reutersVideo;
 //var cna,cnyeshao,invtCom,isbl,marie,mindi,xueqiu,yahooTW;
-const twt=[['WinfieldSmart','Win Smart'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
+const twt=[['WinfieldSmart','Win Smart'],['MikeZaccardi','Mike Zaccardi'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
 const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-ce30-48f5-93ed-567dfcf3e07b','Editor’s Picks'],['2d4617cb-4448-4bbe-be69-507820ee12be','Investing & Market Insights'],['9657ccb4-0423-4420-94de-024c54839a21','Trending Stocks'],['e799ec4c-02d3-477d-ba05-e8bb5c88bfc8','Tech News'],['aa2ec37b-b63e-4154-b9bd-18e0b14bb1e7','Asking for a Trend'],['d27bc0dd-04f8-4a61-8b08-9c7c6cc3169f','Catalysts'],['9a665a61-55bd-43bc-8657-6eb984ef9a37','Market Domination'],['0c9d1849-74a9-459f-9131-a9cee22acc8e','Morning Brief'],['739eb51e-bc2e-4bd2-99a8-6793977028ed','Market Domination Overtime']];
 
 const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
