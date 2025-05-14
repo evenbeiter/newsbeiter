@@ -1918,7 +1918,7 @@ async function openBook(){
       let chapter = await item.load(book.load.bind(book));
       let str = await item.render();
       var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-      var content=doc.querySelector('body').innerHTML.replace(/ class="[\s\S]*?"/g,'');
+      var content=doc.querySelector('body').innerHTML;
       jsonOutput.chapters.push({
         id: 'chapter_'+i,
         href: item.href,
@@ -1930,7 +1930,7 @@ async function openBook(){
     for (let c of jsonOutput.chapters){
       var parser=new DOMParser();var doc = parser.parseFromString(c.content, "text/html");
       if(doc.querySelector('h1')){
-        c.section=doc.querySelector('h1').textContent;
+        c.section=doc.querySelector('.te_section_title').textContent;
         array.push(c);
       }
     }
@@ -1954,7 +1954,7 @@ async function openBook(){
 
 async function ecoMagGetList(a){
   try{var hh = content.find(item => item.section === a);
-  for (let h of hh.content){html+=h.content.replace('<h1>',`<p class="title t-tl" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p>').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'')+'</div><hr>'}
+  for (let h of hh.content){html+=h.content.replace(/ class="[\s\S]*?"/g,'').replace('<h1>',`<p class="title t-tl" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p>').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'')+'</div><hr>'}
   }catch{html='<p>No Content.</p>'}
   return html;
 }
