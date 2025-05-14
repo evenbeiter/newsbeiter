@@ -1947,7 +1947,7 @@ async function openBook(){
     for (let tab of tabs){
     ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;
     }
-    get1stList('Leaders');
+    get1stList('ecoMag','The Economist | Leaders','Leaders');
   }
   reader.readAsArrayBuffer(file);
 };
