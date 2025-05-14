@@ -74,6 +74,7 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 const openContentDirectly=['apollo','cnyeshao','ecoMag'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
 const sites2Translate=['apollo','ecoMag','msnUS','peInsights','substack'];
+const noNextPage=['ecoMag'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader';
 
@@ -371,11 +372,13 @@ window.onscroll = function () {
     const scrollTop = window.scrollY;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
-    if (scrollTop + windowHeight >= documentHeight - 5) {
-      if(rt!=='s'){
-        getList(siteNameVar,rt);
-      }else{
-        getSearchResults(siteNameVar);
+    if (!noNextPage.includes(siteNameVar)){
+      if (scrollTop + windowHeight >= documentHeight - 5) {
+        if(rt!=='s'){
+          getList(siteNameVar,rt);
+        }else{
+          getSearchResults(siteNameVar);
+        }
       }
     }
   }, 1000);
@@ -1925,7 +1928,7 @@ async function openBook(){
         content: content
       });
     }
-    console.log(jsonOutput);
+    
     var array=[];
     for (let c of jsonOutput.chapters){
       var parser=new DOMParser();var doc = parser.parseFromString(c.content, "text/html");
@@ -1933,8 +1936,8 @@ async function openBook(){
         c.section=doc.querySelector('.te_section_title')?.textContent??null;
         if(c.section!==null){array.push(c)};
       }
-    }console.log(array);
-    var tabs = [...new Set(array.map(item => item.section))];console.log(tabs);
+    }
+    var tabs = [...new Set(array.map(item => item.section))];
     ecoMagContent = Object.values(array.reduce((acc, item) => {
       if (!acc[item.section]) {
         acc[item.section] = { section: item.section, content: [] };
@@ -1942,7 +1945,7 @@ async function openBook(){
       acc[item.section].content.push(item);
       return acc;
     }, {})
-    );console.log(ecoMagContent);
+    );
   
     for (let tab of tabs){ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;}
     get1stList('ecoMag','The Economist | Leaders','Leaders');
@@ -1951,7 +1954,7 @@ async function openBook(){
 };
 
 async function ecoMagGetList(siteName,t){
-  try{var hh = ecoMagContent.find(item => item.section === t);console.log(hh);
+  try{var hh = ecoMagContent.find(item => item.section === t);
   for (let h of hh.content){html+=h.content.replace(/ class="[\s\S]*?"/g,'').replace('<h1>',`<p class="title t-tl" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p>').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'')+'</div><hr>'}
   }catch{html='<p>No Content.</p>'}
   return html;
