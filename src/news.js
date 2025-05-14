@@ -71,9 +71,9 @@ const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday',
 const allSitesB=[['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
-const openContentDirectly=['apollo','cnyeshao'];
+const openContentDirectly=['apollo','cnyeshao','ecoMag'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','msnUS','peInsights','substack'];
+const sites2Translate=['apollo','ecoMag','msnUS','peInsights','substack'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader';
 
@@ -163,14 +163,16 @@ document.documentElement.innerHTML=`
 //    DEFINE NAME OF ELEMENTS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var options=document.getElementById('btn-group');
-var btn=document.getElementById('btn');
-if(document.getElementById('channelList')){var channelList=document.getElementById('channelList')};
-if(document.getElementById('searchList')){var searchList=document.getElementById('searchList')};
-if(document.getElementById('urlList')){var urlList=document.getElementById('urlList')};
-var list=document.getElementById('list');
-var topdiv=document.getElementById('top');
-var loading=document.getElementById('loading');
+const options=document.getElementById('btn-group');
+const btn=document.getElementById('btn');
+if(document.getElementById('channelList')){const channelList=document.getElementById('channelList')};
+if(document.getElementById('searchList')){const searchList=document.getElementById('searchList')};
+const fileInput=document.getElementById('fileInput');
+const ecoMagSection=document.getElementById('ecoMagSection');
+if(document.getElementById('urlList')){const urlList=document.getElementById('urlList')};
+const list=document.getElementById('list');
+const topdiv=document.getElementById('top');
+const loading=document.getElementById('loading');
 
 
 //    CREATE CHANNEL, SEARCH & URL LIST FOR BOOKMARKLET
@@ -1880,4 +1882,77 @@ async function videoGetContent(clickedId,id,url,m3u8Url){
       cEl.previousElementSibling.previousElementSibling.scrollIntoView()}catch{document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
     }
   }
+}
+
+
+//    THE ECONOMIST MAGAZINE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function dlEcoMag(){
+  var date = prompt('Issue Date:');date=date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1.$2.$3');
+  var link = document.createElement('a');
+  link.href = `https://github.com/hehonghui/awesome-english-ebooks/raw/master/01_economist/te_${date}/TheEconomist.${date}.epub`;
+  link.target = '_blank';link.download = `TheEconomist.${date}.epub`;
+  link.click();link.remove();
+}
+
+async function openBook(){
+  options.style.display='none';
+  if (fileInput.files.length === 0) {alert('Please select an EPUB file.');return;}
+  const file=fileInput.files[0];const reader=new FileReader();
+
+  reader.onload = async (e) => {
+    const arrayBuffer=e.target.result;const book=ePub({ replacements: 'blobUrl' });
+    await book.open(arrayBuffer);
+    var jsonOutput = {
+      metadata: book.packaging.metadata,
+      chapters: []
+    };
+
+    let spineItems = book.spine.spineItems;
+    var i=0;
+    for (let item of spineItems) {
+      i=i+1;
+      let chapter = await item.load(book.load.bind(book));
+      let str = await item.render();
+      var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+      var content=doc.querySelector('body').innerHTML.replace(/ class="[\s\S]*?"/g,'');
+      jsonOutput.chapters.push({
+        id: 'chapter_'+i,
+        href: item.href,
+        content: content
+      });
+    }
+    console.log(jsonOutput);
+    var array=[];
+    for (let c of jsonOutput.chapters){
+      var parser=new DOMParser();var doc = parser.parseFromString(c.content, "text/html");
+      if(doc.querySelector('h1')){
+        c.section=doc.querySelector('h1').textContent;
+        array.push(c);
+      }
+    }
+    var tabs = [...new Set(array.map(item => item.section))];
+    content = Object.values(array.reduce((acc, item) => {
+      if (!acc[item.section]) {
+        acc[item.section] = { section: item.section, content: [] };
+      }
+      acc[item.section].content.push(item);
+      return acc;
+    }, {})
+    );
+  
+    for (let tab of tabs){
+    ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;
+    }
+    get1stList('Leaders');
+  }
+  reader.readAsArrayBuffer(file);
+};
+
+async function ecoMagGetList(a){
+  try{var hh = content.find(item => item.section === a);
+  for (let h of hh.content){html+=h.content.replace('<h1>',`<p class="title t-tl" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p>').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'')+'</div><hr>'}
+  }catch{html='<p>No Content.</p>'}
+  return html;
 }
