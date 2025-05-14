@@ -1930,11 +1930,11 @@ async function openBook(){
     for (let c of jsonOutput.chapters){
       var parser=new DOMParser();var doc = parser.parseFromString(c.content, "text/html");
       if(doc.querySelector('h1')){
-        c.section=doc.querySelector('.te_section_title').textContent;
-        array.push(c);
+        c.section=doc.querySelector('.te_section_title')?.textContent??null;
+        if(c.section!==null){array.push(c)};
       }
-    }
-    var tabs = [...new Set(array.map(item => item.section))];
+    }console.log(array);
+    var tabs = [...new Set(array.map(item => item.section))];console.log(tabs);
     content = Object.values(array.reduce((acc, item) => {
       if (!acc[item.section]) {
         acc[item.section] = { section: item.section, content: [] };
@@ -1942,11 +1942,9 @@ async function openBook(){
       acc[item.section].content.push(item);
       return acc;
     }, {})
-    );
+    );console.log(content);
   
-    for (let tab of tabs){
-    ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;
-    }
+    for (let tab of tabs){ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;}
     get1stList('ecoMag','The Economist | Leaders','Leaders');
   }
   reader.readAsArrayBuffer(file);
