@@ -165,11 +165,12 @@ document.documentElement.innerHTML=`
 
 const options=document.getElementById('btn-group');
 const btn=document.getElementById('btn');
-if(document.getElementById('channelList')){const channelList=document.getElementById('channelList')};
-if(document.getElementById('searchList')){const searchList=document.getElementById('searchList')};
+const channelList=document.getElementById('channelList');
+const searchList=document.getElementById('searchList');
+const ecoMagList=document.getElementById('ecoMagList');
 const fileInput=document.getElementById('fileInput');
 const ecoMagSection=document.getElementById('ecoMagSection');
-if(document.getElementById('urlList')){const urlList=document.getElementById('urlList')};
+const urlList=document.getElementById('urlList');
 const list=document.getElementById('list');
 const topdiv=document.getElementById('top');
 const loading=document.getElementById('loading');
@@ -382,8 +383,9 @@ window.onscroll = function () {
 
 function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
 function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
-function openChannelList(){channelList.style.display='block';searchList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
+function openChannelList(){channelList.style.display='block';searchList.style.display='none';ecoMagList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
 function openSearchList(){document.getElementById('search-term').value='';channelList.style.display='none';searchList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
+function openEcoMagList(){channelList.style.display='none';searchList.style.display='none';ecoMagList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
 function openUrlList(){channelList.style.display='none';searchList.style.display='none';urlList.style.display='block';options.style.display='block';topdiv.style.display='none';}
 function openOptions(){if (options.style.display=='none'){options.style.display='block';topdiv.style.display='none';} else {options.style.display='none';topdiv.style.display='block';}}
 async function ping(){var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');}
