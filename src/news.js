@@ -1951,7 +1951,7 @@ async function openBook(){
 };
 
 async function ecoMagGetList(siteName,t){
-  try{var hh = ecoMagContent.find(item => item.section === t);
+  try{var hh = ecoMagContent.find(item => item.section === t);console.log(hh);
   for (let h of hh.content){html+=h.content.replace(/ class="[\s\S]*?"/g,'').replace('<h1>',`<p class="title t-tl" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p>').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'')+'</div><hr>'}
   }catch{html='<p>No Content.</p>'}
   return html;
