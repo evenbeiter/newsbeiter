@@ -2024,6 +2024,7 @@ async function openBook(input){
   }
 
   document.getElementById('copy-btn').style.display='block';
+  openOptions();
   reader.readAsArrayBuffer(file);
 };
 
