@@ -1977,8 +1977,8 @@ async function getEcoMagFromJson(date){
   const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');
   const str=await res.text();
   ecoMagContent=JSON.parse(str.replaceAll('\\"','\"'));
-  ecoMagSection.innerHTML='';
-  for (let h of ecoMagContent){ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${h.section}','${h.section}')">${h.section}</button>`;}
+  channelList.innerHTML='';
+  for (let h of ecoMagContent){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${h.section}','${h.section}')">${h.section}</button>`;}
   get1stList('ecoMag','The Economist | Leaders','Leaders');
 }
 
