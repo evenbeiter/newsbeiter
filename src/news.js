@@ -2031,7 +2031,8 @@ async function openBook(input){
 function copyJSONToClipboard(){
   var jsonStr = JSON.stringify(ecoMagContent);
   navigator.clipboard.writeText(jsonStr).then(() => {
-    document.getElementById('copy-btn').style.display='none';console.log('Copied.');  
+    document.getElementById('copy-btn').style.display='none';
+    console.log('Copied.');  
   }).catch(err => {
     console.error('Failed: ', err);
   });
@@ -2039,8 +2040,8 @@ function copyJSONToClipboard(){
 
 async function getEcoMagFromJson(date){
   const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');
-  const str=await res.text();
-  ecoMagContent=JSON.parse(str.replaceAll('\\"','\"'));
+  const str=await res.json();
+  ecoMagContent=str;
   channelList.innerHTML='';
   for (let h of ecoMagContent){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${h.section}','${h.section}')">${h.section}</button>`;}
   openChannelList();
