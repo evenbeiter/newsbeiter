@@ -176,7 +176,7 @@ const urlList=document.getElementById('urlList');
 const list=document.getElementById('list');
 const topdiv=document.getElementById('top');
 const loading=document.getElementById('loading');
-for (let d of sats){ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getEcoMagFromJson('${d}')">${d}</button>`;}  
+for (let d of sats){ecoMagList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getEcoMagFromJson('${d}')">${d}</button>`;}  
 
 
 //    CREATE CHANNEL, SEARCH & URL LIST FOR BOOKMARKLET
@@ -1965,15 +1965,21 @@ async function openBook(){
       return acc;
     }, {})
     );
-  
+
+    ecoMagSection.innerHTML='';
     for (let tab of tabs){ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;}
     get1stList('ecoMag','The Economist | Leaders','Leaders');
   }
   reader.readAsArrayBuffer(file);
 };
 
-async function getEcoMagFromJson(){
-  
+async function getEcoMagFromJson(date){
+  const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');
+  const str=await res.text();
+  ecoMagContent=JSON.parse(str.replaceAll('\\"','\"'));
+  ecoMagSection.innerHTML='';
+  for (let h of ecoMagContent){ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${h.section}','${h.section}')">${h.section}</button>`;}
+  get1stList('ecoMag','The Economist | Leaders','Leaders');
 }
 
 async function ecoMagGetList(siteName,t){
