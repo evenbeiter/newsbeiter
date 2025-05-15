@@ -1920,59 +1920,6 @@ function dlEcoMag(){
   link.click();link.remove();
 }
 
-// async function openBook(){
-//   options.style.display='none';
-//   if (fileInput.files.length === 0) {alert('Please select an EPUB file.');return;}
-//   const file=fileInput.files[0];const reader=new FileReader();
-
-//   reader.onload = async (e) => {
-//     const arrayBuffer=e.target.result;const book=ePub({ replacements: 'blobUrl' });
-//     await book.open(arrayBuffer);
-//     var jsonOutput = {
-//       metadata: book.packaging.metadata,
-//       chapters: []
-//     };
-
-//     let spineItems = book.spine.spineItems;
-//     var i=0;
-//     for (let item of spineItems) {
-//       i=i+1;
-//       let chapter = await item.load(book.load.bind(book));
-//       let str = await item.render();
-//       var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-//       var content=doc.querySelector('body').innerHTML;
-//       jsonOutput.chapters.push({
-//         id: 'chapter_'+i,
-//         href: item.href,
-//         content: content
-//       });
-//     }
-    
-//     var array=[];
-//     for (let c of jsonOutput.chapters){
-//       var parser=new DOMParser();var doc = parser.parseFromString(c.content, "text/html");
-//       if(doc.querySelector('h1')){
-//         c.section=doc.querySelector('.te_section_title')?.textContent??null;
-//         if(c.section!==null){array.push(c)};
-//       }
-//     }
-//     var tabs = [...new Set(array.map(item => item.section))];
-//     ecoMagContent = Object.values(array.reduce((acc, item) => {
-//       if (!acc[item.section]) {
-//         acc[item.section] = { section: item.section, content: [] };
-//       }
-//       acc[item.section].content.push(item);
-//       return acc;
-//     }, {})
-//     );
-
-//     channelList.innerHTML='';
-//     for (let tab of tabs){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;}
-//     get1stList('ecoMag','The Economist | Leaders','Leaders');
-//   }
-//   reader.readAsArrayBuffer(file);
-// };
-
 async function openBook(){
   options.style.display='none';
   if (fileInput.files.length === 0) {alert('Please select an EPUB file.');return;}
@@ -2018,11 +1965,64 @@ async function openBook(){
       return acc;
     }, {})
     );
-  }
 
-  copy.style.display='block';
+    channelList.innerHTML='';
+    for (let tab of tabs){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;}
+    get1stList('ecoMag','The Economist | Leaders','Leaders');
+  }
   reader.readAsArrayBuffer(file);
 };
+
+// async function openBook(){
+//   options.style.display='none';
+//   if (fileInput.files.length === 0) {alert('Please select an EPUB file.');return;}
+//   const file=fileInput.files[0];const reader=new FileReader();
+
+//   reader.onload = async (e) => {
+//     const arrayBuffer=e.target.result;const book=ePub({ replacements: 'blobUrl' });
+//     await book.open(arrayBuffer);
+//     var jsonOutput = {
+//       metadata: book.packaging.metadata,
+//       chapters: []
+//     };
+
+//     let spineItems = book.spine.spineItems;
+//     var i=0;
+//     for (let item of spineItems) {
+//       i=i+1;
+//       let chapter = await item.load(book.load.bind(book));
+//       let str = await item.render();
+//       var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+//       var content=doc.querySelector('body').innerHTML;
+//       jsonOutput.chapters.push({
+//         id: 'chapter_'+i,
+//         href: item.href,
+//         content: content
+//       });
+//     }
+    
+//     var array=[];
+//     for (let c of jsonOutput.chapters){
+//       var parser=new DOMParser();var doc = parser.parseFromString(c.content, "text/html");
+//       if(doc.querySelector('h1')){
+//         c.section=doc.querySelector('.te_section_title')?.textContent??null;
+//         if(c.section!==null){array.push(c)};
+//       }
+//     }
+//     var tabs = [...new Set(array.map(item => item.section))];
+//     ecoMagContent = Object.values(array.reduce((acc, item) => {
+//       if (!acc[item.section]) {
+//         acc[item.section] = { section: item.section, content: [] };
+//       }
+//       acc[item.section].content.push(item);
+//       return acc;
+//     }, {})
+//     );
+//   }
+
+//   copy.style.display='block';
+//   reader.readAsArrayBuffer(file);
+// };
 
 function copyJSONToClipboard(){
   var jsonStr = JSON.stringify(ecoMagContent);
