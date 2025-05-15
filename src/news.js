@@ -84,6 +84,7 @@ const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-
 
 var siteNameVar='',docTitle='',tabs=[];
 var items=[],ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0;
+const sats=getLast5Sats();
 
 //    RENDER HTML FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,6 +176,7 @@ const urlList=document.getElementById('urlList');
 const list=document.getElementById('list');
 const topdiv=document.getElementById('top');
 const loading=document.getElementById('loading');
+for (let d of sats){ecoMagSection.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getEcoMagFromJson('${d}')">${d}</button>`;}  
 
 
 //    CREATE CHANNEL, SEARCH & URL LIST FOR BOOKMARKLET
@@ -364,6 +366,23 @@ async function getTranslation(all){
     }
   }
 }
+
+function getLast5Sats() {
+  const saturdays = [];const today = new Date();
+  const dayOfWeek = today.getDay(); // Sunday = 0, Saturday = 6
+  const daysSinceSaturday = (dayOfWeek + 1) % 7;
+  let current = new Date(today);
+  current.setDate(current.getDate() - daysSinceSaturday);
+
+  for (let i = 0; i < 5; i++) {
+    const yyyymmdd = current.getFullYear().toString() +
+      String(current.getMonth() + 1).padStart(2, '0') +
+      String(current.getDate()).padStart(2, '0');
+    saturdays.push(yyyymmdd);
+    current.setDate(current.getDate() - 7);
+  }
+  return saturdays;
+}
   
 let scrollTimeout;
 window.onscroll = function () {
@@ -387,9 +406,9 @@ window.onscroll = function () {
 function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
 function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
 function openChannelList(){channelList.style.display='block';searchList.style.display='none';ecoMagList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
-function openSearchList(){document.getElementById('search-term').value='';channelList.style.display='none';searchList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
+function openSearchList(){document.getElementById('search-term').value='';channelList.style.display='none';searchList.style.display='block';ecoMagList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
 function openEcoMagList(){channelList.style.display='none';searchList.style.display='none';ecoMagList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
-function openUrlList(){channelList.style.display='none';searchList.style.display='none';urlList.style.display='block';options.style.display='block';topdiv.style.display='none';}
+function openUrlList(){channelList.style.display='none';searchList.style.display='none';ecoMagList.style.display='none';urlList.style.display='block';options.style.display='block';topdiv.style.display='none';}
 function openOptions(){if (options.style.display=='none'){options.style.display='block';topdiv.style.display='none';} else {options.style.display='none';topdiv.style.display='block';}}
 async function ping(){var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');}
 function cvt2Timezone(timestamp) {const date = new Date(timestamp);return date.toLocaleString('zh-TW',{timeZone:'Asia/Taipei'});}
@@ -1952,6 +1971,10 @@ async function openBook(){
   }
   reader.readAsArrayBuffer(file);
 };
+
+async function getEcoMagFromJson(){
+  
+}
 
 async function ecoMagGetList(siteName,t){
   try{var hh = ecoMagContent.find(item => item.section === t);
