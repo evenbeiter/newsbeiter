@@ -171,7 +171,7 @@ const copy=document.getElementById('copy-btn');
 const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
 const ecoMagList=document.getElementById('ecoMagList');
-const fileUpload=document.getElementById('fileInput');
+//const fileUpload=document.getElementById('fileInput');
 const urlList=document.getElementById('urlList');
 const list=document.getElementById('list');
 const topdiv=document.getElementById('top');
@@ -1920,10 +1920,11 @@ function dlEcoMag(){
   link.click();link.remove();
 }
 
-async function openBook(){
+async function openBook(input){
   options.style.display='none';
-  if (fileUpload.files.length === 0) {alert('Please select an EPUB file.');return;}
-  const file=fileUpload.files[0];const reader=new FileReader();
+  if (input.files.length === 0) {alert('Please select an EPUB file.');return;}
+  const file=input.files[0];
+  const reader=new FileReader();
 
   reader.onload = async (e) => {
     const arrayBuffer=e.target.result;const book=ePub({ replacements: 'blobUrl' });
@@ -1974,10 +1975,10 @@ async function openBook(){
   reader.readAsArrayBuffer(file);
 };
 
-// async function openBook(){
+// async function openBook(input){
 //   options.style.display='none';
-//   if (fileUpload.files.length === 0) {alert('Please select an EPUB file.');return;}
-//   const file=fileUpload.files[0];const reader=new FileReader();
+//   if (input.files.length === 0) {alert('Please select an EPUB file.');return;}
+//   const file=input.files[0];const reader=new FileReader();
 
 //   reader.onload = async (e) => {
 //     const arrayBuffer=e.target.result;const book=ePub({ replacements: 'blobUrl' });
