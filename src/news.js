@@ -2002,7 +2002,6 @@ function dlEcoMag(){
 // };
 
 async function openBook(input){
-  options.style.display='none';
   if (input.files.length === 0) {alert('Please select an EPUB file.');return;}
   const file=input.files[0];
   const reader=new FileReader();
@@ -2049,8 +2048,7 @@ async function openBook(input){
     );
   }
 
-  document.getElementById('copy-btn').style.display='block';
-  openOptions();
+  document.getElementById('copy-btn').style.display='inline-block';
   reader.readAsArrayBuffer(file);
 };
 
