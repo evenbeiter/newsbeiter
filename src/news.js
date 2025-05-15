@@ -167,7 +167,7 @@ document.documentElement.innerHTML=`
 
 const options=document.getElementById('btn-group');
 const btn=document.getElementById('btn');
-const copy=document.getElementById('copy-btn');
+// const copy=document.getElementById('copy-btn');
 const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
 const ecoMagList=document.getElementById('ecoMagList');
@@ -2023,14 +2023,14 @@ async function openBook(input){
     );
   }
 
-  copy.style.display='block';
+  document.getElementById('copy-btn').style.display='block';
   reader.readAsArrayBuffer(file);
 };
 
 function copyJSONToClipboard(){
   var jsonStr = JSON.stringify(ecoMagContent);
   navigator.clipboard.writeText(jsonStr).then(() => {
-    copy.style.display='none';console.log('Copied.');  
+    document.getElementById('copy-btn').style.display='none';console.log('Copied.');  
   }).catch(err => {
     console.error('Failed: ', err);
   });
