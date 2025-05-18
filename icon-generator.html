@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>產生 PWA & Apple Touch Icons</title>
+</head>
+<body>
+  <h2>自動產生多尺寸 Icon</h2>
+  <label>
+    App 名稱：
+    <input type="text" id="appName" value="Notebook">
+  </label>
+  <button onclick="generateIcons()">產生 Icons</button>
+  <div id="iconList"></div>
+
+  <script>
+    const sizes = [120, 152, 167, 180, 192, 512];
+
+    function generateIcons() {
+      const appName = document.getElementById('appName').value.trim();
+      const firstLetter = appName.charAt(0).toUpperCase() || 'A';
+      const container = document.getElementById('iconList');
+      container.innerHTML = '';
+
+      sizes.forEach(size => {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        // 深灰漸層背景
+        const gradient = ctx.createLinearGradient(0, 0, size, size);
+        gradient.addColorStop(0, '#333333');
+        gradient.addColorStop(1, '#111111');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, size, size);
+
+        // 白色字母
+        ctx.fillStyle = '#ffffff';
+        ctx.font = `bold ${Math.floor(size * 0.6)}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(firstLetter, size / 2, size / 2);
+
+        // 顯示與下載按鈕
+        const img = document.createElement('img');
+        img.src = canvas.toDataURL('image/png');
+        img.width = size / 2;
+        img.height = size / 2;
+        img.style.margin = '10px';
+
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = `icon-${size}x${size}.png`;
+        link.textContent = `下載 icon-${size}x${size}.png`;
+        link.style.display = 'block';
+
+        container.appendChild(img);
+        container.appendChild(link);
+      });
+    }
+  </script>
+</body>
+</html>
