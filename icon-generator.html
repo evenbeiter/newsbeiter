@@ -34,7 +34,8 @@
 
     function generateIcons() {
       const appName = document.getElementById('appName').value.trim();
-      const firstLetter = appName.charAt(0).toUpperCase() || 'A';
+      const firstLetter = appName;
+      //const firstLetter = appName.charAt(0).toUpperCase() || 'A';
       const startColor = document.getElementById('startColor').value;
       const endColor = document.getElementById('endColor').value;
       const angleDeg = parseFloat(document.getElementById('angle').value);
