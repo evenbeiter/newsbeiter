@@ -2078,20 +2078,3 @@ async function ecoMagGetList(siteName,t){
   }catch{html='<p>No Content.</p>'}
   return html;
 }
-
-async function eco(){
-  var res=await fetch(preStr+'https://www.economist.com/weeklyedition/2025-05-17');
-  var str=await res.text();
-  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-  var ecoMagContent=[];
-  var wtw=doc.querySelectorAll('[data-test-id="wtw-link"]');
-  ecoMagContent.push({section:doc.querySelector('.title_mb-section-header__title__73sdX').innerText,titles:[]});
-  for (let w of wtw){ecoMagContent[0].titles.push({url:w.href,title:w.innerText})};
-  
-  var hh=doc.querySelectorAll('section.css-1m627lq.e17r2bow0');
-  for (let h of hh){
-      var a=h.querySelector('[data-test-id="teaser"]');
-      ecoMagContent.push({section:h.querySelector('.title_mb-section-header__title__73sdX').innerText,titles:[{url:a.querySelector('[data-test-id="teaser-link"]').href,title:'<p>'+a.querySelector('.css-zx0bc2.e1etum70').innerText+'</p><p class="title">'+a.querySelector('[data-test-id="teaser-link"]').innerText+'</p>']});
-    
-};
-}
