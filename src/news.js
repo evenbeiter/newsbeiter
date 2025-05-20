@@ -2079,7 +2079,7 @@ async function ecoMagGetList(siteName,t){
   return html;
 }
 
-async function eco){
+async function eco(){
   var res=await fetch(preStr+'https://www.economist.com/weeklyedition/2025-05-17');
   var str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
