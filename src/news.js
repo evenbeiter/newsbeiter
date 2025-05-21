@@ -2086,7 +2086,7 @@ async function ecoMagGetList(siteName,t){
     for (let date of issue){
       const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');const str=await res.json();
       ecoMagContent=str[0];
-      html+=`<div onclick="getEcoMagFromJson('${date}')"><img src="${ecoMagContent.cover}"><br><p class="title">${ecoMagContent.title}</p></div><hr>`
+      html+=`<div onclick="getEcoMagFromJson('${date}')"><img src="${ecoMagContent.cover}"><p class="title">${ecoMagContent.title}</p></div><hr>`
     }
   } else {
   var hh = ecoMagContent.content.find(item => item.section === t);
