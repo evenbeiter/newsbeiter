@@ -2072,9 +2072,19 @@ async function getEcoMagFromJson(date){
   get1stList('ecoMag','The Economist | Leaders','Leaders');
 }
 
+// async function ecoMagGetList(siteName,t){
+//   try{var hh = ecoMagContent.find(item => item.section === t);
+//   for (let h of hh.content){html+=h.content.replace(/ class="[\s\S]*?"/g,'').replace('<h1>',`<p class="title t-tl en-us" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p class="title t-tl en-us">').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'').replaceAll('<p>','<p class="en-us">')+'</div><hr>'}
+//   }catch{html='<p>No Content.</p>'}
+//   return html;
+// }
+
 async function ecoMagGetList(siteName,t){
-  try{var hh = ecoMagContent.find(item => item.section === t);
-  for (let h of hh.content){html+=h.content.replace(/ class="[\s\S]*?"/g,'').replace('<h1>',`<p class="title t-tl en-us" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p class="title t-tl en-us">').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'').replaceAll('<p>','<p class="en-us">')+'</div><hr>'}
-  }catch{html='<p>No Content.</p>'}
+  try{const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');
+  const str=await res.json();
+  ecoMagContent=str;
+  var hh = ecoMagContent.find(item => item.section === t);
+  for (let h of hh.articles){html+=`<div onclick="getContent('${siteName}',this.id,'${h.url}')">${h.title}</div><div id="${h.url}" class="content" onclick="getContent('${siteName}',this.id,'${h.url}')">${h.content}</div><hr>`}
+  }catch{html='<p>尚無內容</p>'}
   return html;
 }
