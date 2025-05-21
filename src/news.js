@@ -2078,14 +2078,11 @@ async function getEcoMagFromJson(date){
 //   }catch{html='<p>No Content.</p>'}
 //   return html;
 // }
-
-get1stList('ecoMag','The Economist','')
-
   
 async function ecoMagGetList(siteName,t){
   try{
   if (t==''){
-    var issue=getLastNSats(20);
+    var issue=getLastNSats(3);
     for (let date of issue){
       const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');const str=await res.json();
       ecoMagContent=str;
