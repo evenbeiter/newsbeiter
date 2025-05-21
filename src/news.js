@@ -2090,7 +2090,6 @@ async function ecoMagGetList(siteName,t){
     }
   } else {
   var hh = ecoMagContent.content.find(item => item.section === t);
-  if (t==='Leaders'){html+=`<img src="${ecoMagContent.cover}"><br><p class="title">${ecoMagContent.title}</p>`};
   for (let h of hh.articles){html+=`<div onclick="getContent('${siteName}',this.id,'${h.url}')">${h.title}</div><div id="${h.url}" class="content" onclick="getContent('${siteName}',this.id,'${h.url}')">${h.content}</div><hr>`}
   }
   }catch{html='<p>尚無內容</p>'}
