@@ -2065,9 +2065,9 @@ function copyJSONToClipboard(){
 async function getEcoMagFromJson(date){
   const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');
   const str=await res.json();
-  ecoMagContent=str;
+  ecoMagContent=str[0];
   channelList.innerHTML='';
-  for (let h of ecoMagContent){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${h.section}','${h.section}')">${h.section}</button>`;}
+  for (let h of ecoMagContent.content){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${h.section}','${h.section}')">${h.section}</button>`;}
   openChannelList();
   get1stList('ecoMag','The Economist | Leaders','Leaders');
 }
@@ -2085,8 +2085,8 @@ async function ecoMagGetList(siteName,t){
     var issue=getLastNSats(3);
     for (let date of issue){
       const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');const str=await res.json();
-      ecoMagContent=str;
-      html+=`<div onclick="get1stList('ecoMag','The Economist | Leaders','Leaders')"><img src="${ecoMagContent.cover}"><br><p class="title">${ecoMagContent.title}</p></div><hr>`
+      ecoMagContent=str[0];
+      html+=`<div onclick="getEcoMagFromJson('${date}')"><img src="${ecoMagContent.cover}"><br><p class="title">${ecoMagContent.title}</p></div><hr>`
     }
   } else {
   var hh = ecoMagContent.content.find(item => item.section === t);
