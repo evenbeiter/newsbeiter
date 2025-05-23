@@ -202,7 +202,7 @@ const urlList=document.getElementById('urlList');
 const list=document.getElementById('list');
 const topdiv=document.getElementById('top');
 const loading=document.getElementById('loading');
-for (let d of getLastNSats(5)){ecoMagList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getEcoMagFromJson('${d}')">${d}</button>`;}  
+//for (let d of getLastNSats(5)){ecoMagList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getEcoMagFromJson('${d}')">${d}</button>`;}  
 
 
 //    CREATE CHANNEL, SEARCH & URL LIST FOR BOOKMARKLET
@@ -398,14 +398,17 @@ function getLastNSats(n) {
   const dayOfWeek = today.getDay(); // Sunday = 0, Saturday = 6
   const daysSinceSaturday = (dayOfWeek + 1) % 7;
   let current = new Date(today);
+  const start = new Date('2025-04-25');
   current.setDate(current.getDate() - daysSinceSaturday);
 
   for (let i = 0; i < n; i++) {
-    const yyyymmdd = current.getFullYear().toString() +
-      String(current.getMonth() + 1).padStart(2, '0') +
-      String(current.getDate()).padStart(2, '0');
-    saturdays.push(yyyymmdd);
-    current.setDate(current.getDate() - 7);
+    if (current>start){
+      const yyyymmdd = current.getFullYear().toString() +
+        String(current.getMonth() + 1).padStart(2, '0') +
+        String(current.getDate()).padStart(2, '0');
+      saturdays.push(yyyymmdd);
+      current.setDate(current.getDate() - 7);
+    }
   }
   return saturdays;
 }
@@ -2063,6 +2066,7 @@ function copyJSONToClipboard(){
 }
 
 async function getEcoMagFromJson(date){
+  if (date===''){date=document.getElementById('ecoMagDate').value;}
   const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');
   const str=await res.json();
   ecoMagContent=str[0];
@@ -2078,11 +2082,12 @@ async function getEcoMagFromJson(date){
 //   }catch{html='<p>No Content.</p>'}
 //   return html;
 // }
-  
+
 async function ecoMagGetList(siteName,t){
   try{
   if (t==''){
     var issue=getLastNSats(3);
+    html+='<div class="input-group mb-3"><input type="search" id="ecoMagDate" class="form-control my-2"><button class="btn sepia" type="button" onclick="getEcoMagFromJson('')">Read</button></div>';
     for (let date of issue){
       const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/books/te/'+date+'.json');const str=await res.json();
       ecoMagContent=str[0];
