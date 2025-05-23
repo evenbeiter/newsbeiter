@@ -398,7 +398,7 @@ function getLastNSats(n) {
   const dayOfWeek = today.getDay(); // Sunday = 0, Saturday = 6
   const daysSinceSaturday = (dayOfWeek + 1) % 7;
   let current = new Date(today);
-  const start = new Date('2025-04-25');
+  const start = new Date('2025-05-02');
   current.setDate(current.getDate() - daysSinceSaturday);
 
   for (let i = 0; i < n; i++) {
