@@ -1780,6 +1780,7 @@ async function ytnGetList(siteName,t){
     body: t+'&page='+rr,
     });
   var str=await res.text();
+  console.log(JSON.parse(str).data);
   for (let a of JSON.parse(str).data){
     items.push([a[1]+'_'+a.join_key,a.title,a.n_date])
   }
