@@ -1800,6 +1800,7 @@ async function ytnGetContent(id){
   return html;
 }
 
+//https://mpeg4.ytn.co.kr/general/_definst_/mp4:general/mov/2025/0603/202506032045202852_z.mp4/playlist.m3u8
 
 
 
