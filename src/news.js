@@ -1780,9 +1780,8 @@ async function ytnGetList(siteName,t){
     body: t+'&page='+rr,
     });
   var str=await res.text();
-  console.log(JSON.parse(str).data);
   for (let a of JSON.parse(str).data){
-    items.push([a[1]+'_'+a.join_key,a.title,a.n_date])
+    items.push([a.m_cd+'_'+a.join_key,a.title,a.n_date])
   }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
