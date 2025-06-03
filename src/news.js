@@ -1784,7 +1784,7 @@ async function ytnGetList(siteName,t){
     items.push([a[1]+'_'+a.join_key,a.title,a.n_date])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">$h[2]</p></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
