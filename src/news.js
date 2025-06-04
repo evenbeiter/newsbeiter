@@ -322,7 +322,7 @@ async function getContent(siteName,clickedId,id){
         //handle items for ytn
         if (siteName=='ytn'){
           //img
-          cEl.querySelectorAll('img').forEach(img=>{img.src=img.dataset.src;img.outerHTML+='<p class="fs10">'+img.alt+'</p>'});
+          cEl.querySelectorAll('img').forEach(img=>{if(img.dataset.src){img.src=img.dataset.src};img.outerHTML+='<p class="fs10">'+img.alt+'</p>'});
           //video
           if (cEl.querySelector('video')){
             const video = cEl.querySelector('video');
