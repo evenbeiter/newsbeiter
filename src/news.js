@@ -319,6 +319,8 @@ async function getContent(siteName,clickedId,id){
         //get content
         if (msnALL.includes(siteName)){cEl.innerHTML+=await msnGetContent(id)}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
+        //handle img for ytn
+        if (siteName=='ytn'){cEl.querySelectorAll('img').forEach(img=>{img.src=img.dataset.src;img.outerHTML+='<p class="fs10">'+img.alt+'</p>'})};
         //remove image style
         cEl.querySelectorAll(rmImgStyle).forEach(img => {img.removeAttribute('style')});
         //handle image src
