@@ -411,7 +411,8 @@ async function translate(a){
 
 async function getTranslation(all){
   for (let a of all){
-    if (a.innerText!=='' && cnTest(a.innerText)!==true){
+    //if (a.innerText!=='' && cnTest(a.innerText)!==true){
+    if (a.innerText!==''){
       var t=await translate(a.textContent);
       if (t!==''){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
     }
