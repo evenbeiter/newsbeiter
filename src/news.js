@@ -74,7 +74,7 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','ecoMag','msnUS','peInsights','substack'];
+const sites2Translate=['apollo','ecoMag','msnUS','peInsights','substack','ytn'];
 const noNextPage=['ecoMag'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader';
@@ -84,7 +84,7 @@ const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var siteNameVar='',docTitle='',tabs=[];
-var items=[],ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0;
+var items=[],ytnVideo='',ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0;
 //const sats=getLastNSats(5);
 
 //    RENDER HTML FOR BOOKMARKLET
@@ -319,8 +319,29 @@ async function getContent(siteName,clickedId,id){
         //get content
         if (msnALL.includes(siteName)){cEl.innerHTML+=await msnGetContent(id)}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
-        //handle img for ytn
-        if (siteName=='ytn'){cEl.querySelectorAll('img').forEach(img=>{img.src=img.dataset.src;img.outerHTML+='<p class="fs10">'+img.alt+'</p>'})};
+        //handle items for ytn
+        if (siteName=='ytn'){
+          //img
+          cEl.querySelectorAll('img').forEach(img=>{img.src=img.dataset.src;img.outerHTML+='<p class="fs10">'+img.alt+'</p>'});
+          //video
+          if (cEl.querySelector('video')){
+            const video = cEl.querySelector('video');
+            const m3u8Url='https://mpeg4.ytn.co.kr/general/_definst_/mp4:general/mov/2025/'+cEl.id.slice(9,13)+'/'+cEl.id.slice(5)+'_z.mp4/playlist.m3u8';
+            if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = m3u8Url;
+                video.play();
+            } else if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(m3u8Url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.play();
+                });
+            } else {
+                console.error("HLS is not supported in this browser.");
+            }
+          }
+        };
         //remove image style
         cEl.querySelectorAll(rmImgStyle).forEach(img => {img.removeAttribute('style')});
         //handle image src
@@ -1783,10 +1804,11 @@ async function ytnGetList(siteName,t){
     });
   var str=await res.text();
   for (let a of JSON.parse(str).data){
-    items.push([a.m_cd+'_'+a.join_key,a.title,a.n_date])
+    items.push([a.m_cd+'_'+a.join_key,a.title,a.n_date,a.m_file_link])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
+    if (h[3]===null){ytnVedio=''}else{ytnVideo='<video id="video-'+h[0]+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'};
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${h[2]}</p>${ytnVideo}</div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1797,7 +1819,7 @@ async function ytnGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html=(doc.querySelector('.arti_summary')?.innerHTML??'')+(doc.querySelector('#YTN_Player')?.outerHTML??'')+(doc.querySelector('#CmAdContent')?.outerHTML??'')+ '<p class="text-end"><a href="https://www.ytn.co.kr/_ln/'+id+'" target="_blank">分享</a></p><br>';
+  html=(doc.querySelector('.arti_summary')?.innerHTML??'')+(doc.querySelector('#CmAdContent')?.outerHTML??'')+ '<p class="text-end"><a href="https://www.ytn.co.kr/_ln/'+id+'" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://www.ytn.co.kr/_ln/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
