@@ -32,7 +32,7 @@ const udnMoney=[['0','即時'],['10846','要聞'],['5588','國際'],['5590','證
 const wealth=[["Articles|","最新"],["Articles|bd088d2c-f76a-4187-8673-1ae412cd6356","謝金河"],["Category|95f4329c-bcf4-47c4-b133-879bb862b479","財經茶水間"],["Category|2c6379e9-7527-442b-880a-bb9552689e06","國際"],["Category|87259978-8ff6-465c-b552-c33f69f6432e","投資理財"],["Category|450cbbed-c577-4d8e-a689-8e90b4f8bac7","財經指標"],["Category|d1354fa3-82bf-42e6-84ad-9e36d7615892","金融圈"],["Category|79c03f3f-d546-4551-a05f-c6d38e5579ca","科技"],["Category|3187845b-57fb-4336-bc4b-4f30cbeb642c","企業"],["Category|dd2b5859-96aa-42bb-b5cc-08e6c7c8728e","生醫"],["Category|800e2b3c-0352-4fba-aea2-01fff6b16015","地產"],["Category|352be1d4-7ce8-42b8-9a84-0f491f7927ea","政經"],["Category|de408237-667e-4594-abd8-8106ba567324","健康醫療"],["Category|2eb0f6be-d8bb-447d-b067-e17601f44056","美食旅遊"],["Category|2492cf34-afd8-40ee-95de-6f340988ab22","品味人生"]];
 const wiki=[['','Did You Know...']];
 const wscn=[['global','最新'],['shares','股市'],['bonds','債市'],['commodities','商品'],['forex','外匯'],['tmt','科技'],['ai','AI']];
-const ytn=[['mcd=0101&hcd=','政治'],['mcd=0102&hcd=','經濟'],['mcd=0103&hcd=','社會'],['mcd=0115&hcd=','全國'],['mcd=0106&hcd=','文化'],['mcd=0117&hcd=03','放送'],['mcd=0117&hcd=04','音樂'],['mcd=0117&hcd=05','電影'],['mcd=0117&hcd=17','專訪'],['mcd=0117&hcd=15','議題'],['mcd=0117&hcd=20','焦點'],['mcd=0117&hcd=18','YTN Star News']];
+const ytn=[['mcd=0103&hcd=','社會'],['mcd=0115&hcd=','全國'],['mcd=0101&hcd=','政治'],['mcd=0102&hcd=','經濟'],['mcd=0104&hcd=','國際'],['mcd=0106&hcd=','文化'],['mcd=0117&hcd=03','放送'],['mcd=0117&hcd=04','音樂'],['mcd=0117&hcd=05','電影'],['mcd=0117&hcd=17','專訪'],['mcd=0117&hcd=15','議題'],['mcd=0117&hcd=20','焦點'],['mcd=0117&hcd=18','YTN Star News']];
 
 const bbgVideo=[['markets;bbiz;technology;cryptocurrencies;pursuits','Latest'],['markets','Markets'],['bbiz','Business'],['technology','Technology'],['cryptocurrencies','Crypto'],['pursuits','Pursuits']];
 const msnVideo=[['vid-4k3nj4ageev4xbh5ka3xq2xv0au7qyya0p2bt0w8tvx9u0x895rs','CNBC'],['money video','Money'],['vid-9sg538d8084xdac9cqur3c8fr7gyh8mehuf2f55ssbmcapc6hrha', 'CBS'],['vid-vvpqk5ypg9f3g4ypq6ahsrf0tu0bu56i7vh63n3tseid8uk4mkvs', 'Washington Post'],['WATCH','MSN'],['lifestyle video','Lifestyle'],['entertainment video','Entertainment']];
@@ -328,19 +328,20 @@ async function getContent(siteName,clickedId,id){
             const video = cEl.querySelector('video');
             const m3u8Url='https://mpeg4.ytn.co.kr/general/_definst_/mp4:general/mov/2025/'+cEl.id.slice(9,13)+'/'+cEl.id.slice(5)+'_z.mp4/playlist.m3u8';
             if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = m3u8Url;
-                video.play();
+                video.src = m3u8Url;video.play();
             } else if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(m3u8Url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play();
-                });
+                const hls = new Hls();hls.loadSource(m3u8Url);hls.attachMedia(video);hls.on(Hls.Events.MANIFEST_PARSED, () => {video.play()});
             } else {
                 console.error("HLS is not supported in this browser.");
             }
           }
+          //paragraph
+          var ss=cEl.querySelector('#CmAdContent').querySelectorAll('span');
+          ss.forEach(span => {
+            const parts = span.innerHTML.split(/<br\s*\/?>/i); 
+            const newHTML = parts.map(part => part.trim()).filter(part => part).map(part => `<p>${part}</p>`).join('');
+            span.innerHTML = newHTML;
+          });
         };
         //remove image style
         cEl.querySelectorAll(rmImgStyle).forEach(img => {img.removeAttribute('style')});
@@ -353,7 +354,7 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='none';
     //handle translation
     if (sites2Translate.includes(siteName)){
-      var all=cEl.querySelectorAll('p, h2, h3, li');
+      var all=cEl.querySelectorAll('p:not(.time), h2, h3, li');
       getTranslation(all);
     }
   } else {
@@ -486,7 +487,7 @@ async function apolloGetList(siteName,t){
   for (let h of hh){
     var a=h.parentElement.previousElementSibling;
     var cid=a.querySelector('h2').children[0].href;
-    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${cid}" class="content" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="fs10">${a.querySelector('time').innerText}</p>${h.outerHTML}<p class="text-end"><a href="${cid}" target="_blank">Share</a></p><br></div><hr>`;
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${cid}" class="content" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="time">${a.querySelector('time').innerText}</p>${h.outerHTML}<p class="text-end"><a href="${cid}" target="_blank">Share</a></p><br></div><hr>`;
   }
   }catch{html='<p>No Content.</p>'}
   return html;
@@ -566,7 +567,7 @@ async function bnextGetContent(id){
   const a = doc.querySelector('[data-cat=article]');
   // var ads=a.querySelector('#pumpkin_159');
   // if(ads){ads.remove()};
-  html = '<p class="fs10">'+t.innerText+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+t.innerText+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -597,7 +598,7 @@ async function businessTodayGetContent(id){
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
-  html = '<p class="fs10">'+(doc.querySelector('.context__info-item--date')?doc.querySelector('.context__info-item--date').innerText:'')+' | '+(doc.querySelector('.context__info-item--author')?doc.querySelector('.context__info-item--author').innerText:'')+'</p><p>'+(doc.querySelector('.article__introduction')?doc.querySelector('.article__introduction').innerHTML:'')+'</p>'+(doc.querySelector('div[itemprop="articleBody"]')?doc.querySelector('div[itemprop="articleBody"]').outerHTML.replaceAll('<p>&nbsp;</p>',''):'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+(doc.querySelector('.context__info-item--date')?doc.querySelector('.context__info-item--date').innerText:'')+' | '+(doc.querySelector('.context__info-item--author')?doc.querySelector('.context__info-item--author').innerText:'')+'</p><p>'+(doc.querySelector('.article__introduction')?doc.querySelector('.article__introduction').innerHTML:'')+'</p>'+(doc.querySelector('div[itemprop="articleBody"]')?doc.querySelector('div[itemprop="articleBody"]').outerHTML.replaceAll('<p>&nbsp;</p>',''):'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -660,9 +661,9 @@ async function businessWeeklyGetContent(id){
   const res=await fetch((preStr+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   if (id.indexOf('StrId=')==-1){
-    html = '<p class="fs10">'+(doc.querySelector('.Padding-left.Margin-top')?.innerText??'')+'</p>'+(doc.querySelector('.Single-summary')?.outerHTML??'')+(doc.querySelector('.Single-article')?.outerHTML??'')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+    html = '<p class="time">'+(doc.querySelector('.Padding-left.Margin-top')?.innerText??'')+'</p>'+(doc.querySelector('.Single-summary')?.outerHTML??'')+(doc.querySelector('.Single-article')?.outerHTML??'')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
   } else {
-    html = '<p class="fs10">'+(doc.querySelector('.articleinfo')?.innerText??'')+'</p>'+(doc.querySelector('.postbody')?.outerHTML??'')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';    
+    html = '<p class="time">'+(doc.querySelector('.articleinfo')?.innerText??'')+'</p>'+(doc.querySelector('.postbody')?.outerHTML??'')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';    
   }
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -714,7 +715,7 @@ async function cnaGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html= '<p class="fs10">'+doc.querySelector('.updatetime').innerText+'</p>'+doc.querySelector('.paragraph').outerHTML.replaceAll('</span></a><a','</span></a><br><a') + '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  html= '<p class="time">'+doc.querySelector('.updatetime').innerText+'</p>'+doc.querySelector('.paragraph').outerHTML.replaceAll('</span></a><a','</span></a><br><a') + '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -754,7 +755,7 @@ async function cnyesGetList(siteName,t){
     let str=await res.json();
     for (let a of str.items.data){
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')">
-            <p class="fs10">${cvt2Timezone(a.publishAt*1000)}</p>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
+            <p class="time">${cvt2Timezone(a.publishAt*1000)}</p>${decodeHTMLEntities(a.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
             </div><hr>`;
     }
   }
@@ -789,7 +790,7 @@ async function cnyesGetSearchResults(siteName,t){
   let str=await res.json();
   if(str.items.data!==null && str.items.data!==undefined){
     for (let a of str.items.data){
-      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')"><p class="fs10">${cvt2Timezone(a.publishAt*1000)}</p></div><hr>`;
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')"><p class="time">${cvt2Timezone(a.publishAt*1000)}</p></div><hr>`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
@@ -816,7 +817,7 @@ async function cnyeshaoGetList(siteName,t){
     }
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]?h[1]:'【詳內文】'}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3]}<p class="text-end"><a href="https://hao.cnyes.com/post/${h[0]}" target="_blank">分享</a></p><br></div><hr>`;
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]?h[1]:'【詳內文】'}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3]}<p class="text-end"><a href="https://hao.cnyes.com/post/${h[0]}" target="_blank">分享</a></p><br></div><hr>`;
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -834,7 +835,7 @@ async function cteeGetList(siteName,t){
     items.push([h.hyperLink,h.title,h.publishDatetime])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])}</p></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])}</p></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -856,7 +857,7 @@ async function cteeGetSearchResults(siteName,t){
     items.push([h.articleUrl,h.title,h.publishDate])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${h[2]}</p></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${h[2]}</p></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -896,9 +897,9 @@ async function dwGetContent(id){
   d=JSON.parse(d[d.length-1].innerText.slice(22,-2));
   d=d[Object.keys(d)[1]].data.content;
   if(id.indexOf('video-')===-1){
-    html = '<p class="fs10">'+d.localizedContentDate+'</p>'+d.text.replace(/poster="data[\s\S]*?"/g,'').replaceAll('data-url="https://static.dw.com/image','src="https://static.dw.com/image').replaceAll('${formatId}','905')+ '<p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
+    html = '<p class="time">'+d.localizedContentDate+'</p>'+d.text.replace(/poster="data[\s\S]*?"/g,'').replaceAll('data-url="https://static.dw.com/image','src="https://static.dw.com/image').replaceAll('${formatId}','905')+ '<p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
   }else{
-    html = '<p class="fs10">'+d.localizedContentDate+'</p><p>'+d.teaser+'</p><video controls playsinline><source src="'+d.openGraphMetadata.url+'" type="video/mp4"></source></video><p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
+    html = '<p class="time">'+d.localizedContentDate+'</p><p>'+d.teaser+'</p><video controls playsinline><source src="'+d.openGraphMetadata.url+'" type="video/mp4"></source></video><p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
   }
   }catch{html='<p><a href="https://www.dw.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -923,7 +924,7 @@ async function invtComGetList(siteName,t){
     }
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`;
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`;
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -963,7 +964,7 @@ async function isblGetList(siteName,t){
       var dt=doc.querySelector('.date-meta').innerText.replaceAll('\\n',' ');
       var pg=doc.querySelector('.elementor-text-editor');
       if (doc.querySelector('.gallery-icon')){var img=doc.querySelector('.gallery-icon')}else{var img=doc.querySelector('.elementor-image')};
-      html+='<p class="title">'+hh.textContent+'</p><p class="fs10">'+dt+'</p>'+pg.innerHTML+img.innerHTML+'<br><br><hr>';
+      html+='<p class="title">'+hh.textContent+'</p><p class="time">'+dt+'</p>'+pg.innerHTML+img.innerHTML+'<br><br><hr>';
       html=html.replaceAll('<p>Image:','<p class=\"fs10\">Image:'); 
     }
   }catch{html='<p>No Content.</p>'}
@@ -985,7 +986,7 @@ async function jinGetList(siteName,t){
     items.push([h.querySelector('a').href,h.querySelector('.jin10-news-list-item-title').innerText,h.querySelector('.jin10-news-list-item-display_datetime').innerText+' | '+(h.querySelector('.jin10-news-list-item-topic')?.textContent??'').replace('\n                来自专题:\n                \n                  订阅','')])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${s2t(h[2])}</p></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time>${s2t(h[2])}</p></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1051,9 +1052,9 @@ async function lineTodayGetContent(id){
   const a = str.data;
   if (a) {
     if (a.media==undefined){
-      var html = '<p class="fs10">' + a.publishTime + ' | ' + a.publisher + '</p>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
+      var html = '<p class="time">' + a.publishTime + ' | ' + a.publisher + '</p>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
     } else {
-      html = '<p class="fs10">' + a.publishTime + ' ' + a.publisher + '</p>' + '<video class="video-js" style="width:100%" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+a.media.hash+'/270p.m3u8" muted="muted" type="application/x-mpegURL"></source></video>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
+      html = '<p class="time">' + a.publishTime + ' ' + a.publisher + '</p>' + '<video class="video-js" style="width:100%" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+a.media.hash+'/270p.m3u8" muted="muted" type="application/x-mpegURL"></source></video>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
     }
   }
   }catch{html='<p><a href="' + a.url.url + '" target="_blank">繼續閱讀</a></p><br>'}
@@ -1101,7 +1102,7 @@ async function mindiGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html = '<p class="fs10">'+doc.querySelector('p.post-date').innerText+'</p>'+doc.querySelector('.entry-content').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+doc.querySelector('p.post-date').innerText+'</p>'+doc.querySelector('.entry-content').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1140,14 +1141,14 @@ async function msnGetContent(id){
   var d=await res.json();
 
   if (d.type==='article'){
-    html = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name||'')+'</p>' +(d.body?d.body.replaceAll('\/>','\/><br>'):'')+ '<p class="text-end"><a href="' + (d.sourceHref||'') + '" target="_blank">分享</a></p><br>';
+    html = '<p class="time">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name||'')+'</p>' +(d.body?d.body.replaceAll('\/>','\/><br>'):'')+ '<p class="text-end"><a href="' + (d.sourceHref||'') + '" target="_blank">分享</a></p><br>';
   } else if (d.type==='slideshow'){
     var slides=d.slides;
     var slidesHtml='';
     for (let s of slides){
       slidesHtml+='<img src="'+(s.image.url?s.image.url:'')+'"><br><p>'+(s.title?s.title:'')+'</p>'+(s.body?s.body:'');
     }
-    html = '<p class="fs10">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name||'')+'</p>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref||'') + '" target="_blank">分享</a></p><br>';
+    html = '<p class="time">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name||'')+'</p>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref||'') + '" target="_blank">分享</a></p><br>';
   } 
   }catch{html='<p><a href="' + ((d && d.sourceHref)||'') + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -1171,7 +1172,7 @@ async function peInsightsGetList(siteName,t){
     }
   }
   for (let h of items){
-    html+=`<div class="t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title">${h[1]}</p></div><p class="fs10">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<div class="t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title">${h[1]}</p></div><p class="time">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -1220,7 +1221,7 @@ async function newslensGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html = '<p class="fs10">'+doc.querySelector('div.item-froms').innerText.replace(/\s+/g,' ')+'</p>'+doc.querySelector('section.item.article-body').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+doc.querySelector('div.item-froms').innerText.replace(/\s+/g,' ')+'</p>'+doc.querySelector('section.item.article-body').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1250,7 +1251,7 @@ async function reutersGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html = '<p class="fs10">'+cvt2Timezone(doc.querySelector('time').dateTime)+' | '+doc.querySelector('.container-S9SJ08EW').querySelector('span').innerText+'</p>' +doc.querySelector('.body-KX2tCBZq.body-pIO_GYwT.content-pIO_GYwT').outerHTML+'<p class="text-end"><a href="https://tw.tradingview.com' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+cvt2Timezone(doc.querySelector('time').dateTime)+' | '+doc.querySelector('.container-S9SJ08EW').querySelector('span').innerText+'</p>' +doc.querySelector('.body-KX2tCBZq.body-pIO_GYwT.content-pIO_GYwT').outerHTML+'<p class="text-end"><a href="https://tw.tradingview.com' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://tw.tradingview.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1279,9 +1280,9 @@ async function sinaGetContent(id){
   try{const res = await fetch(preStr+id);const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
   if (/[0-9]/.test(rt)){
-  html='<p class="fs10">'+doc.querySelector('.date-source').innerText+'</p>'+doc.querySelector('#artibody').outerHTML.replace(/src="data:image[\s\S]*?data-src/g,'src') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';   
+  html='<p class="time">'+doc.querySelector('.date-source').innerText+'</p>'+doc.querySelector('#artibody').outerHTML.replace(/src="data:image[\s\S]*?data-src/g,'src') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';   
   } else {
-  html='<p class="fs10">'+doc.querySelector('time').innerText.replace(/\s+/g,' ')+'</p>'+doc.querySelector('section.art_pic_card.art_content').outerHTML.replace(/src="data:image[\s\S]*?data-src/g,'src') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'; 
+  html='<p class="time">'+doc.querySelector('time').innerText.replace(/\s+/g,' ')+'</p>'+doc.querySelector('section.art_pic_card.art_content').outerHTML.replace(/src="data:image[\s\S]*?data-src/g,'src') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'; 
   }}catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1307,7 +1308,7 @@ async function substackGetList(siteName,t){
 async function substackGetContent(id){
   try{const res = await fetch(preStr+'https://'+rt+'.substack.com/api/v1/posts/'+id);
   const str=await res.json();
-  html = '<p class="fs10">'+cvt2Timezone(str.updated_at)+'</p><p>'+str.subtitle+'</p>'+str.body_html+'<p class="text-end"><a href="https://'+rt+'.substack.com/p/' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+cvt2Timezone(str.updated_at)+'</p><p>'+str.subtitle+'</p>'+str.body_html+'<p class="text-end"><a href="https://'+rt+'.substack.com/p/' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://'+rt+'.substack.com/p/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1357,7 +1358,7 @@ async function technewsGetContent(id){
     var z=a.outerHTML+b.outerHTML;
   }
 
-  html = '<p class="fs10">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'
+  html = '<p class="time">'+t.innerText+'</p>'+z+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>'
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1373,7 +1374,7 @@ async function twtGetList(siteName,t){
   const sm=doc.querySelector('.show-more').children[0].href;cursor=sm.slice(sm.indexOf('?'));
   items=doc.querySelectorAll('.tweet-body');
   for (let h of items){
-    html+='<p class="fs10">'+(h.querySelector('.tweet-date')?.innerText??'')+' | '+(h.querySelector('.fullname')?.innerText??'')+' '+(h.querySelector('.username')?.innerText??'')+'</p>'+(h.querySelector('.tweet-content.media-body')?.outerHTML.replaceAll('<div','<p').replaceAll('</div>','</p>')??'');
+    html+='<p class="time">'+(h.querySelector('.tweet-date')?.innerText??'')+' | '+(h.querySelector('.fullname')?.innerText??'')+' '+(h.querySelector('.username')?.innerText??'')+'</p>'+(h.querySelector('.tweet-content.media-body')?.outerHTML.replaceAll('<div','<p').replaceAll('</div>','</p>')??'');
     try{var img=h.querySelector('.attachments').querySelectorAll('img');
     if (img){for (let i of img){html+='<img src="'+i.src+'">';}}
    }catch{};
@@ -1414,7 +1415,7 @@ async function udnGetContent(id){
   var doc = parser.parseFromString(str, "text/html");
   var t=doc.querySelector('.authors');
   var a=doc.querySelector('.article-content');
-  html = '<p class="fs10">'+t.innerText+'</p>'+a.outerHTML + '<p class="text-end"><a href="https://udn.com' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+t.innerText+'</p>'+a.outerHTML + '<p class="text-end"><a href="https://udn.com' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://udn.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1459,7 +1460,7 @@ async function udnMoneyGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html = '<p class="fs10">'+doc.querySelector('time').innerText+' | '+doc.querySelector('.article-body__info').innerText+'</p>' +doc.querySelector('.article-body__editor').outerHTML+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+doc.querySelector('time').innerText+' | '+doc.querySelector('.article-body__info').innerText+'</p>' +doc.querySelector('.article-body__editor').outerHTML+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1558,7 +1559,7 @@ async function wealthGetContent(id){
   var data=str.data.article;
   var content=JSON.parse(str.data.article.content);
 
-  html = '<p class="fs10">'+cvt2Timezone(data.releasedAt)+' | '+data.authors[0].name+'</p><img src="https://static.wealth.com.tw/'+data.cover+'"><p class="fs10">'+data.coverText+'</p><div id="'+id+'__">aaaaa</div><p class="text-end"><a href="https://www.wealth.com.tw/articles/' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+cvt2Timezone(data.releasedAt)+' | '+data.authors[0].name+'</p><img src="https://static.wealth.com.tw/'+data.cover+'"><p class="time">'+data.coverText+'</p><div id="'+id+'__">aaaaa</div><p class="text-end"><a href="https://www.wealth.com.tw/articles/' + id + '" target="_blank">分享</a></p><br>';
   var body='';    
   for (let c of content){
     if (c.type=='p'){
@@ -1636,7 +1637,7 @@ async function wscnGetList(siteName,t){
 async function wscnGetContent(id){
   try{const res = await fetch('https://api-one-wscn.awtmt.com/apiv1/content/'+id+'?extract=0');
   const str=await res.json();
-  html = '<p class="fs10">'+cvt2Timezone(str.data.display_time*1000)+'</p>'+str.data.content + '<p class="text-end"><a href="https://wallstreetcn.com/' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+cvt2Timezone(str.data.display_time*1000)+'</p>'+str.data.content + '<p class="text-end"><a href="https://wallstreetcn.com/' + id + '" target="_blank">分享</a></p><br>';
   if (str.videos!==undefined){html+='<video style="width:100%" tabindex="-1" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+str.videos[0].uri+' type="application/x-mpegURL"></source></video>'};
   }catch{html='<p><a href="https://wallstreetcn.com/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -1681,7 +1682,7 @@ async function xueqiuGetList(siteName,t){
       for (let h of str.list){items.push([h.target,(h.title===undefined||h.title===null||h.title==='')?h.description:h.title,h.created_at,h.text,h.user.screen_name]);}    
     }
     for (let h of items){
-      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3]}<p class="text-end"><a href="https://xueqiu.com${h[0]}" target="_blank">分享</a></p><br></div><hr>`;
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3]}<p class="text-end"><a href="https://xueqiu.com${h[0]}" target="_blank">分享</a></p><br></div><hr>`;
     }    
   }
   }catch{html='<p>尚無內容</p>'}
@@ -1691,7 +1692,7 @@ async function xueqiuGetList(siteName,t){
 async function xueqiuGetContent(id){
   try{const res=await fetch('https://xueqiu.com'+id);const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
-  html = '<p class="fs10">'+doc.querySelector('.avatar__subtitle').innerText+'</p>'+doc.querySelector('.article__bd__detail').outerHTML+ '<p class="text-end"><a href="https://xueqiu.com' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+doc.querySelector('.avatar__subtitle').innerText+'</p>'+doc.querySelector('.article__bd__detail').outerHTML+ '<p class="text-end"><a href="https://xueqiu.com' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://xueqiu.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1725,7 +1726,7 @@ async function yahooTWGetContent(id){
     const str=await res.json();
     var a=str.items[0].data.partnerData;
     var b=str.items[0].markup.replaceAll('data-src','src').replace(/padding-bottom[\\s\\S]*?%/g,'');
-    html = '<p class="fs10">'+cvt2Timezone(a.publishDate)+' | '+a.publisher+'</p>'+ b + '<p class="text-end"><a href="' + a.finalUrl + '" target="_blank">分享</a></p><br>';
+    html = '<p class="time">'+cvt2Timezone(a.publishDate)+' | '+a.publisher+'</p>'+ b + '<p class="text-end"><a href="' + a.finalUrl + '" target="_blank">分享</a></p><br>';
   }catch{html='<p>尚無內容</p><br>'}
   return html;
 }
@@ -1808,7 +1809,7 @@ async function ytnGetList(siteName,t){
   }
   for (let h of items){
     if (h[3]===null){ytnVedio=''}else{ytnVideo='<video id="video-'+h[0]+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'};
-    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="fs10">${h[2]}</p>${ytnVideo}</div><hr>`
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${h[2]}</p>${ytnVideo}</div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1846,7 +1847,7 @@ async function bbgVideoGetList(siteName,t){
     items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
 
     for (let h of items){
-      html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://www.bloomberg.com/media-manifest/videos/android/WiFi/${h[0]}.m3u8')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="fs10">${cvt2Timezone(h[2])} | <span class="fw-bold">${cvtS2HHMMSS(h[3],1000)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://www.bloomberg.com/media-manifest/videos/android/WiFi/${h[0]}.m3u8')"></div><hr>`
+      html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://www.bloomberg.com/media-manifest/videos/android/WiFi/${h[0]}.m3u8')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="time">${cvt2Timezone(h[2])} | <span class="fw-bold">${cvtS2HHMMSS(h[3],1000)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://www.bloomberg.com/media-manifest/videos/android/WiFi/${h[0]}.m3u8')"></div><hr>`
     }
   }catch{html='<p>No Content.</p>'}
   return html;
@@ -1881,7 +1882,7 @@ async function msnVideoGetList(siteName,t){
   items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
   
   for (let h of items){
-    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="fs10">${h[7]}<br>${cvt2Timezone(h[2])} | <span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="time">${h[7]}<br>${cvt2Timezone(h[2])} | <span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
   }
   }catch{html='<p>No Content.</p>'}
   return html;
@@ -1906,7 +1907,7 @@ async function msnChannelVideoGetList(siteName,t){
   items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
   
   for (let h of items){
-    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="fs10">${cvt2Timezone(h[2])} | <span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="time">${cvt2Timezone(h[2])} | <span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
   }
   return html;
   }catch{html='<p>尚無內容</p>'}
@@ -1950,7 +1951,7 @@ async function wsjVideoGetList(siteName,t){
   items.sort((a, b) => {return Number(new Date(b[2]).getTime()) - Number(new Date(a[2]).getTime())});
   
   for (let h of items){
-    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="fs10">${cvt2Timezone(h[2])} | <span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
+    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"><img src="${h[4]}" class="pb-2"><p class="title">${h[1]}</p><p class="time">${cvt2Timezone(h[2])} | <span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','${h[6]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
