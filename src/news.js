@@ -84,7 +84,7 @@ const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var siteNameVar='',docTitle='',tabs=[];
-var items=[],ytnVideo='',ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0;
+var items=[],ytnCoverImg='',ytnVideo='',ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0;
 //const sats=getLastNSats(5);
 
 //    RENDER HTML FOR BOOKMARKLET
@@ -1805,11 +1805,11 @@ async function ytnGetList(siteName,t){
     });
   var str=await res.text();
   for (let a of JSON.parse(str).data){
-    items.push([a.m_cd+'_'+a.join_key,a.title,a.n_date,a.m_file_link])
+    items.push([a.m_cd+'_'+a.join_key,a.title,a.n_date,a.img,a.m_file_link])
   }
   for (let h of items){
-    if (h[3]===null){ytnVedio=''}else{ytnVideo='<video id="video-'+h[0]+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'};
-    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${h[2]}</p>${ytnVideo}</div><hr>`
+    if (!h[4]){ytnVedio=''}else{ytnVideo='<video id="video-'+h[0]+'" class="video-js" style="width:100%;height:auto" playsinline controls></video>'};
+    html+=`<div onclick="getContent('${siteName}',this.id,'${h[0]}')"><img src="${h[3]}"><p class="title t-tl">${h[1]}</p></div><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${h[2]}</p>${ytnVideo}</div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
