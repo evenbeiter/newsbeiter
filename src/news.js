@@ -779,7 +779,7 @@ async function cnyesGetContent(id){
     let str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
-    html=doc.querySelector('#article-container').outerHTML+ '<p class="text-end"><a href="https://news.cnyes.com/news/id/'+id + '" target="_blank">分享</a></p><br>';
+    html=doc.querySelector('#article-container').outerHTML.replaceAll('src="/_next/image?url=','src="')+ '<p class="text-end"><a href="https://news.cnyes.com/news/id/'+id + '" target="_blank">分享</a></p><br>';
   }
   }catch{html='<p><a href="https://news.cnyes.com/news/id/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html
