@@ -78,7 +78,7 @@ const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
 const sites2Translate=['apollo','ecoMag','msnUS','nb','peInsights','substack','ytn'];
 const noNextPage=['ecoMag'];
 const msnALL=['msnTW','msnUS'];
-const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader';
+const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
 
 
 //    GLOBAL VARIABLES
