@@ -20,6 +20,7 @@ const msnTW=[['Y_321db332-7d5a-4672-96b5-2d342ca554fb', '焦點'],['Y_ab001b84-6
 const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e-4a75-ba34-6460811ccfe3','Tech'],['Y_99096e96-6d4f-401c-832b-461e08143a5a','Lifestyle'],
   ['Y_69fcfcf0-f686-4b19-9901-0a4ce35b823d', 'Business'],['Y_ce1fe19d-4d60-4312-b4d6-8cba9aa76413', 'Stocks'],['Y_8c7b0706-a0d1-49f1-8603-5c33a3dadd73', 'Economics'],['Y_d6433e0a-2be3-4106-839c-5a40a5375514', 'AI'],['Y_dc6dc645-d63a-4c97-8812-3ecdf27695b8', 'SMID'],['Y_f457eae0-84c0-4d35-b1dc-8435b7b6c140', 'Generative AI'],
   ['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', 'Bloomberg'],['vid-mpxsw8rp392wedf25t8tfhk7r3b364q8dj75ks43nimmf06qg2es', 'Reuters'],['vid-r0r09b3muc6xnf5tv2est5f5ukjbkk67i9svrhyu3jy2pskkbems', 'MarketWatch'],['vid-y572a3ryyddhuiujs0xe2j4m4b6c3n2fp5hnux4jpsdand8h09ys', 'WSJ'],['vid-bpwfbvkfudq92wksju4upi9jrx2pn0ax46vrw0vkst93vpwr5pva', 'CNN'],['vid-v3atkpesfykfx7084fbu0cpbtx0jne99kctychfsn9ry96wsmbba', 'BBC'],['vid-r4du2vx0u9h0kr9tx7iyx55w7sneq7e6tg934epuehq3grvn05aa', 'Fortune'],['vid-n3h9ssyxg550pryvt4287xynyckhu84k5vc6n3tdqwsvtvmn2p0s', 'USA TODAY'],['vid-27xbtchrc5gpxe8uhvw9f24q2kqi9f0ppk7ptb8xw9v9sscheg6s', 'Motley Fool'],['vid-i3g0qyhrtn28biukcpyvsrmhccmv8k8ugtmtr6kqhb9dkf6ccrua', 'FOX News'],['vid-rvn4g4busxh65p6kgfvhye9atw9n8ebd46ut057ypkbm5n6xa5ts', 'BuzzFeed']];
+const nb=[['All',''],['Fixed Income','filterone[]={921E72A4-5051-4B39-8273-7D833553B3F6}'],['Equities','filterone[]={2E93C31D-413D-4D7D-AC8D-D9C21D5372D6}'],['Multi-Asset','filterone[]={7BC2AFCB-3CBD-448C-9C3E-556C97A543FA}'],['Public Real Assets','filterone[]={34CE1C17-AF8D-4385-9B86-776EE519795D}'],['Liquid Alts','filterone[]={72DFCB28-DD56-4266-8FAA-D887379A3F15}'],['Private Equity','filterone[]={9FA955E6-01E1-405B-A205-2AA05834D459}'],['Private Credit','filterone[]={33BE00CD-749A-4862-B004-0A6F837C6221}'],['Specialty Alternatives','filterone[]={C4880DDA-A4F7-4DB7-A265-8327C3A0C7D9}']];
 const newslens=[['latest-article/','最新'],['event-tag/380574-2025川普對等關稅/','對等關稅'],['tag/22338/','川普'],['category/economy/','經濟'],['category/business/','商業'],['category/personal-finance/','理財'],['tag/5260/','美債'],['category/tech/','科技'],['tag/3503/','供應鏈'],['tag/30/','台灣'],['category/world/','國際'],['category/us-canada/','美加'],['tag/83/','美國'],['category/europe/','歐洲'],['category/china/','中國'],['category/indo-pacific/','印太'],['tag/64/','日本'],['category/latin-america/','拉美'],['category/middle-east/','中東'],['category/africa/','非洲'],['author/BBC/','BBC中文'],['author/cnataiwan/','中央社'],['category/arts-culture/','藝文'],['category/literature/','文學'],['category/movie-tv/','影劇'],['category/health/','健康'],['category/lifestyle/','生活'],['category/psychology/','心理'],['category/language/','語文'],['author/bookdigest/','書摘'],['author/editor/','轉載']];
 const peInsights=[['','Latest']];
 var preStr=''; if (onEVBT===true){preStr=sCC(uLi,iOd)};
@@ -57,7 +58,7 @@ const yahooTW=[['cff206bf-9612-4903-9863-a9ad12319b12','焦點'],['b11aeba6-28c8
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //var apollo,bbc,bnext,businessToday,businessWeekly,cnyes,ctee,dw,jin,lineToday,msnTW,msnUS,newslens,peInsights,reuters,sina,substack,technews,udn,udnMoney,wealth,wiki,wscn,msnVideo,wsjVideo,bbgVideo,reutersVideo;
-//var cna,cnyeshao,invtCom,isbl,marie,mindi,xueqiu,yahooTW;
+//var cna,cnyeshao,invtCom,isbl,marie,mindi,nb,xueqiu,yahooTW;
 const twt=[['WinfieldSmart','Win Smart'],['MikeZaccardi','Mike Zaccardi'],['Barchart','Barchart'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
 const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-ce30-48f5-93ed-567dfcf3e07b','Editor’s Picks'],['2d4617cb-4448-4bbe-be69-507820ee12be','Investing & Market Insights'],['9657ccb4-0423-4420-94de-024c54839a21','Trending Stocks'],['e799ec4c-02d3-477d-ba05-e8bb5c88bfc8','Tech News'],['aa2ec37b-b63e-4154-b9bd-18e0b14bb1e7','Asking for a Trend'],['d27bc0dd-04f8-4a61-8b08-9c7c6cc3169f','Catalysts'],['9a665a61-55bd-43bc-8657-6eb984ef9a37','Market Domination'],['0c9d1849-74a9-459f-9131-a9cee22acc8e','Morning Brief'],['739eb51e-bc2e-4bd2-99a8-6793977028ed','Market Domination Overtime']];
 
@@ -69,12 +70,12 @@ const videoSites=[['msnVideo','MSN'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',
 
 const faqB=[['yahooTW','Yahoo','私募'],['yahooTW','Yahoo','日股'],['yahooTW','Yahoo','美債']];
 const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday','LINE']]; 
-const allSitesB=[['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
+const allSitesB=[['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['nb','NB',nb,'nb.com','https://www.nb.com'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','ecoMag','msnUS','peInsights','substack','ytn'];
+const sites2Translate=['apollo','ecoMag','msnUS','nb','peInsights','substack','ytn'];
 const noNextPage=['ecoMag'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader';
@@ -1152,6 +1153,35 @@ async function msnGetContent(id){
     html = '<p class="time">'+(d.updatedDateTime?cvt2Timezone(d.updatedDateTime):'')+' | '+(d.provider.name||'')+'</p>' +slidesHtml+ '<p class="text-end"><a href="' + (d.sourceHref||'') + '" target="_blank">分享</a></p><br>';
   } 
   }catch{html='<p><a href="' + ((d && d.sourceHref)||'') + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
+
+//    NB
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function nbGetList(siteName,t){
+  try{
+  var res = await fetch('https://www.nb.com/api/Sitecore/Article/FilterResults', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
+    body: t+'&language=en&sortOrder=new',
+    });
+  var str=await res.json();
+  var parser=new DOMParser();var doc=parser.parseFromString(str.filteredResults, "text/html");
+  var hh=doc.querySelectorAll('.article-list-tile');
+  for (let h of hh){items.push([h.querySelector('a').href,h.querySelector('h6').innerText,h.querySelector('date').innerText])};
+  for (let h of items){html+=`<div onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title t-tl">${h[1]}</p><p class="time">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`};
+  }catch{html='<p>No Content.</p>'}
+  return html;
+}
+
+async function nbGetContent(id){
+  try{const res = await fetch(preStr+id);const str=await res.text();
+  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+  html = '<p class="time">'+doc.querySelector('.article-date-content')?.innerText??''+'</p>'+doc.querySelectorAll('.col-xs-12.col-sm-9')[1]?.innerHTML??'' + '<p class="text-end"><a href="' + id + '" target="_blank">Share</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
