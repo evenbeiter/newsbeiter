@@ -1171,7 +1171,7 @@ async function nbGetList(siteName,t){
   var str=await res.json();
   var parser=new DOMParser();var doc=parser.parseFromString(str.filteredResults, "text/html");
   var hh=doc.querySelectorAll('.article-list-tile');
-  var data=hh.slice((rr-1)*25,rr*25);
+  var data=Array.from(hh).slice((rr-1)*25,rr*25);
   for (let h of data){items.push([h.querySelector('a').href,h.querySelector('h6').innerText,h.querySelector('date').innerText])};
   for (let h of items){html+=`<div onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title t-tl">${h[1]}</p><span class="time">${h[2]}</span><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`};
   }catch{html='<p>No Content.</p>'}
