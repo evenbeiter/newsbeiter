@@ -1171,7 +1171,8 @@ async function nbGetList(siteName,t){
   var str=await res.json();
   var parser=new DOMParser();var doc=parser.parseFromString(str.filteredResults, "text/html");
   var hh=doc.querySelectorAll('.article-list-tile');
-  for (let h of hh){items.push([h.querySelector('a').href,h.querySelector('h6').innerText,h.querySelector('date').innerText])};
+  var data=hh.slice((rr-1)*25,rr*25);
+  for (let h of data){items.push([h.querySelector('a').href,h.querySelector('h6').innerText,h.querySelector('date').innerText])};
   for (let h of items){html+=`<div onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title t-tl">${h[1]}</p><p class="time">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`};
   }catch{html='<p>No Content.</p>'}
   return html;
@@ -1179,7 +1180,7 @@ async function nbGetList(siteName,t){
 
 async function nbGetContent(id){
   try{const res = await fetch(preStr+id);const str=await res.text();
-  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");console.log(doc.querySelectorAll('.col-xs-12.col-sm-9')[1]);
   html = '<p class="time">'+doc.querySelector('.article-date-content')?.innerText??''+'</p>'+doc.querySelectorAll('.col-xs-12.col-sm-9')[1]?.innerHTML??'' + '<p class="text-end"><a href="' + id + '" target="_blank">Share</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
