@@ -1406,7 +1406,7 @@ async function twtGetList(siteName,t){
   const sm=doc.querySelector('.show-more').children[0].href;cursor=sm.slice(sm.indexOf('?'));
   items=doc.querySelectorAll('.tweet-body');
   for (let h of items){
-    html+='<p class="time">'+(h.querySelector('.tweet-date')?.innerText??'')+' | '+(h.querySelector('.fullname')?.innerText??'')+' '+(h.querySelector('.username')?.innerText??'')+'</p>'+(h.querySelector('.tweet-content.media-body')?.outerHTML.replaceAll('<div','<p').replaceAll('</div>','</p>').replaceAll('%3Fname%3Dsmall%26format%3Dwebp','').replaceAll('loading="lazy"','')??'');
+    html+='<p class="time">'+(h.querySelector('.tweet-date')?.innerText??'')+' | '+(h.querySelector('.fullname')?.innerText??'')+' '+(h.querySelector('.username')?.innerText??'')+'</p>'+(h.querySelector('.tweet-content.media-body')?.outerHTML.replaceAll('<div','<p').replaceAll('</div>','</p>').replaceAll('%3Fname%3Dsmall%26format%3Dwebp','')??'');
     try{var img=h.querySelector('.attachments').querySelectorAll('img');
     if (img){for (let i of img){html+='<img src="'+i.src+'">';}}
    }catch{};
