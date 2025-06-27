@@ -78,6 +78,7 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
 const sites2Translate=['apollo','ecoMag','kd','msnUS','nb','peInsights','substack','ytn'];
+const text2Speech=['kd'];
 const noNextPage=['ecoMag','kd'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
@@ -369,7 +370,8 @@ async function getContent(siteName,clickedId,id){
         getTranslation(all);
       } else {
         var txt=cEl.previousElementSibling.textContent;txt=txt.substring(txt.indexOf('. ')+2);
-        if (txt!==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
+        const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
+        if (cEl.innerText!==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
       }
     }
   } else {
