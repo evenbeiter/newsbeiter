@@ -244,12 +244,12 @@ function createChannelList(site,siteName,top){
   channelList.innerHTML='';
   if (siteName.indexOf('|')===-1){
     for (let tab of site){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top} | ${tab[1]}','${tab[0]}')">${tab[1]}</button>`;}
+    get1stList(siteName, top+' | '+site[0][1],site[0][0]);
   } else {
     const title=siteName.split('|')[0];const num=siteName.split('|')[1];
-    for (let i=1;i<Number(num)+1;i++){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('kd','${top} | ${i.padStart(num.length, '0')}','${title}/${i.padStart(num.length, '0')}')">${i.padStart(num.length, '0')}</button>`;}
+    for (let i=1;i<Number(num)+1;i++){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('kd','${top} | ${String(i).padStart(num.length, '0')}','${title}/${String(i).padStart(num.length, '0')}')">${String(i).padStart(num.length, '0')}</button>`;}
   }
   openChannelList();
-  get1stList(siteName, top+' | '+site[0][1],site[0][0]);
 }
 
 function createSearchListDiv(faqList,searchSiteList){
@@ -262,7 +262,8 @@ function createUrlListDiv(sitesList){
   if (onEVBT===true){
     for (let s of sitesList){
       for (let tab of s){
-        urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
+        if (tab[0].indexOf('|')===-1){var ln=tab[0]}else{var ln=''};
+        urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${ln},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
       }
       urlList.innerHTML+='<hr>';
     }
