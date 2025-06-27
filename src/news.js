@@ -371,7 +371,7 @@ async function getContent(siteName,clickedId,id){
       } else {
         var txt=cEl.previousElementSibling.textContent;txt=txt.substring(txt.indexOf('. ')+2);
         const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
-        if (cEl.innerText!==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
+        if (cEl.innerText==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
       }
     }
   } else {
