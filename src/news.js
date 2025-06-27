@@ -67,16 +67,18 @@ const searchSites=[['lineToday','LINE'],['cnyes','鉅亨'],['wscn','華爾街見
 const allSites1=[['msnTW','MSN 台灣',msnTW,'msn.com/zh-tw','https://www.msn.com/zh-tw'],['ctee','工商',ctee,'ctee.com.tw','https://www.ctee.com.tw/'],['udn','聯合',udn,'udn.com','https://udn.com/'],['wealth','財訊',wealth,'wealth.com.tw','https://www.wealth.com.tw/'],['dw','德國之聲',dw,'dw.com/zh-hant','https://www.dw.com/zh-hant/'],['wscn','華爾街見聞',wscn,'wallstreetcn.com','https://wallstreetcn.com/']];
 const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['substack','Substack',substack,'substack.com','https://altgoesmainstream.substack.com/'],['ytn','YTN',ytn,'ytn.co.kr','https://www.ytn.co.kr']];
 const videoSites=[['msnVideo','MSN'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2'],['reutersVideo','Reuters']];
+const kd=[['이산|77','李祘']];
+
 
 const faqB=[['yahooTW','Yahoo','私募'],['yahooTW','Yahoo','日股'],['yahooTW','Yahoo','美債']];
 const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday','LINE']]; 
 const allSitesB=[['yahooTW','奇摩新聞',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['nb','NB',nb,'nb.com','https://www.nb.com'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['marie','美麗佳人',marie,'marieclaire.com','https://www.marieclaire.com.tw/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
-const openContentDirectly=['apollo','cnyeshao','ecoMag'];
+const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','ecoMag','msnUS','nb','peInsights','substack','ytn'];
-const noNextPage=['ecoMag'];
+const sites2Translate=['apollo','ecoMag','kd','msnUS','nb','peInsights','substack','ytn'];
+const noNextPage=['ecoMag','kd'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
 
@@ -228,7 +230,7 @@ if (onEVBT===false){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   ping();
-  createUrlListDiv([allSites1,allSites2,videoSites]);
+  createUrlListDiv([allSites1,allSites2,videoSites,kd]);
   createSearchListDiv(faq,searchSites);
   openUrlList();
 }
@@ -240,7 +242,12 @@ if (onEVBT===false){
 
 function createChannelList(site,siteName,top){
   channelList.innerHTML='';
-  for (let tab of site){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top} | ${tab[1]}','${tab[0]}')">${tab[1]}</button>`;}
+  if (siteName.indexOf('|')===-1){
+    for (let tab of site){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top} | ${tab[1]}','${tab[0]}')">${tab[1]}</button>`;}
+  } else {
+    const title=siteName.split('|')[0];const num=siteName.split('|')[1];
+    for (let i=1;i<Number(num)+1;i++){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('kd','${top} | ${i.padStart(num.length, '0')}','${title}/${i.padStart(num.length, '0')}')">${i.padStart(num.length, '0')}</button>`;}
+  }
   openChannelList();
   get1stList(siteName, top+' | '+site[0][1],site[0][0]);
 }
@@ -355,8 +362,13 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='none';
     //handle translation
     if (sites2Translate.includes(siteName)){
-      var all=cEl.querySelectorAll('p:not(.time), h2, h3, li');
-      getTranslation(all);
+      if (siteName!=='kd'){
+        var all=cEl.querySelectorAll('p:not(.time), h2, h3, li');
+        getTranslation(all);
+      } else {
+        var txt=cEl.previousElementSibling.textContent;txt=txt.substring(txt.indexOf('. ')+2);
+        if (txt!==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
+      }
     }
   } else {
       var e=window.event;
@@ -2040,61 +2052,6 @@ function dlEcoMag(){
   link.click();link.remove();
 }
 
-// async function openBook(input){
-//   options.style.display='none';
-//   if (input.files.length === 0) {alert('Please select an EPUB file.');return;}
-//   const file=input.files[0];
-//   const reader=new FileReader();
-
-//   reader.onload = async (e) => {
-//     const arrayBuffer=e.target.result;const book=ePub({ replacements: 'blobUrl' });
-//     await book.open(arrayBuffer);
-//     var jsonOutput = {
-//       metadata: book.packaging.metadata,
-//       chapters: []
-//     };
-
-//     let spineItems = book.spine.spineItems;
-//     var i=0;
-//     for (let item of spineItems) {
-//       i=i+1;
-//       let chapter = await item.load(book.load.bind(book));
-//       let str = await item.render();
-//       var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-//       var content=doc.querySelector('body').innerHTML;
-//       jsonOutput.chapters.push({
-//         id: 'chapter_'+i,
-//         href: item.href,
-//         content: content
-//       });
-//     }
-    
-//     var array=[];
-//     for (let c of jsonOutput.chapters){
-//       var parser=new DOMParser();var doc = parser.parseFromString(c.content, "text/html");
-//       if(doc.querySelector('h1')){
-//         c.section=doc.querySelector('.te_section_title')?.textContent??null;
-//         if(c.section!==null){array.push(c)};
-//       }
-//     }
-//     var tabs = [...new Set(array.map(item => item.section))];console.log(tabs);
-//     ecoMagContent = Object.values(array.reduce((acc, item) => {
-//       if (!acc[item.section]) {
-//         acc[item.section] = { section: item.section, content: [] };
-//       }
-//       acc[item.section].content.push(item);
-//       return acc;
-//     }, {})
-//     );console.log(ecoMagContent);
-
-//     channelList.innerHTML='';
-//     for (let tab of tabs){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${tab}','${tab}')">${tab}</button>`;}
-//     openChannelList();
-//     get1stList('ecoMag','The Economist | Leaders','Leaders');
-//   }
-//   reader.readAsArrayBuffer(file);
-// };
-
 async function openBook(input){
   if (input.files.length === 0) {alert('Please select an EPUB file.');return;}
   const file=input.files[0];
@@ -2167,13 +2124,6 @@ async function getEcoMagFromJson(date){
   get1stList('ecoMag','The Economist | Leaders','Leaders');
 }
 
-// async function ecoMagGetList(siteName,t){
-//   try{var hh = ecoMagContent.find(item => item.section === t);
-//   for (let h of hh.content){html+=h.content.replace(/ class="[\s\S]*?"/g,'').replace('<h1>',`<p class="title t-tl en-us" onclick="getContent('ecoMag',this.id,'${h.id}')">`).replace('</h1>','</p>').replace('<h3>','<p class="title t-tl en-us">').replace('</h3><h3>',`</p><div id="${h.id}" class="content" onclick="getContent('ecoMag',this.id,'${h.id}')"><p class="fs10">`).replace('</h3>','</p>').replace(/<p><i>For subscribers only[\s\S]*?<\/p>/g,'').replace(/<p>This article was downloaded by[\s\S]*?<\/p>/g,'').replaceAll('<p>','<p class="en-us">')+'</div><hr>'}
-//   }catch{html='<p>No Content.</p>'}
-//   return html;
-// }
-
 async function ecoMagGetList(siteName,t){
   try{
   if (t==''){
@@ -2188,6 +2138,30 @@ async function ecoMagGetList(siteName,t){
   var hh = ecoMagContent.content.find(item => item.section === t);
   for (let h of hh.articles){html+=`<div onclick="getContent('${siteName}',this.id,'${h.url}')">${h.title}</div><div id="${h.url}" class="content" onclick="getContent('${siteName}',this.id,'${h.url}')">${h.content}</div><hr>`}
   }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+
+//    KOREAN
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function getKdFromJson(t){
+  const title=t.split('|')[0];const num=t.split('|')[0];
+  const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/korean/'+title+'/'+n+'.json');
+  const str=await res.json();
+  ecoMagContent=str[0];
+  channelList.innerHTML='';
+  for (let h of ecoMagContent.content){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${h.section}','${h.section}')">${h.section}</button>`;}
+  openChannelList();
+  get1stList('ecoMag','The Economist | Leaders','Leaders');
+}
+
+async function kdGetList(siteName,t){
+  try{url='https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/korean/'+t+'.txt';console.log(url);
+  const res=await fetch(url);const str=await res.text();
+  const raw=str.split('\n');items=raw.filter(item=>item!=="");var i=1;
+  for (let h of items){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'line-${i}')"><span class="fs07 text-secondary">${i}.</span> ${h}</p><div id="line-${i}" class="content" onclick="getContent('${siteName}',this.id,'line-${i}')"></div><hr>`;i++;}
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
