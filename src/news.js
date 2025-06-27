@@ -262,7 +262,7 @@ function createUrlListDiv(sitesList){
   if (onEVBT===true){
     for (let s of sitesList){
       for (let tab of s){
-        if (tab[0].indexOf('|')===-1){var ln=tab[0]}else{var ln=''};
+        if (tab[0].indexOf('|')===-1){var ln=tab[0]}else{var ln=kd};
         urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${ln},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
       }
       urlList.innerHTML+='<hr>';
