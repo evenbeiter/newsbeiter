@@ -262,9 +262,8 @@ function createUrlListDiv(sitesList){
   if (onEVBT===true){
     for (let s of sitesList){
       for (let tab of s){
-        if (tab[0].indexOf('|')===-1){var ln=tab[0]}else{var ln=apollo};
-        urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${ln},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`;
-      }
+        if (tab[0].indexOf('|')===-1){urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList(${tab[0]},'${tab[0]}','${tab[1]}')">${tab[1]}</button>`}
+        else {urlList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="createChannelList('','${tab[0]}','${tab[1]}')">${tab[1]}</button>`};
       urlList.innerHTML+='<hr>';
     }
   } else {
