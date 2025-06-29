@@ -450,8 +450,8 @@ async function translatePapago(a){
     body: 'deviceId=0d987625-b116-49f9-94a9-2659b84c9235&locale=ja&dict=true&dictDisplay=30&honorific=false&instant=false&paging=false&source=ko&target=zh-TW&text='+a+'&usageAgreed=false',
     });
   var str=await res.json();
-  return str?str.translatedText??'';
-  } catch(error){console.error(error)}
+  return str.translatedText;
+  } catch(error){return ''}
 }
 
 function getLastNSats(n) {
