@@ -376,7 +376,7 @@ async function getContent(siteName,clickedId,id){
         const utter = new SpeechSynthesisUtterance(txt);
         utter.lang = 'ko-KR';if (koreanVoice) {utter.voice = koreanVoice};utter.rate = 1;utter.pitch = 1;speechSynthesis.cancel();speechSynthesis.speak(utter);
         //const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
-        if (cEl.innerText==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
+        if (cEl.innerText==''){var a=await translatePapago(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
       }
     }
   } else {
@@ -439,6 +439,19 @@ async function getTranslation(all){
       if (t!==''){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
     }
   }
+}
+
+async function translatePapago(a){
+  try{
+  url='https://papago.naver.com/apis/n2mt/translate';
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
+    body: 'deviceId=0d987625-b116-49f9-94a9-2659b84c9235&locale=ja&dict=true&dictDisplay=30&honorific=false&instant=false&paging=false&source=ko&target=zh-TW&text='+a+'&usageAgreed=false',
+    });
+  var str=await res.json();
+  return str?str.translatedText??'';
+  } catch(error){console.error(error)}
 }
 
 function getLastNSats(n) {
