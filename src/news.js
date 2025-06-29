@@ -370,7 +370,7 @@ async function getContent(siteName,clickedId,id){
         getTranslation(all);
       } else {
         var txt=cEl.previousElementSibling.textContent;txt=txt.substring(txt.indexOf('. ')+2);
-        if (speechSynthesis.getVoice().length===0){speechSynthesis.onvoiceschanged=()=>{};
+        if (speechSynthesis.getVoice().length===0){speechSynthesis.onvoiceschanged=()=>{}};
         const voices = speechSynthesis.getVoices();
         const koreanVoice = voices.find(v => v.lang === 'ko-KR') || voices.find(v => v.lang.startsWith('ko'));
         const utter = new SpeechSynthesisUtterance(txt);
