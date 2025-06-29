@@ -451,7 +451,7 @@ async function translatePapago(a){
     });
   var str=await res.json();
   return str.translatedText;
-  } catch(error){return ''}
+  } catch(error){console.error(error);return ''}
 }
 
 function getLastNSats(n) {
