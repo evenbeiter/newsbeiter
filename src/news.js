@@ -447,7 +447,7 @@ async function translatePapago(a){
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
-    body: 'deviceId=0d987625-b116-49f9-94a9-2659b84c9235&locale=ja&dict=true&dictDisplay=30&honorific=false&instant=false&paging=false&source=ko&target=zh-TW&text='+a+'&usageAgreed=false',
+    body: 'deviceId=0d987625-b116-49f9-94a9-2659b84c9235&locale=ja&dict=true&dictDisplay=30&honorific=false&instant=false&paging=false&source=ko&target=zh-TW&text='+encodeURIComponent(a)+'&usageAgreed=false',
     });
   var str=await res.json();
   return str.translatedText;
