@@ -370,20 +370,12 @@ async function getContent(siteName,clickedId,id){
         getTranslation(all);
       } else {
         var txt=cEl.previousElementSibling.textContent;txt=txt.substring(txt.indexOf('. ')+2);
-        
+        if (speechSynthesis.getVoice().length===0){speechSynthesis.onvoiceschanged=()=>{};
         const voices = speechSynthesis.getVoices();
-  const koreanVoice = voices.find(v => v.lang === 'ko-KR') || voices.find(v => v.lang.startsWith('ko'));
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'ko-KR';
-  if (koreanVoice) utter.voice = koreanVoice;
-  utter.rate = 1;
-  utter.pitch = 1;
-  speechSynthesis.cancel();
-  speechSynthesis.speak(utter);
-        
-        
-        
-        const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
+        const koreanVoice = voices.find(v => v.lang === 'ko-KR') || voices.find(v => v.lang.startsWith('ko'));
+        const utter = new SpeechSynthesisUtterance(txt);
+        utter.lang = 'ko-KR';if (koreanVoice) {utter.voice = koreanVoice};utter.rate = 1;utter.pitch = 1;speechSynthesis.cancel();speechSynthesis.speak(utter);
+        //const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
         if (cEl.innerText==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
       }
     }
