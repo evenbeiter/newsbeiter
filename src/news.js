@@ -376,7 +376,7 @@ async function getContent(siteName,clickedId,id){
         const utter = new SpeechSynthesisUtterance(txt);
         utter.lang = 'ko-KR';if (koreanVoice) {utter.voice = koreanVoice};utter.rate = 1;utter.pitch = 1;speechSynthesis.cancel();speechSynthesis.speak(utter);
         //const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
-        if (cEl.innerText==''){var a=await translatePapago(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
+        if (cEl.innerText==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
       }
     }
   } else {
@@ -428,6 +428,19 @@ async function translate(a){
         if (raw[0][j][0]!==null && raw[0][j][0]!==undefined && raw[0][j][0]!=='undefined'){ts=ts+raw[0][j][0]}else{ts=ts}
     }
     return ts
+  }catch (error) {console.error(error)}
+}
+
+async function translateG(a){
+  try{
+  url='https://www.google.com/async/translate?vet=12ahUKEwj75Y-bmpuOAxWlxzgGHQp9LhUQqDh6BAgKEC4..i&ei=TJdjaPuPIqWP4-EPivq5qQE&opi=89978449&rlz=1C1GCEA_enHK824HK825&yv=3&_fmt=pc&cs=0';
+  var res=await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',},
+    body: 'async=translate,sl:auto,tl:zh-TW,st:'+encodeURIComponent(a)+',id:'+new Date().getTime()+',qc:true,ac:false,_id:tw-async-translate,_pms:s,_fmt:pc,_basejs:/xjs/_/js/k=xjs.s.en.-0FQwjg3K-M.2018.O/am=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAACAAAAAFBAABAAAAAAAAABAAIAAAAAAAAAAAAAAAAAAAACAAAEACAAgAQAAAAAAAAAAAAAgAAAAAAAAgEEAAEAQgKAIAEABAAAAAAAAAACAQQAAAQAAAAAkIALg__5kAAAAAAAAAAABAAAAAAAgAEgAAAAAAAAAALgAAAgUA0CAXQABAAAAAAAAAAAAAAgAAAAAAABAAAAAAAAAIAAAAIACAAAAAAAAAAAACAAAAAAAAAAAAIAAAAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAIAAMAAAAAAAAKABDADwAAAAAAADgAAAAQAgAAAEcQAwAAAAAAAADIAeDxAA4pKAAAAAAAAAAAAAAAAAAAAAJQEMyB9AsCBAAAAAAAAAAAAAAAAAAAAAAAUgRNrDUAQA/dg=0/br=1/rs=ACT90oEGcY4FbcPY8acomjPcTKKX1xk_uQ,_basecss:/xjs/_/ss/k=xjs.s.DJuMc4J72Oo.L.B1.O/am=ABAAAASEAAAAAAwAAAAQAgBSAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAARAAAAAIAAAAAEAAAAAAAgAAAAAAAgBADAoAwDAAAAQNAEAYAUEAAAAADwAQxyFYAAAQAAAAAAAAAgAQAAAAAAAAAQAMAAACAAgAAAAstAAAAQgJAAAAABAAAREIAgAYCAAQAgEQAAQCIABDIAAABHQAEAABIAAAAACAAA3gcgLAAABBAxAAAADYAAAAAUA0BAWAAIAAAAABQCAgAAAAAAABQAAABAAAAAkACwIAgDIKACwNLDEQQAAAAAIgAAAQEAAAAABABAIQAQAwAAUAAAAgQAPAEE8AAAAAARgAgAAAkAAAIAAIAAAAAKAYAAwAUAAQAAABgJAAAwAAAsAEcQAwAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAQA/br=1/rs=ACT90oECiGtZo4EUcf8Ws7pEmLqFni3Txw,_basecomb:/xjs/_/js/k=xjs.s.en.-0FQwjg3K-M.2018.O/ck=xjs.s.DJuMc4J72Oo.L.B1.O/am=ABAAAASEAAAAAAwAAAAQAgBSAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAARAAAAAIAAAAAEAAAAAAAgAACAAAAgFBDApAwDAAAAQNBEAYAUEAAAAADwAQxyFYAAAQCAAAEACAAgAQAAAAAAAAAQAMAgACAAgAAAgstAAEAQgLAIAEABAAAREIAgAYCAQQAgEQAAQCIkJDLg__5nQAEAABIAAAABCAAA3gcgLEgABBAxAAAADbgAAAgUA0DAXQAJAAAAABQCAgAAAAgAABQAAABAAAAAkACwIAgDIKACwNLDEQQAAAAAKgAAAQEAAAAABIBAIQAQAwAAUAIAAgQAPAEE8AAAAAARgAgAAAkIAAMAAIAAAAAKAZDAzwUAAQAAADgJAAAwAgAsAEcQAwAAAAAAAADIAeDxAA4pKAAAAAAAAAAAAAAAAAAAAAJQEMyB9AsCBAAAAAAAAAAAAAAAAAAAAAAAUgRNrDUAQA/d=1/ed=1/dg=0/br=1/ujg=1/rs=ACT90oFniwFnFDMrDYfvVeH_XVWPg5ajqg',
+    });
+  var str=await res.text();
+  return str.match(/<span id="tw-answ-target-text">[\s\S]*?<\/span>/g)[0].replace('<span id="tw-answ-target-text">','').replace('</span>','');
   }catch (error) {console.error(error)}
 }
 
@@ -2183,7 +2196,7 @@ async function kdGetList(siteName,t){
   try{url='https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/korean/'+t+'.txt';console.log(url);
   const res=await fetch(url);const str=await res.text();
   const raw=str.split('\n');items=raw.filter(item=>item!=="");var i=1;
-  for (let h of items){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'line-${i}')"><span class="fs07 text-secondary">${i}.</span> ${h}</p><div id="line-${i}" class="content" onclick="getContent('${siteName}',this.id,'line-${i}')"></div><hr>`;i++;}
+  for (let h of items){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'line-${i}')"><span class="fs07 text-secondary">${i}.</span> ${h.replace('\t','：')}</p><div id="line-${i}" class="content" onclick="getContent('${siteName}',this.id,'line-${i}')"></div><hr>`;i++;}
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
