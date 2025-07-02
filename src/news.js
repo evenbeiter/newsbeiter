@@ -1083,7 +1083,9 @@ async function lineTodayGetList(siteName,tt){
         method: 'GET',
         headers: {
           'x-linemedia-platform': 'web',
-          'x-linemedia-client': 'line'
+          'x-linemedia-client': 'line',
+              'accept-language': 'zh-TW',
+    'user-agent': 'Line/13.1.0 Android',
         }        
       });
       let str=await res.json();
@@ -1103,7 +1105,9 @@ async function lineTodayGetList(siteName,tt){
           method: 'GET',
           headers: {
             'x-linemedia-platform': 'web',
-            'x-linemedia-client': 'line'
+            'x-linemedia-client': 'line',
+              'accept-language': 'zh-TW',
+    'user-agent': 'Line/13.1.0 Android',
           }
         });
         str=await res.json();
