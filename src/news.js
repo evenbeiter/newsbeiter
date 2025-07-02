@@ -679,16 +679,20 @@ async function businessWeeklyGetList(siteName,t){
   try{if (t=='0000000000'){
     var res = await fetch(preStr+'https://www.businessweekly.com.tw/latest/SearchList', {
       method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
-      body: 'CurPage='+20*(rr-1),
+      headers: {'Content-Type': 'application/x-www-form-urlencoded',},
+      body: new URLSearchParams({ CurPage:20*(rr-1)}),
       });
     var str=await res.json();
     str=str.Content;
   } else {
   var res = await fetch(preStr+'https://www.businessweekly.com.tw/ChannelAction/LoadBlock/', {
     method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
-    body: 'Start='+(50*rr-1)+'&End='+50*(rr)+'&ID='+t,
+    headers: {'Content-Type': 'application/x-www-form-urlencoded',},
+    body: new URLSearchParams({
+      Start: 50 * rr - 1,
+      End: 50 * rr,
+      ID: t
+    }),
     });
   var str=await res.text();
   }
@@ -724,8 +728,11 @@ async function businessWeeklyGetSearchResults(siteName,t){
   for (let i=1;i<=k;i++){
     var res = await fetch(preStr+'https://www.businessweekly.com.tw/Search/GetSolrSearchData', {
       method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
-      body: 'wd='+t+'&page='+((rr-1)*k+i),
+      headers: {'Content-Type': 'application/x-www-form-urlencoded',},
+      body: new URLSearchParams({
+        wd: t,
+        page: (rr-1)*k+i
+      }),
     });
     var str=await res.text();str=str.replaceAll('\\"','"').replaceAll('\\r','\r').replaceAll('\\n','\n');
     var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
