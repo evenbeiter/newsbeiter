@@ -1813,7 +1813,7 @@ async function xueqiuGetContent(id){
 async function yahooTWGetList(siteName,t){
   try{coun='TW';
   if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='US'};
-  var url='https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t;
+  var url=preStr+'https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t;
   let res=await fetch(url);
   let str=await res.json();
   var data=str.data.main.stream.slice((rr-1)*50,rr*50);
