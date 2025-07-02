@@ -433,7 +433,7 @@ async function translateOld(a){
 
 async function translate(a){
   try{
-  var res = await fetch(preStr.replace('/api/fetch?url=','/translate/google', {
+  var res = await fetch(preStr.replace('/api/fetch?url=','/translate/google'), {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
     body: JSON.stringify({ text: a, to: 'zh-TW' })
@@ -445,7 +445,7 @@ async function translate(a){
 
 async function translatePapago(a){
   try{
-  var res = await fetch(preStr.replace('/api/fetch?url=','/translate/papago', {
+  var res = await fetch(preStr.replace('/api/fetch?url=','/translate/papago'), {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
     body: JSON.stringify({ text: a, to: 'zh-TW' })
