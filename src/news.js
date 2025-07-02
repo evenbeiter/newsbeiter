@@ -376,7 +376,7 @@ async function getContent(siteName,clickedId,id){
         const utter = new SpeechSynthesisUtterance(txt);
         utter.lang = 'ko-KR';if (koreanVoice) {utter.voice = koreanVoice};utter.rate = 1;utter.pitch = 1;speechSynthesis.cancel();speechSynthesis.speak(utter);
         //const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
-        if (cEl.innerText==''){var a=await translate(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
+        if (cEl.innerText==''){var a=await translateP(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
       }
     }
   } else {
@@ -387,7 +387,7 @@ async function getContent(siteName,clickedId,id){
       try{
         if (msnALL.includes(siteName)){
           cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()
-        } else {
+        } else if (siteName!=='kd') {
           cEl.previousElementSibling.previousElementSibling.scrollIntoView()
         }
       } catch {document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
@@ -418,7 +418,7 @@ function cvtS2HHMMSS(sec,rescale) {
     return mm+':'+ss;
 }
 
-async function translate(a){
+async function translateOld(a){
   try{
     var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(a);
     var res=await fetch(url);
@@ -431,17 +431,28 @@ async function translate(a){
   }catch (error) {console.error(error)}
 }
 
-async function translateG(a){
+async function translate(a){
   try{
-  url='https://www.google.com/async/translate?vet=12ahUKEwj75Y-bmpuOAxWlxzgGHQp9LhUQqDh6BAgKEC4..i&ei=TJdjaPuPIqWP4-EPivq5qQE&opi=89978449&rlz=1C1GCEA_enHK824HK825&yv=3&_fmt=pc&cs=0';
-  var res=await fetch(url, {
+  var res = await fetch(preStr.replace('/api/fetch?url=','/translate/google', {
     method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',},
-    body: 'async=translate,sl:auto,tl:zh-TW,st:'+encodeURIComponent(a)+',id:'+new Date().getTime()+',qc:true,ac:false,_id:tw-async-translate,_pms:s,_fmt:pc,_basejs:/xjs/_/js/k=xjs.s.en.-0FQwjg3K-M.2018.O/am=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAACAAAAAFBAABAAAAAAAAABAAIAAAAAAAAAAAAAAAAAAAACAAAEACAAgAQAAAAAAAAAAAAAgAAAAAAAAgEEAAEAQgKAIAEABAAAAAAAAAACAQQAAAQAAAAAkIALg__5kAAAAAAAAAAABAAAAAAAgAEgAAAAAAAAAALgAAAgUA0CAXQABAAAAAAAAAAAAAAgAAAAAAABAAAAAAAAAIAAAAIACAAAAAAAAAAAACAAAAAAAAAAAAIAAAAAAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAIAAMAAAAAAAAKABDADwAAAAAAADgAAAAQAgAAAEcQAwAAAAAAAADIAeDxAA4pKAAAAAAAAAAAAAAAAAAAAAJQEMyB9AsCBAAAAAAAAAAAAAAAAAAAAAAAUgRNrDUAQA/dg=0/br=1/rs=ACT90oEGcY4FbcPY8acomjPcTKKX1xk_uQ,_basecss:/xjs/_/ss/k=xjs.s.DJuMc4J72Oo.L.B1.O/am=ABAAAASEAAAAAAwAAAAQAgBSAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAARAAAAAIAAAAAEAAAAAAAgAAAAAAAgBADAoAwDAAAAQNAEAYAUEAAAAADwAQxyFYAAAQAAAAAAAAAgAQAAAAAAAAAQAMAAACAAgAAAAstAAAAQgJAAAAABAAAREIAgAYCAAQAgEQAAQCIABDIAAABHQAEAABIAAAAACAAA3gcgLAAABBAxAAAADYAAAAAUA0BAWAAIAAAAABQCAgAAAAAAABQAAABAAAAAkACwIAgDIKACwNLDEQQAAAAAIgAAAQEAAAAABABAIQAQAwAAUAAAAgQAPAEE8AAAAAARgAgAAAkAAAIAAIAAAAAKAYAAwAUAAQAAABgJAAAwAAAsAEcQAwAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAAAAAAAAAAAQA/br=1/rs=ACT90oECiGtZo4EUcf8Ws7pEmLqFni3Txw,_basecomb:/xjs/_/js/k=xjs.s.en.-0FQwjg3K-M.2018.O/ck=xjs.s.DJuMc4J72Oo.L.B1.O/am=ABAAAASEAAAAAAwAAAAQAgBSAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAARAAAAAIAAAAAEAAAAAAAgAACAAAAgFBDApAwDAAAAQNBEAYAUEAAAAADwAQxyFYAAAQCAAAEACAAgAQAAAAAAAAAQAMAgACAAgAAAgstAAEAQgLAIAEABAAAREIAgAYCAQQAgEQAAQCIkJDLg__5nQAEAABIAAAABCAAA3gcgLEgABBAxAAAADbgAAAgUA0DAXQAJAAAAABQCAgAAAAgAABQAAABAAAAAkACwIAgDIKACwNLDEQQAAAAAKgAAAQEAAAAABIBAIQAQAwAAUAIAAgQAPAEE8AAAAAARgAgAAAkIAAMAAIAAAAAKAZDAzwUAAQAAADgJAAAwAgAsAEcQAwAAAAAAAADIAeDxAA4pKAAAAAAAAAAAAAAAAAAAAAJQEMyB9AsCBAAAAAAAAAAAAAAAAAAAAAAAUgRNrDUAQA/d=1/ed=1/dg=0/br=1/ujg=1/rs=ACT90oFniwFnFDMrDYfvVeH_XVWPg5ajqg',
+    headers: {'Content-Type': 'application/json',},
+    body: JSON.stringify({ text: a, to: 'zh-TW' })
     });
-  var str=await res.text();
-  return str.match(/<span id="tw-answ-target-text">[\s\S]*?<\/span>/g)[0].replace('<span id="tw-answ-target-text">','').replace('</span>','');
-  }catch (error) {console.error(error)}
+  var str=await res.json();
+  return str.translatedText;
+  }catch (error) {return '';console.error(error)}
+}
+
+async function translatePapago(a){
+  try{
+  var res = await fetch(preStr.replace('/api/fetch?url=','/translate/papago', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: JSON.stringify({ text: a, to: 'zh-TW' })
+    });
+  var str=await res.json();
+  return str.translatedText;
+  }catch (error) {return '';console.error(error)}
 }
 
 async function getTranslation(all){
@@ -454,7 +465,7 @@ async function getTranslation(all){
   }
 }
 
-async function translatePapago(a){
+async function translateP(a){
   try{
   url='https://papago.naver.com/apis/n2mt/translate';
   var res = await fetch(url, {
