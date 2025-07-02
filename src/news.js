@@ -1079,7 +1079,13 @@ async function lineTodayGetList(siteName,tt){
   for (let t of tt) {
     if (/[0-9]/.test(t)){
       url=preStr+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+(rr-1)*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
-      let res=await fetch(url);
+      let res=await fetch(url,{
+        method: 'GET',
+        headers: {
+          'x-linemedia-platform': 'web',
+          'x-linemedia-client': 'line'
+        }        
+      });
       let str=await res.json();
       for (let a of str.items){
         items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
@@ -1093,7 +1099,13 @@ async function lineTodayGetList(siteName,tt){
       data=data.map(d=>d.listings[0].id);
       
       for (let d of data){
-        res=await fetch(preStr+'https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+(rr-1)*20+'&length=20');
+        res=await fetch(preStr+'https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+(rr-1)*20+'&length=20',{
+          method: 'GET',
+          headers: {
+            'x-linemedia-platform': 'web',
+            'x-linemedia-client': 'line'
+          }
+        });
         str=await res.json();
         for (let a of str.items){
             items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
