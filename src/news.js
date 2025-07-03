@@ -1223,7 +1223,7 @@ async function nbGetList(siteName,t){
   try{
   var res = await fetch(preStr+encodeURIComponent('https://www.nb.com/api/Sitecore/Article/FilterResults'), {
     method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
+    headers: {'Content-Type': 'application/x-www-form-urlencoded',},
     body: t+'&language=en&sortOrder=new',
     });
   var str=await res.json();
