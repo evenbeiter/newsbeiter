@@ -753,8 +753,8 @@ async function businessWeeklyGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function cnaGetList(siteName,t){
-  try{url=encodeURIComponent('https://www.cna.com.tw/cna2018api/api/WNewsList');
-  var res = await fetch(url, {
+  try{url='https://www.cna.com.tw/cna2018api/api/WNewsList';
+  var res = await fetch(preStr+encodeURIComponent(url), {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
     body: '{"action":"0","category":"'+t+'","pagesize":"100","pageidx":1}',
@@ -771,7 +771,7 @@ async function cnaGetList(siteName,t){
 }
 
 async function cnaGetContent(id){
-  try{const res = await fetch(encodeURIComponent(id));
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -781,8 +781,8 @@ async function cnaGetContent(id){
 }
 
 async function cnaGetSearchResults(siteName,t){
-  try{url=encodeURIComponent('https://www.cna.com.tw/search/hysearchws.aspx?q='+t);console.log(url);
-  let res=await fetch(url);
+  try{url='https://www.cna.com.tw/search/hysearchws.aspx?q='+t;console.log(url);
+  let res=await fetch(preStr+encodeURIComponent(url));
   let str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -973,8 +973,8 @@ async function invtComGetList(siteName,t){
   try{
   var k=2;
   for (let i=0;i<k;i++){
-    url=encodeURIComponent('https://hk.investing.com/'+t+((rr-1)*k+i+1));console.log(url);
-    let res=await fetch(url);
+    url='https://hk.investing.com/'+t+((rr-1)*k+i+1);console.log(url);
+    let res=await fetch(preStr+encodeURIComponent(url));
     let str=await res.text();
     var parser=new DOMParser();
     var doc=parser.parseFromString(str, "text/html");
@@ -991,7 +991,7 @@ async function invtComGetList(siteName,t){
 }
 
 async function invtComGetContent(id){
-  try{const res = await fetch(encodeURIComponent(id));
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1007,8 +1007,8 @@ async function invtComGetContent(id){
 
 async function isblGetList(siteName,t){
   try{
-    url=encodeURIComponent('https://www.isabelnet.com/blog/page/'+rr);console.log(url);
-    var res=await fetch(url);
+    url='https://www.isabelnet.com/blog/page/'+rr;console.log(url);
+    var res=await fetch(preStr+encodeURIComponent(url));
     var str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
@@ -1147,8 +1147,8 @@ async function lineTodayGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function mindiGetList(siteName,t,coun){
-  try{url=encodeURIComponent('https://www.mindiworldnews.com/blog/page/'+rr);console.log(url);
-  const res=await fetch(url);const str=await res.text();
+  try{url='https://www.mindiworldnews.com/blog/page/'+rr;console.log(url);
+  const res=await fetch(preStr+encodeURIComponent(url));const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('h3');
   for (var i=1;i<hh.length;i++){items.push([hh[i].querySelector('a').href,hh[i].querySelector('a').textContent]);}
@@ -1158,7 +1158,7 @@ async function mindiGetList(siteName,t,coun){
 }
 
 async function mindiGetContent(id){
-  try{const res = await fetch(encodeURIComponent(id));
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1221,7 +1221,7 @@ async function msnGetContent(id){
 
 async function nbGetList(siteName,t){
   try{
-  var res = await fetch(encodeURIComponent('https://www.nb.com/api/Sitecore/Article/FilterResults'), {
+  var res = await fetch(preStr+encodeURIComponent('https://www.nb.com/api/Sitecore/Article/FilterResults'), {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
     body: t+'&language=en&sortOrder=new',
