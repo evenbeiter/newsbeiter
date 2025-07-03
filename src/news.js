@@ -1849,7 +1849,7 @@ async function yahooVideoGetList(siteName,t){
   var url='https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
   var res = await fetch(preStr+encodeURIComponent(url), {
     method: 'POST',
-    headers: {'Content-Type': 'text/plain;charset=UTF-8',},
+    headers: {'user-agent':'','referer':'https://finance.yahoo.com/','accept-language':'en-US,en;q=0.9'},
     body: JSON.stringify(payload),
     });
   var str=await res.json();
