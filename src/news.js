@@ -77,7 +77,8 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','ecoMag','kd','msnUS','nb','peInsights','substack','ytn'];
+const sites2Translate=['apollo','ecoMag','msnUS','nb','peInsights','substack','yahooTW'];
+const kr=['kd','ytn'];
 const text2Speech=['kd'];
 const noNextPage=['ecoMag','kd'];
 const msnALL=['msnTW','msnUS'];
@@ -365,10 +366,10 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='none';
     //handle translation
     if (sites2Translate.includes(siteName)){
-      if (siteName!=='kd'){
-        var all=cEl.querySelectorAll('p:not(.time), h2, h3, li');
-        getTranslation(all);
-      } else {
+      var all=cEl.querySelectorAll('p:not(.time), h2, h3, li');
+      getTranslation(all);
+      } else if (kr.includes(siteName)){
+        if (siteName=='kd'){
         var txt=cEl.previousElementSibling.textContent;txt=txt.substring(txt.indexOf('. ')+2);
         if (speechSynthesis.getVoices().length===0){speechSynthesis.onvoiceschanged=()=>{}};
         const voices = speechSynthesis.getVoices();
@@ -377,6 +378,12 @@ async function getContent(siteName,clickedId,id){
         utter.lang = 'ko-KR';if (koreanVoice) {utter.voice = koreanVoice};utter.rate = 1;utter.pitch = 1;speechSynthesis.cancel();speechSynthesis.speak(utter);
         //const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
         if (cEl.innerText==''){var a=await translatePapago(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
+      } else {
+        var all=cEl.querySelectorAll('p:not(.time), h2, h3, li');
+        for (let a of all){
+          var t=await translatePapago(a.textContent);
+          if (t!==''){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
+        }
       }
     }
   } else {
