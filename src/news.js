@@ -1459,7 +1459,7 @@ async function technewsGetContent(id){
 
 async function twtGetList(siteName,t){
   try{
-  const res=await fetch(encodeURIComponent('https://nitter.poast.org/'+t+cursor));const str=await res.text();
+  const res=await fetch(preStr+encodeURIComponent('https://nitter.poast.org/'+t+cursor));const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   const sm=doc.querySelector('.show-more').children[0].href;cursor=sm.slice(sm.indexOf('?'));
   items=doc.querySelectorAll('.tweet-body');
