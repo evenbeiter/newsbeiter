@@ -1786,21 +1786,27 @@ async function xueqiuGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function yahooTWGetList(siteName,t){
-  try{coun='TW';
-  if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='US'};
-  var url=preStr+encodeURIComponent('https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t);
-  let res=await fetch(url);
-  let str=await res.json();
-  var data=str.data.main.stream.slice((rr-1)*50,rr*50);
-  for (let h of data){
-    if(h.content){
-      h=h.content;
-      //items.push([h.id,h.title])
-      items.push([h.canonicalUrl.url,h.title])
-    }
-  }
+  try{coun='.caas-body';
+  if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='.atoms-wrapper'};
+
+  var payload={"requests":{"g0":{"resource":"StreamService","operation":"read","params":{"ui":{"ntk_bypassA3c":true,"pubtime_maxage":0},"category":"LISTID:"+t,"forceJpg":true,"releasesParams":{"limit":20,"offset":0},"useNCP":true,"batches":{"pagination":true,"size":200,"timeout":1300,"total":200}}}},"context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}};
+  var url='https://tw.news.yahoo.com/_td-news/api/resource';
+  var res = await fetch(preStr+encodeURIComponent(url), {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: JSON.stringify(payload),
+    });
+  var str=await res.json();
+  var data=str.g0.data.stream_items.slice((rr-1)*50,rr*50);
+
+  // var url=preStr+encodeURIComponent('https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t);
+  // let res=await fetch(url);
+  // let str=await res.json();
+  // var data=str.data.main.stream.slice((rr-1)*50,rr*50);
+      
+  for (let h of data){items.push([h.url,h.title,h.pubtime,h.publisher])}
   for (let h of items){
-    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p>'</div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1809,21 +1815,21 @@ async function yahooTWGetList(siteName,t){
 async function yahooTWGetContent(id){
     try{
 
-let res = await fetch(preStr+encodeURIComponent(id),{
-  method: 'GET',
-  headers: {
-    'user-agent':
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
-    'referer': 'https://tw.yahoo.com/',
-    'accept': 'text/html'
-  }
-});
+let res = await fetch(preStr+encodeURIComponent(id));
+//                       ,{
+//   method: 'GET',
+//   headers: {
+//     'user-agent':
+//       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+//     'referer': 'https://tw.yahoo.com/',
+//     'accept': 'text/html'
+//   }
+// });
 
 let str = await res.text();
 var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-html = '<p class="time">'+doc.querySelector('time').textContent +' | '+doc.querySelector('.caas-author-byline-collapse').textContent+'</p>'+ doc.querySelector('.caas-body').innerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+html=doc.querySelector(coun).innerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
 
-      
     // const res = await fetch(encodeURIComponent('https://www.yahoo.com/caas/content/article/?region='+coun+'&uuid='+id));
     // const str=await res.json();
     // var a=str.items[0].data.partnerData;
