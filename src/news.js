@@ -465,19 +465,6 @@ async function getTranslation(all){
   }
 }
 
-async function translateP(a){
-  try{
-  url='https://papago.naver.com/apis/n2mt/translate';
-  var res = await fetch(url, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8','Authorization':'PPG 0d987625-b116-49f9-94a9-2659b84c9235:V9D7lsUwNTYIYByieMcEwQ==',},
-    body: 'deviceId=0d987625-b116-49f9-94a9-2659b84c9235&locale=ja&dict=true&dictDisplay=30&honorific=false&instant=false&paging=false&source=ko&target=zh-TW&text='+encodeURIComponent(a)+'&usageAgreed=false',
-    });
-  var str=await res.json();
-  return str.translatedText;
-  } catch(error){console.error(error);return ''}
-}
-
 function getLastNSats(n) {
   const saturdays = [];const today = new Date();
   const dayOfWeek = today.getDay(); // Sunday = 0, Saturday = 6
@@ -540,7 +527,7 @@ function convertTextInsideTags(element) {for (let child of element.childNodes) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function apolloGetList(siteName,t){
-  try{url=preStr+'https://www.apolloacademy.com/the-daily-spark/?query-15-page='+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://www.apolloacademy.com/the-daily-spark/?query-15-page='+rr);console.log(url);
   const res=await fetch(url);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('.entry-content.wp-block-post-content');
@@ -558,7 +545,7 @@ async function apolloGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function bbcGetList(siteName,t){
-  try{url=preStr+'https://www.bbc.com/zhongwen/'+t+'/trad?page='+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://www.bbc.com/zhongwen/'+t+'/trad?page='+rr);console.log(url);
   const res=await fetch(url);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('a.bbc-1i4ie53.e1d658bg0');
@@ -569,7 +556,7 @@ async function bbcGetList(siteName,t){
 }
 
 async function bbcGetContent(id){
-  try{const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var embeds=str.match(/https:\/\/www.bbc.com\/ws\/av-embeds[\s\S]*?zh-hant/g);
   var parser = new DOMParser();
@@ -590,7 +577,7 @@ async function bbcGetContent(id){
 
 
 async function bnextGetList(siteName,t){
-  try{url=preStr+'https://www.bnext.com.tw/'+t+'?page='+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://www.bnext.com.tw/'+t+'?page='+rr);console.log(url);
   var res = await fetch(url);
   var str=await res.text();
   var parser = new DOMParser();
@@ -618,7 +605,7 @@ async function bnextGetList(siteName,t){
 }
 
 async function bnextGetContent(id){
-  try{const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -637,7 +624,7 @@ async function bnextGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function businessTodayGetList(siteName,t){
-  try{url=preStr+'https://www.businesstoday.com.tw/'+t+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://www.businesstoday.com.tw/'+t+rr);console.log(url);
   var res = await fetch(url);
   var str=await res.text();
   var parser = new DOMParser();
@@ -654,7 +641,7 @@ async function businessTodayGetList(siteName,t){
 }
 
 async function businessTodayGetContent(id){
-  try{const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -664,7 +651,7 @@ async function businessTodayGetContent(id){
 }
 
 async function businessTodayGetSearchResults(siteName,t){
-  try{url=preStr+'https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://www.businesstoday.com.tw/group_search/article?count=30&keywords='+t+'&page='+rr);console.log(url);
   var res = await fetch(url);
   var str=await res.text();
   var parser = new DOMParser();
@@ -688,7 +675,7 @@ async function businessTodayGetSearchResults(siteName,t){
 
 async function businessWeeklyGetList(siteName,t){
   try{if (t=='0000000000'){
-    var res = await fetch(preStr+'https://www.businessweekly.com.tw/latest/SearchList', {
+    var res = await fetch(preStr+encodeURIComponent('https://www.businessweekly.com.tw/latest/SearchList'), {
       method: 'POST',
       headers: {'Content-Type': 'application/x-www-form-urlencoded',},
       body: new URLSearchParams({ CurPage:20*(rr-1)}),
@@ -696,7 +683,7 @@ async function businessWeeklyGetList(siteName,t){
     var str=await res.json();
     str=str.Content;
   } else {
-  var res = await fetch(preStr+'https://www.businessweekly.com.tw/ChannelAction/LoadBlock/', {
+  var res = await fetch(preStr+encodeURIComponent('https://www.businessweekly.com.tw/ChannelAction/LoadBlock/'), {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded',},
     body: new URLSearchParams({
@@ -722,7 +709,7 @@ async function businessWeeklyGetList(siteName,t){
 
 async function businessWeeklyGetContent(id){
   try{
-  const res=await fetch((preStr+id).replace('evenbeiter.github.io','www.businessweekly.com.tw'));const str=await res.text();
+  const res=await fetch((preStr+encodeURIComponent(id)).replace('evenbeiter.github.io','www.businessweekly.com.tw'));const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   if (id.indexOf('StrId=')==-1){
     html = '<p class="time">'+(doc.querySelector('.Padding-left.Margin-top')?.innerText??'')+'</p>'+(doc.querySelector('.Single-summary')?.outerHTML??'')+(doc.querySelector('.Single-article')?.outerHTML??'')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
@@ -737,7 +724,7 @@ async function businessWeeklyGetSearchResults(siteName,t){
   try{
   var k=3;
   for (let i=1;i<=k;i++){
-    var res = await fetch(preStr+'https://www.businessweekly.com.tw/Search/GetSolrSearchData', {
+    var res = await fetch(preStr+encodeURIComponent('https://www.businessweekly.com.tw/Search/GetSolrSearchData'), {
       method: 'POST',
       headers: {'Content-Type': 'application/x-www-form-urlencoded',},
       body: new URLSearchParams({
@@ -760,7 +747,7 @@ async function businessWeeklyGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function cnaGetList(siteName,t){
-  try{url='https://www.cna.com.tw/cna2018api/api/WNewsList';
+  try{url=encodeURIComponent('https://www.cna.com.tw/cna2018api/api/WNewsList');
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
@@ -778,7 +765,7 @@ async function cnaGetList(siteName,t){
 }
 
 async function cnaGetContent(id){
-  try{const res = await fetch(id);
+  try{const res = await fetch(encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -788,7 +775,7 @@ async function cnaGetContent(id){
 }
 
 async function cnaGetSearchResults(siteName,t){
-  try{url='https://www.cna.com.tw/search/hysearchws.aspx?q='+t;console.log(url);
+  try{url=encodeURIComponent('https://www.cna.com.tw/search/hysearchws.aspx?q='+t);console.log(url);
   let res=await fetch(url);
   let str=await res.text();
   var parser=new DOMParser();
@@ -810,14 +797,14 @@ async function cnaGetSearchResults(siteName,t){
 
 async function cnyesGetList(siteName,t){
   try{if (t=='topics'){
-    url=preStr+'https://api.cnyes.com/media/api/v1/project/index?page='+rr;
+    url=preStr+encodeURIComponent('https://api.cnyes.com/media/api/v1/project/index?page='+rr);
     let res=await fetch(url);
     let str=await res.json();
     for (let a of str.items.data){
       html+=`<p class="title" onclick="openUrl('${a.link}')">${a.title}</p><hr>`;
     }
   } else {
-    url=preStr+'https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr;
+    url=preStr+encodeURIComponent('https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr);
     let res=await fetch(url);
     let str=await res.json();
     for (let a of str.items.data){
@@ -832,7 +819,7 @@ async function cnyesGetList(siteName,t){
 
 async function cnyesGetContent(id){
   try{if (id.length<5){
-    const res = await fetch(preStr+id);
+    const res = await fetch(preStr+encodeURIComponent(id));
     const str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
@@ -841,7 +828,7 @@ async function cnyesGetContent(id){
       html+=c.innerHTML
     }
   } else {
-    let res=await fetch(preStr+'https://news.cnyes.com/news/id/'+id);
+    let res=await fetch(preStr+encodeURIComponent('https://news.cnyes.com/news/id/'+id));
     let str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
@@ -852,7 +839,7 @@ async function cnyesGetContent(id){
 }
 
 async function cnyesGetSearchResults(siteName,t){
-  try{url=preStr+'https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr;
+  try{url=preStr+encodeURIComponent('https://api.cnyes.com/media/api/v1/search?q='+t+'&page='+rr);
   let res=await fetch(url);
   let str=await res.json();
   if(str.items.data!==null && str.items.data!==undefined){
@@ -871,7 +858,7 @@ async function cnyesGetSearchResults(siteName,t){
 async function cnyeshaoGetList(siteName,t){
   try{
   var k=4;
-  if (t.slice(0,2)=='W_'){url='https://hao.cnyes.com/h_api/1/pg_wall/more';t=t.slice(2)}else{url='https://hao.cnyes.com/h_api/1/pg_ch/more'};
+  if (t.slice(0,2)=='W_'){url=encodeURIComponent('https://hao.cnyes.com/h_api/1/pg_wall/more');t=t.slice(2)}else{url=encodeURIComponent('https://hao.cnyes.com/h_api/1/pg_ch/more')};
   for (let i=0;i<k;i++){console.log((rr-1)*k+i+1);
     var res = await fetch(url, {
       method: 'POST',
@@ -895,7 +882,7 @@ async function cnyeshaoGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function cteeGetList(siteName,t){
-  try{url='https://www.ctee.com.tw/api/'+t+rr;console.log(url);
+  try{url=encodeURIComponent('https://www.ctee.com.tw/api/'+t+rr);console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -909,7 +896,7 @@ async function cteeGetList(siteName,t){
 }
 
 async function cteeGetContent(id){
-  try{const res = await fetch('https://www.ctee.com.tw/api'+id);
+  try{const res = await fetch(encodeURIComponent('https://www.ctee.com.tw/api'+id));
   const str=await res.json();
   html = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://www.ctee.com.tw' + id + '" target="_blank">繼續閱讀</a></p><br>'}
@@ -917,7 +904,7 @@ async function cteeGetContent(id){
 }
 
 async function cteeGetSearchResults(siteName,t){
-  try{url='https://www.ctee.com.tw/api/search/'+t+'?p='+rr;
+  try{url=encodeURIComponent('https://www.ctee.com.tw/api/search/'+t+'?p='+rr);
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -935,7 +922,7 @@ async function cteeGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function dwGetList(siteName,t){
-  try{url='https://www.dw.com/zh-hant/'+t;console.log(url);
+  try{url=encodeURIComponent('https://www.dw.com/zh-hant/'+t);console.log(url);
   let res=await fetch(url);
   let str=await res.text();
   var parser=new DOMParser();
@@ -956,7 +943,7 @@ async function dwGetList(siteName,t){
 }
 
 async function dwGetContent(id){
-  try{const res = await fetch('https://www.dw.com'+id);
+  try{const res = await fetch(encodeURIComponent('https://www.dw.com'+id));
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -980,7 +967,7 @@ async function invtComGetList(siteName,t){
   try{
   var k=2;
   for (let i=0;i<k;i++){
-    url='https://hk.investing.com/'+t+((rr-1)*k+i+1);console.log(url);
+    url=encodeURIComponent('https://hk.investing.com/'+t+((rr-1)*k+i+1));console.log(url);
     let res=await fetch(url);
     let str=await res.text();
     var parser=new DOMParser();
@@ -998,7 +985,7 @@ async function invtComGetList(siteName,t){
 }
 
 async function invtComGetContent(id){
-  try{const res = await fetch(id);
+  try{const res = await fetch(encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1014,7 +1001,7 @@ async function invtComGetContent(id){
 
 async function isblGetList(siteName,t){
   try{
-    url='https://www.isabelnet.com/blog/page/'+rr;console.log(url);
+    url=encodeURIComponent('https://www.isabelnet.com/blog/page/'+rr);console.log(url);
     var res=await fetch(url);
     var str=await res.text();
     var parser = new DOMParser();
@@ -1043,7 +1030,7 @@ async function isblGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function jinGetList(siteName,t){
-  try{url=preStr+'https://xnews.jin10.com/'+t+'page/'+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://xnews.jin10.com/'+t+'page/'+rr);console.log(url);
   let res=await fetch(url);
   let str=await res.text();
   var parser=new DOMParser();
@@ -1060,7 +1047,7 @@ async function jinGetList(siteName,t){
 }
 
 async function jinGetContent(id){
-  try{const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1078,22 +1065,14 @@ async function lineTodayGetList(siteName,tt){
   tt=tt.split('|');
   for (let t of tt) {
     if (/[0-9]/.test(t)){
-      url=preStr+'https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+(rr-1)*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200';
-      let res=await fetch(url,{
-        method: 'GET',
-        headers: {
-          'x-linemedia-platform': 'web',
-          'x-linemedia-client': 'line',
-              'accept-language': 'zh-TW',
-    'user-agent': 'Line/13.1.0 Android',
-        }        
-      });
+      url=preStr+encodeURIComponent('https://today.line.me/webapi/trending/cp/latest/listings/module:cp:'+t+':5f4dd7e908b2af5b0e13bba1:0?offset='+(rr-1)*50+'&length=50&country=tw&targetContent=ALL&cps='+t+':200');
+      let res=await fetch(url);
       let str=await res.json();
       for (let a of str.items){
         items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
       }
     } else {
-      url=preStr+'https://today.line.me/_next/data/v1/tw/v3/page/'+t+'.json';
+      url=preStr+encodeURIComponent('https://today.line.me/_next/data/v1/tw/v3/page/'+t+'.json');
       let res=await fetch(url);
       let str=await res.json();
       var data=str.pageProps.fallback['getPageData,'+t].modules;
@@ -1101,15 +1080,7 @@ async function lineTodayGetList(siteName,tt){
       data=data.map(d=>d.listings[0].id);
       
       for (let d of data){
-        res=await fetch(preStr+'https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+(rr-1)*20+'&length=20',{
-          method: 'GET',
-          headers: {
-            'x-linemedia-platform': 'web',
-            'x-linemedia-client': 'line',
-              'accept-language': 'zh-TW',
-    'user-agent': 'Line/13.1.0 Android',
-          }
-        });
+        res=await fetch(preStr+encodeURIComponent('https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+(rr-1)*20+'&length=20'));
         str=await res.json();
         for (let a of str.items){
             items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
@@ -1130,7 +1101,7 @@ async function lineTodayGetList(siteName,tt){
 }
 
 async function lineTodayGetContent(id){
-  try{const res = await fetch(preStr+'https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id);
+  try{const res = await fetch(preStr+encodeURIComponent('https://today.line.me/webapi/portal/page/setting/article?country=tw&hash=' + id));
   const str=await res.json();
   const a = str.data;
   if (a) {
@@ -1146,7 +1117,7 @@ async function lineTodayGetContent(id){
 
 async function lineTodayGetSearchResults(siteName,t){
  //try{
-  url=preStr+'https://today.line.me/webapi/listing/search?country=tw&query='+t;
+  url=preStr+encodeURIComponent('https://today.line.me/webapi/listing/search?country=tw&query='+t);
   let res=await fetch(url);
   let str=await res.json();
   for (let a of str.items){
@@ -1170,7 +1141,7 @@ async function lineTodayGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function mindiGetList(siteName,t,coun){
-  try{url='https://www.mindiworldnews.com/blog/page/'+rr;console.log(url);
+  try{url=encodeURIComponent('https://www.mindiworldnews.com/blog/page/'+rr);console.log(url);
   const res=await fetch(url);const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('h3');
@@ -1181,7 +1152,7 @@ async function mindiGetList(siteName,t,coun){
 }
 
 async function mindiGetContent(id){
-  try{const res = await fetch(id);
+  try{const res = await fetch(encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1206,7 +1177,7 @@ async function msnGetList(siteName,t){
   
   for (var i=0;i<2;i++){
     url='https://assets.msn.com/service/news/feed/pages/'+srvc+'?ocid=social-peregrine&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&User=m-00A80177A097658A10770F1FA15F64FF&cm='+coun+'&'+t+'&newsSkip='+12*((rr-1)*2+i)+'&$skip='+((rr-1)*2+i);
-    let res=await fetch(url);
+    let res=await fetch(encodeURIComponent(url));
     let str=await res.json();
     for (let h of str.sections[0].cards){
       items.push([h.id,h.title]);
@@ -1220,7 +1191,7 @@ async function msnGetList(siteName,t){
 }
 
 async function msnGetContent(id){
-  try{var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
+  try{var res = await fetch(encodeURIComponent('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id));
   var d=await res.json();
 
   if (d.type==='article'){
@@ -1244,7 +1215,7 @@ async function msnGetContent(id){
 
 async function nbGetList(siteName,t){
   try{
-  var res = await fetch('https://www.nb.com/api/Sitecore/Article/FilterResults', {
+  var res = await fetch(encodeURIComponent('https://www.nb.com/api/Sitecore/Article/FilterResults'), {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
     body: t+'&language=en&sortOrder=new',
@@ -1260,7 +1231,7 @@ async function nbGetList(siteName,t){
 }
 
 async function nbGetContent(id){
-  try{const res = await fetch(preStr+id);const str=await res.text();
+  try{const res = await fetch(preStr+encodeURIComponent(id));const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");console.log(doc.querySelectorAll('.col-xs-12.col-sm-9')[1]);
   html = '<p class="time">'+doc.querySelector('.article-date-content').innerText+'</p>'+doc.querySelectorAll('.col-xs-12.col-sm-9')[1].innerHTML.replaceAll('class="dropdown collapse in"','') + '<p class="text-end"><a href="' + id + '" target="_blank">Share</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
@@ -1274,7 +1245,7 @@ async function nbGetContent(id){
 async function peInsightsGetList(siteName,t){
   try{var k=3;
   for (let i=1;i<k;i++){
-    url=preStr+'https://pe-insights.com/page/'+((rr-1)*k+i)+'?s='+t+'&et_pb_searchform_submit=et_search_proccess&et_pb_include_posts=yes&et_pb_include_pages=yes';console.log(url);
+    url=preStr+encodeURIComponent('https://pe-insights.com/page/'+((rr-1)*k+i)+'?s='+t+'&et_pb_searchform_submit=et_search_proccess&et_pb_include_posts=yes&et_pb_include_pages=yes');console.log(url);
     let res=await fetch(url);
     let str=await res.text();
     var parser = new DOMParser();
@@ -1292,7 +1263,7 @@ async function peInsightsGetList(siteName,t){
 }
 
 async function peInsightsGetContent(id){
-  try{const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -1312,7 +1283,7 @@ async function peInsightsGetContent(id){
 
 async function newslensGetList(siteName,t){
   try{
-  if(rr==1){url=preStr+'https://www.thenewslens.com/'+t}else{url=preStr+'https://www.thenewslens.com/'+t+'page'+rr};console.log(url);
+  if(rr==1){url=preStr+encodeURIComponent('https://www.thenewslens.com/'+t)}else{url=preStr+encodeURIComponent('https://www.thenewslens.com/'+t+'page'+rr)};console.log(url);
   var res = await fetch(url);
   var str=await res.text();
   var parser=new DOMParser();
@@ -1330,7 +1301,7 @@ async function newslensGetList(siteName,t){
 }
 
 async function newslensGetContent(id){
-  try{const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1345,8 +1316,8 @@ async function newslensGetContent(id){
 
 async function reutersGetList(siteName,t){
   try{
-  if (t.slice(0,6)=='market'){url=preStr+'https://news-mediator.tradingview.com/news-flow/v2/news?filter=lang:zh-Hant&filter='+t+'&filter=provider:reuters&client=screener';console.log(url)}
-  else {url=preStr+'https://news-mediator.tradingview.com/news-flow/v2/news?filter='+t+'&filter=lang:zh-Hant&filter=provider:reuters&client=screener';console.log(url)}
+  if (t.slice(0,6)=='market'){url=preStr+encodeURIComponent('https://news-mediator.tradingview.com/news-flow/v2/news?filter=lang:zh-Hant&filter='+t+'&filter=provider:reuters&client=screener');console.log(url)}
+  else {url=preStr+encodeURIComponent('https://news-mediator.tradingview.com/news-flow/v2/news?filter='+t+'&filter=lang:zh-Hant&filter=provider:reuters&client=screener');console.log(url)}
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str.items){
@@ -1360,7 +1331,7 @@ async function reutersGetList(siteName,t){
 }
 
 async function reutersGetContent(id){
-  try{const res = await fetch(preStr+'https://tw.tradingview.com'+id);
+  try{const res = await fetch(preStr+encodeURIComponent('https://tw.tradingview.com'+id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1376,11 +1347,11 @@ async function reutersGetContent(id){
 async function sinaGetList(siteName,t){
   try{
   if (/[0-9]/.test(t)){
-    url=preStr+'https://cj.sina.com.cn/k/api/article/lists_by_author?uid='+t+'&page='+rr+'&count=20';console.log(url);
+    url=preStr+encodeURIComponent('https://cj.sina.com.cn/k/api/article/lists_by_author?uid='+t+'&page='+rr+'&count=20');console.log(url);
     const res=await fetch(url);const str=await res.json();
     for (let h of str.result.data.lists){items.push([h.url,h.title]);}
   } else {
-    url=preStr+'https://api.cj.sina.cn/transmit?pid=finance_wap_proxy_fl_1663832597&smartFlow='+t+'&up='+(rr-1)+'&pageSize=30';console.log(url);
+    url=preStr+encodeURIComponent('https://api.cj.sina.cn/transmit?pid=finance_wap_proxy_fl_1663832597&smartFlow='+t+'&up='+(rr-1)+'&pageSize=30');console.log(url);
     const res=await fetch(url);const str=await res.json();
     for (let h of str.data){items.push([h.wapurl,h.title]);}
   }
@@ -1390,7 +1361,7 @@ async function sinaGetList(siteName,t){
 }
 
 async function sinaGetContent(id){
-  try{const res = await fetch(preStr+id);const str=await res.text();
+  try{const res = await fetch(preStr+encodeURIComponent(id));const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
   if (/[0-9]/.test(rt)){
   html='<p class="time">'+doc.querySelector('.date-source').innerText+'</p>'+doc.querySelector('#artibody').outerHTML.replace(/src="data:image[\s\S]*?data-src/g,'src') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';   
@@ -1405,7 +1376,7 @@ async function sinaGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function substackGetList(siteName,t){
-  try{url=preStr+'https://'+t+'.substack.com/api/v1/archive?sort=new&limit=20&offset='+(rr-1)*20;console.log(url);
+  try{url=preStr+encodeURIComponent('https://'+t+'.substack.com/api/v1/archive?sort=new&limit=20&offset='+(rr-1)*20);console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -1419,7 +1390,7 @@ async function substackGetList(siteName,t){
 }
 
 async function substackGetContent(id){
-  try{const res = await fetch(preStr+'https://'+rt+'.substack.com/api/v1/posts/'+id);
+  try{const res = await fetch(preStr+encodeURIComponent('https://'+rt+'.substack.com/api/v1/posts/'+id));
   const str=await res.json();
   html = '<p class="time">'+cvt2Timezone(str.updated_at)+'</p><p>'+str.subtitle+'</p>'+str.body_html+'<p class="text-end"><a href="https://'+rt+'.substack.com/p/' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://'+rt+'.substack.com/p/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
@@ -1431,7 +1402,7 @@ async function substackGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function technewsGetList(siteName,t){
-  try{url=preStr+'https://cdn.'+t+'page/'+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://cdn.'+t+'page/'+rr);console.log(url);
   let res=await fetch(url);
   let str=await res.text();
   var parser = new DOMParser();
@@ -1456,7 +1427,7 @@ async function technewsGetList(siteName,t){
 }
 
 async function technewsGetContent(id){
-  try{const res = await fetch(preStr+id.replace('https://','https://cdn.').replace('finance.',''));
+  try{const res = await fetch(preStr+encodeURIComponent(id.replace('https://','https://cdn.').replace('finance.','')));
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -1482,7 +1453,7 @@ async function technewsGetContent(id){
 
 async function twtGetList(siteName,t){
   try{
-  const res=await fetch('https://nitter.poast.org/'+t+cursor);const str=await res.text();
+  const res=await fetch(encodeURIComponent('https://nitter.poast.org/'+t+cursor));const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   const sm=doc.querySelector('.show-more').children[0].href;cursor=sm.slice(sm.indexOf('?'));
   items=doc.querySelectorAll('.tweet-body');
@@ -1502,12 +1473,12 @@ async function twtGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function udnGetList(siteName,t){
-  try{url='https://udn.com/api/more?'+t+'&page='+(rr-1);console.log(url);
+  try{url=encodeURIComponent('https://udn.com/api/more?'+t+'&page='+(rr-1));console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   if (str.lists.length<18){var k=5}else{var k=1};
   for (let i=0;i<k;i++){
-    var url='https://udn.com/api/more?'+t+'&page='+((rr-1)*k+i);console.log(url);
+    var url=encodeURIComponent('https://udn.com/api/more?'+t+'&page='+((rr-1)*k+i));console.log(url);
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str.lists){
@@ -1522,7 +1493,7 @@ async function udnGetList(siteName,t){
 }
 
 async function udnGetContent(id){
-  try{const res = await fetch('https://udn.com/'+id);
+  try{const res = await fetch(encodeURIComponent('https://udn.com/'+id));
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -1534,7 +1505,7 @@ async function udnGetContent(id){
 }
 
 async function udnGetSearchResults(siteName,t){
-  try{url=preStr+'https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr;
+  try{url=preStr+encodeURIComponent('https://udn.com/api/more?channelId=2&type=searchword&id=search:'+t+'&page='+rr);
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -1552,7 +1523,7 @@ async function udnGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function udnMoneyGetList(siteName,t){
-  try{url=preStr+'https://money.udn.com/rank/ajax_newest/1001/'+t+'/'+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://money.udn.com/rank/ajax_newest/1001/'+t+'/'+rr);console.log(url);
   let res=await fetch(url);
   let str=await res.text();
   var parser=new DOMParser();
@@ -1569,7 +1540,7 @@ async function udnMoneyGetList(siteName,t){
 }
 
 async function udnMoneyGetContent(id){
-  try{const res = await fetch(preStr+id);
+  try{const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1579,7 +1550,7 @@ async function udnMoneyGetContent(id){
 }
 
 async function udnMoneyGetSearchResults(siteName,t){
-  try{url=preStr+'https://money.udn.com/search/result/1001/'+t+'/'+rr;console.log(url);
+  try{url=preStr+encodeURIComponent('https://money.udn.com/search/result/1001/'+t+'/'+rr);console.log(url);
   let res=await fetch(url);
   let str=await res.text();
   var parser=new DOMParser();
@@ -1633,7 +1604,7 @@ async function wealthGetList(siteName,t){
     }
   }
   
-  url='https://www.wealth.com.tw/graphql';
+  url=encodeURIComponent('https://www.wealth.com.tw/graphql');
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
@@ -1662,7 +1633,7 @@ async function wealthGetContent(id){
     "query": "query Article($id: ID!, $token: String) {\n  article(id: $id, token: $token) {\n    ...ArticleBaseFields\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  cover\n  coverText\n  content\n  releasedAt\n  authors {\n    name\n  }\n}\n"
   };
 
-  url='https://www.wealth.com.tw/graphql';
+  url=encodeURIComponent('https://www.wealth.com.tw/graphql');
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
@@ -1703,7 +1674,7 @@ async function wealthGetSearchResults(siteName,t){
       "query": "query Articles($offset: Int, $limit: Int, $type: ArticleType, $vipOnly: Boolean, $searchTerm: String, $isFameColumn: Boolean, $magazineId: ID, $authorId: ID, $viewOrderType: ArticleViewOrderType) {\n  articles(\n    offset: $offset\n    limit: $limit\n    type: $type\n    vipOnly: $vipOnly\n    searchTerm: $searchTerm\n    isFameColumn: $isFameColumn\n    magazineId: $magazineId\n    authorId: $authorId\n    viewOrderType: $viewOrderType\n  ) {\n    ...ArticleBaseFields\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  state\n  title\n  subtitle\n  cover\n  coverText\n  coverAlt\n  content\n  contents\n  type\n  vipOnly\n  views\n  video {\n    id\n    youtubeId\n    playlistId\n    __typename\n  }\n  authors {\n    id\n    name\n    state\n    fameColumn {\n      id\n      avatar\n      description\n      __typename\n    }\n    __typename\n  }\n  directors\n  organizers {\n    id\n    name\n    state\n    fameColumn {\n      id\n      avatar\n      description\n      __typename\n    }\n    __typename\n  }\n  hashtags {\n    id\n    name\n    __typename\n  }\n  categories {\n    id\n    name\n    __typename\n  }\n  releasedAt\n  createdAt\n  updatedAt\n  deletedAt\n  isHeadline\n  isPinned\n  isSponsored\n  __typename\n}\n"
     }
 
-  url='https://www.wealth.com.tw/graphql';
+  url=encodeURIComponent('https://www.wealth.com.tw/graphql');
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
@@ -1726,7 +1697,7 @@ async function wealthGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function wscnGetList(siteName,t){
-  try{url='https://api-one-wscn.awtmt.com/apiv1/content/information-flow?accept=article,chart&action=upglide&limit=20&channel='+t+'&cursor='+cursor;console.log(url);
+  try{url=encodeURIComponent('https://api-one-wscn.awtmt.com/apiv1/content/information-flow?accept=article,chart&action=upglide&limit=20&channel='+t+'&cursor='+cursor);console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   cursor=str.data.next_cursor;
@@ -1748,7 +1719,7 @@ async function wscnGetList(siteName,t){
 }
 
 async function wscnGetContent(id){
-  try{const res = await fetch('https://api-one-wscn.awtmt.com/apiv1/content/'+id+'?extract=0');
+  try{const res = await fetch(encodeURIComponent('https://api-one-wscn.awtmt.com/apiv1/content/'+id+'?extract=0'));
   const str=await res.json();
   html = '<p class="time">'+cvt2Timezone(str.data.display_time*1000)+'</p>'+str.data.content + '<p class="text-end"><a href="https://wallstreetcn.com/' + id + '" target="_blank">分享</a></p><br>';
   if (str.videos!==undefined){html+='<video style="width:100%" tabindex="-1" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+str.videos[0].uri+' type="application/x-mpegURL"></source></video>'};
@@ -1757,7 +1728,7 @@ async function wscnGetContent(id){
 }
 
 async function wscnGetSearchResults(siteName,t){
-  try{url='https://api-one-wscn.awtmt.com/apiv1/search/article?limit=20&query='+t+'&cursor='+cursor;
+  try{url=encodeURIComponent('https://api-one-wscn.awtmt.com/apiv1/search/article?limit=20&query='+t+'&cursor='+cursor);
   let res=await fetch(url);
   let str=await res.json();
   cursor=str.data.next_cursor;
@@ -1780,7 +1751,7 @@ async function xueqiuGetList(siteName,t){
   if (/[0-9]/.test(t)){
     var k=3;lastId='';
     for (let i=1;i<=k;i++){
-      url='https://xueqiu.com/recommend-proxy/anonymous_recommend.json?category='+t+'&page='+((rr-1)*k+i)+'&last_id='+lastId;console.log(url);
+      url=encodeURIComponent('https://xueqiu.com/recommend-proxy/anonymous_recommend.json?category='+t+'&page='+((rr-1)*k+i)+'&last_id='+lastId);console.log(url);
       const res=await fetch(url);const str=await res.json();lastId=str.list[str.list.length-1].id;
       for (let h of str.list){items.push([h.target,(h.title===undefined||h.title===null||h.title==='')?h.description:h.title]);}    
     }
@@ -1790,7 +1761,7 @@ async function xueqiuGetList(siteName,t){
   } else {
     var k=3;
     for (let i=1;i<=k;i++){
-      url='https://xueqiu.com/query/v1/search/status.json?sortId=2&q='+t+'+&page='+((rr-1)*k+i);console.log(url);
+      url=encodeURIComponent('https://xueqiu.com/query/v1/search/status.json?sortId=2&q='+t+'+&page='+((rr-1)*k+i));console.log(url);
       const res=await fetch(url);const str=await res.json();
       for (let h of str.list){items.push([h.target,(h.title===undefined||h.title===null||h.title==='')?h.description:h.title,h.created_at,h.text,h.user.screen_name]);}    
     }
@@ -1803,7 +1774,7 @@ async function xueqiuGetList(siteName,t){
 }
 
 async function xueqiuGetContent(id){
-  try{const res=await fetch('https://xueqiu.com'+id);const str=await res.text();
+  try{const res=await fetch(encodeURIComponent('https://xueqiu.com'+id));const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
   html = '<p class="time">'+doc.querySelector('.avatar__subtitle').innerText+'</p>'+doc.querySelector('.article__bd__detail').outerHTML+ '<p class="text-end"><a href="https://xueqiu.com' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://xueqiu.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
@@ -1817,7 +1788,7 @@ async function xueqiuGetContent(id){
 async function yahooTWGetList(siteName,t){
   try{coun='TW';
   if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='US'};
-  var url=preStr+'https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t;
+  var url=preStr+encodeURIComponent('https://ncp-gw-finance.media.yahoo.com/api/v2/gql/stream_view?count=200&imageFormat=WEBP&namespace=finance&ntkEnabled=false&ssl=true&id=neo-ntk-assetlist-stream&site=finance&version=v1&enableCrossModuleDedup=true&snippetCount=200&listId='+t);
   let res=await fetch(url);
   let str=await res.json();
   var data=str.data.main.stream.slice((rr-1)*50,rr*50);
@@ -1853,7 +1824,7 @@ var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
 html = '<p class="time">'+doc.querySelector('time').textContent +' | '+doc.querySelector('.caas-author-byline-collapse').textContent+'</p>'+ doc.querySelector('.caas-body').innerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
 
       
-    // const res = await fetch('https://www.yahoo.com/caas/content/article/?region='+coun+'&uuid='+id);
+    // const res = await fetch(encodeURIComponent('https://www.yahoo.com/caas/content/article/?region='+coun+'&uuid='+id));
     // const str=await res.json();
     // var a=str.items[0].data.partnerData;
     // var b=str.items[0].markup.replaceAll('data-src','src').replace(/padding-bottom[\\s\\S]*?%/g,'');
@@ -1866,7 +1837,7 @@ async function yahooTWGetSearchResults(siteName,t){
   try{
   coun='TW'; var k=3;
   for (let i=0;i<k;i++){
-  url='https://tw.news.yahoo.com/_td-news/api/resource/NuwaSearchService.newsSearch;loadMore=true;query='+t+';offset='+(k*10*(rr-1)+(i*10));console.log(url);
+  url=encodeURIComponent('https://tw.news.yahoo.com/_td-news/api/resource/NuwaSearchService.newsSearch;loadMore=true;query='+t+';offset='+(k*10*(rr-1)+(i*10)));console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   var data=str.data;
@@ -1886,7 +1857,7 @@ async function yahooTWGetSearchResults(siteName,t){
 
 async function yahooVideoGetList(siteName,t){
   try{var payload={"payload":{"gqlVariables": {"main": {"pagination": {"uuids": uuids}}}},"serviceConfig": {"listId": t,"count": 200,"snippetCount": 50}};
-  var url='https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US';
+  var url=encodeURIComponent('https://finance.yahoo.com/xhr/ncp?location=US&queryRef=videosCategoryNeo&serviceKey=ncp_fin&lang=en-US&region=US');
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'text/plain;charset=UTF-8',},
@@ -1928,7 +1899,7 @@ async function yahooVideoGetContent(clickedId,id,url){
 
 async function ytnGetList(siteName,t){
   try{
-  if (t.slice(0,8)=='mcd=0117'){url=preStr+'https://star.ytn.co.kr/ajax/getMoreNews.php'}else{url=preStr+'https://www.ytn.co.kr/ajax/getMoreNews.php'};
+  if (t.slice(0,8)=='mcd=0117'){url=preStr+encodeURIComponent('https://star.ytn.co.kr/ajax/getMoreNews.php')}else{url=preStr+encodeURIComponent('https://www.ytn.co.kr/ajax/getMoreNews.php')};
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',},
@@ -1947,7 +1918,7 @@ async function ytnGetList(siteName,t){
 }
 
 async function ytnGetContent(id){
-  try{const res = await fetch(preStr+'https://www.ytn.co.kr/_ln/'+id);
+  try{const res = await fetch(preStr+encodeURIComponent('https://www.ytn.co.kr/_ln/'+id));
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
@@ -1969,7 +1940,7 @@ async function ytnGetContent(id){
 
 async function bbgVideoGetList(siteName,t){
   try{
-    url=preStr+'https://personalization.bloomberg.com/user/recommendations/cfru?timezoneOffset=-28800000&limit=50&resourceTypes=Video&offset='+(rr-1)*30+'&includedSites='+t;
+    url=preStr+encodeURIComponent('https://personalization.bloomberg.com/user/recommendations/cfru?timezoneOffset=-28800000&limit=50&resourceTypes=Video&offset='+(rr-1)*30+'&includedSites='+t);
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str){
@@ -1992,7 +1963,7 @@ async function msnVideoGetList(siteName,t){
   try{
   if (t.slice(0,3)==='vid'){  // MSN VIDEO FROM CHANNEL
     for (var i=0;i<2;i++){
-      url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
+      url=encodeURIComponent('https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i));
       let res=await fetch(url);
       let str=await res.json();
       for (let h of str.sections[0].cards){
@@ -2002,7 +1973,7 @@ async function msnVideoGetList(siteName,t){
       }
     }
   } else {  // MSN VIDEO FROM CATEGORY
-    url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
+    url=encodeURIComponent('https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50);
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str.value[0].subCards){
@@ -2026,7 +1997,7 @@ async function msnVideoGetList(siteName,t){
 async function msnChannelVideoGetList(siteName,t){
   try{
     for (var i=0;i<2;i++){
-    url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
+    url=encodeURIComponent('https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i));
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str.sections[0].cards){
@@ -2051,7 +2022,7 @@ async function msnChannelVideoGetList(siteName,t){
 async function reutersVideoGetList(siteName,t){
   try{
     url='https://www.reuters.com/pf/api/v3/content/fetch/video-playlist-by-collection-v1?query={"collection_alias":"featured-video","offset":'+(rr-1)*20+',"size":20,"website":"reuters"}&d=284&mxId=00000000&_website=reuters';
-    let res=await fetch(url);
+    let res=await fetch(encodeURIComponent(url));
     let str=await res.json();
     let raw=str.result.channels.filter(s => s.id === t);
     for (let h of raw[0].videos){
@@ -2073,7 +2044,7 @@ async function reutersVideoGetList(siteName,t){
 
 async function wsjVideoGetList(siteName,t){
   try{url='https://video-api.shdsvc.dowjones.io/api/legacy/find-all-videos?lang=en-us&count=50'+t+'&page='+(rr-1);
-  let res=await fetch(url);
+  let res=await fetch(encodeURIComponent(url));
   let str=await res.json();
   for (let h of str.items){
     var thumbnail=h.thumbnailList[0].url;
@@ -2130,65 +2101,6 @@ async function videoGetContent(clickedId,id,url,m3u8Url){
 
 //    THE ECONOMIST MAGAZINE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function dlEcoMag(){
-  var date = prompt('Issue Date:');date=date.replace(/(\d{4})(\d{2})(\d{2})/g, '$1.$2.$3');
-  var link = document.createElement('a');
-  link.href = `https://github.com/hehonghui/awesome-english-ebooks/raw/master/01_economist/te_${date}/TheEconomist.${date}.epub`;
-  link.target = '_blank';link.download = `TheEconomist.${date}.epub`;
-  link.click();link.remove();
-}
-
-async function openBook(input){
-  if (input.files.length === 0) {alert('Please select an EPUB file.');return;}
-  const file=input.files[0];
-  const reader=new FileReader();
-
-  reader.onload = async (e) => {
-    const arrayBuffer=e.target.result;const book=ePub({ replacements: 'blobUrl' });
-    await book.open(arrayBuffer);
-    var jsonOutput = {
-      metadata: book.packaging.metadata,
-      chapters: []
-    };
-
-    let spineItems = book.spine.spineItems;
-    var i=0;
-    for (let item of spineItems) {
-      i=i+1;
-      let chapter = await item.load(book.load.bind(book));
-      let str = await item.render();
-      var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-      var content=doc.querySelector('body').innerHTML;
-      jsonOutput.chapters.push({
-        id: 'chapter_'+i,
-        href: item.href,
-        content: content
-      });
-    }
-    
-    var array=[];
-    for (let c of jsonOutput.chapters){
-      var parser=new DOMParser();var doc = parser.parseFromString(c.content, "text/html");
-      if(doc.querySelector('h1')){
-        c.section=doc.querySelector('.te_section_title')?.textContent??null;
-        if(c.section!==null){array.push(c)};
-      }
-    }
-    var tabs = [...new Set(array.map(item => item.section))];
-    ecoMagContent = Object.values(array.reduce((acc, item) => {
-      if (!acc[item.section]) {
-        acc[item.section] = { section: item.section, content: [] };
-      }
-      acc[item.section].content.push(item);
-      return acc;
-    }, {})
-    );
-  }
-
-  document.getElementById('copy-btn').style.display='inline-block';
-  reader.readAsArrayBuffer(file);
-};
 
 function copyJSONToClipboard(){
   var jsonStr = JSON.stringify(ecoMagContent);
