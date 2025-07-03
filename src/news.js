@@ -1015,7 +1015,7 @@ async function isblGetList(siteName,t){
 
     let ts=doc.querySelectorAll('.entry-title');
     for (let t of ts){
-      res=await fetch(t.firstChild.href);
+      res=await fetch(preStr+encodeURIComponent(t.firstChild.href));
       str=await res.text();
       parser = new DOMParser();
       doc = parser.parseFromString(str, "text/html");
