@@ -864,9 +864,9 @@ async function cnyesGetSearchResults(siteName,t){
 async function cnyeshaoGetList(siteName,t){
   try{
   var k=4;
-  if (t.slice(0,2)=='W_'){url=encodeURIComponent('https://hao.cnyes.com/h_api/1/pg_wall/more');t=t.slice(2)}else{url=encodeURIComponent('https://hao.cnyes.com/h_api/1/pg_ch/more')};
+  if (t.slice(0,2)=='W_'){url='https://hao.cnyes.com/h_api/1/pg_wall/more';t=t.slice(2)}else{url='https://hao.cnyes.com/h_api/1/pg_ch/more'};
   for (let i=0;i<k;i++){console.log((rr-1)*k+i+1);
-    var res = await fetch(url, {
+    var res = await fetch(preStr+encodeURIComponent(url), {
       method: 'POST',
       headers: {'Content-Type': 'application/json;charset=UTF-8',},
       body: '{"p2":"'+t+'","p3":'+((rr-1)*k+i+1)+',"timezoneOffset":-28800000}',
