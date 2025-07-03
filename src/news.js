@@ -1183,7 +1183,7 @@ async function msnGetList(siteName,t){
   
   for (var i=0;i<2;i++){
     url='https://assets.msn.com/service/news/feed/pages/'+srvc+'?ocid=social-peregrine&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&User=m-00A80177A097658A10770F1FA15F64FF&cm='+coun+'&'+t+'&newsSkip='+12*((rr-1)*2+i)+'&$skip='+((rr-1)*2+i);
-    let res=await fetch(encodeURIComponent(url));
+    let res=await fetch(preStr+encodeURIComponent(url));
     let str=await res.json();
     for (let h of str.sections[0].cards){
       items.push([h.id,h.title]);
@@ -1197,7 +1197,7 @@ async function msnGetList(siteName,t){
 }
 
 async function msnGetContent(id){
-  try{var res = await fetch(encodeURIComponent('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id));
+  try{var res = await fetch(preStr+encodeURIComponent('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id));
   var d=await res.json();
 
   if (d.type==='article'){
