@@ -332,7 +332,7 @@ async function getContent(siteName,clickedId,id){
         
         //handle videos for line
         if (siteName=='lineToday'){
-          var video=cEl.querySelector('video');
+          var video=cEl.querySelector('video');if (video){
           var m3u8Url=video.querySelector('source').src;
           if (video.canPlayType('application/vnd.apple.mpegurl')) {
               video.src = m3u8Url;
@@ -346,7 +346,7 @@ async function getContent(siteName,clickedId,id){
           } else {
               console.error("HLS is not supported in this browser.");
           }
-        }
+        }}
 
         //handle items for ytn
         if (siteName=='ytn'){
