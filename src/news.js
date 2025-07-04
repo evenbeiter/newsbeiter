@@ -329,6 +329,22 @@ async function getContent(siteName,clickedId,id){
         //get content
         if (msnALL.includes(siteName)){cEl.innerHTML+=await msnGetContent(id)}
         else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
+        //handle videos for line
+        var video=document.querySelector('video');
+        var m3u8Url=video.querySelector('source').src;
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = m3u8Url;
+        } else if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(m3u8Url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                video.play();
+            });
+        } else {
+            console.error("HLS is not supported in this browser.");
+        }
+
         //handle items for ytn
         if (siteName=='ytn'){
           //img
