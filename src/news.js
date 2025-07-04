@@ -619,7 +619,7 @@ async function blkGetContent(id){
   try{
   const res = await fetch(preStr+id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-  var a=doc.querySelector('#mainWrapper').outerHTML.replace(/col-[\s\S]*? /g,'').replace(/col-[\s\S]*?"/g,'"').replace(/offset-[\s\S]*? /g,'').replace(/offset-[\s\S]*?"/g,'"').replaceAll('bg-white','').replaceAll('data-src="','src="').replaceAll('src="/','src="https://www.blackrock.com/');
+  var a=doc.querySelector('#mainWrapper').outerHTML.replaceAll('<p>','<p class="us-en">').replace(/col-[\s\S]*? /g,'').replace(/col-[\s\S]*?"/g,'"').replace(/offset-[\s\S]*? /g,'').replace(/offset-[\s\S]*?"/g,'"').replaceAll('bg-white','').replaceAll('data-src="','src="').replaceAll('src="/','src="https://www.blackrock.com/');
   if (str.match(/contentUrl":[\s\S]*?.mp4"/g)){a=a.replace('<video','<video src='+str.match(/contentUrl":[\s\S]*?.mp4"/g)[0].replace('contentUrl":',''))};
   html = a+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
