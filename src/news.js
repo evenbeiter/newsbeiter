@@ -888,7 +888,7 @@ async function cnyeshaoGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function cteeGetList(siteName,t){
-  try{url=encodeURIComponent('https://www.ctee.com.tw/api/'+t+rr);console.log(url);
+  try{url='https://www.ctee.com.tw/api/'+t+rr;console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -902,7 +902,7 @@ async function cteeGetList(siteName,t){
 }
 
 async function cteeGetContent(id){
-  try{const res = await fetch(encodeURIComponent('https://www.ctee.com.tw/api'+id));
+  try{const res = await fetch('https://www.ctee.com.tw/api'+id);
   const str=await res.json();
   html = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://www.ctee.com.tw' + id + '" target="_blank">繼續閱讀</a></p><br>'}
@@ -910,7 +910,7 @@ async function cteeGetContent(id){
 }
 
 async function cteeGetSearchResults(siteName,t){
-  try{url=encodeURIComponent('https://www.ctee.com.tw/api/search/'+t+'?p='+rr);
+  try{url='https://www.ctee.com.tw/api/search/'+t+'?p='+rr;
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
@@ -928,7 +928,7 @@ async function cteeGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function dwGetList(siteName,t){
-  try{url=encodeURIComponent('https://www.dw.com/zh-hant/'+t);console.log(url);
+  try{url='https://www.dw.com/zh-hant/'+t;console.log(url);
   let res=await fetch(url);
   let str=await res.text();
   var parser=new DOMParser();
@@ -949,7 +949,7 @@ async function dwGetList(siteName,t){
 }
 
 async function dwGetContent(id){
-  try{const res = await fetch(encodeURIComponent('https://www.dw.com'+id));
+  try{const res = await fetch('https://www.dw.com'+id);
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -1183,7 +1183,7 @@ async function msnGetList(siteName,t){
   
   for (var i=0;i<2;i++){
     url='https://assets.msn.com/service/news/feed/pages/'+srvc+'?ocid=social-peregrine&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&User=m-00A80177A097658A10770F1FA15F64FF&cm='+coun+'&'+t+'&newsSkip='+12*((rr-1)*2+i)+'&$skip='+((rr-1)*2+i);
-    let res=await fetch(preStr+encodeURIComponent(url));
+    let res=await fetch(url);
     let str=await res.json();
     for (let h of str.sections[0].cards){
       items.push([h.id,h.title]);
@@ -1197,7 +1197,7 @@ async function msnGetList(siteName,t){
 }
 
 async function msnGetContent(id){
-  try{var res = await fetch(preStr+encodeURIComponent('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id));
+  try{var res = await fetch('https://assets.msn.com/content/view/v2/Detail/'+coun+'/'+id);
   var d=await res.json();
 
   if (d.type==='article'){
@@ -1479,12 +1479,12 @@ async function twtGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function udnGetList(siteName,t){
-  try{url=encodeURIComponent('https://udn.com/api/more?'+t+'&page='+(rr-1));console.log(url);
+  try{url='https://udn.com/api/more?'+t+'&page='+(rr-1);console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   if (str.lists.length<18){var k=5}else{var k=1};
   for (let i=0;i<k;i++){
-    var url=encodeURIComponent('https://udn.com/api/more?'+t+'&page='+((rr-1)*k+i));console.log(url);
+    var url='https://udn.com/api/more?'+t+'&page='+((rr-1)*k+i);console.log(url);
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str.lists){
@@ -1499,7 +1499,7 @@ async function udnGetList(siteName,t){
 }
 
 async function udnGetContent(id){
-  try{const res = await fetch(encodeURIComponent('https://udn.com/'+id));
+  try{const res = await fetch('https://udn.com/'+id);
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
@@ -1610,7 +1610,7 @@ async function wealthGetList(siteName,t){
     }
   }
   
-  url=encodeURIComponent('https://www.wealth.com.tw/graphql');
+  url='https://www.wealth.com.tw/graphql';
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
@@ -1639,7 +1639,7 @@ async function wealthGetContent(id){
     "query": "query Article($id: ID!, $token: String) {\n  article(id: $id, token: $token) {\n    ...ArticleBaseFields\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  title\n  cover\n  coverText\n  content\n  releasedAt\n  authors {\n    name\n  }\n}\n"
   };
 
-  url=encodeURIComponent('https://www.wealth.com.tw/graphql');
+  url='https://www.wealth.com.tw/graphql';
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
@@ -1680,7 +1680,7 @@ async function wealthGetSearchResults(siteName,t){
       "query": "query Articles($offset: Int, $limit: Int, $type: ArticleType, $vipOnly: Boolean, $searchTerm: String, $isFameColumn: Boolean, $magazineId: ID, $authorId: ID, $viewOrderType: ArticleViewOrderType) {\n  articles(\n    offset: $offset\n    limit: $limit\n    type: $type\n    vipOnly: $vipOnly\n    searchTerm: $searchTerm\n    isFameColumn: $isFameColumn\n    magazineId: $magazineId\n    authorId: $authorId\n    viewOrderType: $viewOrderType\n  ) {\n    ...ArticleBaseFields\n    __typename\n  }\n}\n\nfragment ArticleBaseFields on Article {\n  id\n  state\n  title\n  subtitle\n  cover\n  coverText\n  coverAlt\n  content\n  contents\n  type\n  vipOnly\n  views\n  video {\n    id\n    youtubeId\n    playlistId\n    __typename\n  }\n  authors {\n    id\n    name\n    state\n    fameColumn {\n      id\n      avatar\n      description\n      __typename\n    }\n    __typename\n  }\n  directors\n  organizers {\n    id\n    name\n    state\n    fameColumn {\n      id\n      avatar\n      description\n      __typename\n    }\n    __typename\n  }\n  hashtags {\n    id\n    name\n    __typename\n  }\n  categories {\n    id\n    name\n    __typename\n  }\n  releasedAt\n  createdAt\n  updatedAt\n  deletedAt\n  isHeadline\n  isPinned\n  isSponsored\n  __typename\n}\n"
     }
 
-  url=encodeURIComponent('https://www.wealth.com.tw/graphql');
+  url='https://www.wealth.com.tw/graphql';
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/json',},
@@ -1703,7 +1703,7 @@ async function wealthGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function wscnGetList(siteName,t){
-  try{url=encodeURIComponent('https://api-one-wscn.awtmt.com/apiv1/content/information-flow?accept=article,chart&action=upglide&limit=20&channel='+t+'&cursor='+cursor);console.log(url);
+  try{url='https://api-one-wscn.awtmt.com/apiv1/content/information-flow?accept=article,chart&action=upglide&limit=20&channel='+t+'&cursor='+cursor;console.log(url);
   let res=await fetch(url);
   let str=await res.json();
   cursor=str.data.next_cursor;
@@ -1725,7 +1725,7 @@ async function wscnGetList(siteName,t){
 }
 
 async function wscnGetContent(id){
-  try{const res = await fetch(encodeURIComponent('https://api-one-wscn.awtmt.com/apiv1/content/'+id+'?extract=0'));
+  try{const res = await fetch('https://api-one-wscn.awtmt.com/apiv1/content/'+id+'?extract=0');
   const str=await res.json();
   html = '<p class="time">'+cvt2Timezone(str.data.display_time*1000)+'</p>'+str.data.content + '<p class="text-end"><a href="https://wallstreetcn.com/' + id + '" target="_blank">分享</a></p><br>';
   if (str.videos!==undefined){html+='<video style="width:100%" tabindex="-1" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+str.videos[0].uri+' type="application/x-mpegURL"></source></video>'};
@@ -1734,7 +1734,7 @@ async function wscnGetContent(id){
 }
 
 async function wscnGetSearchResults(siteName,t){
-  try{url=encodeURIComponent('https://api-one-wscn.awtmt.com/apiv1/search/article?limit=20&query='+t+'&cursor='+cursor);
+  try{url='https://api-one-wscn.awtmt.com/apiv1/search/article?limit=20&query='+t+'&cursor='+cursor;
   let res=await fetch(url);
   let str=await res.json();
   cursor=str.data.next_cursor;
@@ -1757,8 +1757,8 @@ async function xueqiuGetList(siteName,t){
   if (/[0-9]/.test(t)){
     var k=3;lastId='';
     for (let i=1;i<=k;i++){
-      url=encodeURIComponent('https://xueqiu.com/recommend-proxy/anonymous_recommend.json?category='+t+'&page='+((rr-1)*k+i)+'&last_id='+lastId);console.log(url);
-      const res=await fetch(url);const str=await res.json();lastId=str.list[str.list.length-1].id;
+      url='https://xueqiu.com/recommend-proxy/anonymous_recommend.json?category='+t+'&page='+((rr-1)*k+i)+'&last_id='+lastId;console.log(url);
+      const res=await fetch(preStr+encodeURIComponent(url));const str=await res.json();lastId=str.list[str.list.length-1].id;
       for (let h of str.list){items.push([h.target,(h.title===undefined||h.title===null||h.title==='')?h.description:h.title]);}    
     }
     for (let h of items){
@@ -1767,8 +1767,8 @@ async function xueqiuGetList(siteName,t){
   } else {
     var k=3;
     for (let i=1;i<=k;i++){
-      url=encodeURIComponent('https://xueqiu.com/query/v1/search/status.json?sortId=2&q='+t+'+&page='+((rr-1)*k+i));console.log(url);
-      const res=await fetch(url);const str=await res.json();
+      url='https://xueqiu.com/query/v1/search/status.json?sortId=2&q='+t+'+&page='+((rr-1)*k+i);console.log(url);
+      const res=await fetch(preStr+encodeURIComponent(url));const str=await res.json();
       for (let h of str.list){items.push([h.target,(h.title===undefined||h.title===null||h.title==='')?h.description:h.title,h.created_at,h.text,h.user.screen_name]);}    
     }
     for (let h of items){
@@ -1780,7 +1780,8 @@ async function xueqiuGetList(siteName,t){
 }
 
 async function xueqiuGetContent(id){
-  try{const res=await fetch(encodeURIComponent('https://xueqiu.com'+id));const str=await res.text();
+  try{url='https://xueqiu.com'+id;
+  const res=await fetch(preStr+encodeURIComponent(url));const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
   html = '<p class="time">'+doc.querySelector('.avatar__subtitle').innerText+'</p>'+doc.querySelector('.article__bd__detail').outerHTML+ '<p class="text-end"><a href="https://xueqiu.com' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://xueqiu.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
