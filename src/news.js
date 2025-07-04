@@ -619,7 +619,7 @@ async function blkGetContent(id){
   try{
   const res = await fetch(preStr+id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-  html = doc.querySelector('#mainWrapper').outerHTML.replaceAll('col-xl-7','').replaceAll('col-lg-9','').replaceAll('col-12','')+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = doc.querySelector('#mainWrapper').outerHTML.replace(/col-[\s\S]*? /g,'').replace(/col-[\s\S]*?"/g,'"').replaceAll('src="/','src="https://www.blackrock.com/')+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
