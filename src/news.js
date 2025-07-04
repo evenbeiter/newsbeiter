@@ -601,7 +601,7 @@ async function bbcGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function blkGetList(siteName,t){
-  try{url=preStr+'https://www.blackrock.com/us/individual/insights');console.log(url);
+  try{url=preStr+'https://www.blackrock.com/us/individual/insights';console.log(url);
   let res=await fetch(url);let str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('div.tile-container');
