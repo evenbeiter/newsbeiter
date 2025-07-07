@@ -405,17 +405,18 @@ async function getContent(siteName,clickedId,id){
       }
     }
   } else {
-      var e=window.event;
-      if (e && e.target.tagName==='VIDEO'){return}else{
-      cEl.style.display='none';
-      if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
-      try{
-        if (msnALL.includes(siteName)){
-          cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()
-        } else if (siteName!=='kd') {
-          cEl.previousElementSibling.previousElementSibling.scrollIntoView()
-        }
-      } catch {document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
+    var e=window.event;
+    if (e && e.target.tagName==='VIDEO'){return}else{
+      const selection=window.getSelection();
+      const selectedText=selection.toString().trim();
+      if (selectedText.length===0){
+        cEl.style.display='none';
+        if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
+        try{
+          if (msnALL.includes(siteName)){cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()}
+          else if (siteName!=='kd') {cEl.previousElementSibling.previousElementSibling.scrollIntoView()}
+        } catch {document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
+      }
     }
   }
 }
