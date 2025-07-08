@@ -385,7 +385,7 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='none';
     //handle translation
     if (sites2Translate.includes(siteName)){
-      var all=cEl.querySelectorAll('p:not(.time), h2, h3, li');
+      var all=cEl.querySelectorAll('p:not(.time):not(.fs12), h2, h3, li');
       getTranslation(all);
       } else if (kr.includes(siteName)){
         if (siteName=='kd'){
@@ -611,7 +611,7 @@ async function blkGetList(siteName,t){
       items.push([h.querySelector('a').href,h.querySelector('h2.title').textContent.replaceAll('\n',''),h.querySelector('.attribution-text').querySelector('span').textContent])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<span class="time fw-normal"> ${h[2]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<span class="time fw-normal"> ${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1143,7 +1143,18 @@ async function jpmGetContent(id){
     var hh=doc.querySelector('div.economic-update');
     for (let h of hh){html+=h.querySelector('.content.animated div.text-content').outerHTML}
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/'){
-    console.log('gtm');    
+    const res=await fetch(preStr+'https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json');
+    const str=await res.json();
+    var cat=str.categories;var htmlCat='';
+    html=str.globalDisclosure.replaceAll('<i>','').replaceAll('</i>','');
+    for (let c of cat){
+      var slides=c.slides;var htmlSlides='';
+      for (let s of slides){
+        htmlSlides+='<p>'+s.title+'</p>'+s.summaryDescription+'<img src="'+s.chartImage+'">'+.disclosures?.replaceAll('<p>','<p class="time">');
+      }
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><hr>`
+    }
+  } else if (id.slice(0,4)=='gtm-'){
   } else {
   const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
