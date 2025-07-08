@@ -1131,10 +1131,21 @@ async function jpmGetList(siteName,t){
 }
 
 async function jpmGetContent(id){
-  try{const res = await fetch(preStr+encodeURIComponent(id));
+  try{
+  if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/market-updates/weekly-market-recap/'){
+    const res=await fetch(preStr+'https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/wmr.json');
+    const str=await res.json();
+    html='<img src="https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/chart_of_the_week.png"><p class="fs10">'+str.WMI.Disclosures.chartOfTheWeekDisclosure+'</p><p>'+str.WMI.ThoughtOfTheWeek+'</p><p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/market-updates/economic-update/'){
+    console.log('eu');    
+  } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/'){
+    console.log('gtm');    
+  } else {
+  const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   html = '<p class="fs10">'+doc.querySelector('div.author-card a').textContent+' | '+doc.querySelector('div.author-card p').textContent+doc.querySelector('.editorial-free-drop').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
