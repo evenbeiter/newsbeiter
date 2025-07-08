@@ -77,7 +77,7 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','blk','ecoMag','msnUS','nb','peInsights','substack','yahooTW'];
+const sites2Translate=['apollo','blk','ecoMag','jpm','msnUS','nb','peInsights','substack','yahooTW'];
 const kr=['kd','ytn'];
 const text2Speech=['kd'];
 const noNextPage=['ecoMag','kd'];
@@ -1135,9 +1135,13 @@ async function jpmGetContent(id){
   if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/market-updates/weekly-market-recap/'){
     const res=await fetch(preStr+'https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/wmr.json');
     const str=await res.json();
-    html='<img src="https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/chart_of_the_week.png"><p class="fs10">'+str.WMI.Disclosures.chartOfTheWeekDisclosure+'</p><p>'+str.WMI.ThoughtOfTheWeek+'</p><p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+    html='<img src="https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/chart_of_the_week.png"><p class="time">'+str.WMI.Disclosures.chartOfTheWeekDisclosure+'</p><p>'+str.WMI.ThoughtOfTheWeek+'</p><p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/market-updates/economic-update/'){
-    console.log('eu');    
+    const res=await fetch(preStr+encodeURIComponent(id));
+    const str=await res.text();  
+    var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+    var hh=doc.querySelector('div.economic-update');
+    for (let h of hh){html+=h.querySelector('.content.animated div.text-content').outerHTML}
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/'){
     console.log('gtm');    
   } else {
