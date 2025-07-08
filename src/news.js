@@ -1150,7 +1150,7 @@ async function jpmGetContent(id){
     for (let c of cat){
       var slides=c.slides;var htmlSlides='';
       for (let s of slides){
-        htmlSlides+='<p>'+s.title+'</p>'+s.summaryDescription+'<img src="'+s.chartImage+'">'+.disclosures?.replaceAll('<p>','<p class="time">');
+        htmlSlides+='<p>'+s.title+'</p>'+s.summaryDescription+'<img src="'+s.chartImage+'">'+s.disclosures?.replaceAll('<p>','<p class="time">');
       }
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><hr>`
     }
