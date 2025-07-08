@@ -1121,7 +1121,7 @@ async function jpmGetList(siteName,t){
   let res=await fetch(preStr+encodeURIComponent(url));
   let str=await res.json();
   for (let h of str.pages){
-    items.push(['https://am.jpmorgan.com'+h.url,h.title,h.displayDate+h.authors[0].name?' | '+h.authors[0].name+', '+h.authors[0].title:''])
+    if (h.authors[0]==undefined){items.push(['https://am.jpmorgan.com'+h.url,h.title,h.displayDate])}else{items.push(['https://am.jpmorgan.com'+h.url,h.title,(h.displayDate+' | '+h.authors[0].name+', '+h.authors[0].title).replace(', null','')])};
   }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<br><span class="time">${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
