@@ -1121,10 +1121,10 @@ async function jpmGetList(siteName,t){
   let res=await fetch(preStr+encodeURIComponent(url));
   let str=await res.json();
   for (let h of str.pages){
-    items.push(['https://am.jpmorgan.com'+h.url,h.title,h.displayDate])
+    items.push(['https://am.jpmorgan.com'+h.url,h.title,h.displayDate+h.authors[0].name?' | '+h.authors[0].name+', '+h.authors[0].title:''])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<span class="time"> | ${h[2]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<br><span class="time">${h[2]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1149,7 +1149,7 @@ async function jpmGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var dd=JSON.parse(doc.querySelector('#jpm-am-editorial-sidebar-desktop').dataset.compJson);
-  html='<p class="time">'+dd.publishDate+' | '+dd.authors[0].name +', '+dd.authors[0].title+'</p>'+doc.querySelector('.editorial-free-drop').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html=doc.querySelector('.editorial-free-drop').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
