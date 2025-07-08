@@ -1137,11 +1137,17 @@ async function jpmGetContent(id){
     const str=await res.json();
     html='<img src="https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/chart_of_the_week.png"><p class="time">'+str.WMI.Disclosures.chartOfTheWeekDisclosure+'</p><p>'+str.WMI.ThoughtOfTheWeek+'</p><p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/market-updates/economic-update/'){
-    const res=await fetch(preStr+encodeURIComponent(id));
-    const str=await res.text();  
-    var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-    var hh=doc.querySelector('div.economic-update');
-    for (let h of hh){html+=h.querySelector('.content.animated div.text-content').outerHTML}
+    const res=await fetch(preStr+'https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/wmr.json');
+    const str=await res.json();
+    html=`
+    <p class="xtl">Growth</p><p>${str.EconomicUpdate.economic_update_growth.data}</p>
+    <p class="xtl">Jobs</p><p>${str.EconomicUpdate.economic_update_jobs.data}</p>
+    <p class="xtl">Profits</p><p>${str.EconomicUpdate.economic_update_profits.data}</p>
+    <p class="xtl">Inflation</p><p>${str.EconomicUpdate.economic_update_inflation.data}</p>
+    <p class="xtl">Rates</p><p>${str.EconomicUpdate.economic_update_rates.data}</p>
+    <p class="xtl">Risks</p><p>${str.EconomicUpdate.economic_update_risks.data}</p>
+    <p class="xtl">Investment Themes</p><p>${str.EconomicUpdate.economic_update_growth_inv_themes.data}</p>
+    <p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/economic_update.pdf" target="_blank">分享</a></p><br>`;
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/'){
     const res=await fetch(preStr+'https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json');
     const str=await res.json();
@@ -1152,7 +1158,7 @@ async function jpmGetContent(id){
       for (let s of slides){
         htmlSlides+='<p>'+s.title+'</p>'+s.summaryDescription+'<img src="'+s.chartImage+'">'+s.disclosures?.replaceAll('<p>','<p class="time">');
       }
-      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><hr>`
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/market-insights/guide-to-the-markets/mi-guide-to-the-markets-us.pdf" target="_blank">分享</a></p><br><hr>`
     }
   } else if (id.slice(0,4)=='gtm-'){
   } else {
