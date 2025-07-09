@@ -13,6 +13,7 @@ const cna=[['aall','即時'],['aopl','國際'],['aie','產經'],['asc','證券']
 const cnyes=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
 const cnyeshao=[['W_1','最新'],['W_2','推薦'],['W_8','美股'],['W_40','台股'],['W_14','國際'],['W_62','宏觀'],['W_11','外匯'],['W_13','商品期貨'],['W_40','科技'],['30','美股艾大叔'],['361680','華爾街脈動'],['444','RexAA'],['443','小小天下'],['29','北風窗'],['113','老馬記']];const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
 const dw=[['經濟/s-1682','經濟'],['政治/s-1681','政治'],['科技創新/s-1686','科技創新'],['文化/s-1683','文化']];
+const gsam=[['','Latest']];
 const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6,15];
 const uLi=['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const isbl=[['','Latest']];
@@ -67,7 +68,7 @@ const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-c
 const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
 const searchSites=[['lineToday','LINE'],['cnyes','鉅亨'],['wscn','華爾街見聞'],['ctee','工商'],['wealth','財訊'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周']]; 
 const allSites1=[['msnTW','MSN 台灣',msnTW,'msn.com/zh-tw','https://www.msn.com/zh-tw'],['ctee','工商',ctee,'ctee.com.tw','https://www.ctee.com.tw/'],['udn','聯合',udn,'udn.com','https://udn.com/'],['wealth','財訊',wealth,'wealth.com.tw','https://www.wealth.com.tw/'],['dw','德國之聲',dw,'dw.com/zh-hant','https://www.dw.com/zh-hant/'],['wscn','華爾街見聞',wscn,'wallstreetcn.com','https://wallstreetcn.com/']];
-const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['yahooTW','奇摩',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['nb','NB',nb,'nb.com','https://www.nb.com'],['blk','BlackRock',blk,'blackrock.com','https://www.blackrock.com/us/individual/insights/'],['jpm','JPM',jpm,'am.jpmorgan.com','https://am.jpmorgan.com/'],['pimco','PIMCO',pimco,'pimco.com','https://www.pimco.com'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['substack','Substack',substack,'substack.com','https://altgoesmainstream.substack.com/'],['ytn','YTN',ytn,'ytn.co.kr','https://www.ytn.co.kr']];
+const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['yahooTW','奇摩',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['nb','NB',nb,'nb.com','https://www.nb.com'],['blk','BlackRock',blk,'blackrock.com','https://www.blackrock.com/us/individual/insights/'],['jpm','JPM',jpm,'am.jpmorgan.com','https://am.jpmorgan.com/'],['pimco','PIMCO',pimco,'pimco.com','https://www.pimco.com'],['gsam','GSAM',gsam,'am.gs.com','https://am.gs.com/'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['substack','Substack',substack,'substack.com','https://altgoesmainstream.substack.com/'],['ytn','YTN',ytn,'ytn.co.kr','https://www.ytn.co.kr']];
 const videoSites=[['msnVideo','MSN'],['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2'],['reutersVideo','Reuters']];
 
 
@@ -78,7 +79,7 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','blk','ecoMag','jpm','msnUS','nb','peInsights','pimco','substack','yahooTW'];
+const sites2Translate=['apollo','blk','ecoMag','gsam','jpm','msnUS','nb','peInsights','pimco','substack','yahooTW'];
 const kr=['kd','ytn'];
 const text2Speech=['kd'];
 const noNextPage=['ecoMag','kd'];
@@ -1014,6 +1015,38 @@ async function dwGetContent(id){
     html = '<p class="time">'+d.localizedContentDate+'</p><p>'+d.teaser+'</p><video controls playsinline><source src="'+d.openGraphMetadata.url+'" type="video/mp4"></source></video><p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
   }
   }catch{html='<p><a href="https://www.dw.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
+//    GSAM
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function gsamGetList(siteName,t){
+  try{url='https://am.gs.com/services/search-engine/en-us/institutions/search/insights?hitsPerPage=20&page='+rr;console.log(url);
+  let res=await fetch(preStr+encodeURIComponent(url));
+  let str=await res.json();
+  for (let h of str.insights.hits){
+    items.push([h.slug,h.title,h.publishDate.slice(0,10)])
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]} <span class="time fw-normal">${h[2]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function gsamGetContent(id){
+  try{url='https://am.gs.com/_next/data/SzESSl3vWGbiighuFZH9-'+id+'.json';
+  const res = await fetch(preStr+encodeURIComponent(url));
+  const str=await res.json();
+  html=`<p class="time">${str.pageProps.data.properties.authorDetails?[0].personReferencePath.metadata.firstName??''} ${str.pageProps.data.properties.authorDetails?[0].personReferencePath.metadata.lastName??''}, ${str.pageProps.data.properties.authorDetails?[0].personReferencePath.metadata.jobTitle??''}</p>`;
+  var order=str.pageProps.data.itemsOrder;
+  for (let o of order){
+    if (o.slice(0,4)=='text'){html+=str.pageProps.data.items[o].text} else if (o.slice(0,5)=='image'){html+=`<p class="xtl">${str.pageProps.data.items[o].images[0].title}<img src="https://am.gs.com${str.pageProps.data.items[o].images[0].fileReference.path}">${str.pageProps.data.items[o].images[0].source}`}
+  }
+  html+='<p class="text-end"><a href="https://am.gs.com/' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="https://www.ctee.com.tw' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
