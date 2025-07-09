@@ -17,7 +17,7 @@ const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6
 const uLi=['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const isbl=[['','Latest']];
 const jin=[['','最新'],['topic/402/','精選圖表'],['topic/416','宏觀圖表'],['topic/415/','股市'],['topic/72/','金融大鱷'],['topic/20/','FED'],['topic/47/','ECB'],['topic/51/','BOJ'],['topic/31/','黃金'],['topic/388/','原油'],['topic/418/','川普'],['topic/373/','俄烏'],['topic/356/','中東'],['topic/352/','半導體']];
-const jpm=[['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/_jcr_content/root/responsivegrid/jpm_am_mosaic_copy.model.json','Latest'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json','GTM'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-alternatives/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json','GTA'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/etf-insights/guide-to-etfs/_jcr_content.linklistv2.json','GTE'],['https://am.jpmorgan.com/content/jpm-am-aem/emea/no/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json','GTEU'],['https://am.jpmorgan.com/content/jpm-am-aem/asiapacific/hk/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json','GTAS'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/retirement-insights/guide-to-retirement/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie_1506598259.model.json','GTR']];
+const jpm=[['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/_jcr_content/root/responsivegrid/jpm_am_mosaic_copy.model.json','Latest'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/mi-guide-to-the-markets-us','GTM'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-alternatives/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-alternatives/mi-guide-to-alternatives','GTA'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/etf-insights/guide-to-etfs/_jcr_content.linklistv2.json__market-insights/guide-to-etfs/guide-to-etfs','GTE'],['https://am.jpmorgan.com/content/jpm-am-aem/emea/no/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/mi-guide-to-the-markets-ce-en','GTEU'],['https://am.jpmorgan.com/content/jpm-am-aem/asiapacific/hk/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/guide-to-the-markets-asia','GTAS'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/retirement-insights/guide-to-retirement/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie_1506598259.model.json__retirement-insights/guide-to-retirement-us','GTR']];
 const kd=[['이산|77','李祘']];
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],['102394|103101','經濟工商'],['103214|100267','M平方'],['100295','今周刊'],['101131','CMoney'],['100422|100421|100423','商周'],['101170','路透社'],['104453|101006','財訊'],['100150|103088','鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],['100004|101886','風傳媒'],['100275|101201','關鍵評論網'],['global','國際'],['100003','中央社'],['TOPIC-USelection|2024election','川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],['100568|100158','天下雜誌'],['101031','地球圖輯隊'],['101934|100394|103227','閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['100746|TOPIC-DIY','裝潢'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
 const msnTW=[['Y_321db332-7d5a-4672-96b5-2d342ca554fb', '焦點'],['Y_ab001b84-62eb-4605-96c4-12221f946e94', '新聞'],['Y_5993abc4-f49c-49ce-bed0-a5b4b61dd9f6', '財經'],['Y_a484713e-0cec-4003-8fac-a629da5bcf3d', '兩岸國際'],['Y_a0268fb1-402c-48ec-8946-c31ddd7751da', '即時新聞'],['Y_b4ddc302-8189-44e9-b136-9682cc7e3746', '即時財經'],['Y_fef3ac37-3667-4a34-92c0-3e373c55d307', '理財'],['Y_aced43e9-95ab-4e5c-a0c5-d035aeb2133b', '科技'],['Y_da100b0d-55ac-49d4-beae-84ffdcbf3da9', '生活'],['Y_e2c684a5-a8fe-4879-91b9-8d5dc50b5488', '居家設計'],['Y_b77e5da5-aea6-4ee3-8890-91990040926a', '健康'],['Y_57552325-541f-4702-b61e-f307056e39b1', '旅遊'],['Y_95fdd1de-0e14-47b2-a213-6edf24542702', '娛樂'],['Y_f3ddd032-c606-4c7f-b11f-cb16a3596ae2', '台灣'],['Y_7a50bf00-ca7e-4699-ac07-b31e1c3ae01f', '房地產'],['Y_fb97b38c-1cf6-445a-b579-f7b9b35f6590', '職場求職'],['Y_54b11fc3-6cd6-45d6-a669-1c0168275125', '職場焦點'],
@@ -385,7 +385,7 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='none';
     //handle translation
     if (sites2Translate.includes(siteName)){
-      var all=cEl.querySelectorAll('p:not(.time):not(.fs12), h2, h3, li');
+      var all=cEl.querySelectorAll('p:not(.time):not(.xtl), h2, h3, li');
       getTranslation(all);
       } else if (kr.includes(siteName)){
         if (siteName=='kd'){
@@ -1118,17 +1118,27 @@ async function jinGetContent(id){
 
 async function jpmGetList(siteName,t){
   try{url=t;console.log(url);
-  let res=await fetch(preStr+encodeURIComponent(url));
-  let str=await res.json();
   if (t=='https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/_jcr_content/root/responsivegrid/jpm_am_mosaic_copy.model.json'){
+    const res=await fetch(preStr+encodeURIComponent(url));
+    const str=await res.json();
     for (let h of str.pages){
       if (h.authors[0]==undefined){items.push(['https://am.jpmorgan.com'+h.url,h.title,h.displayDate])}else{items.push(['https://am.jpmorgan.com'+h.url,h.title,(h.displayDate+' | '+h.authors[0].name+', '+h.authors[0].title).replace(', null','')])};
     }
     for (let h of items){
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<br><span class="time">${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
     }
-  } else {
-    
+  } else {url=t.split('__')[0];
+    const res=await fetch(preStr+encodeURIComponent(url));
+    const str=await res.json();
+    var cat=str.categories;var htmlCat='';
+    html=str.globalDisclosure.replaceAll('<i>','').replaceAll('</i>','');
+    for (let c of cat){
+      var slides=c.slides;var htmlSlides='';
+      for (let s of slides){
+        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.chartImage}">${s.disclosures??''.replaceAll('<p>','<p class="time">')}`;
+      }
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br><hr>`
+    }
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1144,23 +1154,23 @@ async function jpmGetContent(id){
     const res=await fetch(preStr+'https://cdn.jpmorganfunds.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/wmr.json');
     const str=await res.json();
     html=`
-    <p class="xtl">Growth</p><p>${str.EconomicUpdate.economic_update_growth.data}</p>
-    <p class="xtl">Jobs</p><p>${str.EconomicUpdate.economic_update_jobs.data}</p>
-    <p class="xtl">Profits</p><p>${str.EconomicUpdate.economic_update_profits.data}</p>
-    <p class="xtl">Inflation</p><p>${str.EconomicUpdate.economic_update_inflation.data}</p>
-    <p class="xtl">Rates</p><p>${str.EconomicUpdate.economic_update_rates.data}</p>
-    <p class="xtl">Risks</p><p>${str.EconomicUpdate.economic_update_risks.data}</p>
-    <p class="xtl">Investment Themes</p><p>${str.EconomicUpdate.economic_update_growth_inv_themes.data}</p>
+    <p class="title xtl">Growth</p><p>${str.EconomicUpdate.economic_update_growth?.data??''}</p>
+    <p class="title xtl">Jobs</p><p>${str.EconomicUpdate.economic_update_jobs?.data??''}</p>
+    <p class="title xtl">Profits</p><p>${str.EconomicUpdate.economic_update_profits?.data??''}</p>
+    <p class="title xtl">Inflation</p><p>${str.EconomicUpdate.economic_update_inflation?.data??''}</p>
+    <p class="title xtl">Rates</p><p>${str.EconomicUpdate.economic_update_rates?.data??''}</p>
+    <p class="title xtl">Risks</p><p>${str.EconomicUpdate.economic_update_risks?.data??''}</p>
+    <p class="title xtl">Investment Themes</p><p>${str.EconomicUpdate.economic_update_growth_inv_themes?.data??''}</p>
     <p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/economic_update.pdf" target="_blank">分享</a></p><br>`;
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/'){
     const res=await fetch(preStr+'https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json');
-    const str=await res.json();
+    const str=await res.json();console.log(str);
     var cat=str.categories;var htmlCat='';
     html=str.globalDisclosure.replaceAll('<i>','').replaceAll('</i>','');
     for (let c of cat){
       var slides=c.slides;var htmlSlides='';
       for (let s of slides){
-        htmlSlides+='<p>'+s.title+'</p>'+s.summaryDescription+'<img src="'+s.chartImage+'">'+s.disclosures?.replaceAll('<p>','<p class="time">');
+        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.chartImage}">${s.disclosures??''.replaceAll('<p>','<p class="time">')}`;
       }
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/market-insights/guide-to-the-markets/mi-guide-to-the-markets-us.pdf" target="_blank">分享</a></p><br><hr>`
     }
