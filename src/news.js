@@ -1165,7 +1165,6 @@ async function jpmGetContent(id){
     <p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/economic_update.pdf" target="_blank">分享</a></p><br>`;
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/'){
       html+=`<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/market-insights/guide-to-the-markets/mi-guide-to-the-markets-us.pdf" target="_blank">分享</a></p><br><hr>`
-    }
   } else {
   const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
