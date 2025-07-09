@@ -10,7 +10,7 @@ video{width:100% !important;height:auto !important;border-radius:0.375rem;width:
 h1,h2,h3,h4,h5,h6,.title{font-size:1.5rem;color:#3B2D20 !important;font-weight:bold}
 .mw-heading1, .mw-heading2 {padding-top:3rem;color:#FF4D00;border-bottom:1px solid;border-color:#a2a9b1}
 .fs12, .en-us,.css-1l5amll.e1y9q0ei0,#mainWrapper{font-size:1.2rem}
-.fs10, .time, time, figcaption, .bbc-1rvtlej,.bbc-1276odk, p.source, table,div.inf, strong#article-byline.bbc-m04vo2{font-size:1rem}
+.fs10, .time, time, figcaption, .bbc-1rvtlej,.bbc-1276odk, p.source, table,div.inf, strong#article-byline.bbc-m04vo2, .two-columns-with-media__media-caption{font-size:1rem}
 .fs07{font-size:0.7rem}
 * {word-break: break-word;overflow-wrap: break-word;max-width: 100%;}
 h1 a {color: navy; font-weight: bold; text-decoration:none;cursor:pointer}
