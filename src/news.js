@@ -27,6 +27,7 @@ const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e
   ['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', 'Bloomberg'],['vid-mpxsw8rp392wedf25t8tfhk7r3b364q8dj75ks43nimmf06qg2es', 'Reuters'],['vid-r0r09b3muc6xnf5tv2est5f5ukjbkk67i9svrhyu3jy2pskkbems', 'MarketWatch'],['vid-y572a3ryyddhuiujs0xe2j4m4b6c3n2fp5hnux4jpsdand8h09ys', 'WSJ'],['vid-bpwfbvkfudq92wksju4upi9jrx2pn0ax46vrw0vkst93vpwr5pva', 'CNN'],['vid-v3atkpesfykfx7084fbu0cpbtx0jne99kctychfsn9ry96wsmbba', 'BBC'],['vid-r4du2vx0u9h0kr9tx7iyx55w7sneq7e6tg934epuehq3grvn05aa', 'Fortune'],['vid-n3h9ssyxg550pryvt4287xynyckhu84k5vc6n3tdqwsvtvmn2p0s', 'USA TODAY'],['vid-27xbtchrc5gpxe8uhvw9f24q2kqi9f0ppk7ptb8xw9v9sscheg6s', 'Motley Fool'],['vid-i3g0qyhrtn28biukcpyvsrmhccmv8k8ugtmtr6kqhb9dkf6ccrua', 'FOX News'],['vid-rvn4g4busxh65p6kgfvhye9atw9n8ebd46ut057ypkbm5n6xa5ts', 'BuzzFeed']];
 const newslens=[['latest-article/','最新'],['event-tag/380574-2025川普對等關稅/','對等關稅'],['tag/22338/','川普'],['category/economy/','經濟'],['category/business/','商業'],['category/personal-finance/','理財'],['tag/5260/','美債'],['category/tech/','科技'],['tag/3503/','供應鏈'],['tag/30/','台灣'],['category/world/','國際'],['category/us-canada/','美加'],['tag/83/','美國'],['category/europe/','歐洲'],['category/china/','中國'],['category/indo-pacific/','印太'],['tag/64/','日本'],['category/latin-america/','拉美'],['category/middle-east/','中東'],['category/africa/','非洲'],['author/BBC/','BBC中文'],['author/cnataiwan/','中央社'],['category/arts-culture/','藝文'],['category/literature/','文學'],['category/movie-tv/','影劇'],['category/health/','健康'],['category/lifestyle/','生活'],['category/psychology/','心理'],['category/language/','語文'],['author/bookdigest/','書摘'],['author/editor/','轉載']];
 const peInsights=[['','Latest']];
+const pimco=[['','Latest']];
 var preStr=''; if (onEVBT===true){preStr=sCC(uLi,iOd)};
 const reuters=[['market:bond,crypto,economic,etf,forex,futures,index,stock','最新'],['market:forex','外匯'],['market:bond','債市'],['market:stock','股市'],['market:index','指數'],['market:futures','期貨'],['market:economic','經濟'],['market:crypto','加密貨幣'],['market:etf','ETF'],['area:WLD','全球'],['area:AME','美國'],['area:EUR','歐洲'],['area:ASI','亞洲'],['area:OCN','大洋洲'],['area:AFR','非洲']];
 const sina=[['sinago_finance_usstocks_feed','美股'],['2183570524','雪球']];
@@ -77,7 +78,7 @@ const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https:/
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','blk','ecoMag','jpm','msnUS','nb','peInsights','substack','yahooTW'];
+const sites2Translate=['apollo','blk','ecoMag','jpm','msnUS','nb','peInsights','pimco','substack','yahooTW'];
 const kr=['kd','ytn'];
 const text2Speech=['kd'];
 const noNextPage=['ecoMag','kd'];
@@ -1396,6 +1397,35 @@ async function peInsightsGetContent(id){
     html = img.outerHTML+'<br>'+a.outerHTML.replaceAll(/<span[\s\S]*?">/g,'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }
   }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+
+//    PIMCO
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function pimcoGetList(siteName,t){
+  try{url='https://www.pimco.com/ren/coveo/rest/search/v2?sitecoreItemUri=sitecore://web/{176550E2-E8CD-47BA-BDA2-4B9ACDDB7FEA}?lang=en-US&amp;ver=1&siteName=website-us-en';console.log(url);
+  const res=await fetch(preStr+encodeURIComponent(url),{
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded',},
+    body: new URLSearchParams({firstResult:(rr-1)*25,numberOfResults:25,sortCriteria:'@publishz32xdate descending',cq:'(@z95xlanguage=="en-US") (@z95xlatestversion==1) (@source=="Coveo_web_index - Ren-PIMCO-PROD")'})
+  });
+  const str=await res.json();
+  for (let h of str.results){items.push([h.ClickUri,h.title])};
+  for (let h of items){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`}
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function pimcoGetContent(id){
+  try{const res = await fetch(preStr+encodeURIComponent(id));const str=await res.text();
+  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+  html=`<p class="time">${doc.querySelector('time').textContent.trim()} | ${doc.querySelector('address').textContent.trim()}</p>`;
+  var hh=doc.querySelector('.module-base.two-columns-with-media.gtm-navigation-title');
+  for (let h of hh){html+=h.outerHTML}
+  html+='<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
