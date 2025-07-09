@@ -487,7 +487,8 @@ async function getTranslation(all){
   for (let a of all){
     if (a.innerText!=='' && cnTest(a.innerText)!==true){
     //if (a.innerText!==''){
-      var t=await translate(a.textContent);
+      var t=await translateOld(a.textContent);
+      //var t=await translate(a.textContent);
       if (t!==''&&t!==undefined){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
     }
   }
@@ -623,7 +624,7 @@ async function blkGetContent(id){
   const res = await fetch(preStr+id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var a=doc.querySelector('#mainWrapper').outerHTML.replace(/col-[\s\S]*? /g,'').replace(/col-[\s\S]*?"/g,'"').replace(/offset-[\s\S]*? /g,'').replace(/offset-[\s\S]*?"/g,'"').replaceAll('bg-white','').replaceAll('data-src="','src="').replaceAll('src="/','src="https://www.blackrock.com/');
-  if (str.match(/contentUrl":[\s\S]*?.mp4"/g)){a=a.replace('<video','<video src="'+preStr.replace('api/fetch','embed')+str.match(/contentUrl":"[\s\S]*?.mp4"/g)[0].replace('contentUrl":"',''))};
+  if (str.match(/contentUrl":[\s\S]*?.mp4"/g)){a=a.replace('<video','<video playsinline src="'+preStr.replace('api/fetch','embed')+str.match(/contentUrl":"[\s\S]*?.mp4"/g)[0].replace('contentUrl":"',''))};
   html = a+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
