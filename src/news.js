@@ -1139,7 +1139,7 @@ async function jpmGetList(siteName,t){
       for (let s of slides){
         htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.desktopImage}"><br>`;
       }
-      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br><hr>`
+      html+=`<p class="title xlt" onclick="getContent('${siteName}',this.id,'${c.id}')">${c.name}</p><div id="${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'${c.id}')">${htmlSlides}<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br></div><hr>`
     }
   }
   }catch{html='<p>尚無內容</p>'}
