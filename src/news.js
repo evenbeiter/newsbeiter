@@ -1135,7 +1135,7 @@ async function jpmGetList(siteName,t){
     for (let c of cat){
       var slides=c.slides;var htmlSlides='';
       for (let s of slides){
-        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.chartImage}">${s.disclosures??''.replaceAll('<p>','<p class="time">')}`;
+        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.desktopImage}"><br>`;
       }
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br><hr>`
     }
@@ -1163,18 +1163,8 @@ async function jpmGetContent(id){
     <p class="title xtl">Investment Themes</p><p>${str.EconomicUpdate.economic_update_growth_inv_themes?.data??''}</p>
     <p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/economic_update.pdf" target="_blank">分享</a></p><br>`;
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/'){
-    const res=await fetch(preStr+'https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json');
-    const str=await res.json();console.log(str);
-    var cat=str.categories;var htmlCat='';
-    html=str.globalDisclosure.replaceAll('<i>','').replaceAll('</i>','');
-    for (let c of cat){
-      var slides=c.slides;var htmlSlides='';
-      for (let s of slides){
-        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.chartImage}">${s.disclosures??''.replaceAll('<p>','<p class="time">')}`;
-      }
-      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${c.name}<br></p><div id="gtm-${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'gtm-${c.id}')">${htmlSlides}</div><p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/market-insights/guide-to-the-markets/mi-guide-to-the-markets-us.pdf" target="_blank">分享</a></p><br><hr>`
+      html+=`<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/market-insights/guide-to-the-markets/mi-guide-to-the-markets-us.pdf" target="_blank">分享</a></p><br><hr>`
     }
-  } else if (id.slice(0,4)=='gtm-'){
   } else {
   const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
