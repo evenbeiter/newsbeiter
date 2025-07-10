@@ -517,13 +517,14 @@ function startLazyTranslation(containerElement) {
     return el.innerText && el.innerText.trim().length > 0;
   }
 
-
   function shouldIgnore(el) {
     if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
+    if (el.closest('.translated-text')) return true;
     if (!allowedTags.includes(el.tagName)) return true;
     if (htmlTagsNoTranslate.includes(el.tagName)) return true;
     if (!isElementVisible(el)) return true;
     if (el.getAttribute("data-translated") === "true") return true;
+    if (el.parentElement && allowedTags.includes(el.parentElement.tagName)) return true;
     return false;
   }
 
@@ -537,8 +538,8 @@ function startLazyTranslation(containerElement) {
   function insertTranslation(el, translated) {
     const div = document.createElement("p");
     div.classList.add("translated-text");
+    div.setAttribute("data-translated", "true");
     div.innerText = translated;
-    //div.setAttribute("data-translated", "true");
     el.setAttribute("data-translated", "true");
     el.insertAdjacentElement('afterend', div);
   }
