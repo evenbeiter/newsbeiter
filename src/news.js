@@ -387,8 +387,9 @@ async function getContent(siteName,clickedId,id){
     loading.style.display='none';
     //handle translation
     if (sites2Translate.includes(siteName)){
-      var all=cEl.querySelectorAll('p:not(.time):not(.xtl), h2, h3, li');
-      getTranslation(all);
+      startLazyTranslation(cEl);
+      // var all=cEl.querySelectorAll('p:not(.time):not(.xtl), h2, h3, li');
+      // getTranslation(all);
       } else if (kr.includes(siteName)){
         if (siteName=='kd'){
         var txt=cEl.previousElementSibling.textContent;txt=txt.substring(txt.indexOf('. ')+2);
@@ -449,14 +450,10 @@ function cvtS2HHMMSS(sec,rescale) {
 
 async function translateOld(a){
   try{
-    var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(a);
+    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(a);
     var res=await fetch(url);
     var raw=await res.json();
-    var ts='';
-    for (var j=0;j<raw[0].length;j++){
-        if (raw[0][j][0]!==null && raw[0][j][0]!==undefined && raw[0][j][0]!=='undefined'){ts=ts+raw[0][j][0]}else{ts=ts}
-    }
-    return ts
+    return raw[0][0]||''
   }catch (error) {console.error(error)}
 }
 
@@ -468,7 +465,7 @@ async function translate(a){
     body: JSON.stringify({ text: a, to: 'zh-TW' })
     });
   var str=await res.json();
-  return str.translatedText;
+  return str.translatedText||'';
   }catch (error) {return '';console.error(error)}
 }
 
@@ -480,7 +477,7 @@ async function translatePapago(a){
     body: JSON.stringify({ text: a, to: 'zh-TW' })
     });
   var str=await res.json();
-  return str.translatedText;
+  return str.translatedText||'';
   }catch (error) {return '';console.error(error)}
 }
 
@@ -493,6 +490,67 @@ async function getTranslation(all){
       if (t!==''&&t!==undefined){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
     }
   }
+}
+
+function startLazyTranslation(containerElement) {
+  const translatedCache = new Map();
+  const htmlTagsNoTranslate = ['TITLE', 'SCRIPT', 'STYLE', 'TEXTAREA', 'SVG', 'svg'];
+
+  function isElementVisible(el) {
+    const rect = el.getBoundingClientRect();
+    return rect.height > 0 && rect.width > 0;
+  }
+
+  function hasVisibleText(el) {
+    return Array.from(el.childNodes).some(node =>
+      node.nodeType === Node.TEXT_NODE &&
+      node.textContent.trim().length > 0
+    );
+  }
+
+  function shouldIgnore(el) {
+    if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
+    if (htmlTagsNoTranslate.includes(el.tagName)) return true;
+    if (!isElementVisible(el)) return true;
+    return false;
+  }
+
+  async function translateText(text) {
+    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(a);
+    var res=await fetch(url);
+    var raw=await res.json();
+    return raw[0][0]||''
+  }
+
+  function insertTranslation(el, translated) {
+    const div = document.createElement('div');div.innerText = translated;div.classList.add('translated-text');
+    el.setAttribute('data-translated','true');el.after(div);
+  }
+
+  const observer = new IntersectionObserver(async (entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const el = entry.target;if (el.getAttribute("data-translated")) continue;
+      const text = el.innerText.trim();if (!text || text.length > 500) continue;
+      if (translatedCache.has(text)) {insertTranslation(el, translatedCache.get(text));continue;}
+      try {
+        const translated = await translateText(text);
+        translatedCache.set(text, translated);
+        insertTranslation(el, translated);
+      } catch (err) {
+        console.error("Failed to translate.", err);
+      }
+    }
+  }, { threshold: 0.5 });
+
+  const selector = 'p:not(.time):not(.xtl), h2, h3, li';
+  const candidates = containerElement.querySelectorAll(selector);
+
+  candidates.forEach(el => {
+    if (shouldIgnore(el)) return;
+    if (!hasVisibleText(el)) return;
+    observer.observe(el);
+  });
 }
 
 function getLastNSats(n) {
