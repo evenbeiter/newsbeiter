@@ -543,9 +543,9 @@ function startLazyTranslation(containerElement) {
     }
   }, { threshold: 0.5 });
 
-  const selector = 'p:not(.time):not(.xtl), h2, h3, li';
-  const candidates = containerElement.querySelectorAll(selector);
-
+  // const selector = 'p:not(.time):not(.xtl), h2, h3, li';
+  // const candidates = containerElement.querySelectorAll(selector);
+  const candidates = containerElement.querySelectorAll('*');
   candidates.forEach(el => {
     if (shouldIgnore(el)) return;
     if (!hasVisibleText(el)) return;
