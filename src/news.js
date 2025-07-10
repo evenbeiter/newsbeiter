@@ -494,6 +494,90 @@ async function getTranslation(all){
 
 function startLazyTranslation(containerElement) {
   const translatedCache = new Map();
+
+  const htmlTagsInlineIgnore = ['A', 'B', 'I', 'U', 'SUP', 'SUB', 'SPAN', 'SMALL', 'STRONG', 'EM'];
+  const htmlTagsNoTranslate = ['TITLE', 'SCRIPT', 'STYLE', 'TEXTAREA', 'SVG', 'svg'];
+  const allowedTags = ['P', 'LI', 'H2', 'H3'];
+
+  const selector = 'p:not(.time):not(.xtl), h2, h3, li';
+
+  function isElementVisible(el) {
+    const rect = el.getBoundingClientRect();
+    return rect.height > 0 && rect.width > 0;
+  }
+
+  // function hasVisibleText(el) {
+  //   return Array.from(el.childNodes).some(node =>
+  //     node.nodeType === Node.TEXT_NODE &&
+  //     node.textContent.trim().length > 0
+  //   );
+  // }
+
+  function hasVisibleText(el) {
+    return el.innerText && el.innerText.trim().length > 0;
+  }
+
+
+  function shouldIgnore(el) {
+    if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
+    if (!allowedTags.includes(el.tagName)) return true;
+    if (htmlTagsNoTranslate.includes(el.tagName)) return true;
+    if (!isElementVisible(el)) return true;
+    if (el.getAttribute("data-translated") === "true") return true;
+    return false;
+  }
+
+  async function translateText(text) {
+    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(text);
+    var res=await fetch(url);
+    var raw=await res.json();
+    return raw[0][0]||''
+  }
+
+  function insertTranslation(el, translated) {
+    const div = document.createElement("div");
+    div.innerText = translated;
+    div.classList.add("translated-text");
+    div.setAttribute("data-translated", "true");
+    el.setAttribute("data-translated", "true");
+    el.insertAdjacentElement('afterend', div);
+  }
+
+  const observer = new IntersectionObserver(async (entries) => {
+    for (const entry of entries) {
+      const el = entry.target;
+      if (!entry.isIntersecting || el.getAttribute("data-translated") === "true") continue;
+
+      const rawText = el.innerText.trim();
+      //if (!rawText || rawText.length > 500) continue;
+      if (!rawText) continue;
+
+      if (translatedCache.has(rawText)) {
+        insertTranslation(el, translatedCache.get(rawText));
+        continue;
+      }
+
+      try {
+        const translated = await translateText(rawText);
+        translatedCache.set(rawText, translated);
+        insertTranslation(el, translated);
+      } catch (err) {
+        console.error("翻譯失敗", err);
+      }
+    }
+  }, { threshold: 0.5 });
+
+  const candidates = containerElement.querySelectorAll(selector);
+  candidates.forEach(el => {
+    if (shouldIgnore(el)) return;
+    if (!hasVisibleText(el)) return;
+    observer.observe(el);
+  });
+}
+
+
+function startLazyTranslationOld(containerElement) {
+  const translatedCache = new Map();
   const htmlTagsNoTranslate = ['TITLE', 'SCRIPT', 'STYLE', 'TEXTAREA', 'SVG', 'svg'];
 
   function isElementVisible(el) {
@@ -508,12 +592,26 @@ function startLazyTranslation(containerElement) {
     );
   }
 
+  // function shouldIgnore(el) {
+  //   if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
+  //   if (htmlTagsNoTranslate.includes(el.tagName)) return true;
+  //   if (!isElementVisible(el)) return true;
+  //   return false;
+  // }
+
+  const blockTagsOnly = ['P', 'LI', 'DIV', 'H2', 'H3'];
+
   function shouldIgnore(el) {
     if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
     if (htmlTagsNoTranslate.includes(el.tagName)) return true;
     if (!isElementVisible(el)) return true;
+  
+    // ✅ 僅允許特定 block 標籤
+    if (!blockTagsOnly.includes(el.tagName)) return true;
+  
     return false;
   }
+
 
   async function translateText(text) {
     var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(text);
@@ -522,9 +620,19 @@ function startLazyTranslation(containerElement) {
     return raw[0][0]||''
   }
 
+  // function insertTranslation(el, translated) {
+  //   const div = document.createElement('div');div.innerText = translated;div.classList.add('translated-text');
+  //   el.setAttribute('data-translated','true');el.after(div);
+  // }
+
   function insertTranslation(el, translated) {
-    const div = document.createElement('div');div.innerText = translated;div.classList.add('translated-text');
-    el.setAttribute('data-translated','true');el.after(div);
+    const div = document.createElement("div");
+    div.innerText = translated;
+    div.classList.add("translated-text");
+    el.setAttribute("data-translated", "true");
+  
+    // 插入在元素之後，而不是插入到內部（避免插入到 <sup> 內）
+    el.insertAdjacentElement('afterend', div);
   }
 
   const observer = new IntersectionObserver(async (entries) => {
