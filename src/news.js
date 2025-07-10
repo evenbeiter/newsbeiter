@@ -2047,7 +2047,7 @@ async function yahooVideoGetList(siteName,t){
       
   for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.images.original.url,h.url])};
   for (let h of items){
-    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10">${h[3]}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"></div><hr>`
+    html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
