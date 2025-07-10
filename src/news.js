@@ -499,7 +499,7 @@ function startLazyTranslation(containerElement) {
   const htmlTagsNoTranslate = ['TITLE', 'SCRIPT', 'STYLE', 'TEXTAREA', 'SVG', 'svg'];
   const allowedTags = ['P', 'LI', 'H2', 'H3'];
 
-  const selector = 'p:not(.time):not(.xtl), h2, h3, li';
+  const selector = 'p:not(translated-text):not(.time):not(.xtl), h2, h3, li, div.description';
 
   function isElementVisible(el) {
     const rect = el.getBoundingClientRect();
@@ -536,9 +536,9 @@ function startLazyTranslation(containerElement) {
 
   function insertTranslation(el, translated) {
     const div = document.createElement("p");
-    div.innerText = translated;
     div.classList.add("translated-text");
-    div.setAttribute("data-translated", "true");
+    div.innerText = translated;
+    //div.setAttribute("data-translated", "true");
     el.setAttribute("data-translated", "true");
     el.insertAdjacentElement('afterend', div);
   }
