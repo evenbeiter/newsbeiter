@@ -516,7 +516,7 @@ function startLazyTranslation(containerElement) {
   }
 
   async function translateText(text) {
-    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(a);
+    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(text);
     var res=await fetch(url);
     var raw=await res.json();
     return raw[0][0]||''
