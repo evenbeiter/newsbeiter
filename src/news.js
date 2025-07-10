@@ -535,7 +535,7 @@ function startLazyTranslation(containerElement) {
   }
 
   function insertTranslation(el, translated) {
-    const div = document.createElement("div");
+    const div = document.createElement("p");
     div.innerText = translated;
     div.classList.add("translated-text");
     div.setAttribute("data-translated", "true");
