@@ -472,7 +472,7 @@ async function getTranslation(all){
 }
 
 function startLazyTranslation(containerElement) {
-  const selector='p:not(translated-text):not(.time):not(.xtl), h2, h3, li, div.description';
+  const selector='p:not(.translated-text):not(.time):not(.xtl), h2, h3, li, div.description';
   const translatedCache = new Map();
 
   const observer = new IntersectionObserver(async (entries) => {
