@@ -203,12 +203,12 @@ if (onEVBT===false){
     createChannelList(tabs,siteNameVar,docTitle);
     //createSearchListDiv(faqB,searchSitesB);
     //createUrlListDiv([allSitesB,allSites2,videoSitesB]);
-    createUrlListDiv(allSitesB);
+    createUrlListDiv([allSitesB]);
   } else {
     channelList.innerHTML='';
     searchList.innerHTML='';
     //createUrlListDiv([allSitesB,allSites2,videoSitesB]);
-    createUrlListDiv(allSitesB);
+    createUrlListDiv([allSitesB]);
     openUrlList();
   }
 } else {
