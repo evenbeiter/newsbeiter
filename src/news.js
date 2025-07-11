@@ -1495,7 +1495,7 @@ async function jpmGetList(siteName,t){
     for (let c of cat){
       var slides=c.slides;var htmlSlides='';
       for (let s of slides){
-        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.desktopImage}" onclick="showOverlay('${s.desktopImage}')"><br>`;
+        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img class="gtm" src="${s.desktopImage}" onclick="showOverlay('${s.desktopImage}')"><br>`;
       }
       html+=`<p class="title xlt" onclick="getContent('${siteName}',this.id,'${c.id}')">${c.name}</p><div id="${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'${c.id}')">${htmlSlides}<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br></div><hr>`
     }
@@ -2573,7 +2573,7 @@ async function videoGetContent(clickedId,id,url,m3u8Url){
     loading.style.display='none';
   } else {
       var e=window.event;
-      if (e && e.target.tagName==='VIDEO'){return}else{
+      if (e && e.target.tagName==='VIDEO' || e.target.classList.contains('gtm')){return}else{
       cEl.style.display='none';
       if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
       try{cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
