@@ -68,9 +68,9 @@ const xueqiu=[['203','新聞'],['205','達人'],['巴菲特致股东的信原文
 
 //var apollo,bbc,bnext,businessToday,businessWeekly,cnyes,ctee,dw,jin,lineToday,msnTW,msnUS,newslens,peInsights,reuters,sina,substack,technews,udn,udnMoney,wealth,wiki,wscn,msnVideo,wsjVideo,bbgVideo,reutersVideo;
 //var cna,cnyeshao,invtCom,isbl,marie,mindi,nb,xueqiu,yahooTW;
-const twt=[['WinfieldSmart','Win Smart'],['MikeZaccardi','Mike Zaccardi'],['Barchart','Barchart'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
+//const twt=[['WinfieldSmart','Win Smart'],['MikeZaccardi','Mike Zaccardi'],['Barchart','Barchart'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
 
-const allSitesB=[['nb','NB',nb,'nb.com','https://www.nb.com'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
+const allSitesB=[['nb','NB',nb,'nb.com','https://www.nb.com'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 //const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
@@ -269,7 +269,7 @@ async function get1stList(siteName,top,t){
 }
 
 async function get1stSearchResults(siteName,top){
-  var checkUrl=[...allSites1,...allSites2,...allSitesB,...videoSitesB].find(pair=>pair[0]===siteName)?.[3];
+  var checkUrl=[...allSites1,...allSites2,...allSitesB].find(pair=>pair[0]===siteName)?.[3];
   checkUrl=checkUrl.split('|');
   for (let s of checkUrl){if (window.location.href.indexOf(s)!==-1){var onEXURL=true;break}else{var onEXURL=false}};
   if (onEVBT===true||onEXURL===true){
@@ -277,7 +277,7 @@ async function get1stSearchResults(siteName,top){
     getSearchResults(siteName);
     showTop(top+' | 搜尋：'+document.getElementById('search-term').value);
   } else {
-    openUrl([...allSites1,...allSites2,...allSitesB,...videoSitesB].find(pair=>pair[0]===siteName)?.[4]);
+    openUrl([...allSites1,...allSites2,...allSitesB].find(pair=>pair[0]===siteName)?.[4]);
   }
 }
 
