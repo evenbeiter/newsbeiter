@@ -95,7 +95,7 @@ var items=[],ytnCoverImg='',ytnVideo='',ecoMagContent,url='',html='',coun='',t='
 
 if (onEVBT===false){
 
-for (let l of [allSitesB]) {var ss=l[3].split('|');for (let s of ss){if (window.location.href.indexOf(s) !== -1) {siteNameVar=l[0];docTitle=l[1];tabs=l[2];break}}};
+for (let l of allSitesB) {var ss=l[3].split('|');for (let s of ss){if (window.location.href.indexOf(s) !== -1) {siteNameVar=l[0];docTitle=l[1];tabs=l[2];break}}};
 
 document.documentElement.innerHTML=`
 <!DOCTYPE html>
