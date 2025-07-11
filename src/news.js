@@ -187,7 +187,12 @@ const urlList=document.getElementById('urlList');
 const list=document.getElementById('list');
 const topdiv=document.getElementById('top');
 const loading=document.getElementById('loading');
-//for (let d of getLastNSats(5)){ecoMagList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="getEcoMagFromJson('${d}')">${d}</button>`;}  
+
+const closeBtn=document.getElementById('overlayCloseBtn');
+const backdrop=document.getElementById('overlayBackdrop');
+const overlay=document.getElementById('customOverlay');
+const isVisible=!overlay.classList.contains('d-none');
+document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'Escape') {hideOverlay()}});
 
 
 //    CREATE CHANNEL, SEARCH & URL LIST FOR BOOKMARKLET
@@ -861,6 +866,9 @@ function openUrl(url){window.open(url,'_blank')}
 function decodeHTMLEntities(str){var ta=document.createElement('textarea');ta.innerHTML = str;return ta.value;}
 function cnTest(str) {const chineseCharRegex = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;return chineseCharRegex.test(str);}
 function convertTextInsideTags(element) {for (let child of element.childNodes) {if (child.nodeType === Node.TEXT_NODE) {child.nodeValue = s2t(child.nodeValue.trim());} else if (child.nodeType === Node.ELEMENT_NODE) {convertTextInsideTags(child);}}}
+function showOverlay(){document.getElementById('customOverlay').classList.remove('d-none');}
+function hideOverlay(){document.getElementById('customOverlay').classList.add('d-none');}
+
 
 
 //    FETCH FUNCTIONS
