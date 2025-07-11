@@ -471,7 +471,115 @@ async function getTranslation(all){
   }
 }
 
+
+
 function startLazyTranslation(containerElement) {
+
+const observer = new IntersectionObserver(async (entries, observer) => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) continue;
+    await translateAndInsertWithBrAndP(entry.target);
+    observer.unobserve(entry.target);
+  }
+}, { threshold: 0.4 });
+containerElement.querySelectorAll('*').forEach(el => observer.observe(el));
+}
+
+async function translateAndInsertWithBrAndP(element) {
+    const blockTags = ['P', 'LI', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'SECTION', 'ARTICLE', 'BLOCKQUOTE', 'UL', 'OL'];
+    const excludedClasses = ['translated-text', 'time', 'xtl'];
+  
+    const elements = containerElement.querySelectorAll(selector);elements.forEach(el => {if (!shouldIgnore(el)) observer.observe(el)});
+
+    function isBlockTag(tag) {return tag && blockTags.includes(tag.toUpperCase());}
+  
+    function hasExcludedClass(node) {
+        return (
+          node.nodeType === Node.ELEMENT_NODE &&
+          node.classList &&
+          excludedClasses.some(cls => node.classList.contains(cls))
+        );
+    }
+
+    function getFullText(node) {
+      let text = '';
+      node.childNodes.forEach(child => {
+        if (hasExcludedClass(child)) return;
+        if (child.nodeType === Node.TEXT_NODE) {
+          text += child.textContent;
+        } else if (child.nodeType === Node.ELEMENT_NODE) {
+          text += getFullText(child);
+        }
+      });
+      return text;
+    }
+  
+    async function handleNode(node) {
+        if (hasExcludedClass(node)) return;
+        // 若是區塊元素
+        if (node.nodeType === Node.ELEMENT_NODE && isBlockTag(node.tagName)) {
+          const originalText = getFullText(node).trim();
+          if (originalText) {
+            node.setAttribute('data-translated', 'true');
+            const translated = await translateText(originalText);
+            const p = document.createElement('p');
+            p.classList.add('translated-text');
+            p.setAttribute('data-translated', 'true');
+            p.textContent = translated;
+            if (node.nextSibling) {
+              node.parentNode.insertBefore(p, node.nextSibling);
+            } else {
+              node.parentNode.appendChild(p);
+            }
+          }
+          // 遍歷子節點，只針對非 block element 遞迴
+          node.childNodes.forEach(child => {
+            if (!(child.nodeType === Node.ELEMENT_NODE && isBlockTag(child.tagName))) {
+              handleNode(child);
+            }
+          });
+        }
+        // 若是純文字且父層是 block element
+        else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+          const parent = node.parentNode;
+          if (!hasExcludedClass(parent) && isBlockTag(parent.tagName)) {
+            parent.setAttribute('data-translated', 'true');
+            const translated = await translateText(node.textContent.trim());
+            const br = document.createElement('br');
+            const textNode = document.createTextNode(translated);
+            if (node.nextSibling) {
+              parent.insertBefore(br, node.nextSibling);
+              parent.insertBefore(textNode, br.nextSibling);
+            } else {
+              parent.appendChild(br);
+              parent.appendChild(textNode);
+            }
+          }
+        }
+        // 其他情形（如 inline element），遞迴處理子節點
+        else if (node.nodeType === Node.ELEMENT_NODE) {
+          node.childNodes.forEach(child => {
+            handleNode(child);
+          });
+        }
+    }
+
+    async function translateText(text) {
+        if (translatedCache.has(text)) return translatedCache.get(text);
+        const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q=${encodeURIComponent(text)}`;
+        try {
+          const res=await fetch(url);const json=await res.json();const translated=json[0][0] || '';translatedCache.set(text, translated);
+          return translated;
+        } catch (e) {console.error('Failed to translate.', e);return '';}
+    }
+
+    await handleNode(element);
+}
+
+
+
+
+function startLazyTranslation0711(containerElement) {
   const selector='p:not(.translated-text):not(.time):not(.xtl), h2, h3, li, div.description';
   const translatedCache = new Map();
 
