@@ -63,6 +63,14 @@
   </g>
 </svg>
 </div></div>
+
+<div id="customOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none z-3">
+  <div id="overlayBackdrop" class="position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-25"></div>
+  <div class="position-absolute top-50 start-50 translate-middle bg-white border rounded shadow p-4" style="width: 90vw; height: 90vh; overflow: auto;">
+    <button id="overlayCloseBtn type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close""></button>
+    <div class="mt-4"><img></div>
+  </div>
+</div>
 </div>
 
 <script src="src/news.js"></script>
