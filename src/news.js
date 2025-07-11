@@ -1588,7 +1588,7 @@ async function nbGetList(siteName,t){
   var hh=doc.querySelectorAll('.article-list-tile');
   var data=Array.from(hh).slice((rr-1)*25,rr*25);
   for (let h of data){items.push([h.querySelector('a').href,h.querySelector('h6').innerText,h.querySelector('date').innerText])};
-  for (let h of items){html+=`<div onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title">${h[1]} <span class="time fw-normal">${h[2]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`};
+  for (let h of items){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]} <span class="time fw-normal">${h[2]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`};
   }catch{html='<p>No Content.</p>'}
   return html;
 }
