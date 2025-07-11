@@ -87,7 +87,7 @@ const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var siteNameVar='',docTitle='',tabs=[];
-var items=[],ytnCoverImg='',ytnVideo='',ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0;
+var items=[],ytnCoverImg='',ytnVideo='',ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0,buildId='';
 //const sats=getLastNSats(5);
 
 //    RENDER HTML FOR BOOKMARKLET
@@ -1228,9 +1228,11 @@ async function dwGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function gsamGetList(siteName,t){
-  try{url='https://am.gs.com/services/search-engine/en-us/institutions/search/insights?hitsPerPage=20&page='+rr;console.log(url);
-  let res=await fetch(preStr+encodeURIComponent(url));
-  let str=await res.json();
+  try{url='https://am.gs.com/en-us/institutions/insights';
+  var res=await fetch(preStr+encodeURIComponent(url));var str=await res.text();buildId=str.match(/"buildId":"[\s\S]*?"/g)[0].replace('"buildId":"','').replace('"','');
+  url='https://am.gs.com/services/search-engine/en-us/institutions/search/insights?hitsPerPage=20&page='+rr;console.log(url);
+  res=await fetch(preStr+encodeURIComponent(url));
+  str=await res.json();
   for (let h of str.insights.hits){
     items.push([h.slug,h.title,h.publishDate.slice(0,10)])
   }
@@ -1242,7 +1244,8 @@ async function gsamGetList(siteName,t){
 }
 
 async function gsamGetContent(id){
-  try{url='https://am.gs.com/_next/data/SzESSl3vWGbiighuFZH9-'+id+'.json';
+  try{
+  url='https://am.gs.com/_next/data/'+buildId+id+'.json';
   const res = await fetch(preStr+encodeURIComponent(url));
   const str=await res.json();
   html=`<p class="time">${str.pageProps.data.properties.authorDetails[0].personReferencePath.metadata.firstName} ${str.pageProps.data.properties.authorDetails[0].personReferencePath.metadata.lastName}, ${str.pageProps.data.properties.authorDetails[0].personReferencePath.metadata.jobTitle}</p>`;
