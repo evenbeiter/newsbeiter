@@ -517,7 +517,7 @@ function startLazyTranslation(containerElement) {
     if (translatedCache.has(text)) return translatedCache.get(text);
     const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q=${encodeURIComponent(text)}`;
     try {
-      const res=await fetch(url);const json=await res.json();const translated=json.[0][0] || '';translatedCache.set(text, translated);
+      const res=await fetch(url);const json=await res.json();const translated=json[0][0] || '';translatedCache.set(text, translated);
       return translated;
     } catch (e) {console.error('Failed to translate.', e);return '';}
   }
