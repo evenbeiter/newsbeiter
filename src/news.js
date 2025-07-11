@@ -336,6 +336,21 @@ async function getContent(siteName,clickedId,id){
           }
         }}catch{}}
 
+        //handle iframes in blk
+        if (siteName=='blk'){
+          try{
+            var blkIframe=cEl.querySelectorAll('iframe[id^="bii-flourish"]');
+            for (let b of blkIframe){
+              b.outerHTML+=`
+              <button type="button" class="btn btn-light" onclick="showOverlay('blkIframe','${b.src}')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"/>
+                </svg>
+              </button>`;
+              }
+          }catch{}
+        }
+
         //handle items for ytn
         if (siteName=='ytn'){
           //img
@@ -864,8 +879,11 @@ function openUrl(url){window.open(url,'_blank')}
 function decodeHTMLEntities(str){var ta=document.createElement('textarea');ta.innerHTML = str;return ta.value;}
 function cnTest(str) {const chineseCharRegex = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;return chineseCharRegex.test(str);}
 function convertTextInsideTags(element) {for (let child of element.childNodes) {if (child.nodeType === Node.TEXT_NODE) {child.nodeValue = s2t(child.nodeValue.trim());} else if (child.nodeType === Node.ELEMENT_NODE) {convertTextInsideTags(child);}}}
-function showOverlay(imgSrc){document.getElementById('customOverlay').classList.remove('d-none');document.getElementById('gtmImg').src=imgSrc;}
 function hideOverlay(){document.getElementById('customOverlay').classList.add('d-none');}
+function showOverlay(el,elSrc){
+  document.getElementById('blkIframe').src='';document.getElementById('gtmImg').src='';
+  document.getElementById('customOverlay').classList.remove('d-none');document.getElementById(el).src=elSrc;
+}
 
 
 
@@ -1495,7 +1513,7 @@ async function jpmGetList(siteName,t){
     for (let c of cat){
       var slides=c.slides;var htmlSlides='';
       for (let s of slides){
-        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img class="gtm" src="${s.desktopImage}" onclick="showOverlay('${s.desktopImage}')"><br>`;
+        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img class="gtm" src="${s.desktopImage}" onclick="showOverlay('gtmImg','${s.desktopImage}')"><br>`;
       }
       html+=`<p class="title xlt" onclick="getContent('${siteName}',this.id,'${c.id}')">${c.name}</p><div id="${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'${c.id}')">${htmlSlides}<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br></div><hr>`
     }
