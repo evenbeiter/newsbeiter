@@ -339,14 +339,15 @@ async function getContent(siteName,clickedId,id){
         //handle iframes in blk
         if (siteName=='blk'){
           try{
+            var biiFlourish=cEl.querySelectorAll('.bii-flourish'); for (let b of biiFlourish){b.classList.add('p-0')};
             var blkIframe=cEl.querySelectorAll('iframe[id^="bii-flourish"]');
             for (let b of blkIframe){
               b.outerHTML+=`
-              <button type="button" class="btn btn-light" onclick="showOverlay('blkIframe','${b.src}')">
+              <p class="text-end"><button type="button" class="btn btn-light" onclick="showOverlay('blkIframe','${b.src}')">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
                   <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"/>
                 </svg>
-              </button>`;
+              </button></p>`;
               }
           }catch{}
         }
@@ -409,7 +410,7 @@ async function getContent(siteName,clickedId,id){
     }
   } else {
     var e=window.event;
-    if (e && e.target.tagName==='VIDEO'){return}else{
+    if (e && e.target.tagName==='VIDEO' || e.target.classList.contains('gtm') || e.target.classList.contains('bii-flourish')){return}else{
       const selection=window.getSelection();
       const selectedText=selection.toString().trim();
       if (selectedText.length===0){
@@ -2591,7 +2592,7 @@ async function videoGetContent(clickedId,id,url,m3u8Url){
     loading.style.display='none';
   } else {
       var e=window.event;
-      if (e && e.target.tagName==='VIDEO' || e.target.classList.contains('gtm')){return}else{
+      if (e && e.target.tagName==='VIDEO'){return}else{
       cEl.style.display='none';
       if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
       try{cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
