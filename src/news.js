@@ -523,9 +523,9 @@ function startLazyTranslation(containerElement) {
     div.className = 'translated-text';
     div.setAttribute('data-translated', 'true');
     div.textContent = translatedText;
-
-    const lastTextNode = Array.from(el.childNodes).reverse().find(n => n.nodeType === Node.TEXT_NODE);
-    if (lastTextNode && lastTextNode.nextSibling) {el.insertBefore(div, lastTextNode.nextSibling)} else {el.appendChild(div)}
+    el.parentNode.insertBefore(div,el.nextSibling);
+    // const lastTextNode = Array.from(el.childNodes).reverse().find(n => n.nodeType === Node.TEXT_NODE);
+    // if (lastTextNode && lastTextNode.nextSibling) {el.insertBefore(div, lastTextNode.nextSibling)} else {el.appendChild(div)}
   }
 }
 
