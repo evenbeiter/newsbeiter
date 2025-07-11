@@ -11,7 +11,8 @@ const businessToday=[['news/','最新'],['catalog/183007/list/page/','投資理�
 const businessWeekly=[['0000000000','最新'],['0000000316','國際'],['0000000319','財經'],['0000000326','管理'],['0000000312','焦點'],['0000000342','CEO學院']];
 const cna=[['aall','即時'],['aopl','國際'],['aie','產經'],['asc','證券'],['ait','科技'],['ahel','生活'],['amov','娛樂']];
 const cnyes=[['headline','頭條'],['tw_stock','台股'],['wd_stock','美股'],['tech','科技'],['fund','基金'],['tw_money','理財'],['forex','外匯'],['future','期貨'],['mag','雜誌'],['topics','專題'],['celebrity_area','新視界'],['bc','區塊鏈'],['cn_stock','陸港股'],['cnyeshouse','房產']];
-const cnyeshao=[['W_1','最新'],['W_2','推薦'],['W_8','美股'],['W_40','台股'],['W_14','國際'],['W_62','宏觀'],['W_11','外匯'],['W_13','商品期貨'],['W_40','科技'],['30','美股艾大叔'],['361680','華爾街脈動'],['444','RexAA'],['443','小小天下'],['29','北風窗'],['113','老馬記']];const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
+const cnyeshao=[['W_1','最新'],['W_2','推薦'],['W_8','美股'],['W_40','台股'],['W_14','國際'],['W_62','宏觀'],['W_11','外匯'],['W_13','商品期貨'],['W_40','科技'],['30','美股艾大叔'],['361680','華爾街脈動'],['444','RexAA'],['443','小小天下'],['29','北風窗'],['113','老馬記']];
+const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['category/stock/','證券'],['category/finance/','金融'],['category/wealth/','理財'],['category/industry/','產業'],['category/house/','房市'],['category/world/','國際'],['category/view/','觀點'],['category/bookstore/','書房'],['category/lohas/','樂活']];
 const dw=[['經濟/s-1682','經濟'],['政治/s-1681','政治'],['科技創新/s-1686','科技創新'],['文化/s-1683','文化']];
 const gsam=[['','Latest']];
 const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6,15];
@@ -21,11 +22,8 @@ const jin=[['','最新'],['topic/402/','精選圖表'],['topic/416','宏觀圖�
 const jpm=[['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/_jcr_content/root/responsivegrid/jpm_am_mosaic_copy.model.json','Latest'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/mi-guide-to-the-markets-us','GTM'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-alternatives/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-alternatives/mi-guide-to-alternatives','GTA'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/etf-insights/guide-to-etfs/_jcr_content.linklistv2.json__market-insights/guide-to-etfs/guide-to-etfs','GTE'],['https://am.jpmorgan.com/content/jpm-am-aem/emea/no/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/mi-guide-to-the-markets-ce-en','GTEU'],['https://am.jpmorgan.com/content/jpm-am-aem/asiapacific/hk/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/guide-to-the-markets-asia','GTAS'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/retirement-insights/guide-to-retirement/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie_1506598259.model.json__retirement-insights/guide-to-retirement-us','GTR']];
 const kd=[['이산|77','李祘']];
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],['102394|103101','經濟工商'],['103214|100267','M平方'],['100295','今周刊'],['101131','CMoney'],['100422|100421|100423','商周'],['101170','路透社'],['104453|101006','財訊'],['100150|103088','鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],['100004|101886','風傳媒'],['100275|101201','關鍵評論網'],['global','國際'],['100003','中央社'],['TOPIC-USelection|2024election','川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],['100568|100158','天下雜誌'],['101031','地球圖輯隊'],['101934|100394|103227','閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['100746|TOPIC-DIY','裝潢'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
-const msnTW=[['Y_321db332-7d5a-4672-96b5-2d342ca554fb', '焦點'],['Y_ab001b84-62eb-4605-96c4-12221f946e94', '新聞'],['Y_5993abc4-f49c-49ce-bed0-a5b4b61dd9f6', '財經'],['Y_a484713e-0cec-4003-8fac-a629da5bcf3d', '兩岸國際'],['Y_a0268fb1-402c-48ec-8946-c31ddd7751da', '即時新聞'],['Y_b4ddc302-8189-44e9-b136-9682cc7e3746', '即時財經'],['Y_fef3ac37-3667-4a34-92c0-3e373c55d307', '理財'],['Y_aced43e9-95ab-4e5c-a0c5-d035aeb2133b', '科技'],['Y_da100b0d-55ac-49d4-beae-84ffdcbf3da9', '生活'],['Y_e2c684a5-a8fe-4879-91b9-8d5dc50b5488', '居家設計'],['Y_b77e5da5-aea6-4ee3-8890-91990040926a', '健康'],['Y_57552325-541f-4702-b61e-f307056e39b1', '旅遊'],['Y_95fdd1de-0e14-47b2-a213-6edf24542702', '娛樂'],['Y_f3ddd032-c606-4c7f-b11f-cb16a3596ae2', '台灣'],['Y_7a50bf00-ca7e-4699-ac07-b31e1c3ae01f', '房地產'],['Y_fb97b38c-1cf6-445a-b579-f7b9b35f6590', '職場求職'],['Y_54b11fc3-6cd6-45d6-a669-1c0168275125', '職場焦點'],
-  ['vid-y9reuyeu7hkimpnrdtqpruibsfa4wd4bxxxip6dasjgrby33vd0a', '中央社'],['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', '彭博'],['vid-hvwu6j8yi9b0huc8bkawy5qhvdf3scbniqc8scbbbp6xvj6ftrda', '商周'],['vid-rh9wrnpgtjfx7dbmc38h4xkf6j00me2e9amvgkeqtmanw40mw36s', '天下'],['vid-xj7qtb3g69dr6auu9p8ueq57gnarhrxd5ej05gtswdmnwi02xxia', '德國之聲'],['vid-jwkt4swyp9iyjy43f5cbhi02ttt8enb5t6yms0ppdx869vubmasa', '東森'],['vid-nvte086i8a39iuemvaxwsicfmc2j6tvixtcu9uxbfwqrgaw857rs', 'TVBS新聞'],['vid-n0sumxg56bwh3bguneg5ynixqc3qyiacjst3idsyus5rkrjs3pts', '中時'],['vid-e8mmyirx39xyms90cigfcgdn9p7vdy6u0xe243c7tdm2hgwiypas', '遠見'],['vid-9eqa8gpyscx8v293p3hsyxipqngqd3j7wexky6y09d7eye90m9ya', '風傳媒'],['vid-ctia0d3wuyutasjyriw3uvt8vaa0u4pmwkv0fqpgiciaf5r54m5a', '鏡週刊'],['vid-caqxm27w0p49tmy0ar5urvpar0ccx2b0xdaatyw2nxfqkgab7bds', '早安健康'],['vid-pui6vcpvju95tisme52646g2d79dvjt7akm8cg8ahmrbi8u7a2xa', '康健']];
-const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e-4a75-ba34-6460811ccfe3','Tech'],['Y_99096e96-6d4f-401c-832b-461e08143a5a','Lifestyle'],
-  ['Y_69fcfcf0-f686-4b19-9901-0a4ce35b823d', 'Business'],['Y_ce1fe19d-4d60-4312-b4d6-8cba9aa76413', 'Stocks'],['Y_8c7b0706-a0d1-49f1-8603-5c33a3dadd73', 'Economics'],['Y_d6433e0a-2be3-4106-839c-5a40a5375514', 'AI'],['Y_dc6dc645-d63a-4c97-8812-3ecdf27695b8', 'SMID'],['Y_f457eae0-84c0-4d35-b1dc-8435b7b6c140', 'Generative AI'],
-  ['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', 'Bloomberg'],['vid-mpxsw8rp392wedf25t8tfhk7r3b364q8dj75ks43nimmf06qg2es', 'Reuters'],['vid-r0r09b3muc6xnf5tv2est5f5ukjbkk67i9svrhyu3jy2pskkbems', 'MarketWatch'],['vid-y572a3ryyddhuiujs0xe2j4m4b6c3n2fp5hnux4jpsdand8h09ys', 'WSJ'],['vid-bpwfbvkfudq92wksju4upi9jrx2pn0ax46vrw0vkst93vpwr5pva', 'CNN'],['vid-v3atkpesfykfx7084fbu0cpbtx0jne99kctychfsn9ry96wsmbba', 'BBC'],['vid-r4du2vx0u9h0kr9tx7iyx55w7sneq7e6tg934epuehq3grvn05aa', 'Fortune'],['vid-n3h9ssyxg550pryvt4287xynyckhu84k5vc6n3tdqwsvtvmn2p0s', 'USA TODAY'],['vid-27xbtchrc5gpxe8uhvw9f24q2kqi9f0ppk7ptb8xw9v9sscheg6s', 'Motley Fool'],['vid-i3g0qyhrtn28biukcpyvsrmhccmv8k8ugtmtr6kqhb9dkf6ccrua', 'FOX News'],['vid-rvn4g4busxh65p6kgfvhye9atw9n8ebd46ut057ypkbm5n6xa5ts', 'BuzzFeed']];
+const msnTW=[['Y_321db332-7d5a-4672-96b5-2d342ca554fb', '焦點'],['Y_ab001b84-62eb-4605-96c4-12221f946e94', '新聞'],['Y_5993abc4-f49c-49ce-bed0-a5b4b61dd9f6', '財經'],['Y_a484713e-0cec-4003-8fac-a629da5bcf3d', '兩岸國際'],['Y_a0268fb1-402c-48ec-8946-c31ddd7751da', '即時新聞'],['Y_b4ddc302-8189-44e9-b136-9682cc7e3746', '即時財經'],['Y_fef3ac37-3667-4a34-92c0-3e373c55d307', '理財'],['Y_aced43e9-95ab-4e5c-a0c5-d035aeb2133b', '科技'],['Y_da100b0d-55ac-49d4-beae-84ffdcbf3da9', '生活'],['Y_e2c684a5-a8fe-4879-91b9-8d5dc50b5488', '居家設計'],['Y_b77e5da5-aea6-4ee3-8890-91990040926a', '健康'],['Y_57552325-541f-4702-b61e-f307056e39b1', '旅遊'],['Y_95fdd1de-0e14-47b2-a213-6edf24542702', '娛樂'],['Y_f3ddd032-c606-4c7f-b11f-cb16a3596ae2', '台灣'],['Y_7a50bf00-ca7e-4699-ac07-b31e1c3ae01f', '房地產'],['Y_fb97b38c-1cf6-445a-b579-f7b9b35f6590', '職場求職'],['Y_54b11fc3-6cd6-45d6-a669-1c0168275125', '職場焦點'],['vid-y9reuyeu7hkimpnrdtqpruibsfa4wd4bxxxip6dasjgrby33vd0a', '中央社'],['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', '彭博'],['vid-hvwu6j8yi9b0huc8bkawy5qhvdf3scbniqc8scbbbp6xvj6ftrda', '商周'],['vid-rh9wrnpgtjfx7dbmc38h4xkf6j00me2e9amvgkeqtmanw40mw36s', '天下'],['vid-xj7qtb3g69dr6auu9p8ueq57gnarhrxd5ej05gtswdmnwi02xxia', '德國之聲'],['vid-jwkt4swyp9iyjy43f5cbhi02ttt8enb5t6yms0ppdx869vubmasa', '東森'],['vid-nvte086i8a39iuemvaxwsicfmc2j6tvixtcu9uxbfwqrgaw857rs', 'TVBS新聞'],['vid-n0sumxg56bwh3bguneg5ynixqc3qyiacjst3idsyus5rkrjs3pts', '中時'],['vid-e8mmyirx39xyms90cigfcgdn9p7vdy6u0xe243c7tdm2hgwiypas', '遠見'],['vid-9eqa8gpyscx8v293p3hsyxipqngqd3j7wexky6y09d7eye90m9ya', '風傳媒'],['vid-ctia0d3wuyutasjyriw3uvt8vaa0u4pmwkv0fqpgiciaf5r54m5a', '鏡週刊'],['vid-caqxm27w0p49tmy0ar5urvpar0ccx2b0xdaatyw2nxfqkgab7bds', '早安健康'],['vid-pui6vcpvju95tisme52646g2d79dvjt7akm8cg8ahmrbi8u7a2xa', '康健']];
+const msnUS=[['Y_46b78bbb-31c4-4fc5-8a4a-858072348d06','News'],['Y_d1cad308-780e-4a75-ba34-6460811ccfe3','Tech'],['Y_99096e96-6d4f-401c-832b-461e08143a5a','Lifestyle'],['Y_69fcfcf0-f686-4b19-9901-0a4ce35b823d', 'Business'],['Y_ce1fe19d-4d60-4312-b4d6-8cba9aa76413', 'Stocks'],['Y_8c7b0706-a0d1-49f1-8603-5c33a3dadd73', 'Economics'],['Y_d6433e0a-2be3-4106-839c-5a40a5375514', 'AI'],['Y_dc6dc645-d63a-4c97-8812-3ecdf27695b8', 'SMID'],['Y_f457eae0-84c0-4d35-b1dc-8435b7b6c140', 'Generative AI'],['vid-08gw7ky4u229xjsjvnf4n6n7v67gxm0pjmv9fr4y2x9jjmwcri4s', 'Bloomberg'],['vid-mpxsw8rp392wedf25t8tfhk7r3b364q8dj75ks43nimmf06qg2es', 'Reuters'],['vid-r0r09b3muc6xnf5tv2est5f5ukjbkk67i9svrhyu3jy2pskkbems', 'MarketWatch'],['vid-y572a3ryyddhuiujs0xe2j4m4b6c3n2fp5hnux4jpsdand8h09ys', 'WSJ'],['vid-bpwfbvkfudq92wksju4upi9jrx2pn0ax46vrw0vkst93vpwr5pva', 'CNN'],['vid-v3atkpesfykfx7084fbu0cpbtx0jne99kctychfsn9ry96wsmbba', 'BBC'],['vid-r4du2vx0u9h0kr9tx7iyx55w7sneq7e6tg934epuehq3grvn05aa', 'Fortune'],['vid-n3h9ssyxg550pryvt4287xynyckhu84k5vc6n3tdqwsvtvmn2p0s', 'USA TODAY'],['vid-27xbtchrc5gpxe8uhvw9f24q2kqi9f0ppk7ptb8xw9v9sscheg6s', 'Motley Fool'],['vid-i3g0qyhrtn28biukcpyvsrmhccmv8k8ugtmtr6kqhb9dkf6ccrua', 'FOX News'],['vid-rvn4g4busxh65p6kgfvhye9atw9n8ebd46ut057ypkbm5n6xa5ts', 'BuzzFeed']];
 const newslens=[['latest-article/','最新'],['event-tag/380574-2025川普對等關稅/','對等關稅'],['tag/22338/','川普'],['category/economy/','經濟'],['category/business/','商業'],['category/personal-finance/','理財'],['tag/5260/','美債'],['category/tech/','科技'],['tag/3503/','供應鏈'],['tag/30/','台灣'],['category/world/','國際'],['category/us-canada/','美加'],['tag/83/','美國'],['category/europe/','歐洲'],['category/china/','中國'],['category/indo-pacific/','印太'],['tag/64/','日本'],['category/latin-america/','拉美'],['category/middle-east/','中東'],['category/africa/','非洲'],['author/BBC/','BBC中文'],['author/cnataiwan/','中央社'],['category/arts-culture/','藝文'],['category/literature/','文學'],['category/movie-tv/','影劇'],['category/health/','健康'],['category/lifestyle/','生活'],['category/psychology/','心理'],['category/language/','語文'],['author/bookdigest/','書摘'],['author/editor/','轉載']];
 const peInsights=[['','Latest']];
 const pimco=[['','Latest']];
@@ -49,6 +47,13 @@ const wsjVideo=[['','Latest'],['&type=wsj-section&query=News','News'],['&type=ws
 const yahooVideo=[['00390a14-17cc-49d2-9e32-79365335f0ca','Latest'],['3058c878-ce30-48f5-93ed-567dfcf3e07b','Editor’s Picks'],['2d4617cb-4448-4bbe-be69-507820ee12be','Investing & Market Insights'],['9657ccb4-0423-4420-94de-024c54839a21','Trending Stocks'],['e799ec4c-02d3-477d-ba05-e8bb5c88bfc8','Tech News'],['aa2ec37b-b63e-4154-b9bd-18e0b14bb1e7','Asking for a Trend'],['d27bc0dd-04f8-4a61-8b08-9c7c6cc3169f','Catalysts'],['9a665a61-55bd-43bc-8657-6eb984ef9a37','Market Domination'],['0c9d1849-74a9-459f-9131-a9cee22acc8e','Morning Brief'],['739eb51e-bc2e-4bd2-99a8-6793977028ed','Market Domination Overtime']];
 
 
+const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
+const searchSites=[['lineToday','LINE'],['yahooTW','奇摩新聞'],['cna','中央社'],['cnyes','鉅亨'],['wscn','華爾街見聞'],['ctee','工商'],['wealth','財訊'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周']]; 
+const allSites1=[['msnTW','MSN 台灣',msnTW,'msn.com/zh-tw','https://www.msn.com/zh-tw'],['ctee','工商',ctee,'ctee.com.tw','https://www.ctee.com.tw/'],['udn','聯合',udn,'udn.com','https://udn.com/'],['wealth','財訊',wealth,'wealth.com.tw','https://www.wealth.com.tw/'],['dw','德國之聲',dw,'dw.com/zh-hant','https://www.dw.com/zh-hant/'],['wscn','華爾街見聞',wscn,'wallstreetcn.com','https://wallstreetcn.com/']];
+const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['yahooTW','奇摩',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['nb','NB',nb,'nb.com','https://www.nb.com'],['blk','BlackRock',blk,'blackrock.com','https://www.blackrock.com/us/individual/insights/'],['jpm','JPM',jpm,'am.jpmorgan.com','https://am.jpmorgan.com/'],['pimco','PIMCO',pimco,'pimco.com','https://www.pimco.com'],['gsam','GSAM',gsam,'am.gs.com','https://am.gs.com/'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['substack','Substack',substack,'substack.com','https://altgoesmainstream.substack.com/'],['ytn','YTN',ytn,'ytn.co.kr','https://www.ytn.co.kr']];
+const videoSites=[['msnVideo','MSN'],['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2'],['reutersVideo','Reuters']];
+
+
 //    FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -65,17 +70,12 @@ const xueqiu=[['203','新聞'],['205','達人'],['巴菲特致股东的信原文
 //var cna,cnyeshao,invtCom,isbl,marie,mindi,nb,xueqiu,yahooTW;
 const twt=[['WinfieldSmart','Win Smart'],['MikeZaccardi','Mike Zaccardi'],['Barchart','Barchart'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
 
-const faq=[['wscn','華爾街見聞','私募'],['udnMoney','經濟日報','日股'],['ctee','工商','美債']];
-const searchSites=[['lineToday','LINE'],['yahooTW','奇摩新聞'],['cna','中央社'],['cnyes','鉅亨'],['wscn','華爾街見聞'],['ctee','工商'],['wealth','財訊'],['udnMoney','經濟日報'],['businessToday','今周刊'],['businessWeekly','商周']]; 
-const allSites1=[['msnTW','MSN 台灣',msnTW,'msn.com/zh-tw','https://www.msn.com/zh-tw'],['ctee','工商',ctee,'ctee.com.tw','https://www.ctee.com.tw/'],['udn','聯合',udn,'udn.com','https://udn.com/'],['wealth','財訊',wealth,'wealth.com.tw','https://www.wealth.com.tw/'],['dw','德國之聲',dw,'dw.com/zh-hant','https://www.dw.com/zh-hant/'],['wscn','華爾街見聞',wscn,'wallstreetcn.com','https://wallstreetcn.com/']];
-const allSites2=[['lineToday','LINE',lineToday,'today.line.me','https://today.line.me/tw/v3/tab'],['yahooTW','奇摩',yahooTW,'tw.news.yahoo.com|tw.stock.yahoo.com','https://tw.news.yahoo.com/'],['cna','中央社',cna,'cna.com.tw','https://www.cna.com.tw/'],['newslens','關鍵評論網',newslens,'thenewslens.com','https://www.thenewslens.com/'],['cnyes','鉅亨',cnyes,'www.cnyes.com|news.cnyes.com','https://news.cnyes.com/news/cat/headline'],['cnyeshao','鉅亨號',cnyeshao,'hao.cnyes.com','https://hao.cnyes.com/ch/361680'],['reuters','路透',reuters,'tw.tradingview.com','https://tw.tradingview.com'],['udnMoney','經濟日報',udnMoney,'money.udn.com','https://money.udn.com'],['businessToday','今周刊',businessToday,'businesstoday.com.tw','https://www.businesstoday.com.tw'],['businessWeekly','商周',businessWeekly,'businessweekly.com.tw','https://www.businessweekly.com.tw'],['bbc','BBC',bbc,'bbc.com/zhongwen','https://www.bbc.com/zhongwen/trad'],['bnext','數位時代',bnext,'www.bnext.com.tw','https://www.bnext.com.tw'],['technews','科技新報',technews,'cdn.technews.tw|cdn.finance.technews.tw','https://cdn.technews.tw/'],['jin','金十',jin,'jin10.com','https://xnews.jin10.com'],['sina','新浪',sina,'sina.com.cn','https://finance.sina.com.cn'],['msnUS','MSN',msnUS,'msn.com/en-us','https://www.msn.com/en-us'],['isbl','ISABELNET',isbl,'isabelnet.com','https://www.isabelnet.com/blog/'],['apollo','Apollo',apollo,'apolloacademy.com','https://www.apolloacademy.com/the-daily-spark'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['nb','NB',nb,'nb.com','https://www.nb.com'],['blk','BlackRock',blk,'blackrock.com','https://www.blackrock.com/us/individual/insights/'],['jpm','JPM',jpm,'am.jpmorgan.com','https://am.jpmorgan.com/'],['pimco','PIMCO',pimco,'pimco.com','https://www.pimco.com'],['gsam','GSAM',gsam,'am.gs.com','https://am.gs.com/'],['peInsights','PEI',peInsights,'pe-insights.com','https://pe-insights.com'],['substack','Substack',substack,'substack.com','https://altgoesmainstream.substack.com/'],['ytn','YTN',ytn,'ytn.co.kr','https://www.ytn.co.kr']];
-const videoSites=[['msnVideo','MSN'],['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['wsjVideo','WSJ'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2'],['reutersVideo','Reuters']];
 
 
 const faqB=[['yahooTW','Yahoo','私募'],['yahooTW','Yahoo','日股'],['yahooTW','Yahoo','美債']];
 const searchSitesB=[['yahooTW','奇摩新聞'],['cna','中央社'],['lineToday','LINE']]; 
 const allSitesB=[['nb','NB',nb,'nb.com','https://www.nb.com'],['twt','TWT',twt,'nitter.poast.org','https://nitter.poast.org/'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
-const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
+//const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
@@ -99,25 +99,8 @@ var items=[],ytnCoverImg='',ytnVideo='',ecoMagContent,url='',html='',coun='',t='
 
 if (onEVBT===false){
 
-for (let l of [...allSitesB,...allSites2,...videoSitesB]) {
-  var ss=l[3].split('|');
-  for (let s of ss){if (window.location.href.indexOf(s) !== -1) {siteNameVar=l[0];docTitle=l[1];tabs=l[2];break}}};
-  
-if (siteNameVar=='isabelnet'){
-  function R(a) {
-    ona = "on" + a;
-    if (window.addEventListener) window.addEventListener(a, function(e) {
-        for (var n = e.originalTarget; n; n = n.parentNode) n[ona] = null;
-    }, true);
-    window[ona] = null;
-    document[ona] = null;
-    document.onkeydown = null;
-    if (document.body) document.body[ona] = null;
-    document.body.oncopy = null;
-  }
-  R("contextmenu");R("click");R("mousedown");R("mouseup");R("selectstart");
-}
- 
+for (let l of [allSitesB]) {var ss=l[3].split('|');for (let s of ss){if (window.location.href.indexOf(s) !== -1) {siteNameVar=l[0];docTitle=l[1];tabs=l[2];break}}};
+
 document.documentElement.innerHTML=`
 <!DOCTYPE html>
 <html>
@@ -201,11 +184,9 @@ document.documentElement.innerHTML=`
 
 const options=document.getElementById('btn-group');
 const btn=document.getElementById('btn');
-// const copy=document.getElementById('copy-btn');
 const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
 const ecoMagList=document.getElementById('ecoMagList');
-//const fileUpload=document.getElementById('fileInput');
 const urlList=document.getElementById('urlList');
 const list=document.getElementById('list');
 const topdiv=document.getElementById('top');
@@ -220,11 +201,13 @@ if (onEVBT===false){
   if (siteNameVar!==''){
     createChannelList(tabs,siteNameVar,docTitle);
     createSearchListDiv(faqB,searchSitesB);
-    createUrlListDiv([allSitesB,allSites2,videoSitesB]);
+    //createUrlListDiv([allSitesB,allSites2,videoSitesB]);
+    createUrlListDiv([allSitesB]);
   } else {
     channelList.innerHTML='';
     searchList.innerHTML='';
-    createUrlListDiv([allSitesB,allSites2,videoSitesB]);
+    //createUrlListDiv([allSitesB,allSites2,videoSitesB]);
+    createUrlListDiv([allSitesB]);
     openUrlList();
   }
 } else {
@@ -234,11 +217,11 @@ if (onEVBT===false){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   ping();
-  createUrlListDiv([allSites1,allSites2,videoSites,kd]);
+  //createUrlListDiv([allSites1,allSites2,videoSites,kd]);
+  createUrlListDiv([allSites1,allSites2,videoSites]);
   createSearchListDiv(faq,searchSites);
   openUrlList();
 }
-
 
 
 //    GLOBAL FUNCTIONS
@@ -448,7 +431,7 @@ function cvtS2HHMMSS(sec,rescale) {
     return mm+':'+ss;
 }
 
-async function translateOld(a){
+async function translate(a){
   try{
     var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(a);
     var res=await fetch(url);
@@ -457,7 +440,7 @@ async function translateOld(a){
   }catch (error) {console.error(error)}
 }
 
-async function translate(a){
+async function translateGoogle(a){
   try{
   var res = await fetch(preStr.replace('/api/fetch?url=','/translate/google'), {
     method: 'POST',
@@ -485,7 +468,7 @@ async function getTranslation(all){
   for (let a of all){
     if (a.innerText!=='' && cnTest(a.innerText)!==true){
     //if (a.innerText!==''){
-      var t=await translateOld(a.textContent);
+      var t=await translate(a.textContent);
       //var t=await translate(a.textContent);
       if (t!==''&&t!==undefined){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
     }
@@ -493,6 +476,65 @@ async function getTranslation(all){
 }
 
 function startLazyTranslation(containerElement) {
+  const selector='p:not(translated-text):not(.time):not(.xtl), h2, h3, li, div.description';
+  const translatedCache = new Map();
+
+  const observer = new IntersectionObserver(async (entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      const el = entry.target;if (shouldIgnore(el)) {observer.unobserve(el);continue;}
+      const rawText = getTextOnly(el).trim();if (!rawText) {observer.unobserve(el);continue;}
+
+      const translated = await translateText(rawText);
+      insertTranslationAfter(el, translated);
+      el.setAttribute('data-translated', 'true');
+      observer.unobserve(el);
+    }
+  }, { threshold: 0.4 });
+
+  const elements = containerElement.querySelectorAll(selector);elements.forEach(el => {if (!shouldIgnore(el)) observer.observe(el)});
+
+  function shouldIgnore(el) {
+    if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
+    if (el.hasAttribute('data-translated')) return true;
+    if (el.querySelector('.translated-text')) return true;
+    if (!cnTest(el.innerText)) return true;
+    if (!el || el.innerText.trim().length===0) return true;
+    const parentTarget = el.closest(selector);if (parentTarget && parentTarget !== el) return true;
+    return false;
+  }
+  
+  function getTextOnly(el) {
+    return Array.from(el.childNodes)
+      .filter(n => n.nodeType === Node.TEXT_NODE)
+      .map(n => n.textContent)
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  async function translateText(text) {
+    if (translatedCache.has(text)) return translatedCache.get(text);
+    const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q=${encodeURIComponent(text)}`;
+    try {
+      const res=await fetch(url);const json=await res.json();const translated=json.[0][0] || '';translatedCache.set(text, translated);
+      return translated;
+    } catch (e) {console.error('Failed to translate.', e);return '';}
+  }
+
+  function insertTranslationAfter(el, translatedText) {
+    const div = document.createElement('p');
+    div.className = 'translated-text';
+    div.setAttribute('data-translated', 'true');
+    div.textContent = translatedText;
+
+    const lastTextNode = Array.from(el.childNodes).reverse().find(n => n.nodeType === Node.TEXT_NODE);
+    if (lastTextNode && lastTextNode.nextSibling) {el.insertBefore(div, lastTextNode.nextSibling)} else {el.appendChild(div)}
+  }
+}
+
+
+function startLazyTranslation0710(containerElement) {
   const translatedCache = new Map();
 
   const htmlTagsInlineIgnore = ['A', 'B', 'I', 'U', 'SUP', 'SUB', 'SPAN', 'SMALL', 'STRONG', 'EM'];
