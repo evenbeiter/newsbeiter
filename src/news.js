@@ -489,7 +489,7 @@ async function translateAndInsertWithBrAndP(element) {
     const blockTags = ['P', 'LI', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'SECTION', 'ARTICLE', 'BLOCKQUOTE', 'UL', 'OL'];
     const excludedClasses = ['translated-text', 'time', 'xtl'];
   
-    const elements = containerElement.querySelectorAll(selector);elements.forEach(el => {if (!shouldIgnore(el)) observer.observe(el)});
+    const elements = element.querySelectorAll(selector);elements.forEach(el => {if (!shouldIgnore(el)) observer.observe(el)});
 
     function isBlockTag(tag) {return tag && blockTags.includes(tag.toUpperCase());}
   
