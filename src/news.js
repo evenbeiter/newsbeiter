@@ -1255,7 +1255,7 @@ async function gsamGetContent(id){
     if (o.slice(0,4)=='text'){html+=str.pageProps.data.items[o].text} else if (o.slice(0,5)=='image'){html+=`<p class="xtl">${str.pageProps.data.items[o].images[0].title}<img src="https://am.gs.com${str.pageProps.data.items[o].images[0].fileReference.path}">${str.pageProps.data.items[o].images[0].source}`}
   }
   html+='<p class="text-end"><a href="https://am.gs.com/' + id + '" target="_blank">分享</a></p><br>';
-  }catch{html='<p><a href="https://www.ctee.com.tw' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  }catch{html='<p><a href="https://am.gs.com/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
