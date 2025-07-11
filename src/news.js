@@ -864,7 +864,7 @@ function openUrl(url){window.open(url,'_blank')}
 function decodeHTMLEntities(str){var ta=document.createElement('textarea');ta.innerHTML = str;return ta.value;}
 function cnTest(str) {const chineseCharRegex = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;return chineseCharRegex.test(str);}
 function convertTextInsideTags(element) {for (let child of element.childNodes) {if (child.nodeType === Node.TEXT_NODE) {child.nodeValue = s2t(child.nodeValue.trim());} else if (child.nodeType === Node.ELEMENT_NODE) {convertTextInsideTags(child);}}}
-function showOverlay(){document.getElementById('customOverlay').classList.remove('d-none');}
+function showOverlay(imgSrc){document.getElementById('customOverlay').classList.remove('d-none');document.getElementById('gtmImg').src=imgSrc;}
 function hideOverlay(){document.getElementById('customOverlay').classList.add('d-none');}
 
 
@@ -1492,7 +1492,7 @@ async function jpmGetList(siteName,t){
     for (let c of cat){
       var slides=c.slides;var htmlSlides='';
       for (let s of slides){
-        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.desktopImage}" onclick="showOverlay()"><br>`;
+        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img src="${s.desktopImage}" onclick="showOverlay('${s.desktopImage}')"><br>`;
       }
       html+=`<p class="title xlt" onclick="getContent('${siteName}',this.id,'${c.id}')">${c.name}</p><div id="${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'${c.id}')">${htmlSlides}<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br></div><hr>`
     }
