@@ -410,7 +410,7 @@ async function getContent(siteName,clickedId,id){
     }
   } else {
     var e=window.event;
-    if (e && e.target.tagName==='VIDEO' || e.target.classList.contains('gtm') || e.target.classList.contains('bii-flourish')){return}else{
+    if (e && e.target.tagName==='VIDEO' || e.target.classList.contains('safe-click')){return}else{
       const selection=window.getSelection();
       const selectedText=selection.toString().trim();
       if (selectedText.length===0){
@@ -1514,7 +1514,7 @@ async function jpmGetList(siteName,t){
     for (let c of cat){
       var slides=c.slides;var htmlSlides='';
       for (let s of slides){
-        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img class="gtm" src="${s.desktopImage}" onclick="showOverlay('gtmImg','${s.desktopImage}')"><br>`;
+        htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img class="safe-click" src="${s.desktopImage}" onclick="showOverlay('gtmImg','${s.desktopImage}')"><br>`;
       }
       html+=`<p class="title xlt" onclick="getContent('${siteName}',this.id,'${c.id}')">${c.name}</p><div id="${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'${c.id}')">${htmlSlides}<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br></div><hr>`
     }
