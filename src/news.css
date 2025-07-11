@@ -3,7 +3,7 @@ body{margin:0;background-color:#F4ECD8;color:#3B2D20;font-size:1.5rem;font-famil
 .content{display:none;cursor:pointer}
 iframe{width:100% !important;height:auto !important}
 iframe[id^="video"], iframe[src^="https://player.vimeo.com/video/"]{width:100%;aspect-ratio:1.78;height:auto;margin-top:0.5rem;border:none;border-radius:0.375rem}
-iframe[id^="bii-flourish"]{width:100%;aspect-ratio:1.78;border:none;border-radius:0.375rem}
+iframe[id^="bii-flourish"]{width:100%;aspect-ratio:1.5;border:none;border-radius:0.375rem}
 .bii-flourish{padding:0}
 div.raw-html-embed iframe{width:100% !important;height:auto !important}
 video{width:100% !important;height:auto !important;border-radius:0.375rem;width:100% !important}
