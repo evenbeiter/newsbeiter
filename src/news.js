@@ -1362,7 +1362,7 @@ async function gsamGetContent(id){
   url='https://am.gs.com/_next/data/'+buildId+id+'.json';
   const res = await fetch(preStr+encodeURIComponent(url));
   const str=await res.json();
-  html=`<p class="time">${str.pageProps.data.properties.authorDetails?[0].personReferencePath.metadata.firstName??''} ${str.pageProps.data.properties.authorDetails?[0].personReferencePath.metadata.lastName??''}, ${str.pageProps.data.properties.authorDetails?[0].personReferencePath.metadata.jobTitle??''}</p>`;
+  html=`<p class="time">${str.pageProps.data.properties.authorDetails?.[0].personReferencePath.metadata.firstName??''} ${str.pageProps.data.properties.authorDetails?.[0].personReferencePath.metadata.lastName??''}, ${str.pageProps.data.properties.authorDetails?.[0].personReferencePath.metadata.jobTitle??''}</p>`;
   var order=str.pageProps.data.itemsOrder;
   for (let o of order){
     if (o.slice(0,4)=='text'){html+=str.pageProps.data.items[o].text} else if (o.slice(0,5)=='image'){html+=`<p class="xtl">${str.pageProps.data.items[o].images[0].title}<img src="https://am.gs.com${str.pageProps.data.items[o].images[0].fileReference.path}">${str.pageProps.data.items[o].images[0].source}`}
