@@ -494,7 +494,7 @@ function startLazyTranslation(containerElement) {
     if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
     if (el.hasAttribute('data-translated')) return true;
     if (el.querySelector('.translated-text')) return true;
-    if (!cnTest(el.innerText)) return true;
+    if (cnTest(el.innerText)) return true;
     if (!el || el.innerText.trim().length===0) return true;
     const parentTarget = el.closest(selector);if (parentTarget && parentTarget !== el) return true;
     return false;
@@ -1399,7 +1399,7 @@ async function jpmGetContent(id){
     html=`
     <p class="title xtl">Growth</p><p>${str.EconomicUpdate.economic_update_growth?.data??''}</p>
     <p class="title xtl">Jobs</p><p>${str.EconomicUpdate.economic_update_jobs?.data??''}</p>
-    <p class="title xtl">Profits</p><p>${str.EconomicUpdate.economic_update_profits?.data??''}</p>
+    <p class="title xtl">Profits</p><p>${str.EconomicUpdate.economic_update__profits?.data??''}</p>
     <p class="title xtl">Inflation</p><p>${str.EconomicUpdate.economic_update_inflation?.data??''}</p>
     <p class="title xtl">Rates</p><p>${str.EconomicUpdate.economic_update_rates?.data??''}</p>
     <p class="title xtl">Risks</p><p>${str.EconomicUpdate.economic_update_risks?.data??''}</p>
