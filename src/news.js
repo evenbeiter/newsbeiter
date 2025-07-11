@@ -1578,24 +1578,23 @@ async function msnGetContent(id){
 async function nbGetList(siteName,t){
   try{
   if (t==''){var body=new URLSearchParams({language:'en',sortOrder:'new'})}else{var body=new URLSearchParams({language:'en',sortOrder:'new'});body.append('filterone[]',t);body=body.toString();};
-  var res = await fetch(preStr+encodeURIComponent('https://www.nb.com/api/Sitecore/Article/FilterResults'), {
+  var res = await fetch(preStr+'https://www.nb.com/api/Sitecore/Article/FilterResults', {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded',},
-    //body: t+'&language=en&sortOrder=new',
     body: body,
-    });console.log(headers);
+    });
   var str=await res.json();
   var parser=new DOMParser();var doc=parser.parseFromString(str.filteredResults, "text/html");
   var hh=doc.querySelectorAll('.article-list-tile');
   var data=Array.from(hh).slice((rr-1)*25,rr*25);
   for (let h of data){items.push([h.querySelector('a').href,h.querySelector('h6').innerText,h.querySelector('date').innerText])};
-  for (let h of items){html+=`<div onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title t-tl">${h[1]}</p><span class="time">${h[2]}</span><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`};
+  for (let h of items){html+=`<div onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="title">${h[1]} <span class="time fw-normal">${h[2]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`};
   }catch{html='<p>No Content.</p>'}
   return html;
 }
 
 async function nbGetContent(id){
-  try{const res = await fetch(preStr+encodeURIComponent(id));const str=await res.text();
+  try{const res = await fetch(preStr+id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");console.log(doc.querySelectorAll('.col-xs-12.col-sm-9')[1]);
   html = '<p class="time">'+doc.querySelector('.article-date-content').innerText+'</p>'+doc.querySelectorAll('.col-xs-12.col-sm-9')[1].innerHTML.replaceAll('class="dropdown collapse in"','') + '<p class="text-end"><a href="' + id + '" target="_blank">Share</a></p><br>';
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
