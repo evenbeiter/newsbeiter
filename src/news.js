@@ -892,7 +892,7 @@ function hideOverlay(){document.getElementById('customOverlay').classList.add('d
 function showOverlay(el,elSrc){
   document.getElementById('customOverlay').classList.remove('d-none');
   if (el='blkIframe'){
-    document.getElementById('popupChart').datset.src=elSrc;document.getElementById('gtmImg').src='';
+    document.getElementById('popupChart').dataset.src=elSrc;document.getElementById('gtmImg').src='';
   } else {document.getElementById('gtmImg').src=elSrc;}
 }
 
