@@ -71,12 +71,12 @@ const xueqiu=[['203','新聞'],['205','達人'],['巴菲特致股东的信原文
 //var cna,cnyeshao,invtCom,isbl,marie,mindi,nb,xueqiu,yahooTW;
 //const twt=[['WinfieldSmart','Win Smart'],['MikeZaccardi','Mike Zaccardi'],['Barchart','Barchart'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
 
-const allSitesB=[['nb','NB',nb,'nb.com','https://www.nb.com'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
+const allSitesB=[['nb','NB',nb,'nb.com','https://www.nb.com'],['ab','AB',ab,'alliancebernstein.com','https://www.alliancebernstein.com'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 //const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['apollo','blk','ecoMag','gsam','jpm','msnUS','nb','peInsights','pimco','substack','yahooTW'];
+const sites2Translate=['ab','apollo','blk','ecoMag','gsam','jpm','msnUS','nb','peInsights','pimco','substack','yahooTW'];
 const kr=['kd','ytn'];
 const text2Speech=['kd'];
 const noNextPage=['ecoMag','kd'];
