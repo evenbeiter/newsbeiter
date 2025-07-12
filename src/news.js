@@ -102,6 +102,8 @@ document.documentElement.innerHTML=`
 <html>
 <head>
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="https://evenbeiter.github.io/newsbeiter/icons/icon-32.png">
+<link rel="apple-touch-icon" href="https://evenbeiter.github.io/newsbeiter/icons/icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="">
 <meta charset="utf-8">
@@ -118,17 +120,11 @@ document.documentElement.innerHTML=`
       <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"></path>
     </svg>
   </button>
-  <br>
-  <button type="button" class="btn btn-light mt-2 sepia-contrast opacity-25" onclick="ping()">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
-      <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"></path>
-    </svg>
-</button>
 </div>
-<div id="top" class="fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:none"></div>
+<div id="top" class="z-2 fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:none"></div>
   <form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
     <div id="btn" class="p-2">
-      <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="openEcoMagList()">經濟學人</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
+      <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist','')">經濟學人</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
       <hr style="margin-right:3rem">
       <div id="channelList"></div>
       <div id="searchList" style="display:none"></div>
@@ -161,14 +157,20 @@ document.documentElement.innerHTML=`
   </g>
 </svg>
 </div></div>
-</div>
 
+<div id="customOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none z-3">
+  <div id="overlayBackdrop" class="position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-25" onclick="hideOverlay()"></div>
+  <div class="position-absolute top-50 start-50 translate-middle bg-white border rounded shadow p-4" style="width: 90vw; height: 90vh; overflow: auto;">
+    <button id="overlayCloseBtn" type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" onclick="hideOverlay()"></button>
+    <div class="p-4 h-100 overflow-auto"><iframe id="blkIframe" style="border:none;border-radius:0.375rem"></iframe><img id="gtmImg" class="img-fluid" style="max-height:100%;object-fit:contain"></div>
+  </div>
+</div>
+</div>
+  
 <script src="src/news.js"></script>
 <script src="src/opencc-cn2t.js"></script>
 <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/epubjs@0.3.88/dist/epub.min.js"></script>
 </body>
 </html>
 `;
