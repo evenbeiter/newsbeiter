@@ -342,11 +342,10 @@ async function getContent(siteName,clickedId,id){
         //handle iframes in blk
         if (siteName=='blk'){
           try{
-            var biiFlourish=cEl.querySelectorAll('.bii-flourish'); for (let b of biiFlourish){b.classList.add('p-0');b.classList.add('flourish-embed')};
+            var biiFlourish=cEl.querySelectorAll('.bii-flourish'); for (let b of biiFlourish){b.classList.add('p-0')};
             var blkIframe=cEl.querySelectorAll('iframe[id^="bii-flourish"]');
             for (let b of blkIframe){
               var dataSrc=b.src.replace('https://flo.uri.sh/','').replace('/embed','');
-              //loadFlourishChart(b,dataSrc);
               b.parentElement.dataset.src=dataSrc;
               //b.parentElement.style.aspectRatio=1.78;
               b.parentElement.style.width='100%';
@@ -893,67 +892,10 @@ function hideOverlay(){document.getElementById('customOverlay').classList.add('d
 function showOverlay(el,elSrc){
   document.getElementById('customOverlay').classList.remove('d-none');
   if (el='blkIframe'){
-    loadFlourishChart('popupChart',elSrc);
-    document.getElementById('gtmImg').src='';
-  } else {
-    document.getElementById('popupChart').innerHTML='';
-    document.getElementById('gtmImg').src=elSrc;
-  }
+    document.getElementById('popupChart').dataset.src=elSrc;document.getElementById('gtmImg').src='';
+  } else {document.getElementById('gtmImg').src=elSrc;}
 }
 
-
-  // 封裝 Flourish 載入 Promise
-const loadFlourishScript = (() => {
-  let promise;
-  return () => {
-    if (window.Flourish) return Promise.resolve(); // ✅ 已載入
-
-    if (promise) return promise; // ✅ 第二次呼叫重用同一 promise
-
-    promise = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://public.flourish.studio/resources/embed.js';
-      script.onload = () => {
-        // 等待下一個 event loop，讓 Flourish 有機會初始化
-        setTimeout(() => {
-          if (window.Flourish) {
-            resolve();
-          } else {
-            reject('Flourish 未初始化');
-          }
-        }, 0);
-      };
-      script.onerror = () => reject('Flourish script 載入失敗');
-      document.head.appendChild(script);
-    });
-
-    return promise;
-  };
-})();
-
-
-  // 主函式：動態插入 Flourish 圖表
-  async function loadFlourishChart(containerId, visualisationId) {
-    await loadFlourishScript();
-
-    const container = document.getElementById(containerId);
-    if (!container) {
-      console.warn(`找不到 container: #${containerId}`);
-      return;
-    }
-
-    const chart = document.createElement('div');
-    chart.className = 'flourish-embed';
-    chart.setAttribute('data-src', visualisationId);
-    chart.style.width = '100%';
-    //chart.style.minHeight = '400px';
-
-    if (window.Flourish && typeof Flourish.embed === 'function') {
-      Flourish.embed();
-    } else {
-      console.warn('Flourish 未正確初始化');
-    }
-  }
 
 
 //    FETCH FUNCTIONS
