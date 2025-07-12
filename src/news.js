@@ -903,28 +903,34 @@ function showOverlay(el,elSrc){
 
 
   // 封裝 Flourish 載入 Promise
-  const loadFlourishScript = (() => {
-    let loaded = false;
-    return () => {
-      if (loaded) return Promise.resolve();
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://public.flourish.studio/resources/embed.js';
-        script.onload = () => {
-          if (window.FlourishLoaded instanceof Promise) {
-            window.FlourishLoaded.then(() => {
-              loaded = true;
-              resolve();
-            });
+const loadFlourishScript = (() => {
+  let promise;
+  return () => {
+    if (window.Flourish) return Promise.resolve(); // ✅ 已載入
+
+    if (promise) return promise; // ✅ 第二次呼叫重用同一 promise
+
+    promise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://public.flourish.studio/resources/embed.js';
+      script.onload = () => {
+        // 等待下一個 event loop，讓 Flourish 有機會初始化
+        setTimeout(() => {
+          if (window.Flourish) {
+            resolve();
           } else {
-            reject('FlourishLoaded not available');
+            reject('Flourish 未初始化');
           }
-        };
-        script.onerror = () => reject('Flourish script load failed');
-        document.head.appendChild(script);
-      });
-    };
-  })();
+        }, 0);
+      };
+      script.onerror = () => reject('Flourish script 載入失敗');
+      document.head.appendChild(script);
+    });
+
+    return promise;
+  };
+})();
+
 
   // 主函式：動態插入 Flourish 圖表
   async function loadFlourishChart(containerId, visualisationId) {
