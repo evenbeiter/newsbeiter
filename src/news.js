@@ -2,6 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var onEVBT=true; if (window.location.href.indexOf('evenbeiter.github.io')==-1){onEVBT=false;}
+var window.Flourish={};
 
 const ab=[['','Latest']];
 const apollo=[['','Latest']];
@@ -349,13 +350,9 @@ async function getContent(siteName,clickedId,id){
               b.parentElement.dataset.src=dataSrc;
               //b.parentElement.style.aspectRatio=1.78;
               b.parentElement.style.width='100%';
-              b.outerHTML+=`
-              <p class="safe-click text-end"><button type="button" class="safe-click btn btn-light" onclick="showOverlay('blkIframe','${dataSrc}')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707m4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707m0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"/>
-                </svg>
-              </button></p>`;
+              b.outerHTML+=`<p class="text-end"><a href="${b.src}" target="_blank">分享</a></p>`;
               b.remove();
+              if(window.Flourish){Flourish.embed();}
               }
           }catch{}
         }
@@ -500,112 +497,6 @@ async function getTranslation(all){
   }
 }
 
-
-
-function startLazyTranslation0711(containerElement) {
-
-const observer = new IntersectionObserver(async (entries, observer) => {
-  for (const entry of entries) {
-    if (!entry.isIntersecting) continue;
-    await translateAndInsertWithBrAndP(entry.target);
-    observer.unobserve(entry.target);
-  }
-}, { threshold: 0.4 });
-containerElement.querySelectorAll('*').forEach(el => observer.observe(el));
-}
-
-async function translateAndInsertWithBrAndP(element) {
-    const blockTags = ['P', 'LI', 'DIV', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'SECTION', 'ARTICLE', 'BLOCKQUOTE', 'UL', 'OL'];
-    const excludedClasses = ['translated-text', 'time', 'xtl'];
-
-    function isBlockTag(tag) {return tag && blockTags.includes(tag.toUpperCase());}
-  
-    function hasExcludedClass(node) {
-        return (
-          node.nodeType === Node.ELEMENT_NODE &&
-          node.classList &&
-          excludedClasses.some(cls => node.classList.contains(cls))
-        );
-    }
-
-    function getFullText(node) {
-      let text = '';
-      node.childNodes.forEach(child => {
-        if (hasExcludedClass(child)) return;
-        if (child.nodeType === Node.TEXT_NODE) {
-          text += child.textContent;
-        } else if (child.nodeType === Node.ELEMENT_NODE) {
-          text += getFullText(child);
-        }
-      });
-      return text;
-    }
-  
-    async function handleNode(node) {
-        if (hasExcludedClass(node)) return;
-        // 若是區塊元素
-        if (node.nodeType === Node.ELEMENT_NODE && isBlockTag(node.tagName)) {
-          const originalText = getFullText(node).trim();
-          if (originalText) {
-            node.setAttribute('data-translated', 'true');
-            const translated = await translateText(originalText);
-            const p = document.createElement('p');
-            p.classList.add('translated-text');
-            p.setAttribute('data-translated', 'true');
-            p.textContent = translated;
-            if (node.nextSibling) {
-              node.parentNode.insertBefore(p, node.nextSibling);
-            } else {
-              node.parentNode.appendChild(p);
-            }
-          }
-          // 遍歷子節點，只針對非 block element 遞迴
-          node.childNodes.forEach(child => {
-            if (!(child.nodeType === Node.ELEMENT_NODE && isBlockTag(child.tagName))) {
-              handleNode(child);
-            }
-          });
-        }
-        // 若是純文字且父層是 block element
-        else if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-          const parent = node.parentNode;
-          if (!hasExcludedClass(parent) && isBlockTag(parent.tagName)) {
-            parent.setAttribute('data-translated', 'true');
-            const translated = await translateText(node.textContent.trim());
-            const br = document.createElement('br');
-            const textNode = document.createTextNode(translated);
-            if (node.nextSibling) {
-              parent.insertBefore(br, node.nextSibling);
-              parent.insertBefore(textNode, br.nextSibling);
-            } else {
-              parent.appendChild(br);
-              parent.appendChild(textNode);
-            }
-          }
-        }
-        // 其他情形（如 inline element），遞迴處理子節點
-        else if (node.nodeType === Node.ELEMENT_NODE) {
-          node.childNodes.forEach(child => {
-            handleNode(child);
-          });
-        }
-    }
-
-    async function translateText(text) {
-        //if (translatedCache.has(text)) return translatedCache.get(text);
-        const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q=${encodeURIComponent(text)}`;
-        try {
-          const res=await fetch(url);const json=await res.json();const translated=json[0][0] || '';//translatedCache.set(text, translated);
-          return translated;
-        } catch (e) {console.error('Failed to translate.', e);return '';}
-    }
-
-    await handleNode(element);
-}
-
-
-
-
 function startLazyTranslation(containerElement) {
   const selector='p:not(.translated-text):not(.time):not(.xtl), h2, h3, li, div.description';
   const translatedCache = new Map();
@@ -662,177 +553,6 @@ function startLazyTranslation(containerElement) {
     // const lastTextNode = Array.from(el.childNodes).reverse().find(n => n.nodeType === Node.TEXT_NODE);
     // if (lastTextNode && lastTextNode.nextSibling) {el.insertBefore(div, lastTextNode.nextSibling)} else {el.appendChild(div)}
   }
-}
-
-
-function startLazyTranslation0710(containerElement) {
-  const translatedCache = new Map();
-
-  const htmlTagsInlineIgnore = ['A', 'B', 'I', 'U', 'SUP', 'SUB', 'SPAN', 'SMALL', 'STRONG', 'EM'];
-  const htmlTagsNoTranslate = ['TITLE', 'SCRIPT', 'STYLE', 'TEXTAREA', 'SVG', 'svg'];
-  const allowedTags = ['P', 'LI', 'H2', 'H3'];
-
-  const selector = 'p:not(translated-text):not(.time):not(.xtl), h2, h3, li, div.description';
-
-  function isElementVisible(el) {
-    const rect = el.getBoundingClientRect();
-    return rect.height > 0 && rect.width > 0;
-  }
-
-  // function hasVisibleText(el) {
-  //   return Array.from(el.childNodes).some(node =>
-  //     node.nodeType === Node.TEXT_NODE &&
-  //     node.textContent.trim().length > 0
-  //   );
-  // }
-
-  function hasVisibleText(el) {
-    return el.innerText && el.innerText.trim().length > 0;
-  }
-
-  function shouldIgnore(el) {
-    if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
-    if (el.closest('.translated-text')) return true;
-    if (!allowedTags.includes(el.tagName)) return true;
-    if (htmlTagsNoTranslate.includes(el.tagName)) return true;
-    if (!isElementVisible(el)) return true;
-    if (el.getAttribute("data-translated") === "true") return true;
-    if (el.parentElement && allowedTags.includes(el.parentElement.tagName)) return true;
-    return false;
-  }
-
-  async function translateText(text) {
-    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(text);
-    var res=await fetch(url);
-    var raw=await res.json();
-    return raw[0][0]||''
-  }
-
-  function insertTranslation(el, translated) {
-    const div = document.createElement("p");
-    div.classList.add("translated-text");
-    div.setAttribute("data-translated", "true");
-    div.innerText = translated;
-    el.setAttribute("data-translated", "true");
-    el.insertAdjacentElement('afterend', div);
-  }
-
-  const observer = new IntersectionObserver(async (entries) => {
-    for (const entry of entries) {
-      const el = entry.target;
-      if (!entry.isIntersecting || el.getAttribute("data-translated") === "true") continue;
-
-      const rawText = el.innerText.trim();
-      //if (!rawText || rawText.length > 500) continue;
-      if (!rawText) continue;
-
-      if (translatedCache.has(rawText)) {
-        insertTranslation(el, translatedCache.get(rawText));
-        continue;
-      }
-
-      try {
-        const translated = await translateText(rawText);
-        translatedCache.set(rawText, translated);
-        insertTranslation(el, translated);
-      } catch (err) {
-        console.error("翻譯失敗", err);
-      }
-    }
-  }, { threshold: 0.5 });
-
-  const candidates = containerElement.querySelectorAll(selector);
-  candidates.forEach(el => {
-    if (shouldIgnore(el)) return;
-    if (!hasVisibleText(el)) return;
-    observer.observe(el);
-  });
-}
-
-
-function startLazyTranslationOld(containerElement) {
-  const translatedCache = new Map();
-  const htmlTagsNoTranslate = ['TITLE', 'SCRIPT', 'STYLE', 'TEXTAREA', 'SVG', 'svg'];
-
-  function isElementVisible(el) {
-    const rect = el.getBoundingClientRect();
-    return rect.height > 0 && rect.width > 0;
-  }
-
-  function hasVisibleText(el) {
-    return Array.from(el.childNodes).some(node =>
-      node.nodeType === Node.TEXT_NODE &&
-      node.textContent.trim().length > 0
-    );
-  }
-
-  // function shouldIgnore(el) {
-  //   if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
-  //   if (htmlTagsNoTranslate.includes(el.tagName)) return true;
-  //   if (!isElementVisible(el)) return true;
-  //   return false;
-  // }
-
-  const blockTagsOnly = ['P', 'LI', 'DIV', 'H2', 'H3'];
-
-  function shouldIgnore(el) {
-    if (!el || el.nodeType !== Node.ELEMENT_NODE) return true;
-    if (htmlTagsNoTranslate.includes(el.tagName)) return true;
-    if (!isElementVisible(el)) return true;
-  
-    // ✅ 僅允許特定 block 標籤
-    if (!blockTagsOnly.includes(el.tagName)) return true;
-  
-    return false;
-  }
-
-
-  async function translateText(text) {
-    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(text);
-    var res=await fetch(url);
-    var raw=await res.json();
-    return raw[0][0]||''
-  }
-
-  // function insertTranslation(el, translated) {
-  //   const div = document.createElement('div');div.innerText = translated;div.classList.add('translated-text');
-  //   el.setAttribute('data-translated','true');el.after(div);
-  // }
-
-  function insertTranslation(el, translated) {
-    const div = document.createElement("div");
-    div.innerText = translated;
-    div.classList.add("translated-text");
-    el.setAttribute("data-translated", "true");
-  
-    // 插入在元素之後，而不是插入到內部（避免插入到 <sup> 內）
-    el.insertAdjacentElement('afterend', div);
-  }
-
-  const observer = new IntersectionObserver(async (entries) => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      const el = entry.target;if (el.getAttribute("data-translated")) continue;
-      const text = el.innerText.trim();if (!text || text.length > 500) continue;
-      if (translatedCache.has(text)) {insertTranslation(el, translatedCache.get(text));continue;}
-      try {
-        const translated = await translateText(text);
-        translatedCache.set(text, translated);
-        insertTranslation(el, translated);
-      } catch (err) {
-        console.error("Failed to translate.", err);
-      }
-    }
-  }, { threshold: 0.5 });
-
-  // const selector = 'p:not(.time):not(.xtl), h2, h3, li';
-  // const candidates = containerElement.querySelectorAll(selector);
-  const candidates = containerElement.querySelectorAll('*');
-  candidates.forEach(el => {
-    if (shouldIgnore(el)) return;
-    if (!hasVisibleText(el)) return;
-    observer.observe(el);
-  });
 }
 
 function getLastNSats(n) {
