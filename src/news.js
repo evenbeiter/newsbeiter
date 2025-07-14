@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var onEVBT=true; if (window.location.href.indexOf('evenbeiter.github.io')==-1){onEVBT=false;}
-var window.Flourish={};
+window.Flourish={};
 
 const ab=[['','Latest']];
 const apollo=[['','Latest']];
