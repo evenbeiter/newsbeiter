@@ -346,13 +346,13 @@ async function getContent(siteName,clickedId,id){
             var biiFlourish=cEl.querySelectorAll('.bii-flourish'); for (let b of biiFlourish){b.classList.add('p-0')};
             var blkIframe=cEl.querySelectorAll('iframe[id^="bii-flourish"]');
             for (let b of blkIframe){
-              var dataSrc=b.src.replace('https://flo.uri.sh/','').replace('/embed','');
-              b.parentElement.dataset.src=dataSrc;
+              // var dataSrc=b.src.replace('https://flo.uri.sh/','').replace('/embed','');
+              // b.parentElement.dataset.src=dataSrc;
               //b.parentElement.style.aspectRatio=1.78;
-              b.parentElement.style.width='100%';
-              b.outerHTML+=`<p class="text-end"><a href="${b.src}" target="_blank">分享</a></p>`;
-              b.remove();
-              if(window.Flourish){Flourish.embed();}
+              // b.parentElement.style.width='100%';
+              b.outerHTML+=`<p class="text-end"><a href="${b.src}" target="_blank">放大</a></p>`;
+              // b.remove();
+              // if(window.Flourish){Flourish.embed();}
               }
           }catch{}
         }
