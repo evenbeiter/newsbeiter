@@ -1261,7 +1261,7 @@ async function jinGetContent(id){
 async function jpmGetList(siteName,t){
   try{url=t;console.log(url);
   if (t=='https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/_jcr_content/root/responsivegrid/jpm_am_mosaic_copy.model.json'){
-    const res=await fetch(preStr+encodeURIComponent(url));
+    const res=await fetch(preStr+encodeURIComponent(url+'?v='+new Date().getTime()));
     const str=await res.json();
     for (let h of str.pages){
       if (h.authors[0]==undefined){items.push(['https://am.jpmorgan.com'+h.url,h.title,h.displayDate])}else{items.push(['https://am.jpmorgan.com'+h.url,h.title,(h.displayDate+' | '+h.authors[0].name+', '+h.authors[0].title).replace(', null','')])};
