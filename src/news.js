@@ -625,11 +625,15 @@ function showOverlay(el,elSrc){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function abGetList(siteName,t){
-  try{url='https://searchapi.alliancebernstein.com/search?countryCode=us&audience=investments&language=en-us';console.log(url);
-  const res=await fetch(preStr+encodeURIComponent(url));
-  const str=await res.json();
+  try{url='https://searchapi.alliancebernstein.com/search?countryCode=us&audience=investments&language=en-us';console.log(url); 
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: `{"freeText":"","pageNumber":${rr},"pageSize":20,"searchFor":{},"sortBy":[{"fieldName":"authorPublishDate","order":1}]}`,
+    });
+  var str=await res.json();
   for (let h of str.docs){
-    items.push(['https://www.alliancebernstein.com/'+h.uri,h.title,h.authorPublishDate])
+    items.push(['https://www.alliancebernstein.com'+h.uri,h.title,h.authorPublishDate])
   }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]} <span class="time fw-normal">${cvt2Timezone(h[2])}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
@@ -639,13 +643,13 @@ async function abGetList(siteName,t){
 }
 
 async function abGetContent(id){
-  try{
-  const res=await fetch(preStr+encodeURIComponent(id));
+  try{if (id.slice(-4)=='.pdf'){openUrl(id)}else{
+  const res=await fetch(id);
   const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('div.layoutcontainer div.ab-container');
   html='<p class="time">'+hh[0].textContent.trim()+'</p>'+hh[1].outerHTML+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
-  }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
+  }}catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
