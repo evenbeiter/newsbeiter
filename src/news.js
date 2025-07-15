@@ -350,7 +350,7 @@ async function getContent(siteName,clickedId,id){
               // b.parentElement.dataset.src=dataSrc;
               //b.parentElement.style.aspectRatio=1.78;
               // b.parentElement.style.width='100%';
-              b.outerHTML+=`<p class="text-end"><a href="${b.src}" target="_blank">放大</a></p>`;
+              b.outerHTML+=`<p class="text-end fs09em"><a href="${b.src}" target="_blank">放大</a></p>`;
               // b.remove();
               // if(window.Flourish){Flourish.embed();}
               }
