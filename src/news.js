@@ -62,6 +62,7 @@ const videoSites=[['msnVideo','MSN'],['yahooVideo','Yahoo',yahooVideo,'finance.y
 const invtCom=[['rates-bonds/u.s.-10-year-bond-yield-news/','債市'],['news/forex-news/','匯市'],['news/latest-news/','最新'],['news/economy/','財經'],['news/economic-indicators/','經濟數據'],['news/commodities-news/','原物料'],['news/cryptocurrency-news/','加密貨幣'],['indices/japan-ni225-news/','日經'],['indices/topix-news/','東證'],['analysis/market-overview/','市場評論'],['analysis/editors-picks/','精選評論']];
 const mindi=[['','最新']];
 const nb=[['','All'],['{921E72A4-5051-4B39-8273-7D833553B3F6}','Fixed Income'],['{2E93C31D-413D-4D7D-AC8D-D9C21D5372D6}','Equities'],['{7BC2AFCB-3CBD-448C-9C3E-556C97A543FA}','Multi-Asset'],['{34CE1C17-AF8D-4385-9B86-776EE519795D}','Public Real Assets'],['{72DFCB28-DD56-4266-8FAA-D887379A3F15}','Liquid Alts'],['{9FA955E6-01E1-405B-A205-2AA05834D459}','Private Equity'],['{33BE00CD-749A-4862-B004-0A6F837C6221}','Private Credit'],['{C4880DDA-A4F7-4DB7-A265-8327C3A0C7D9}','Specialty Alternatives']];
+const schroders=[['','Latest']];
 const xueqiu=[['203','新聞'],['205','達人'],['巴菲特致股东的信原文精读','巴菲特致股東信']];
 
 
@@ -72,7 +73,7 @@ const xueqiu=[['203','新聞'],['205','達人'],['巴菲特致股东的信原文
 //var cna,cnyeshao,invtCom,isbl,marie,mindi,nb,xueqiu,yahooTW;
 //const twt=[['WinfieldSmart','Win Smart'],['MikeZaccardi','Mike Zaccardi'],['Barchart','Barchart'],['ISABELNET_SA','isabelnet'],['tEconomics','Trading Economics'],['TimmerFidelity','Jurrien Timmer'],['charliebilello','Charlie Bilello'],['dailychartbook','Daily Chartbook']];
 
-const allSitesB=[['nb','NB',nb,'nb.com','https://www.nb.com'],['ab','AB',ab,'alliancebernstein.com','https://www.alliancebernstein.com'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
+const allSitesB=[['nb','NB',nb,'nb.com','https://www.nb.com'],['ab','AB',ab,'alliancebernstein.com','https://www.alliancebernstein.com'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['schroders','Schroders',schroders,'schroders.com','https://www.schroders.com/en-us/us/non-resident-clients/insights'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 //const videoSitesB=[['yahooVideo','Yahoo',yahooVideo,'finance.yahoo.com','https://finance.yahoo.com/'],['bbgVideo','Bloomberg',bbgVideo,'bloomberg.com','https://www.bloomberg.com/video-v2']];
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
@@ -553,6 +554,55 @@ function startLazyTranslation(containerElement) {
     // const lastTextNode = Array.from(el.childNodes).reverse().find(n => n.nodeType === Node.TEXT_NODE);
     // if (lastTextNode && lastTextNode.nextSibling) {el.insertBefore(div, lastTextNode.nextSibling)} else {el.appendChild(div)}
   }
+}
+
+function jsonToHtml(data) {
+  function renderNode(node) {
+    if (node.text !== undefined) {
+      let text = node.text;
+      if (node.bold) text = `<strong>${text}</strong>`;
+      if (node.underline) text = `<u>${text}</u>`;
+      return text;
+    }
+
+    switch (node.type) {
+      case 'p':
+        return `<p>${(node.children || []).map(renderNode).join('')}</p>`;
+      case 'ul':
+        return `<ul>${(node.children || []).map(renderNode).join('')}</ul>`;
+      case 'li':
+        return `<li>${(node.children || []).map(renderNode).join('')}</li>`;
+      case 'a':
+        const url = node.attrs?.url || '#';
+        const target = node.attrs?.target || '_self';
+        const children = (node.children || []).map(renderNode).join('');
+        return `<a href="${url}" target="${target}">${children}</a>`;
+      case 'h2':
+        // 這裡只處理 h2，你可依需求擴充
+        let h2Content = (node.children || []).map(renderNode).join('');
+        return `<h2>${h2Content}</h2>`;
+      default:
+        // 若遇到未知 type，遞迴其 children
+        if (node.children) {
+          return (node.children || []).map(renderNode).join('');
+        }
+        return '';
+    }
+  }
+
+  function renderParagraphOrImage(item) {
+    if (item.paragraph && item.paragraph.json_rte) {
+      const nodes = item.paragraph.json_rte.children || [];
+      return nodes.map(renderNode).join('');
+    }
+    if (item.image && item.image.bynder_asset && item.image.bynder_asset.length > 0) {
+      const img = item.image.bynder_asset[0];
+      return `<img src="${img.originalUrl}" alt="${img.name || ''}" />`;
+    }
+    return '';
+  }
+
+  return data.map(renderParagraphOrImage).join('\n');
 }
 
 function getLastNSats(n) {
@@ -1629,6 +1679,42 @@ async function reutersGetContent(id){
   var doc=parser.parseFromString(str, "text/html");
   html = '<p class="time">'+cvt2Timezone(doc.querySelector('time').dateTime)+' | '+doc.querySelector('.container-S9SJ08EW').querySelector('span').innerText+'</p>' +doc.querySelector('.body-KX2tCBZq.body-pIO_GYwT.content-pIO_GYwT').outerHTML+'<p class="text-end"><a href="https://tw.tradingview.com' + id + '" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="https://tw.tradingview.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
+//    SCHRODERS
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function schrodersGetList(siteName,t){
+  try{
+  url='https://schcom.azureedge.net/algolia/1/indexes/*/queries?x-algolia-agent=Algolia for JavaScript (4.24.0); Browser (lite); instantsearch.js (4.69.0); react (18.3.1); react-instantsearch (7.9.0); react-instantsearch-core (7.9.0); next.js (14.2.25); JS Helper (3.20.0)';console.log(url); 
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded',},
+    body: `{"requests":[{"indexName":"prod_public-content_date_desc_en-us","params":"analyticsTags=['listing_insights']&clickAnalytics=true&facets=[]&filters=businessUnit: 'Asset Management' AND audience: 'Non-Resident Clients' AND contentType: 'insight_article'&highlightPostTag=__/ais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=20&page=0&tagFilters=&userToken=163978537_1747095177"}]}`,
+    });
+  var str=await res.json();
+
+  for (let h of str.results[0].hits){
+    items.push([h.url,h.title,h.updatedAt.slice(0,10)])
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]} <span class="time fw-normal">${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function schrodersGetContent(id){
+  try{
+  const res=await fetch(id);
+  const str=await res.text();
+  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+  var hh=doc.querySelector('#__NEXT_DATA__');
+  var cc=JSON.parse(hh.textContent).props.pageProps.pageData.entry.insight_body.body;
+  html=jsonToHtml(cc)+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
