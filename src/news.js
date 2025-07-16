@@ -1692,7 +1692,7 @@ async function schrodersGetList(siteName,t){
   var res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded',},
-    body: `{"requests":[{"indexName":"prod_public-content_date_desc_en-us","params":"analyticsTags=['listing_insights']&clickAnalytics=true&facets=[]&filters=businessUnit: 'Asset Management' AND audience: 'Non-Resident Clients' AND contentType: 'insight_article'&highlightPostTag=__/ais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=20&page=0&tagFilters=&userToken=163978537_1747095177"}]}`,
+    body: `{"requests":[{"indexName":"prod_public-content_date_desc_en-us","params":"analyticsTags=['listing_insights']&clickAnalytics=true&facets=[]&filters=businessUnit: 'Asset Management' AND audience: 'Non-Resident Clients' AND contentType: 'insight_article'&highlightPostTag=__/ais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=25&page=${rr-1}&tagFilters=&userToken=163978537_1747095177"}]}`,
     });
   var str=await res.json();
 
