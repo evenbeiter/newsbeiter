@@ -791,7 +791,7 @@ async function isharesGetList(siteName,t){
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('ds-card');
   for (let h of hh){
-      items.push([h.querySelector('a').href,h.querySelector('.ds-heading-s-lc').textContent.trim(),h.querySelector('.ds-attribution').textContent.trim()])
+      items.push([h.querySelector('a').href,h.querySelector('.ds-heading-s-lc')?.textContent.trim()??'',h.querySelector('.ds-attribution')?.textContent.trim()??''])
   }
   for (let h of items){
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<br><span class="time fw-normal">${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
