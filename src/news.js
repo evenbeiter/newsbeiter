@@ -1286,7 +1286,7 @@ async function invescoGetContent(id){
   try{
   const res = await fetch(preStr+id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-  html=doc.querySelector('.key-takeaways__inner').outerHTML+doc.querySelector('.richtext').outerHTML+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  html=(doc.querySelector('.key-takeaways__inner')?.outerHTML??'')+(doc.querySelector('.richtext')?.outerHTML??'')+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
