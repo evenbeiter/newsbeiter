@@ -1882,7 +1882,7 @@ async function ssgaGetList(siteName,t){
 async function ssgaGetContent(id){
   try{const res = await fetch(preStr+encodeURIComponent(id));const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
-  html=doc.querySelectorAll('.aem-GridColumn.aem-GridColumn--default--12.aem-GridColumn--tablet--12.aem-GridColumn--phone--12')?.[0].outerHTML??''+doc.querySelectorAll('.aem-GridColumn.aem-GridColumn--default--12.aem-GridColumn--tablet--12.aem-GridColumn--phone--12')?.[1].outerHTML??''+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>'; 
+  html=(doc.querySelectorAll('.aem-GridColumn.aem-GridColumn--default--12.aem-GridColumn--tablet--12.aem-GridColumn--phone--12')?.[0].outerHTML??'')+(doc.querySelectorAll('.aem-GridColumn.aem-GridColumn--default--12.aem-GridColumn--tablet--12.aem-GridColumn--phone--12')?.[1].outerHTML??'')+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>'; 
   }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
