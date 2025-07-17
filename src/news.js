@@ -1471,13 +1471,13 @@ async function jpmpbGetList(siteName,t){
 }
 
 async function jpmpbGetContent(id){
-  try{
-  const res = await fetch(preStr+'https://privatebank.jpmorgan.com/apac/en/insights'+id);const str=await res.text();
+  try{url=('https://privatebank.jpmorgan.com'+id).replace('https://evenbeiter.github.io','');
+  const res = await fetch(preStr+url);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('[data-id^="jpm-wm-rebrand-global"]');
   for (let h of hh){html+=h.outerHTML;}
-  html+='<p class="text-end"><a href="https://privatebank.jpmorgan.com/apac/en/insights'+id+'" target="_blank">分享</a></p><br>';
-  }catch{html='<p><a href="https://privatebank.jpmorgan.com/apac/en/insights'+id+'" target="_blank">繼續閱讀</a></p><br>'}
+  html+='<p class="text-end"><a href="'+url+'" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="'+url+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
