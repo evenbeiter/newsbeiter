@@ -1476,6 +1476,7 @@ async function jpmpbGetContent(id){
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('[data-id^="jpm-wm-rebrand-global"]');
   for (let h of hh){html+=h.outerHTML;}
+  html=html.replace(/ class="[\s\S]*?"/g,'');
   html+='<p class="text-end"><a href="'+url+'" target="_blank">分享</a></p><br>';
   }catch{html='<p><a href="'+url+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
