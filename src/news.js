@@ -315,7 +315,7 @@ async function getList(siteName,t){
 }
 
 async function getContent(siteName,clickedId,id){
-  var cEl=document.getElementById(id);
+  var cEl=document.getElementById(id);html='';
   try{document.getElementById('dateAuthor-'+id).style.display='none'}catch{};
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
