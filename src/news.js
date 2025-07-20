@@ -2657,3 +2657,74 @@ async function kdGetList(siteName,t){
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
+
+
+
+
+
+
+function transformToParagraphs(targets) {
+  const elements = (targets instanceof NodeList || Array.isArray(targets))
+    ? Array.from(targets)
+    : [targets];
+
+  elements.forEach(element => {
+    processElement(element);
+  });
+
+  function processElement(el) {
+    const blockTagsToKeep = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'LI'];
+    const inlineTags = ['SPAN', 'B', 'I', 'U', 'EM', 'STRONG', 'A', 'SMALL', 'BIG', 'MARK'];
+
+    const newElements = [];
+    let currentText = '';
+
+    for (const node of Array.from(el.childNodes)) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        currentText += node.textContent;
+      } else if (node.nodeName === 'BR') {
+        if (currentText.trim()) {
+          const p = document.createElement('p');
+          p.textContent = currentText.trim();
+          newElements.push(p);
+          currentText = '';
+        }
+      } else if (inlineTags.includes(node.nodeName)) {
+        const temp = document.createElement('div');
+        temp.append(...Array.from(node.childNodes));
+        currentText += temp.textContent;
+      } else if (blockTagsToKeep.includes(node.nodeName)) {
+        if (currentText.trim()) {
+          const p = document.createElement('p');
+          p.textContent = currentText.trim();
+          newElements.push(p);
+          currentText = '';
+        }
+        newElements.push(node);
+      } else {
+        currentText += node.textContent;
+      }
+    }
+
+    if (currentText.trim()) {
+      const p = document.createElement('p');
+      p.textContent = currentText.trim();
+      newElements.push(p);
+    }
+
+    el.innerHTML = '';
+    for (const newEl of newElements) {
+      el.appendChild(newEl);
+    }
+  }
+}
+
+
+// const output = input.replace(/class="([^"]*)"/g, (match, classNames) => {
+//   if (classNames.includes('abc')) {
+//     return match; // 保留原樣
+//   } else {
+//     return 'class="replaced"'; // 替換為你想要的內容
+//   }
+// });
+
