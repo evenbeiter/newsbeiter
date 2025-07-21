@@ -2728,3 +2728,4 @@ function transformToParagraphs(targets) {
 //   }
 // });
 
+//input.replace(/ class="[^"]*"/g,(m,c)=>c.includes('abc')?' class="abc"':'')
