@@ -1600,16 +1600,16 @@ async function msGetList(siteName,t){
   const tt=doc.querySelectorAll('table .pressCenterDate');const hh=doc.querySelectorAll('table h4.media-heading a');
   for (let i=(rr-1)*25;i<rr*25;i++){items.push([hh[i].href,hh[i].textContent.trim(),tt[i].textContent.trim().replace('•  ','')])}
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]} <span class="time fw-normal">${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0].replace('https://evenbeiter.github.io','https://www.morganstanley.com/')}')">${h[1]} <span class="time fw-normal">${h[2]}</span></p><div id="${h[0].replace('https://evenbeiter.github.io','https://www.morganstanley.com/')}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function msGetContent(id){
-  try{const res = await fetch(preStr+encodeURIComponent(id));const str=await res.text();
+  try{const res = await fetch(preStr+id);const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
-  html=(doc.querySelectorAll('.insightsContent .dividerColumns')?.[0].outerHTML??'')+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>'; 
+  html=(doc.querySelectorAll('.insightsContent .dividerColumns')?.[0].outerHTML??'').replaceAll('href="/','href="https://www.morganstanley.com/').replaceAll('src="/','src="https://www.morganstanley.com/').replace(/ class="[\s\S]*?"/g,'')+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>'; 
   }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
