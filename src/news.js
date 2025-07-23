@@ -772,7 +772,7 @@ async function bbgGetList(siteName,t){
 }
 
 async function bbgGetContent(id){
-  try{const res = await fetch(preStr+encodeURIComponent('https://www.bloomberg.com'+id));const str=await res.text();
+  try{const res = await fetch(id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelector('#__NEXT_DATA__');hh=JSON.parse(hh.textContent).props.pageProps.story;
   var data=JSON.parse(hh.body.content);
@@ -814,8 +814,8 @@ async function bbgGetContent(id){
       body+='</ul>';
     }
   }
-  html='<p class="time">'+cvt2Timezone(hh.publishedAt)+'</p>'+lede+body+'<p class="text-end"><a href="https://www.bloomberg.com'+id+'" target="_blank">分享</a></p><br>';
-  }catch{html='<p><a href="https://www.bloomberg.com'+id+'" target="_blank">繼續閱讀</a></p><br>'}
+  html='<p class="time">'+cvt2Timezone(hh.publishedAt)+'</p>'+lede+body+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
