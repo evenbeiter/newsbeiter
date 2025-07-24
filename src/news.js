@@ -702,7 +702,7 @@ function showUploadBtn() {
 }
 
 uploadBtn.addEventListener('click', () => {
-  if (!lastSelectedText) return;
+  if (!lastSelectedText) {alert('尚未選取筆記')};
   const confirmUpload = confirm('是否上傳筆記？');
   if (!confirmUpload) {
     uploadBtn.style.display = 'none';
