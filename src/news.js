@@ -422,7 +422,7 @@ async function getContent(siteName,clickedId,id){
     }
   } else {
     var e=window.event;
-    if (e && (e.target.tagName==='VIDEO' || e.target.closest('button') || e.target.closest('.safe-click'))){return}else{
+    if (e && (e.target.tagName==='VIDEO' || isImageLikeElement(e.target) || e.target.closest('button') || e.target.closest('.safe-click'))){return}else{
       const selection=window.getSelection();
       const selectedText=selection.toString().trim();
       if (selectedText.length===0){
@@ -660,6 +660,7 @@ let lastSelectedText = '';
 
 // 📱 偵測選取文字（含 iOS）
 document.addEventListener('selectionchange', () => {
+  lastSelectedText = '';
   const selection = window.getSelection();
   if (selection.rangeCount === 0) return;
   const text = selection.toString().trim();
@@ -669,23 +670,34 @@ document.addEventListener('selectionchange', () => {
   }
 
   lastSelectedText = text;
-  const rect = selection.getRangeAt(0).getBoundingClientRect();
-  showUploadBtn(rect.left, rect.top - 30);
+  showUploadBtn();
+  // const rect = selection.getRangeAt(0).getBoundingClientRect();
+  // showUploadBtn(rect.left, rect.top - 30);
 });
 
 // 📷 長按圖片（contextmenu for iOS Safari）
-document.addEventListener('contextmenu', (e) => {
-  if (e.target.tagName === 'IMG') {
-    e.preventDefault();
-    lastSelectedText = e.target.outerHTML;
-    const rect = e.target.getBoundingClientRect();
-    showUploadBtn(rect.left, rect.top - 30);
+// document.addEventListener('contextmenu', (e) => {
+//   if (e.target.tagName === 'IMG') {
+//     e.preventDefault();
+//     lastSelectedText = e.target.outerHTML;
+//     //const rect = e.target.getBoundingClientRect();
+//     //showUploadBtn(rect.left, rect.top - 30);
+//     showUploadBtn();
+//   }
+// });
+
+document.addEventListener('click', function (e) {
+  lastSelectedText = '';
+  const el = e.target;
+  if (isImageLikeElement(el)) {
+    lastSelectedText = el.src;
+    showUploadBtn();
   }
 });
 
-function showUploadBtn(x, y) {
-  uploadBtn.style.left = `${x + window.scrollX}px`;
-  uploadBtn.style.top = `${y + window.scrollY}px`;
+function showUploadBtn() {
+  // uploadBtn.style.left = `${x + window.scrollX}px`;
+  // uploadBtn.style.top = `${y + window.scrollY}px`;
   uploadBtn.style.display = 'block';
 }
 
@@ -702,7 +714,7 @@ uploadBtn.addEventListener('click', () => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text: lastSelectedText })
   }).then(res => {
-    if (res.ok) alert('✅ 上傳成功');
+    if (res.ok) return;
     else alert('❌ 上傳失敗');
     uploadBtn.style.display = 'none';
   });
@@ -714,10 +726,24 @@ document.getElementById('clearBtn').addEventListener('click', () => {
 
   fetch(`${backendURL}/clear`, { method: 'POST' })
     .then(res => {
-      if (res.ok) alert('✅ 筆記已清空');
+      if (res.ok) return;
       else alert('❌ 清空失敗');
     });
 });
+
+function isImageLikeElement(el) {
+  if (!el || !(el instanceof Element)) return false;
+  return (
+    el.tagName === 'IMG' ||
+    el.tagName === 'SVG' || // inline SVG 圖片
+    el.tagName === 'FIGURE' || // 可能含有圖與描述
+    el.tagName === 'PICTURE' || // 可能含有圖與描述
+    el.tagName === 'CANVAS' || // 可能含有圖與描述
+    (el.tagName === 'A' && el.querySelector('img')) || // 含有圖片的 <a>
+    el.getAttribute('role') === 'img' || // 無障礙角色標示為圖
+    el.hasAttribute('aria-label') && el.getAttribute('role') === 'presentation' // aria 的圖片替代方式
+  );
+}
 
 function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
 function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
