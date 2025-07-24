@@ -87,7 +87,7 @@ const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
 const sites2Translate=['ab','apollo','bbg','blk','boa','ecoMag','gsam','invesco','ishares','jpm','jpmpb','ms','msnUS','nb','peInsights','pimco','ssga','substack','yahooTW'];
 const kr=['kd','ytn'];
 const text2Speech=['kd'];
-const noNextPage=['ecoMag','kd'];
+const noNextPage=['ecoMag','kd','note'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
 
@@ -690,7 +690,7 @@ document.addEventListener('click', function (e) {
   lastSelectedText = '';
   const el = e.target;
   if (isImageLikeElement(el)) {
-    lastSelectedText = el.src;
+    lastSelectedText = getImageSrc(el);
     showUploadBtn();
   }
 });
@@ -732,6 +732,39 @@ function isImageLikeElement(el) {
     el.hasAttribute('aria-label') && el.getAttribute('role') === 'presentation' // aria 的圖片替代方式
   );
 }
+
+function getImageSrc(el) {
+  //if (!el) return null;
+  if (el.tagName === 'IMG') {return `<img src="${el.src}">`;}
+  else if (el.querySelector('img')) {return `<img src="${el.querySelector('img').src}">`;}
+  else if (el.tagName === 'SVG') {return el.outerHTML;}
+  else {return `<a href="${findNextShareLink(el)}">原文連結</a>`;}
+}
+
+function findNextShareLink(startNode) {
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_ELEMENT,
+    {
+      acceptNode: (node) => {
+        return (
+          node.tagName === 'A' &&
+          node.textContent.trim() === '分享' &&
+          node.href
+        )
+          ? NodeFilter.FILTER_ACCEPT
+          : NodeFilter.FILTER_SKIP;
+      }
+    }
+  );
+
+  walker.currentNode = startNode;
+  while (walker.nextNode()) {
+    return walker.currentNode.href;
+  }
+  return null;
+}
+
 
 async function noteGetList(siteName,t){
   try{url='https://evenbeiter.github.io/storage/notes.json';
