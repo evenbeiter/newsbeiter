@@ -743,6 +743,15 @@ function isImageLikeElement(el) {
   );
 }
 
+async function openNotebook(){
+  try{url='https://evenbeiter.github.io/storage/notes.json';
+  const res=await fetch(url);const str=await res.json();
+  for (let h of str){html+=`<p class="title">${h.text}<br><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span></p><hr>`};
+  html+=`<button id="clearBtn" class="btn sepia me-1 mb-1" type="button">清空筆記</button>`;
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
 function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
 function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
 function openChannelList(){channelList.style.display='block';searchList.style.display='none';ecoMagList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
