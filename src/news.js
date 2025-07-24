@@ -719,16 +719,6 @@ uploadBtn.addEventListener('click', () => {
   });
 });
 
-document.getElementById('clearBtn').addEventListener('click', () => {
-  const confirmClear = confirm('確定要清空雲端筆記？這將無法復原。');
-  if (!confirmClear) return;
-
-  fetch(`${backendURL}/clear`, { method: 'POST' })
-    .then(res => {
-      if (!res.ok) alert('❌ 清空失敗');
-    });
-});
-
 function isImageLikeElement(el) {
   if (!el || !(el instanceof Element)) return false;
   return (
@@ -747,9 +737,18 @@ async function noteGetList(siteName,t){
   try{url='https://evenbeiter.github.io/storage/notes.json';
   const res=await fetch(url);const str=await res.json();
   for (let h of str){html+=`<p class="title">${h.text}<br><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span></p><hr>`};
-  html+=`<button id="clearBtn" class="btn sepia me-1 mb-1" type="button">清空筆記</button>`;
+  html+=`<button id="clearBtn" class="btn sepia me-1 mb-1" type="button" onclick="clearNote()">清空筆記</button>`;
   }catch{html='<p>尚無內容</p>'}
   return html;
+}
+
+function clearNote(){
+  const confirmClear = confirm('確定要清空雲端筆記？這將無法復原。');
+  if (!confirmClear) return;
+  fetch(`${backendURL}/clear`, { method: 'POST' })
+    .then(res => {
+      if (!res.ok) alert('❌ 清空失敗');
+    });
 }
 
 function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
