@@ -650,6 +650,75 @@ window.onscroll = function () {
   }, 1000);
 };
 
+
+
+// FUNCTIONS FOR NOTES-UPLOADER
+
+const backendURL = preStr.replace('/api/fetch?url=','')
+const uploadBtn = document.getElementById('uploadBtn');
+let lastSelectedText = '';
+
+// 📱 偵測選取文字（含 iOS）
+document.addEventListener('selectionchange', () => {
+  const selection = window.getSelection();
+  if (selection.rangeCount === 0) return;
+  const text = selection.toString().trim();
+  if (!text) {
+    uploadBtn.style.display = 'none';
+    return;
+  }
+
+  lastSelectedText = text;
+  const rect = selection.getRangeAt(0).getBoundingClientRect();
+  showUploadBtn(rect.left, rect.top - 30);
+});
+
+// 📷 長按圖片（contextmenu for iOS Safari）
+document.addEventListener('contextmenu', (e) => {
+  if (e.target.tagName === 'IMG') {
+    e.preventDefault();
+    lastSelectedText = e.target.outerHTML;
+    const rect = e.target.getBoundingClientRect();
+    showUploadBtn(rect.left, rect.top - 30);
+  }
+});
+
+function showUploadBtn(x, y) {
+  uploadBtn.style.left = `${x + window.scrollX}px`;
+  uploadBtn.style.top = `${y + window.scrollY}px`;
+  uploadBtn.style.display = 'block';
+}
+
+uploadBtn.addEventListener('click', () => {
+  if (!lastSelectedText) return;
+  const confirmUpload = confirm('是否上傳筆記？');
+  if (!confirmUpload) {
+    uploadBtn.style.display = 'none';
+    return;
+  }
+
+  fetch(`${backendURL}/upload`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: lastSelectedText })
+  }).then(res => {
+    if (res.ok) alert('✅ 上傳成功');
+    else alert('❌ 上傳失敗');
+    uploadBtn.style.display = 'none';
+  });
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  const confirmClear = confirm('確定要清空雲端筆記？這將無法復原。');
+  if (!confirmClear) return;
+
+  fetch(`${backendURL}/clear`, { method: 'POST' })
+    .then(res => {
+      if (res.ok) alert('✅ 筆記已清空');
+      else alert('❌ 清空失敗');
+    });
+});
+
 function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
 function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
 function openChannelList(){channelList.style.display='block';searchList.style.display='none';ecoMagList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
