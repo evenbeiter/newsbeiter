@@ -743,7 +743,7 @@ function isImageLikeElement(el) {
   );
 }
 
-async function openNotebook(){
+async function noteGetList(siteName,t){
   try{url='https://evenbeiter.github.io/storage/notes.json';
   const res=await fetch(url);const str=await res.json();
   for (let h of str){html+=`<p class="title">${h.text}<br><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span></p><hr>`};
