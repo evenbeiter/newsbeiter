@@ -714,8 +714,7 @@ uploadBtn.addEventListener('click', () => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text: lastSelectedText })
   }).then(res => {
-    if (res.ok) return;
-    else alert('❌ 上傳失敗');
+    if (!res.ok) alert('❌ 上傳失敗');
     uploadBtn.style.display = 'none';
   });
 });
@@ -726,8 +725,7 @@ document.getElementById('clearBtn').addEventListener('click', () => {
 
   fetch(`${backendURL}/clear`, { method: 'POST' })
     .then(res => {
-      if (res.ok) return;
-      else alert('❌ 清空失敗');
+      if (!res.ok) alert('❌ 清空失敗');
     });
 });
 
