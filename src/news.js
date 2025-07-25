@@ -664,27 +664,10 @@ document.addEventListener('selectionchange', () => {
   const selection = window.getSelection();
   if (selection.rangeCount === 0) return;
   const text = selection.toString().trim();
-  if (!text) {
-    uploadBtn.style.display = 'none';
-    return;
-  }
-
+  if (!text) {uploadBtn.style.display = 'none';return;}
   lastSelectedText = text;
   showUploadBtn();
-  // const rect = selection.getRangeAt(0).getBoundingClientRect();
-  // showUploadBtn(rect.left, rect.top - 30);
 });
-
-// 📷 長按圖片（contextmenu for iOS Safari）
-// document.addEventListener('contextmenu', (e) => {
-//   if (e.target.tagName === 'IMG') {
-//     e.preventDefault();
-//     lastSelectedText = e.target.outerHTML;
-//     //const rect = e.target.getBoundingClientRect();
-//     //showUploadBtn(rect.left, rect.top - 30);
-//     showUploadBtn();
-//   }
-// });
 
 document.addEventListener('click', function (e) {
   lastSelectedText = '';
@@ -695,28 +678,22 @@ document.addEventListener('click', function (e) {
   }
 });
 
-function showUploadBtn() {
-  // uploadBtn.style.left = `${x + window.scrollX}px`;
-  // uploadBtn.style.top = `${y + window.scrollY}px`;
-  uploadBtn.style.display = 'block';
-}
+function showUploadBtn() {uploadBtn.style.display = 'block';}
 
 uploadBtn.addEventListener('click', () => {
-  if (!lastSelectedText) {alert('尚未選取筆記')};
-  const confirmUpload = confirm('是否上傳筆記？');
-  if (!confirmUpload) {
-    uploadBtn.style.display = 'none';
-    return;
+  if (!lastSelectedText) {alert('尚未選取筆記')} else {
+    const confirmUpload = confirm('是否上傳筆記？');
+    if (!confirmUpload) {uploadBtn.style.display = 'none';return;} else {
+      fetch(`${backendURL}/upload`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: lastSelectedText })
+      }).then(res => {
+        if (!res.ok) alert('❌ 上傳失敗');
+        uploadBtn.style.display = 'none';
+      });
+    }
   }
-
-  fetch(`${backendURL}/upload`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text: lastSelectedText })
-  }).then(res => {
-    if (!res.ok) alert('❌ 上傳失敗');
-    uploadBtn.style.display = 'none';
-  });
 });
 
 function isImageLikeElement(el) {
