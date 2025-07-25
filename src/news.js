@@ -771,7 +771,7 @@ async function noteGetList(siteName,t){
   const res=await fetch(url);const str=await res.text();str=JSON.parse(str);
   for (let h of str){
     html+=`
-    <p>${h.text}<br><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span></p>
+    <p>${h.text.replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
     <p class="text-end">
     <div class="btn-group">
       <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25 editNoteBtn">
