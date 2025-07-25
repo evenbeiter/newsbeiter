@@ -745,7 +745,7 @@ function findNextShareLink(startNode) {
 
 async function noteGetList(siteName,t){
   try{url='https://evenbeiter.github.io/storage/notes.txt';
-  const res=await fetch(url);const str=await res.text();str=JSON.parse(str);
+  const res=await fetch(url);const str=await res.text();//str=JSON.parse(str);
   for (let h of str){
     html+=`
     <p>${h.text.replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
