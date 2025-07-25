@@ -660,7 +660,7 @@ let lastSelectedText = '';
 
 // 📱 偵測選取文字（含 iOS）
 document.addEventListener('selectionchange', () => {
-  lastSelectedText = '';
+  //lastSelectedText = '';
   const selection = window.getSelection();
   if (selection.rangeCount === 0) return;
   const text = selection.toString().trim();
@@ -670,7 +670,7 @@ document.addEventListener('selectionchange', () => {
 });
 
 document.addEventListener('click', function (e) {
-  lastSelectedText = '';
+  //lastSelectedText = '';
   const el = e.target;
   if (isImageLikeElement(el)) {
     lastSelectedText = getImageSrc(el);
