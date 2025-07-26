@@ -742,13 +742,115 @@ function findNextShareLink(startNode) {
   return null;
 }
 
+// function renderNotes(notes, path) {
+//   const container = document.getElementById('note-container');
+//   container.innerHTML = ''; // 清空
+
+//   notes.forEach(note => {
+//     const div = document.createElement('div');
+//     div.className = 'note-item p-3 mb-3 border rounded shadow-sm bg-white';
+//     div.dataset.timestamp = note.timestamp;
+//     div.dataset.path = path;
+
+//     let time = new Date(note.timestamp).toLocaleString();
+//     let content = `<p>${escapeHTML(note.text || '')}</p>`;
+//     if (note.image) {
+//       content += `<img src="${note.image}" class="img-fluid rounded my-2" alt="note image">`;
+//     }
+
+//     div.innerHTML = `
+//       ${content}
+//       <span class="time text-muted small">${time}</span>
+//       <div class="d-flex mt-2">
+//         <div class="btn-group ms-auto">
+//           <button type="button" class="btn btn-light btn-sm editNoteBtn">✏️</button>
+//           <button type="button" class="btn btn-light btn-sm deleteNoteBtn">🗑️</button>
+//         </div>
+//       </div>
+//     `;
+
+//     container.appendChild(div);
+//   });
+
+//   attachNoteEventListeners();
+// }
+
+function escapeHTML(str) {
+  return str.replace(/[&<>'"]/g, tag =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[tag]
+  );
+}
+
+function attachNoteEventListeners() {
+  document.querySelectorAll('.deleteNoteBtn').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      const noteEl = e.target.closest('.note-item');
+      const path = noteEl.dataset.path;
+      const timestamp = noteEl.dataset.timestamp;
+
+      const confirmed = confirm('確定要刪除這則筆記嗎？');
+      if (!confirmed) return;
+
+      const res = await fetch('/note/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path, timestamp })
+      });
+
+      if (res.ok) {
+        noteEl.remove();
+      } else {
+        alert('刪除失敗');
+      }
+    });
+  });
+
+  document.querySelectorAll('.editNoteBtn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const noteEl = e.target.closest('.note-item');
+      const textEl = noteEl.querySelector('p');
+      const textarea = document.createElement('textarea');
+      textarea.className = 'form-control mb-2';
+      textarea.value = textEl.innerText;
+      textarea.style.height = 'auto';
+
+      textEl.replaceWith(textarea);
+
+      const uploadBtn = document.createElement('button');
+      uploadBtn.textContent = '上傳修改';
+      uploadBtn.className = 'btn btn-sm btn-primary';
+      uploadBtn.onclick = async () => {
+        const path = noteEl.dataset.path;
+        const timestamp = noteEl.dataset.timestamp;
+        const newText = textarea.value;
+
+        const res = await fetch('/note/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path, timestamp, text: newText })
+        });
+
+        if (res.ok) {
+          textarea.replaceWith(document.createElement('p')).textContent = newText;
+          uploadBtn.remove();
+        } else {
+          alert('更新失敗');
+        }
+      };
+
+      noteEl.querySelector('.btn-group').appendChild(uploadBtn);
+    });
+  });
+}
 
 async function noteGetList(siteName,t){
-  try{url='https://evenbeiter.github.io/storage/notes.txt';
-  const res=await fetch(url);const raw=await res.text();const str=JSON.parse(raw);
+  try{url=`${backendURL}/notes/read?path=${encodeURIComponent(path)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('讀取筆記失敗');
+  const str = await res.json();
   for (let h of str){
     html+=`
-    <p>${h.text.replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
+    <p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
     <div class="d-flex">
     <div class="btn-group ms-auto">
       <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25 editNoteBtn">
