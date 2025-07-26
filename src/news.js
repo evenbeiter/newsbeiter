@@ -684,7 +684,7 @@ uploadBtn.addEventListener('click', () => {
   if (!lastSelectedText) {alert('尚未選取筆記')} else {
     const confirmUpload = confirm('是否上傳筆記？');
     if (!confirmUpload) {uploadBtn.style.display = 'none';return;} else {
-      await fetch(`${backendURL}/note/add`, {
+      fetch(`${backendURL}/note/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content: lastSelectedText })
