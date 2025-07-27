@@ -2689,7 +2689,7 @@ async function xueqiuGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function yahooTWGetList(siteName,t){
-  try{coun='.caas-body';
+  try{coun='.atoms';
   if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='.atoms-wrapper'};
   var payload={"requests":{"g0":{"resource":"StreamService","operation":"read","params":{"ui":{"ntk_bypassA3c":true,"pubtime_maxage":0},"category":"LISTID:"+t,"forceJpg":true,"releasesParams":{"limit":20,"offset":0},"useNCP":true,"batches":{"pagination":true,"size":200,"timeout":1300,"total":200}}}},"context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}};
   var url='https://tw.news.yahoo.com/_td-news/api/resource';
