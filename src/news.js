@@ -905,10 +905,12 @@ async function noteGetContent(id){console.log(id);
   });
   if (!res.ok) throw new Error('無法讀取筆記');
   const str=await res.json();//const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
-  for (let h of str){
-    html+=`<p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`};
+  for (let s of str){
+    if (s) {var h=JSON.parse(s);console.log(h);
+    html+=`<p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`}
+  }
   if (html==='') html+='<p>尚無內容</p>';
-  else html+=`<button class="btn sepia-contrast me-1 mb-1" type="button" onclick="clearNote()">清空筆記</button><br>`;
+  //else html+=`<button class="btn sepia-contrast me-1 mb-1" type="button" onclick="clearNote()">清空筆記</button><br>`;
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
