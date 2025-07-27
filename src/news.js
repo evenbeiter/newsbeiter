@@ -904,7 +904,7 @@ async function noteGetContent(id){console.log(id);
     body: JSON.stringify({id})
   });
   if (!res.ok) throw new Error('無法讀取筆記');
-  const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
+  const str=await res.json();//const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
   for (let h of str){
     html+=`<p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`};
   if (html==='') html+='<p>尚無內容</p>';
