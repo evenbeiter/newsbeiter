@@ -843,14 +843,86 @@ function attachNoteEventListeners() {
   });
 }
 
+
+async function loadNoteTitles() {
+  const res = await fetch('/notes/list');
+  const list = await res.json();
+
+  const ul = document.getElementById('note-title-list');
+  ul.innerHTML = '';
+
+  list.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item.title;
+    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+    li.dataset.path = item.path;
+
+    // 點擊載入筆記
+    li.addEventListener('click', () => {
+      loadNotes(item.path);
+    });
+
+    ul.appendChild(li);
+  });
+}
+
+
 async function noteGetList(siteName,t){
-  try{url=`${backendURL}/notes/read?path=${encodeURIComponent(path)}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('讀取筆記失敗');
-  const str = await res.json();
+  try{url=`${backendURL}/notes/list}`;
+  const res = await fetch(url);const str = await res.json();
+  for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path')"></div><hr>`}
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function loadNotes(path) {
+  try {
+    const res = await fetch('/notes/read', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path })
+    });
+
+    if (!res.ok) throw new Error('無法讀取筆記');
+
+    const { content } = await res.json();
+    const notes = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
+
+    renderNotes(notes, path); // 顯示筆記，第二個參數是 data-path
+  } catch (err) {
+    console.error('讀取筆記錯誤:', err.message);
+    renderNotes([], path); // 沒有內容就顯示空
+  }
+}
+
+
+async function noteGetContent(id){console.log(id);
+  try{url=`${backendURL}/notes/read`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({${encodeURIComponent(id)}})
+  });
+  if (!res.ok) throw new Error('無法讀取筆記');
+  const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
   for (let h of str){
-    html+=`
-    <p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
+    html+=`<p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`};
+  if (html==='') html+='<p>尚無內容</p>';
+  else html+=`<button class="btn sepia-contrast me-1 mb-1" type="button" onclick="clearNote()">清空筆記</button><br>`;
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+function clearNote(){
+  const confirmClear = confirm('確定要清空雲端筆記？這將無法復原。');
+  if (!confirmClear) return;
+  fetch(`${backendURL}/clear`, { method: 'POST' })
+    .then(res => {
+      if (!res.ok) alert('❌ 清空失敗');
+    });
+}
+
+const noteBtnGroup=`
     <div class="d-flex">
     <div class="btn-group ms-auto">
       <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25 editNoteBtn">
@@ -872,22 +944,7 @@ async function noteGetList(siteName,t){
       </button>
     </div>
     </div>
-    <hr>
-    `};
-  if (html==='') html+='<p>尚無內容</p>';
-  else html+=`<button class="btn sepia-contrast me-1 mb-1" type="button" onclick="clearNote()">清空筆記</button><br>`;
-  }catch{html='<p>尚無內容</p>'}
-  return html;
-}
-
-function clearNote(){
-  const confirmClear = confirm('確定要清空雲端筆記？這將無法復原。');
-  if (!confirmClear) return;
-  fetch(`${backendURL}/clear`, { method: 'POST' })
-    .then(res => {
-      if (!res.ok) alert('❌ 清空失敗');
-    });
-}
+`;
 
 function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
 function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
