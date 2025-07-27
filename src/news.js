@@ -910,6 +910,7 @@ async function noteGetContent(id){console.log(id);
     html+=`<p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`}
   }
   if (html==='') html+='<p>尚無內容</p>';
+  else html=html.slice(0,html.length-4);
   //else html+=`<button class="btn sepia-contrast me-1 mb-1" type="button" onclick="clearNote()">清空筆記</button><br>`;
   }catch{html='<p>尚無內容</p>'}
   return html;
