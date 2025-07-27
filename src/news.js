@@ -870,7 +870,7 @@ async function loadNoteTitles() {
 async function noteGetList(siteName,t){
   try{url=`${backendURL}/notes/list}`;
   const res = await fetch(url);const str = await res.json();
-  for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path')"></div><hr>`}
+  for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
