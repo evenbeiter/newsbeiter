@@ -901,7 +901,7 @@ async function noteGetContent(id){console.log(id);
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({encodeURIComponent(id)})
+    body: JSON.stringify({id})
   });
   if (!res.ok) throw new Error('無法讀取筆記');
   const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
