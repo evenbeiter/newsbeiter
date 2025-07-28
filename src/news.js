@@ -69,7 +69,7 @@ const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
 const sites2Translate=['ab','apollo','bbg','blk','boa','ecoMag','gsam','invesco','ishares','jpm','jpmpb','ms','msnUS','nb','peInsights','pimco','ssga','substack','yahooTW'];
 const kr=['kd','ytn'];
 const text2Speech=['kd'];
-const noNextPage=['ecoMag','kd','note'];
+const noNextPage=['ecoMag','kd'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
 
@@ -870,8 +870,8 @@ async function loadNoteTitles() {
 
 async function noteGetList(siteName,t){
   try{url=`${backendURL}/notes/list/${t}`;
-  const res = await fetch(url);const str = await res.json();
-  for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
+  const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
+  for (let h of data){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
