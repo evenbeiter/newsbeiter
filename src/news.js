@@ -658,6 +658,7 @@ window.onscroll = function () {
 const backendURL = preStr.replace('/api/fetch?url=','')
 const uploadBtn = document.getElementById('uploadBtn');
 let lastSelectedText = '';
+let articleUrl='';
 
 // 📱 偵測選取文字（含 iOS）
 document.addEventListener('selectionchange', () => {
@@ -667,6 +668,7 @@ document.addEventListener('selectionchange', () => {
   const text = selection.toString().trim();
   if (!text) {uploadBtn.style.display = 'none';return;}
   lastSelectedText = text;
+  articleUrl=getArticleUrl();
   showUploadBtn();
 });
 
@@ -675,6 +677,7 @@ document.addEventListener('click', function (e) {
   const el = e.target;
   if (isImageLikeElement(el)) {
     lastSelectedText = getImageSrc(el);
+    articleUrl=getArticleUrl();
     showUploadBtn();
   }
 });
@@ -688,7 +691,7 @@ uploadBtn.addEventListener('click', () => {
       fetch(`${backendURL}/note/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: lastSelectedText })
+        body: JSON.stringify({ content: lastSelectedText,src:articleUrl })
       }).then(res => {
         if (!res.ok) alert('❌ 上傳失敗');
         uploadBtn.style.display = 'none';
@@ -741,6 +744,22 @@ function findNextShareLink(startNode) {
     return walker.currentNode.href;
   }
   return null;
+}
+
+function getSelectionElement() {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return null;
+  const range = selection.getRangeAt(0);
+  const container = range.startContainer;
+
+  // 若 startContainer 是文字節點，取其父層
+  return container.nodeType === Node.TEXT_NODE ? container.parentNode : container;
+}
+
+function getArticleUrl() {
+  const selectedElement = getSelectionElement();
+  if (!selectedElement) return null;
+  return findNextShareLink(selectedElement);
 }
 
 // function renderNotes(notes, path) {
