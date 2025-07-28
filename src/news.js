@@ -927,7 +927,8 @@ async function noteGetContent(id){console.log(id);
   const str=await res.json();//const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
   for (let s of str){
     if (s) {var h=JSON.parse(s);console.log(h);
-    html+=`<p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`}
+    html+=h.src?`<p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><a href="${h.src}" target="_blank">原文連結</a><br><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`
+      :`<p>${escapeHTML(h.content ||'').replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`}
   }
   if (html==='') html+='<p>尚無內容</p>';
   else html=html.slice(0,html.length-4);
@@ -935,6 +936,11 @@ async function noteGetContent(id){console.log(id);
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
+
+const html = h.src
+  ? `<p>文字</p><a href="${h.src}">原文連結</a><p>文字</p>`
+  : `<p>文字</p><p>文字</p>`;
+
 
 function clearNote(){
   const confirmClear = confirm('確定要清空雲端筆記？這將無法復原。');
