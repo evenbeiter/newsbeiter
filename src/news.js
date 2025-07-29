@@ -1019,6 +1019,7 @@ function showOverlay(el,elSrc){
   } else {document.getElementById('gtmImg').src=elSrc;}
 }
 
+function shareLink(url){return `<p class="text-end"><a href="${url}" target="_blank">分享</a></p>`}
 
 
 //    FETCH FUNCTIONS
@@ -1064,7 +1065,7 @@ async function apolloGetList(siteName,t){
   for (let h of hh){
     var a=h.parentElement.previousElementSibling;
     var cid=a.querySelector('h2').children[0].href;
-    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${cid}" class="content fs12" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="time">${a.querySelector('time').innerText}</p>${h.outerHTML}<p class="text-end"><a href="${cid}" target="_blank">Share</a></p><br></div><hr>`;
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${cid}" class="content fs12" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="time">${a.querySelector('time').innerText}</p>${h.outerHTML}${shareLink(cid)}<br></div><hr>`;
   }
   }catch{html='<p>No Content.</p>'}
   return html;
