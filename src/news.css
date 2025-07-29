@@ -37,7 +37,17 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
   and (-webkit-min-device-pixel-ratio: 2) {
   body{font-size:2rem} h1,h2,h3,h4,h5,h6,.title{font-size:2rem} .en-us,.fs12{font-size:1.6rem} .fs10, .time, figcaption, .btn{font-size:1.3rem} #list{padding:2rem} svg.bi{height:2.8rem !important;width:2.8rem !important}
 }
-@media (min-width:1200px){
+@media (min-width:1200px) {
+  @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
+  body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
+  #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8}
+  .sepia{background-color:#F8F8F8;color:#3B3B3B}
+  .sepia-contrast{background-color:#3B3B3B;color:#F8F8F8}
+  #list, .btn {font-weight:bold}
+  h1,h2,h3,h4,h5,h6,.title{font-size:1.2rem;color:#3B3B3B !important;font-weight:bold}.en-us,.fs12{font-size:1.2rem} 
+  #loading{width:5rem;height:5rem}
+}
+body.desktop-force{
   @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
   body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
   #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8}
