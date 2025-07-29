@@ -515,7 +515,7 @@ function startLazyTranslation(containerElement) {
       const el = entry.target;if (shouldIgnore(el)) {observer.unobserve(el);continue;}
       const rawText = getTextOnly(el).trim();if (!rawText) {observer.unobserve(el);continue;}
 
-      const translated = await translateText(rawText);
+      const translated = await translateGoogle(encodeURIComponent(rawText));
       insertTranslationAfter(el, translated);
       el.setAttribute('data-translated', 'true');
       observer.unobserve(el);
@@ -544,12 +544,15 @@ function startLazyTranslation(containerElement) {
   }
 
   async function translateText(text) {
-    if (translatedCache.has(text)) return translatedCache.get(text);
-    const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q=${encodeURIComponent(text)}`;
-    try {
-      const res=await fetch(url);const json=await res.json();const translated=json[0][0] || '';translatedCache.set(text, translated);
-      return translated;
-    } catch (e) {console.error('Failed to translate.', e);return '';}
+    const translated=await translateGoogle(encodeURIComponent(text));
+    return translated;
+    
+    //if (translatedCache.has(text)) return translatedCache.get(text);
+    // const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q=${encodeURIComponent(text)}`;
+    // try {
+    //   const res=await fetch(url);const json=await res.json();const translated=json[0][0] || '';translatedCache.set(text, translated);
+    //   return translated;
+    // } catch (e) {console.error('Failed to translate.', e);return '';}
   }
 
   function insertTranslationAfter(el, translatedText) {
