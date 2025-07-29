@@ -515,7 +515,7 @@ function startLazyTranslation(containerElement) {
       const el = entry.target;if (shouldIgnore(el)) {observer.unobserve(el);continue;}
       const rawText = getTextOnly(el).trim();if (!rawText) {observer.unobserve(el);continue;}
 
-      const translated = await translateGoogle(encodeURIComponent(rawText));
+      const translated = await translateGoogle(rawText);
       insertTranslationAfter(el, translated);
       el.setAttribute('data-translated', 'true');
       observer.unobserve(el);
@@ -544,7 +544,7 @@ function startLazyTranslation(containerElement) {
   }
 
   async function translateText(text) {
-    const translated=await translateGoogle(encodeURIComponent(text));
+    const translated=await translateGoogle(text);
     return translated;
     
     //if (translatedCache.has(text)) return translatedCache.get(text);
