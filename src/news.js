@@ -694,7 +694,7 @@ uploadBtn.addEventListener('click', () => {
       fetch(`${backendURL}/note/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: lastSelectedText,src:articleUrl })
+        body: JSON.stringify({ content: lastSelectedText, siteName: siteNameVar, src: articleUrl })
       }).then(res => {
         if (!res.ok) alert('❌ 上傳失敗');
         uploadBtn.style.display = 'none';
