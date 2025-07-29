@@ -680,7 +680,7 @@ document.addEventListener('click', function (e) {
   const el = e.target;
   if (isImageLikeElement(el)) {
     lastSelectedText = getImageSrc(el);
-    articleUrl=getArticleUrl();
+    articleUrl=findNextShareLink(el);
     showUploadBtn();
   }
 });
