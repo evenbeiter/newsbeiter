@@ -14,7 +14,7 @@
   html, body {
     height: 100%;
     margin: 0;
-    overflow: hidden; /* 防止整體頁面出現滾動條 */
+    overflow: hidden;
   }
   .iframe-container {
     height: 100vh;
@@ -29,13 +29,13 @@
 <body>
 <div class="container-fluid h-100">
   <div class="row h-100">
-    <div class="col-4 iframe-container">
+    <div class="col-6 col-lg-4 iframe-container">
       <iframe src="news.html"></iframe>
     </div>
-    <div class="col-4 iframe-container">
+    <div class="col-6 col-lg-4 iframe-container">
       <iframe src="news.html"></iframe>
     </div>
-    <div class="col-4 iframe-container">
+    <div class="d-none d-lg-block col-lg-4 iframe-container">
       <iframe src="news.html"></iframe>
     </div>
 <!--     <div class="col-6 iframe-container">
