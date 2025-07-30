@@ -1,4 +1,6 @@
 var onEVBT=true; if (window.location.href.indexOf('evenbeiter.github.io')==-1){onEVBT=false;}
+const params=new URLSearchParams(location.search);
+if(params.get('mode')==='desktop'){document.documentElement.classList.add('desktop-force')};
 
 const ab=[['','Latest']];
 const apollo=[['','Latest']];
