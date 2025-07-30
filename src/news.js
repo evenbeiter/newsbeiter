@@ -1021,7 +1021,7 @@ function showOverlay(el,elSrc){
   } else {document.getElementById('gtmImg').src=elSrc;}
 }
 
-function shareLink(url){return `<p class="text-end"><a href="${url}" target="_blank">分享</a></p>`}
+function shareLink(url){return `<p class="text-end"><a href="${url}" target="_blank">分享</a></p><br>`}
 
 
 //    FETCH FUNCTIONS
@@ -1050,7 +1050,7 @@ async function abGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var hh=doc.querySelectorAll('div.layoutcontainer div.ab-container');
-  html='<p class="time">'+hh[0].textContent.trim()+'</p>'+hh[1].outerHTML+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  html='<p class="time">'+hh[0].textContent.trim()+'</p>'+hh[1].outerHTML+shareLink(id);
   }}catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1067,7 +1067,7 @@ async function apolloGetList(siteName,t){
   for (let h of hh){
     var a=h.parentElement.previousElementSibling;
     var cid=a.querySelector('h2').children[0].href;
-    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${cid}" class="content fs12" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="time">${a.querySelector('time').innerText}</p>${h.outerHTML}${shareLink(cid)}<br></div><hr>`;
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${cid}')">${a.querySelector('h2').innerText}</p><div id="${cid}" class="content fs12" onclick="getContent('${siteName}',this.id,'${cid}')"><p class="time">${a.querySelector('time').innerText}</p>${h.outerHTML}${shareLink(cid)}</div><hr>`;
   }
   }catch{html='<p>No Content.</p>'}
   return html;
@@ -1099,7 +1099,7 @@ async function bbcGetContent(id){
   for (let v=0;v<vdo.length;v++){
     vdo[v].outerHTML=`<iframe src="${embeds[v]}" scrolling=no allow="fullscreen" style="border:none;border-radius:0.375rem;aspect-ratio:16/9"></iframe>`;
   }
-  html = a.outerHTML+ '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = a.outerHTML+shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1164,7 +1164,7 @@ async function bbgGetContent(id){
       body+='</ul>';
     }
   }
-  html='<p class="time">'+cvt2Timezone(hh.publishedAt)+'</p>'+lede+body+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  html='<p class="time">'+cvt2Timezone(hh.publishedAt)+'</p>'+lede+body+shareLink(id);
   }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1195,7 +1195,7 @@ async function blkGetContent(id){
   var a=doc.querySelector('#mainWrapper').outerHTML.replace(/ class="[\s\S]*?"/g,'').replaceAll('data-src="','src="').replace(/srcset="[\s\S]*?"/g,'').replaceAll('src="/','src="https://www.blackrock.com/');
   //var a=doc.querySelector('#mainWrapper').outerHTML.replace(/col-[\s\S]*? /g,'').replace(/col-[\s\S]*?"/g,'"').replace(/offset-[\s\S]*? /g,'').replace(/offset-[\s\S]*?"/g,'"').replaceAll('bg-white','').replaceAll('data-src="','src="').replace(/srcset="[\s\S]*?"/g,'').replaceAll('src="/','src="https://www.blackrock.com/');
   if (str.match(/contentUrl":[\s\S]*?.mp4"/g)){a=a.replace('<video','<video playsinline src="'+preStr.replace('api/fetch','embed')+str.match(/contentUrl":"[\s\S]*?.mp4"/g)[0].replace('contentUrl":"',''))};
-  html = a+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = a+shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1221,7 +1221,7 @@ async function isharesGetContent(id){
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var a=doc.querySelector('#mainWrapper').outerHTML.replace(/col-[\s\S]*? /g,'').replace(/col-[\s\S]*?"/g,'"').replace(/offset-[\s\S]*? /g,'').replace(/offset-[\s\S]*?"/g,'"').replaceAll('bg-white','').replaceAll('data-src="','src="').replace(/srcset="[\s\S]*?"/g,'').replaceAll('src="/','src="https://www.blackrock.com/');
   if (str.match(/contentUrl":[\s\S]*?.mp4"/g)){a=a.replace('<video','<video playsinline src="'+preStr.replace('api/fetch','embed')+str.match(/contentUrl":"[\s\S]*?.mp4"/g)[0].replace('contentUrl":"',''))};
-  html = a+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = a+shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1268,7 +1268,7 @@ async function bnextGetContent(id){
   const a = doc.querySelector('[data-cat=article]');
   // var ads=a.querySelector('#pumpkin_159');
   // if(ads){ads.remove()};
-  html = '<p class="time">'+t.innerText+a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+t.innerText+a.outerHTML+shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1296,7 +1296,7 @@ async function boaGetContent(id){
   try{
   const res = await fetch(preStr+id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-  html='<p class="time">'+doc.querySelectorAll('div.positioning-container__wrapper div.aem-wrap--text')+'</p>'+doc.querySelector('.key-takeaways').outerHTML+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  html='<p class="time">'+doc.querySelectorAll('div.positioning-container__wrapper div.aem-wrap--text')+'</p>'+doc.querySelector('.key-takeaways').outerHTML+shareLink(id);
   }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1327,7 +1327,7 @@ async function businessTodayGetContent(id){
   const str=await res.text();
   var parser = new DOMParser();
   var doc = parser.parseFromString(str, "text/html");
-  html = '<p class="time">'+(doc.querySelector('.context__info-item--date')?doc.querySelector('.context__info-item--date').innerText:'')+' | '+(doc.querySelector('.context__info-item--author')?doc.querySelector('.context__info-item--author').innerText:'')+'</p><p>'+(doc.querySelector('.article__introduction')?doc.querySelector('.article__introduction').innerHTML:'')+'</p>'+(doc.querySelector('div[itemprop="articleBody"]')?doc.querySelector('div[itemprop="articleBody"]').outerHTML.replaceAll('<p>&nbsp;</p>',''):'') + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+(doc.querySelector('.context__info-item--date')?doc.querySelector('.context__info-item--date').innerText:'')+' | '+(doc.querySelector('.context__info-item--author')?doc.querySelector('.context__info-item--author').innerText:'')+'</p><p>'+(doc.querySelector('.article__introduction')?doc.querySelector('.article__introduction').innerHTML:'')+'</p>'+(doc.querySelector('div[itemprop="articleBody"]')?doc.querySelector('div[itemprop="articleBody"]').outerHTML.replaceAll('<p>&nbsp;</p>',''):'') +shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1396,7 +1396,7 @@ async function businessWeeklyGetContent(id){
   if (id.indexOf('StrId=')==-1){
     html = '<p class="time">'+(doc.querySelector('.Padding-left.Margin-top')?.innerText??'')+'</p>'+(doc.querySelector('.Single-summary')?.outerHTML??'')+(doc.querySelector('.Single-article')?.outerHTML??'')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
   } else {
-    html = '<p class="time">'+(doc.querySelector('.articleinfo')?.innerText??'')+'</p>'+(doc.querySelector('.postbody')?.outerHTML??'')+ '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';    
+    html = '<p class="time">'+(doc.querySelector('.articleinfo')?.innerText??'')+'</p>'+(doc.querySelector('.postbody')?.outerHTML??'')+shareLink(id);    
   }
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -1451,7 +1451,7 @@ async function cnaGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html= '<p class="time">'+doc.querySelector('.updatetime').innerText+'</p>'+doc.querySelector('.paragraph').outerHTML.replaceAll('</span></a><a','</span></a><br><a') + '<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  html= '<p class="time">'+doc.querySelector('.updatetime').innerText+'</p>'+doc.querySelector('.paragraph').outerHTML.replaceAll('</span></a><a','</span></a><br><a') + shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1514,7 +1514,7 @@ async function cnyesGetContent(id){
     let str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
-    html=doc.querySelector('#article-container').outerHTML.replaceAll('src="/_next/image?url=','src="')+ '<p class="text-end"><a href="https://news.cnyes.com/news/id/'+id + '" target="_blank">分享</a></p><br>';
+    html=doc.querySelector('#article-container').outerHTML.replaceAll('src="/_next/image?url=','src="')+shareLink('https://news.cnyes.com/news/id/'+id);
   }
   }catch{html='<p><a href="https://news.cnyes.com/news/id/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html
@@ -1553,7 +1553,7 @@ async function cnyeshaoGetList(siteName,t){
     }
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]?h[1]:'【詳內文】'}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3].replace(/ src=\/download_image.ashx[\s\S]*? fid="/g,' src="https://hao.cnyes.com/download_image.ashx?file=')}<p class="text-end"><a href="https://hao.cnyes.com/post/${h[0]}" target="_blank">分享</a></p><br></div><hr>`;
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]?h[1]:'【詳內文】'}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[4]}</p>${h[3].replace(/ src=\/download_image.ashx[\s\S]*? fid="/g,' src="https://hao.cnyes.com/download_image.ashx?file=')}${shareLink('https://hao.cnyes.com/post/'+h[0])}</div><hr>`;
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1580,7 +1580,7 @@ async function cteeGetList(siteName,t){
 async function cteeGetContent(id){
   try{const res = await fetch('https://www.ctee.com.tw/api'+id);
   const str=await res.json();
-  html = str.contents + '<p class="text-end"><a href="https://www.ctee.com.tw' + id + '" target="_blank">分享</a></p><br>';
+  html = str.contents + shareLink('https://www.ctee.com.tw'+id);
   }catch{html='<p><a href="https://www.ctee.com.tw' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1635,7 +1635,7 @@ async function dwGetContent(id){
   if(id.indexOf('video-')===-1){
     html = '<p class="time">'+d.localizedContentDate+'</p>'+d.text.replace(/poster="data[\s\S]*?"/g,'').replaceAll('data-url="https://static.dw.com/image','src="https://static.dw.com/image').replaceAll('${formatId}','905')+ '<p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
   }else{
-    html = '<p class="time">'+d.localizedContentDate+'</p><p>'+d.teaser+'</p><video controls playsinline><source src="'+d.openGraphMetadata.url+'" type="video/mp4"></source></video><p class="text-end"><a href="https://www.dw.com' + id + '" target="_blank">分享</a></p><br>';
+    html = '<p class="time">'+d.localizedContentDate+'</p><p>'+d.teaser+'</p><video controls playsinline><source src="'+d.openGraphMetadata.url+'" type="video/mp4"></source></video>'+shareLink('https://www.dw.com'+id);
   }
   }catch{html='<p><a href="https://www.dw.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -1672,9 +1672,9 @@ async function gsamGetContent(id){
     for (let o of order){
       if (o.slice(0,4)=='text'){html+=str.pageProps.data.items[o].text} else if (o.slice(0,5)=='image'){html+=`<p class="xtl">${str.pageProps.data.items[o].images[0].title}<img src="https://am.gs.com${str.pageProps.data.items[o].images[0].fileReference.path}">${str.pageProps.data.items[o].images[0].source}`}
     }
-    html+='<p class="text-end"><a href="https://am.gs.com' + id + '" target="_blank">分享</a></p><br>';
+    html+=shareLink('https://am.gs.com'+id);
   } else {
-    html='<p class="text-end"><a href="https://am.gs.com' + str.pageProps.data.properties.download.path + '" target="_blank">分享</a></p><br>';
+    html=shareLink('https://am.gs.com'+str.pageProps.data.properties.download.path);
   }}catch{html='<p><a href="https://am.gs.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1700,7 +1700,7 @@ async function invescoGetContent(id){
   try{
   const res = await fetch(preStr+id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-  html=(doc.querySelector('.key-takeaways__inner')?.outerHTML??'')+(doc.querySelector('.richtext')?.outerHTML??'')+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>';
+  html=(doc.querySelector('.key-takeaways__inner')?.outerHTML??'')+(doc.querySelector('.richtext')?.outerHTML??'')+shareLink(id);
   }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1736,7 +1736,7 @@ async function invtComGetContent(id){
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
   var a=doc.querySelector('#article');
-  html=a.outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html=a.outerHTML + shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1797,7 +1797,7 @@ async function jinGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html = '<p>'+(doc.querySelector('.jin10-cnews-introduction')?.innerText??'')+'</p>'+(doc.querySelector('.jin10vip-image-viewer.setWebViewConentHeight.upload-statics-links')?.outerHTML??'')+'<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p>'+(doc.querySelector('.jin10-cnews-introduction')?.innerText??'')+'</p>'+(doc.querySelector('.jin10vip-image-viewer.setWebViewConentHeight.upload-statics-links')?.outerHTML??'')+shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1827,7 +1827,7 @@ async function jpmGetList(siteName,t){
       for (let s of slides){
         htmlSlides+=`<p>${s.title??''}</p>${s.summaryDescription??''}<img class="safe-click" src="${s.desktopImage}" onclick="showOverlay('gtmImg','${s.desktopImage}')"><br>`;
       }
-      html+=`<p class="title xlt" onclick="getContent('${siteName}',this.id,'${c.id}')">${c.name}</p><div id="${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'${c.id}')">${htmlSlides}<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/${t.split('__')[1]}.pdf" target="_blank">分享</a></p><br></div><hr>`
+      html+=`<p class="title xlt" onclick="getContent('${siteName}',this.id,'${c.id}')">${c.name}</p><div id="${c.id}" class="content fs12 xtl" onclick="getContent('${siteName}',this.id,'${c.id}')">${htmlSlides}${shareLink('https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/'+t.split('__')[1]+'.pdf')}</div><hr>`
     }
   }
   }catch{html='<p>尚無內容</p>'}
@@ -1853,13 +1853,13 @@ async function jpmGetContent(id){
     <p class="title xtl">Investment Themes</p><p>${str.EconomicUpdate.economic_update_growth_inv_themes?.data??''}</p>
     <p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/americas/us/en/insights/market-insights/wmr/economic_update.pdf" target="_blank">分享</a></p><br>`;
   } else if (id=='https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/'){
-      html+=`<p class="text-end"><a href="https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/market-insights/guide-to-the-markets/mi-guide-to-the-markets-us.pdf" target="_blank">分享</a></p><br><hr>`
+      html+=`${shareLink('https://am.jpmorgan.com/content/dam/jpm-am-aem/global/en/insights/market-insights/guide-to-the-markets/mi-guide-to-the-markets-us.pdf')}<hr>`
   } else {
   const res = await fetch(preStr+encodeURIComponent(id));
   const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
   var dd=JSON.parse(doc.querySelector('#jpm-am-editorial-sidebar-desktop').dataset.compJson);
-  html=doc.querySelector('.editorial-free-drop').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html=doc.querySelector('.editorial-free-drop').outerHTML + shareLink(id);
   }
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
@@ -1891,7 +1891,7 @@ async function jpmpbGetContent(id){
   var hh=doc.querySelectorAll('[data-id^="jpm-wm-rebrand-global"]');
   for (let h of hh){html+=h.outerHTML;}
   html=html.replace(/ class="[\s\S]*?"/g,'');
-  html+='<p class="text-end"><a href="'+url+'" target="_blank">分享</a></p><br>';
+  html+=shareLink(url);
   }catch{html='<p><a href="'+url+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -1946,9 +1946,9 @@ async function lineTodayGetContent(id){
   const a = str.data;
   if (a) {
     if (a.media==undefined){
-      var html = '<p class="time">' + a.publishTime + ' | ' + a.publisher + '</p>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
+      var html = '<p class="time">' + a.publishTime + ' | ' + a.publisher + '</p>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + shareLink(a.url.url);
     } else {
-      html = '<p class="time">' + a.publishTime + ' ' + a.publisher + '</p>' + '<video class="video-js" style="width:100%" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+a.media.hash+'/270p.m3u8" muted="muted" type="application/x-mpegURL"></source></video>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + '<p class="text-end"><a href="' + a.url.url + '" target="_blank">分享</a></p><br>';
+      html = '<p class="time">' + a.publishTime + ' ' + a.publisher + '</p>' + '<video class="video-js" style="width:100%" playsinline webkit-playsinline controls><source src="https://today-obs.line-scdn.net/'+a.media.hash+'/270p.m3u8" muted="muted" type="application/x-mpegURL"></source></video>' + a.content.replace(/img data-hashid="/g, 'img src="https://today-obs.line-scdn.net/') + shareLink(a.url.url);
     }
   }
   }catch{html='<p><a href="' + a.url.url + '" target="_blank">繼續閱讀</a></p><br>'}
@@ -1996,7 +1996,7 @@ async function mindiGetContent(id){
   const str=await res.text();
   var parser=new DOMParser();
   var doc=parser.parseFromString(str, "text/html");
-  html = '<p class="time">'+doc.querySelector('p.post-date').innerText+'</p>'+doc.querySelector('.entry-content').outerHTML + '<p class="text-end"><a href="' + id + '" target="_blank">分享</a></p><br>';
+  html = '<p class="time">'+doc.querySelector('p.post-date').innerText+'</p>'+doc.querySelector('.entry-content').outerHTML + shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
@@ -2021,7 +2021,7 @@ async function msGetList(siteName,t){
 async function msGetContent(id){
   try{const res = await fetch(preStr+id);const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
-  html=(doc.querySelectorAll('.insightsContent .dividerColumns')?.[0].outerHTML??'').replaceAll('href="/','href="https://www.morganstanley.com/').replaceAll('src="/','src="https://www.morganstanley.com/').replace(/ class="[\s\S]*?"/g,'')+'<p class="text-end"><a href="'+id+'" target="_blank">分享</a></p><br>'; 
+  html=(doc.querySelectorAll('.insightsContent .dividerColumns')?.[0].outerHTML??'').replaceAll('href="/','href="https://www.morganstanley.com/').replaceAll('src="/','src="https://www.morganstanley.com/').replace(/ class="[\s\S]*?"/g,'')+shareLink(id); 
   }catch{html='<p><a href="'+id+'" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
