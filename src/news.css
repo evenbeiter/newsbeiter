@@ -25,7 +25,36 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
 .infobox.geography.vcard, .wikitable{max-width:100%!important}
 .bbc-2fjy3x{position:relative;height:0;width:5rem;height:5rem;} .bbc-1rvtlej{list-style:none;padding:0;margin:0;}
 #article-side-rail,.bbc-geybui,.bbc-1151pbn.ebmt73l0,button.transcript-title,.caas-attr,.caas-da,.caas-header,.caas-readmore,.coffee-btn-wrapper,div.body-tabs-data,.div-gpt-ad-cnyes_news_article_middle_2,div[data-componentname="Standard Banner"],div[data-componentname="Navigation List"],div[data-componentname="Image Cta"],div[data-componentname="Related Materials"],.edn-ads--inlineAds,form.subscription-widget-subscribe,.gmailNews,.googlenews_Content,.Google-special,.Google-special.d-md-block,.googlenews_Content,h2 svg, img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.wrapper-TJ9ObuLF.skeleton-PsAlMQQF,img.logo-ocURKVwI.xxxsmall-ocURKVwI.skeleton-ocURKVwI.wrapper-TJ9ObuLF,img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.letter-PsAlMQQF,img[src*="face/emoji"],.inline-ads,.inline-ads.inline-ads--desktop,.js-advertise.ad-content,.mw-editsection,.pg.red,.raise_block,div[data-e2e^="youtube-embed"],.reflist,.reflist.columns.references-column-width,.social-media-share-container,.SubscriptionInner.mySubscriptionInner,.tooltip-wrap.toggle_button_click,.udn-ads,.user-controls-container.print-no,#bmc-tn-modal,#inside_AD,#pumpkin_159,#references-NoteFoot,#sf_div-gpt-ad-1599104924568-0-1{display:none}
-@media only screen 
+
+/* ✅ iPhone 11、XR、12、13、14 以上機種 */
+@media screen and (max-width: 430px) and (-webkit-min-device-pixel-ratio: 2) {
+
+}
+
+/* ✅ 一般 iPad (如 9.7", 10.2", iPad Air) */
+@media screen and (min-width: 768px) and (max-width: 1023px) and (-webkit-min-device-pixel-ratio: 2) {
+  body{font-size:2rem} h1,h2,h3,h4,h5,h6,.title{font-size:2rem} .en-us,.fs12{font-size:1.6rem} .fs10, .time, figcaption, .btn{font-size:1.3rem} #list{padding:2rem} svg.bi{height:2.8rem !important;width:2.8rem !important}
+}
+
+/* ✅ iPad Pro 12.9 吋 */
+@media screen and (min-width: 1024px) and (max-width: 1366px) and (-webkit-min-device-pixel-ratio: 2) {
+  body{font-size:2rem} h1,h2,h3,h4,h5,h6,.title{font-size:2rem} .en-us,.fs12{font-size:1.6rem} .fs10, .time, figcaption, .btn{font-size:1.3rem} #list{padding:2rem} svg.bi{height:2.8rem !important;width:2.8rem !important}
+}
+
+/* ✅ 非 Retina 桌上型電腦（通常為老型螢幕）和Retina 桌機 / 筆電（如 MacBook Pro / iMac Retina）  */
+@media screen and (min-width: 1367px) {
+  @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
+  body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
+  #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8}
+  .sepia{background-color:#F8F8F8;color:#3B3B3B}
+  .sepia-contrast{background-color:#3B3B3B;color:#F8F8F8}
+  #list, .btn {font-weight:bold}
+  h1,h2,h3,h4,h5,h6,.title{font-size:1.2rem;color:#3B3B3B !important;font-weight:bold}.en-us,.fs12{font-size:1.2rem} 
+  #loading{width:5rem;height:5rem}
+}
+
+
+/* @media only screen 
   and (min-device-width: 768px) 
   and (max-device-width: 1023px) 
   and (-webkit-min-device-pixel-ratio: 2) {
@@ -46,5 +75,4 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
   #list, .btn {font-weight:bold}
   h1,h2,h3,h4,h5,h6,.title{font-size:1.2rem;color:#3B3B3B !important;font-weight:bold}.en-us,.fs12{font-size:1.2rem} 
   #loading{width:5rem;height:5rem}
-}
-/* .desktop-force{width:1200px;margin:auto} */
+} */
