@@ -1,5 +1,5 @@
 @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
-body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
+body {margin:0;background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
 #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8}
 .sepia{background-color:#F8F8F8;color:#3B3B3B}
 .sepia-contrast{background-color:#3B3B3B;color:#F8F8F8}
@@ -33,7 +33,7 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
 
 
 @media screen and (max-width: 1023px) and (-webkit-min-device-pixel-ratio: 2) {
-  body{margin:0;background-color:#F4ECD8;color:#3B2D20;font-size:1.5rem;font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;}
+  body{margin:0;background-color:#F4ECD8!important;color:#3B2D20!important;font-size:1.5rem;font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;}
   #container{min-height:100vh;margin:auto}
   .sepia{background-color:#F4ECD8;color:#3B2D20}
   .sepia-contrast{background-color:#3B2D20;color:#F4ECD8}
@@ -59,7 +59,7 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
 }
 
 /* ✅ 非 Retina 桌上型電腦（通常為老型螢幕）和Retina 桌機 / 筆電（如 MacBook Pro / iMac Retina）  */
-@media screen and (min-width: 1200px) {
+/* @media screen and (min-width: 1200px) {
   @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
   body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
   #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8}
@@ -70,7 +70,7 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
   .fs12, .en-us{font-size:1.3rem}
   #loading{width:5rem;height:5rem}
 }
-
+ */
 
 /* @media only screen 
   and (min-device-width: 768px) 
