@@ -42,7 +42,7 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
 }
 
 /* ✅ 非 Retina 桌上型電腦（通常為老型螢幕）和Retina 桌機 / 筆電（如 MacBook Pro / iMac Retina）  */
-@media screen and (min-width: 1367px) {
+@media screen and (min-width: 1200px) {
   @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
   body {background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
   #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8}
