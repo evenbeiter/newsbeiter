@@ -109,6 +109,161 @@
   // Auto-save on switching (to implement)
   // Search functionality (to implement)
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const editor = document.getElementById("editor");
+  const noteList = document.getElementById("noteList");
+  const versionList = document.getElementById("versionList");
+  const searchInput = document.getElementById("searchInput");
+  const searchResults = document.getElementById("searchResults");
+  let currentNotePath = "";
+  let currentTimestamp = null;
+
+  // ➕ 新增筆記
+  async function addNote(content, isStandalone = false, title = "") {
+    const payload = {
+      content,
+      isStandalone,
+      title,
+      siteName: location.href,
+      src: location.href
+    };
+    const res = await fetch("/note/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    return res.json();
+  }
+
+  // 📝 編輯筆記
+  async function editNote(path, timestamp, newContent) {
+    const res = await fetch("/note/edit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path, timestamp, newContent })
+    });
+    return res.json();
+  }
+
+  // ❌ 刪除筆記
+  async function deleteNote(path, timestamp) {
+    const res = await fetch("/note/delete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path, timestamp })
+    });
+    return res.json();
+  }
+
+  // 📖 讀取筆記
+  async function loadNote(path) {
+    const res = await fetch("/notes/read", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ path })
+    });
+    const lines = await res.json();
+    noteList.innerHTML = "";
+    lines.forEach(line => {
+      try {
+        const note = JSON.parse(line);
+        const li = document.createElement("li");
+        li.textContent = note.title || new Date(note.timestamp).toLocaleString();
+        li.onclick = () => showNote(note, path);
+        noteList.appendChild(li);
+      } catch {}
+    });
+  }
+
+  function showNote(note, path) {
+    editor.innerHTML = note.content;
+    currentNotePath = path;
+    currentTimestamp = note.timestamp;
+  }
+
+  // 🔍 搜尋
+  searchInput.addEventListener("input", async () => {
+    const q = searchInput.value;
+    if (!q.trim()) {
+      searchResults.innerHTML = "";
+      editor.style.display = "block";
+      return;
+    }
+
+    const res = await fetch(`/notes/search?q=${encodeURIComponent(q)}`);
+    const results = await res.json();
+    searchResults.innerHTML = "";
+    results.forEach(r => {
+      const div = document.createElement("div");
+      div.className = "search-result";
+      div.textContent = `${r.title} - ${r.path}`;
+      div.onclick = () => loadNote(r.path);
+      searchResults.appendChild(div);
+    });
+    editor.style.display = "none";
+  });
+
+  // 💾 自動儲存
+  async function autoSave() {
+    if (!currentNotePath || !currentTimestamp) return;
+    const html = editor.innerHTML;
+    if (!html.trim()) return;
+    await editNote(currentNotePath, currentTimestamp, html);
+  }
+
+  // ⌨ 貼上圖片或 URL
+  editor.addEventListener("paste", async (e) => {
+    const items = e.clipboardData.items;
+    for (const item of items) {
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile();
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await fetch("/upload/image", {
+          method: "POST",
+          body: formData
+        });
+        const { url } = await res.json();
+        insertImage(url);
+        e.preventDefault();
+        return;
+      } else if (item.type === "text/plain") {
+        const text = await (new Promise(resolve => item.getAsString(resolve)));
+        if (text.startsWith("http") && /\.(jpg|jpeg|png|gif|webp)$/i.test(text)) {
+          insertImage(text);
+          e.preventDefault();
+          return;
+        }
+      }
+    }
+  });
+
+  function insertImage(url) {
+    const img = document.createElement("img");
+    img.src = url;
+    img.style.maxWidth = "100%";
+    editor.appendChild(img);
+  }
+
+  // 🧰 格式工具
+  function format(command, value = null) {
+    document.execCommand(command, false, value);
+  }
+
+  document.getElementById("boldBtn").onclick = () => format("bold");
+  document.getElementById("italicBtn").onclick = () => format("italic");
+  document.getElementById("underlineBtn").onclick = () => format("underline");
+  document.getElementById("ulBtn").onclick = () => format("insertUnorderedList");
+  document.getElementById("colorBtn").onchange = (e) => format("foreColor", e.target.value);
+
+  // ⏳ 離開或切換自動儲存
+  window.addEventListener("beforeunload", autoSave);
+
+  // 🔄 預設載入
+  loadNote("standalone/首頁.txt"); // 載入預設筆記
+});
+</script>
 
 </body>
 </html>
