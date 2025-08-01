@@ -106,7 +106,7 @@ const preStr=sCC(uLi,iOd).replace('/api/fetch?url=','');
     const content = document.getElementById('noteEditor').innerHTML.trim();
     if (content === '') return alert('筆記為空，未儲存');
     if (content !== lastContent) {
-      fetch(`${backendURL}/note/add`, {
+      fetch(preStr+'/note/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title:noteTitle, content: content, isStandalone: true})
