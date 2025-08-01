@@ -122,27 +122,6 @@ const preStr=sCC(uLi,iOd).replace('/api/fetch?url=','');
     document.getElementById('noteEditor').innerHTML = lastContent;
   });
 
-async function get1stList(siteName,top,t){
-  rr=0;cursor='';
-  getList(siteName,t);
-  //showTop(top);
-}
-
-async function getList(siteName,t){
-  // loading.style.display='block';
-  // siteNameVar=siteName;rr++;rt=t;cursor='';
-  // if (rr==1){newNews()};
-  items=[];html='';
-  noteList.innerHTML+=await window[`${siteName}GetList`](siteName,t);
-  // if (msnALL.includes(siteName)){list.innerHTML+=await msnGetList(siteName,t)}
-  // else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
-  //loading.style.display='none';
-  // if (sites2Translate.includes(siteName)){
-  //   var all=document.querySelectorAll('.t-tl');
-  //   getTranslation(all);
-  //}
-}
-
 async function noteGetList(siteName,t){var rr=1;
   try{url=`${preStr}/notes/list/${t}`;
   const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
@@ -213,7 +192,7 @@ document.addEventListener('click', (e) => {
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-  const editor = document.getElementById("editor");
+  const editor = document.getElementById("noteEditor");
   const noteList = document.getElementById("noteList");
   const versionList = document.getElementById("versionList");
   const searchInput = document.getElementById("searchInput");
