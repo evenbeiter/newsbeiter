@@ -95,6 +95,17 @@ const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6
 const uLi=['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const preStr=sCC(uLi,iOd).replace('/api/fetch?url=','');
 
+  const title = document.getElementById("noteTitle");
+  const editor = document.getElementById("noteEditor");
+  const noteList = document.getElementById("noteList");
+  const versionList = document.getElementById("versionList");
+  const searchInput = document.getElementById("searchInput");
+  const searchResults = document.getElementById("searchResults");
+  let currentNotePath = "";
+  let currentTimestamp = null;
+  noteGetList('note','standalone');
+
+
   let lastContent = '';
 
   function execCmd(cmd) {
@@ -201,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchResults = document.getElementById("searchResults");
   let currentNotePath = "";
   let currentTimestamp = null;
-  noteGetList('note','standalone');
+  //noteGetList('note','standalone');
 
   // ➕ 新增筆記
   async function addNote(content, isStandalone = false, title = "") {
