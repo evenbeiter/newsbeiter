@@ -146,7 +146,7 @@ async function getList(siteName,t){
 async function noteGetList(siteName,t){var rr=1;
   try{url=`${preStr}/notes/list/${t}`;
   const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
-  for (let h of data){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
+  for (let h of data){html+=`<p class="title" onclick="noteGetContent('${h.path}')">${h.title}</p><hr>`}
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
@@ -162,12 +162,10 @@ async function noteGetContent(id){
   const str=await res.json();//const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
   for (let s of str){
     if (s) {var h=JSON.parse(s);//console.log(h);
-    html+=h.content}
+    editor.innerHTML+=h.content}
   }
-  if (html==='') html+='<p>尚無內容</p>';
-  else html=html.slice(0,html.length-4);
-  }catch{html='<p>尚無內容</p>'}
-  return html;
+  if (editor.innerHTML==='') editor.innerHTML+='<p>尚無內容</p>';
+  }catch{editor.innerHTML='<p>尚無內容</p>'}
 }
 
 
@@ -223,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchResults = document.getElementById("searchResults");
   let currentNotePath = "";
   let currentTimestamp = null;
-  get1stList('note','筆記','standalone');
+  noteGetList('note','standalone');
 
   // ➕ 新增筆記
   async function addNote(content, isStandalone = false, title = "") {
