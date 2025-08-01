@@ -41,15 +41,19 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tiptap/core@2.0.0-beta.237/dist/tiptap.umd.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@tiptap/core@2.0.0-beta.237/dist/tiptap.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tiptap/starter-kit@2.0.0-beta.237/dist/tiptap-starter-kit.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-image@2.0.0-beta.237/dist/tiptap-extension-image.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-image@2.0.0-beta.237/dist/tiptap-extension-image.umd.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  const { Editor } = window['@tiptap/core']
-  const StarterKit = window['@tiptap/starter-kit'].StarterKit
-  const Image = window['@tiptap/extension-image'].Image
+
+  import { Editor } from 'https://esm.sh/@tiptap/core'
+  import StarterKit from 'https://esm.sh/@tiptap/starter-kit'
+
+  //const { Editor } = window['@tiptap/core']
+  //const StarterKit = window['@tiptap/starter-kit'].StarterKit
+  //const Image = window['@tiptap/extension-image'].Image
 
   let autosaveTimer = null
   let currentNoteId = null
