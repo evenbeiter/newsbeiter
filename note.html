@@ -73,6 +73,7 @@
         </div>        
       </div>
 
+      <input id="noteTitle" class="form-control mb-2" type="text" placeholder="標題...">
       <div id="noteEditor" class="note-editor" contenteditable="true"></div>
       <div class="mt-2">
         <button id="uploadBtn" class="btn btn-success">上傳</button>
@@ -100,19 +101,16 @@ const preStr=sCC(uLi,iOd).replace('/api/fetch?url=','');
   }
 
   document.getElementById('uploadBtn').addEventListener('click', () => {
+    const title = document.getElementById('noteTitle').value.trim();
     const content = document.getElementById('noteEditor').innerHTML.trim();
     if (content === '') return alert('筆記為空，未儲存');
     if (content !== lastContent) {
-      // call API to upload (POST /api/uploadNote)
-      fetch(preStr+'/api/uploadNote', {
+      fetch(`${backendURL}/note/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          timestamp: Date.now(),
-          title: '新筆記',
-          content
-        })
-      }).then(res => res.json()).then(result => {
+        body: JSON.stringify({ title:noteTitle, content: content, isStandalone: true})
+      }).then(res => {
+        if (!res.ok) alert('❌ 上傳失敗');
         alert('筆記已儲存');
         lastContent = content;
       });
