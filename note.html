@@ -140,7 +140,8 @@ async function noteGetContent(id){
   const str=await res.json();//const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
   for (let s of str){
     if (s) {var h=JSON.parse(s);//console.log(h);
-    editor.innerHTML+=h.content}
+    title.value=h.title;
+    editor.innerHTML=h.content}
   }
   if (editor.innerHTML==='') editor.innerHTML+='<p>尚無內容</p>';
   }catch{editor.innerHTML='<p>尚無內容</p>'}
@@ -192,6 +193,7 @@ document.addEventListener('click', (e) => {
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  const title = document.getElementById("noteTitle");
   const editor = document.getElementById("noteEditor");
   const noteList = document.getElementById("noteList");
   const versionList = document.getElementById("versionList");
