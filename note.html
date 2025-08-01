@@ -109,7 +109,7 @@ const preStr=sCC(uLi,iOd).replace('/api/fetch?url=','');
       fetch(preStr+'/note/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title:noteTitle, content: content, isStandalone: true})
+        body: JSON.stringify({ title:title, content: content, isStandalone: true})
       }).then(res => {
         if (!res.ok) alert('❌ 上傳失敗');
         alert('筆記已儲存');
