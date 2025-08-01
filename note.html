@@ -146,9 +146,8 @@ async function getList(siteName,t){
 async function noteGetList(siteName,t){var rr=1;
   try{url=`${preStr}/notes/list/${t}`;
   const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
-  for (let h of data){html+=`<p class="title" onclick="noteGetContent('${h.path}')">${h.title}</p><hr>`}
-  }catch{html='<p>尚無內容</p>'}
-  return html;
+  for (let h of data){noteList.innerHTML+=`<p class="title" onclick="noteGetContent('${h.path}')">${h.title}</p><hr>`}
+  }catch{noteList.innerHTML='<p>尚無內容</p>'}
 }
 
 async function noteGetContent(id){

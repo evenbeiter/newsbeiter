@@ -1219,7 +1219,7 @@ async function isharesGetContent(id){
   try{
   const res = await fetch(preStr+id);const str=await res.text();
   var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-  var a=doc.querySelector('#mainWrapper').outerHTML.replace(/col-[\s\S]*? /g,'').replace(/col-[\s\S]*?"/g,'"').replace(/offset-[\s\S]*? /g,'').replace(/offset-[\s\S]*?"/g,'"').replaceAll('bg-white','').replaceAll('data-src="','src="').replace(/srcset="[\s\S]*?"/g,'').replaceAll('src="/','src="https://www.blackrock.com/');
+  var a=doc.querySelector('#mainWrapper').outerHTML.replace(/col-[\s\S]*? /g,'').replace(/col-[\s\S]*?"/g,'"').replace(/offset-[\s\S]*? /g,'').replace(/offset-[\s\S]*?"/g,'"').replaceAll('bg-white','').replaceAll('data-src="','src="').replace(/srcset="[\s\S]*?"/g,'').replaceAll('src="/','src="https://www.ishares.com/');
   if (str.match(/contentUrl":[\s\S]*?.mp4"/g)){a=a.replace('<video','<video playsinline src="'+preStr.replace('api/fetch','embed')+str.match(/contentUrl":"[\s\S]*?.mp4"/g)[0].replace('contentUrl":"',''))};
   html = a+shareLink(id);
   }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
