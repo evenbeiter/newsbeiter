@@ -129,20 +129,21 @@ async function get1stList(siteName,top,t){
 }
 
 async function getList(siteName,t){
-  loading.style.display='block';
-  siteNameVar=siteName;rr++;rt=t;cursor='';
-  if (rr==1){newNews()};
+  // loading.style.display='block';
+  // siteNameVar=siteName;rr++;rt=t;cursor='';
+  // if (rr==1){newNews()};
   items=[];html='';
-  if (msnALL.includes(siteName)){list.innerHTML+=await msnGetList(siteName,t)}
-  else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
-  loading.style.display='none';
-  if (sites2Translate.includes(siteName)){
-    var all=document.querySelectorAll('.t-tl');
-    getTranslation(all);
-  }
+  noteList.innerHTML+=await window[`${siteName}GetList`](siteName,t);
+  // if (msnALL.includes(siteName)){list.innerHTML+=await msnGetList(siteName,t)}
+  // else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
+  //loading.style.display='none';
+  // if (sites2Translate.includes(siteName)){
+  //   var all=document.querySelectorAll('.t-tl');
+  //   getTranslation(all);
+  //}
 }
 
-async function noteGetList(siteName,t){
+async function noteGetList(siteName,t){var rr=1;
   try{url=`${preStr}/notes/list/${t}`;
   const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
   for (let h of data){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
