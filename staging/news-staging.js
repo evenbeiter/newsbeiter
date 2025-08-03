@@ -331,7 +331,8 @@ async function getContent(siteName,clickedId,id){
       if (cEl.querySelector('a')==null){
         //get content
         if (msnALL.includes(siteName)){cEl.innerHTML+=await msnGetContent(id)}
-        else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
+        //else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
+        else {cEl.innerHTML+=await (await fetch(`https://newsbeiter.onrender.com/api/getContent?src=${siteName}&id=${id}`)).text();}
         
         //handle videos for line
         if (siteName=='lineToday'){
@@ -1089,21 +1090,21 @@ async function abGetContent(id){
 //   return html;
 // }
 
-async function bbcGetContent(id){
-  try{const res = await fetch(preStr+encodeURIComponent(id));
-  const str=await res.text();
-  var embeds=str.match(/https:\/\/www.bbc.com\/ws\/av-embeds[\s\S]*?zh-hant/g);
-  var parser = new DOMParser();
-  var doc = parser.parseFromString(str, "text/html");
-  var a=doc.querySelector('main');
-  var vdo=a.querySelectorAll('[data-e2e^="media-loader"]');
-  for (let v=0;v<vdo.length;v++){
-    vdo[v].outerHTML=`<iframe src="${embeds[v]}" scrolling=no allow="fullscreen" style="border:none;border-radius:0.375rem;aspect-ratio:16/9"></iframe>`;
-  }
-  html = a.outerHTML+shareLink(id);
-  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
-  return html;
-}
+//async function bbcGetContent(id){
+//  try{const res = await fetch(preStr+encodeURIComponent(id));
+//  const str=await res.text();
+//  var embeds=str.match(/https:\/\/www.bbc.com\/ws\/av-embeds[\s\S]*?zh-hant/g);
+//  var parser = new DOMParser();
+//  var doc = parser.parseFromString(str, "text/html");
+//  var a=doc.querySelector('main');
+//  var vdo=a.querySelectorAll('[data-e2e^="media-loader"]');
+//  for (let v=0;v<vdo.length;v++){
+//    vdo[v].outerHTML=`<iframe src="${embeds[v]}" scrolling=no allow="fullscreen" style="border:none;border-radius:0.375rem;aspect-ratio:16/9"></iframe>`;
+//  }
+//  html = a.outerHTML+shareLink(id);
+//  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+//  return html;
+//}
 
 
 //    BBG
