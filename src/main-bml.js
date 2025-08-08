@@ -1,4 +1,4 @@
-(function(){
+// (function(){
 
 // functions-init > functions-fetchbml > main-bml > functions-notes > opencc-cn2t
 
@@ -135,6 +135,6 @@ if (siteNameVar!==''){
   openUrlList();
 }
 
-window.options=options;window.btn=btn;window.channelList=channelList;window.searchList=searchList;window.ecoMagList=ecoMagList;window.urlList=urlList;window.list=list;window.topdiv=topdiv;window.loading=loading;window.closeBtn=closeBtn;window.backdrop=backdrop;window.overlay=overlay;window.isVisible=isVisible;
+// window.options=options;window.btn=btn;window.channelList=channelList;window.searchList=searchList;window.ecoMagList=ecoMagList;window.urlList=urlList;window.list=list;window.topdiv=topdiv;window.loading=loading;window.closeBtn=closeBtn;window.backdrop=backdrop;window.overlay=overlay;window.isVisible=isVisible;
 
-})();
+// })();

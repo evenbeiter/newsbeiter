@@ -1,4 +1,4 @@
-(function(){
+// (function(){
 
 //    AB
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -281,13 +281,13 @@ async function xueqiuGetContent(id){
   return html;
 }
 
-window.abGetList=abGetList;window.abGetContent=abGetContent;
-window.bbgGetList=bbgGetList;window.bbgGetContent=bbgGetContent;
-window.invtComGetList=invtComGetList;window.invtComGetContent=invtComGetContent;
-window.mindiGetList=mindiGetList;window.mindiGetContent=mindiGetContent;
-window.nbGetList=nbGetList;window.nbGetContent=nbGetContent;
-window.schrodersGetList=schrodersGetList;window.schrodersGetContent=schrodersGetContent;
-window.twtGetList=twtGetList;
-window.xueqiuGetList=xueqiuGetList;window.xueqiuGetContent=xueqiuGetContent;
+// window.abGetList=abGetList;window.abGetContent=abGetContent;
+// window.bbgGetList=bbgGetList;window.bbgGetContent=bbgGetContent;
+// window.invtComGetList=invtComGetList;window.invtComGetContent=invtComGetContent;
+// window.mindiGetList=mindiGetList;window.mindiGetContent=mindiGetContent;
+// window.nbGetList=nbGetList;window.nbGetContent=nbGetContent;
+// window.schrodersGetList=schrodersGetList;window.schrodersGetContent=schrodersGetContent;
+// window.twtGetList=twtGetList;
+// window.xueqiuGetList=xueqiuGetList;window.xueqiuGetContent=xueqiuGetContent;
 
-})();
+// })();
