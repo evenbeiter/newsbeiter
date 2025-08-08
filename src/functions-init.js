@@ -1,3 +1,5 @@
+(function(){
+    
 var onEVBT=true; if (window.location.href.indexOf('evenbeiter.github.io')==-1){onEVBT=false;}
 const ab=[['','Latest']];
 const apollo=[['','Latest']];
@@ -557,3 +559,8 @@ function showOverlay(el,elSrc){
   } else {document.getElementById('gtmImg').src=elSrc;}
 }
 function shareLink(url){return `<p class="text-end"><a href="${url}" target="_blank">分享</a></p><br>`}
+
+window.ab=ab;window.bbg=bbg;window.iOd=iOd;window.uLi=uLi;window.preStr=preStr;window.invtCom=invtCom;window.mindi=mindi;window.nb=nb;window.schroders=schroders;window.twt=twt;window.xueqiu=xueqiu;window.allSitesB=allSitesB;
+window.openContentDirectly=openContentDirectly;window.cvtSc2Tc=cvtSc2Tc;window.sites2Translate=sites2Translate;window.kr=kr;window.noNextPage=noNextPage;window.msnALL=msnALL;window.rmImgStyle=rmImgStyle;
+
+  })();

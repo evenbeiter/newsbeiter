@@ -1,3 +1,5 @@
+(function(){
+
 //    AB
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -219,6 +221,27 @@ async function schrodersGetContent(id){
 }
 
 
+//    TWT
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function twtGetList(siteName,t){
+  try{
+  const res=await fetch(preStr+encodeURIComponent('https://nitter.poast.org/'+t+cursor));const str=await res.text();
+  var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
+  const sm=doc.querySelector('.show-more').children[0].href;cursor=sm.slice(sm.indexOf('?'));
+  items=doc.querySelectorAll('.tweet-body');
+  for (let h of items){
+    html+='<p class="time">'+(h.querySelector('.tweet-date')?.innerText??'')+' | '+(h.querySelector('.fullname')?.innerText??'')+' '+(h.querySelector('.username')?.innerText??'')+'</p>'+(h.querySelector('.tweet-content.media-body')?.outerHTML.replaceAll('<div','<p').replaceAll('</div>','</p>').replaceAll('%3Fname%3Dsmall%26format%3Dwebp','')??'');
+    try{var img=h.querySelector('.attachments').querySelectorAll('img');
+    if (img){for (let i of img){html+='<img src="'+i.src+'">';}}
+   }catch{};
+   html+='<br><hr>';
+  }
+  }catch{html='<p>No Content.</p>'}
+  return html;
+}
+
+
 //    XUEQIU
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -257,3 +280,14 @@ async function xueqiuGetContent(id){
   }catch{html='<p><a href="https://xueqiu.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
+
+window.abGetList=abGetList;window.abGetContent=abGetContent;
+window.bbgGetList=bbgGetList;window.bbgGetContent=bbgGetContent;
+window.invtComGetList=invtComGetList;window.invtComGetContent=invtComGetContent;
+window.mindiGetList=mindiGetList;window.mindiGetContent=mindiGetContent;
+window.nbGetList=nbGetList;window.nbGetContent=nbGetContent;
+window.schrodersGetList=schrodersGetList;window.schrodersGetContent=schrodersGetContent;
+window.twtGetList=twtGetList;
+window.xueqiuGetList=xueqiuGetList;window.xueqiuGetContent=xueqiuGetContent;
+
+})();

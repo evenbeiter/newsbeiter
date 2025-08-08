@@ -1,10 +1,13 @@
-// functions-init > main-bml > functions-fetch > functions-notes > opencc-cn2t
+(function(){
+
+// functions-init > functions-fetchbml > main-bml > functions-notes > opencc-cn2t
 
 //    RENDER HTML FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 for (let l of allSitesB) {var ss=l[3].split('|');for (let s of ss){if (window.location.href.indexOf(s) !== -1) {siteNameVar=l[0];docTitle=l[1];tabs=l[2];break}}};
 
+//  (to be removed in chrome extension)
 document.documentElement.innerHTML=`
 <!DOCTYPE html>
 <html>
@@ -131,3 +134,7 @@ if (siteNameVar!==''){
   createUrlListDiv([allSitesB]);
   openUrlList();
 }
+
+window.options=options;window.btn=btn;window.channelList=channelList;window.searchList=searchList;window.ecoMagList=ecoMagList;window.urlList=urlList;window.list=list;window.topdiv=topdiv;window.loading=loading;window.closeBtn=closeBtn;window.backdrop=backdrop;window.overlay=overlay;window.isVisible=isVisible;
+
+})();
