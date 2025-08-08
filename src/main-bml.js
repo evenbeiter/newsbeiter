@@ -9,9 +9,6 @@ document.documentElement.innerHTML=`
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="https://evenbeiter.github.io/newsbeiter/icons/icon-32.png">
-<link rel="apple-touch-icon" href="https://evenbeiter.github.io/newsbeiter/icons/icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="">
 <meta charset="utf-8">
@@ -94,10 +91,6 @@ document.documentElement.innerHTML=`
 </div>
 </div>
   
-<script src="src/news.js"></script>
-<script src="src/opencc-cn2t.js"></script>
-<script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </body>
 </html>
 `;
