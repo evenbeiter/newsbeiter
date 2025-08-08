@@ -1,4 +1,4 @@
-(function(){
+// (function(){
     
 var onEVBT=true; if (window.location.href.indexOf('evenbeiter.github.io')==-1){onEVBT=false;}
 const ab=[['','Latest']];
@@ -561,9 +561,6 @@ function showOverlay(el,elSrc){
 }
 function shareLink(url){return `<p class="text-end"><a href="${url}" target="_blank">分享</a></p><br>`}
 
-// window.ab=ab;window.bbg=bbg;window.iOd=iOd;window.uLi=uLi;window.preStr=preStr;window.invtCom=invtCom;window.mindi=mindi;window.nb=nb;window.schroders=schroders;window.xueqiu=xueqiu;window.allSitesB=allSitesB;
-// window.openContentDirectly=openContentDirectly;window.cvtSc2Tc=cvtSc2Tc;window.sites2Translate=sites2Translate;window.kr=kr;window.noNextPage=noNextPage;window.msnALL=msnALL;window.rmImgStyle=rmImgStyle;
-
 window.ab=ab;window.bbg=bbg;window.iOd=iOd;window.uLi=uLi;window.preStr=preStr;window.invtCom=invtCom;window.mindi=mindi;window.nb=nb;window.schroders=schroders;window.twt=twt;window.xueqiu=xueqiu;window.allSitesB=allSitesB;
 window.createChannelList=createChannelList;window.createSearchListDiv=createSearchListDiv;window.createUrlListDiv=createUrlListDiv;window.get1stList=get1stList;window.get1stSearchResults=get1stSearchResults;window.getFAQSearchResults=getFAQSearchResults;window.getList=getList;window.getContent=getContent;window.getSearchResults=getSearchResults;window.cvtS2HHMMSS=cvtS2HHMMSS;window.translate=translate;window.translateGoogle=translateGoogle;window.translatePapago=translatePapago;window.getTranslation=getTranslation;
 window.openContentDirectly=openContentDirectly;window.cvtSc2Tc=cvtSc2Tc;window.sites2Translate=sites2Translate;window.kr=kr;window.noNextPage=noNextPage;window.msnALL=msnALL;window.rmImgStyle=rmImgStyle;
@@ -571,4 +568,4 @@ window.getLastNSats=getLastNSats;window.showTop=showTop;window.newNews=newNews;w
 window.cvtS2HHMMSS=cvtS2HHMMSS;window.startLazyTranslation=startLazyTranslation;
 window.translateGoogle=translateGoogle;window.jsonToHtml=jsonToHtml;window.transformToParagraphs=transformToParagraphs;window.shareLink=shareLink;
 
-})();
+// })();
