@@ -22,7 +22,6 @@ const isbl=[['','Latest']];
 const jin=[['','最新'],['topic/402/','精選圖表'],['topic/416','宏觀圖表'],['topic/415/','股市'],['topic/72/','金融大鱷'],['topic/20/','FED'],['topic/47/','ECB'],['topic/51/','BOJ'],['topic/31/','黃金'],['topic/388/','原油'],['topic/418/','川普'],['topic/373/','俄烏'],['topic/356/','中東'],['topic/352/','半導體']];
 const jpm=[['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/_jcr_content/root/responsivegrid/jpm_am_mosaic_copy.model.json','Latest'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/mi-guide-to-the-markets-us','GTM'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/market-insights/guide-to-alternatives/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-alternatives/mi-guide-to-alternatives','GTA'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/etf-insights/guide-to-etfs/_jcr_content.linklistv2.json__market-insights/guide-to-etfs/guide-to-etfs','GTE'],['https://am.jpmorgan.com/content/jpm-am-aem/emea/no/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/mi-guide-to-the-markets-ce-en','GTEU'],['https://am.jpmorgan.com/content/jpm-am-aem/asiapacific/hk/en/adv/insights/market-insights/guide-to-the-markets/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie.model.json__market-insights/guide-to-the-markets/guide-to-the-markets-asia','GTAS'],['https://am.jpmorgan.com/content/jpm-am-aem/americas/us/en/adv/insights/retirement-insights/guide-to-retirement/_jcr_content/root/responsivegrid/jpm_am_gtx_slide_vie_1506598259.model.json__retirement-insights/guide-to-retirement-us','GTR']];
 const jpmpb=[['','Latest']];
-const kd=[['이산|77','李祘']];
 const lineToday=[['top','焦點'],['finance','理財'],['100140','鉅亨'],['102394|103101','經濟工商'],['103214|100267','M平方'],['100295','今周刊'],['101131','CMoney'],['100422|100421|100423','商周'],['101170','路透社'],['104453|101006','財訊'],['100150|103088','鏡週刊'],['101427','CTWANT'],['100237','東森'],['100167','TVBS'],['100004|101886','風傳媒'],['100275|101201','關鍵評論網'],['global','國際'],['100003','中央社'],['TOPIC-USelection|2024election','川普2.0'],['worldtrend','世界趨勢'],['101074','CNN'],['tech','科技'],['AI','AI'],['100317','數位時代'],['100341','科技新報'],['101196','科技報橘'],['104322','優分析'],['104264','產業定錨筆記'],['100198','經理人月刊'],['101499','德國之聲'],['100462','換日線'],['100568|100158','天下雜誌'],['101031','地球圖輯隊'],['101934|100394|103227','閱讀'],['domestic','國內'],['TOPIC-BingeWatching','追劇'],['TOPIC-KoreaStar','韓星最前線'],['health','健康'],['life','生活'],['cleanandstorage','生活智慧王'],['100746|TOPIC-DIY','裝潢'],['fun','鄉民'],['entertainment','娛樂'],['travel','旅遊'],['TOPIC-TravelJapan','日本旅遊情報']];
 const mindi=[['','最新']];
 const ms=[['','Latest']];
@@ -63,12 +62,11 @@ const videoSites=[['msnVideo','MSN'],['yahooVideo','Yahoo',yahooVideo,'finance.y
 
 const allSitesB=[['bbg','BBG',bbg,'bloomberg.com','https://www.bloomberg.com'],['nb','NB',nb,'nb.com','https://www.nb.com'],['ab','AB',ab,'alliancebernstein.com','https://www.alliancebernstein.com'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['schroders','Schroders',schroders,'schroders.com','https://www.schroders.com/en-us/us/non-resident-clients/insights'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 
-const openContentDirectly=['apollo','cnyeshao','ecoMag','kd'];
+const openContentDirectly=['apollo','cnyeshao','ecoMag'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
 const sites2Translate=['ab','apollo','bbg','blk','boa','ecoMag','gsam','invesco','ishares','jpm','jpmpb','ms','msnUS','nb','peInsights','pimco','ssga','substack','yahooTW'];
-const kr=['kd','ytn'];
-const text2Speech=['kd'];
-const noNextPage=['ecoMag','kd'];
+const kr=['ytn'];
+const noNextPage=['ecoMag'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-17ytifv, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
 
@@ -106,15 +104,9 @@ document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'E
 
 function createChannelList(site,siteName,top){
   channelList.innerHTML='';
-  if (siteName.indexOf('|')===-1){
-    for (let tab of site){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top} | ${tab[1]}','${tab[0]}')">${tab[1]}</button>`;}
-    openChannelList();
-    get1stList(siteName, top+' | '+site[0][1],site[0][0]);
-  } else {
-    const title=siteName.split('|')[0];const num=siteName.split('|')[1];
-    for (let i=1;i<Number(num)+1;i++){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('kd','${top} | ${String(i).padStart(num.length, '0')}','${title}/${String(i).padStart(num.length, '0')}')">${String(i).padStart(num.length, '0')}</button>`;}
-    openChannelList();
-  }
+  for (let tab of site){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top} | ${tab[1]}','${tab[0]}')">${tab[1]}</button>`;}
+  openChannelList();
+  get1stList(siteName, top+' | '+site[0][1],site[0][0]);
 }
 
 function createSearchListDiv(faqList,searchSiteList){
@@ -268,23 +260,12 @@ async function getContent(siteName,clickedId,id){
       // var all=cEl.querySelectorAll('p:not(.time):not(.xtl), h2, h3, li');
       // getTranslation(all);
       } else if (kr.includes(siteName)){
-        if (siteName=='kd'){
-        var txt=cEl.previousElementSibling.textContent;txt=txt.substring(txt.indexOf('. ')+2);
-        if (speechSynthesis.getVoices().length===0){speechSynthesis.onvoiceschanged=()=>{}};
-        const voices = speechSynthesis.getVoices();
-        const koreanVoice = voices.find(v => v.lang === 'ko-KR') || voices.find(v => v.lang.startsWith('ko'));
-        const utter = new SpeechSynthesisUtterance(txt);
-        utter.lang = 'ko-KR';if (koreanVoice) {utter.voice = koreanVoice};utter.rate = 1;utter.pitch = 1;speechSynthesis.cancel();speechSynthesis.speak(utter);
-        //const utterance=new SpeechSynthesisUtterance(txt);utterance.lang='ko-KR';utterance.rate=1;utterance.pitch=1;window.speechSynthesis.cancel();window.speechSynthesis.speak(utterance);
-        if (cEl.innerText==''){var a=await translatePapago(txt);if (a!==''){cEl.innerHTML+='<p class="fs10">'+a+'</p>'}};
-      } else {
         var all=cEl.querySelectorAll('p:not(.time), h2, h3, li');
         for (let a of all){
           var t=await translatePapago(a.textContent);
           if (t!==''){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
         }
       }
-    }
   } else {
     var e=window.event;
     if (e && (e.target.tagName==='VIDEO' || isImageLikeElement(e.target) || e.target.closest('button') || e.target.closest('.safe-click'))){return}else{
@@ -295,7 +276,6 @@ async function getContent(siteName,clickedId,id){
         if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
         try{
           if (msnALL.includes(siteName)){cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()}
-          else if (siteName!=='kd') {cEl.previousElementSibling.previousElementSibling.scrollIntoView()}
         } catch {document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
       }
     }

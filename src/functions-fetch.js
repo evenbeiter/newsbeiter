@@ -2047,30 +2047,6 @@ async function ecoMagGetList(siteName,t){
 }
 
 
-//    KOREAN
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-async function getKdFromJson(t){
-  const title=t.split('|')[0];const num=t.split('|')[0];
-  const res=await fetch('https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/korean/'+title+'/'+n+'.json');
-  const str=await res.json();
-  ecoMagContent=str[0];
-  channelList.innerHTML='';
-  for (let h of ecoMagContent.content){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('ecoMag','The Economist | ${h.section}','${h.section}')">${h.section}</button>`;}
-  openChannelList();
-  get1stList('ecoMag','The Economist | Leaders','Leaders');
-}
-
-async function kdGetList(siteName,t){
-  try{url='https://raw.githubusercontent.com/evenbeiter/media/refs/heads/main/korean/'+t+'.txt';console.log(url);
-  const res=await fetch(url);const str=await res.text();
-  const raw=str.split('\n');items=raw.filter(item=>item!=="");var i=1;
-  for (let h of items){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'line-${i}')"><span class="fs07 text-secondary">${i}.</span> ${h.replace('\t','：')}</p><div id="line-${i}" class="content" onclick="getContent('${siteName}',this.id,'line-${i}')"></div><hr>`;i++;}
-  }catch{html='<p>尚無內容</p>'}
-  return html;
-}
-
-
 //    NOTES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
