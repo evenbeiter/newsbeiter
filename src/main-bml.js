@@ -96,6 +96,26 @@ document.documentElement.innerHTML=`
 `;
 
 
+//    DEFINE NAME OF ELEMENTS (same in main-page.js)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const options=document.getElementById('btn-group');
+const btn=document.getElementById('btn');
+const channelList=document.getElementById('channelList');
+const searchList=document.getElementById('searchList');
+const ecoMagList=document.getElementById('ecoMagList');
+const urlList=document.getElementById('urlList');
+const list=document.getElementById('list');
+const topdiv=document.getElementById('top');
+const loading=document.getElementById('loading');
+
+const closeBtn=document.getElementById('overlayCloseBtn');
+const backdrop=document.getElementById('overlayBackdrop');
+const overlay=document.getElementById('customOverlay');
+const isVisible=!overlay.classList.contains('d-none');
+document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'Escape') {hideOverlay()}});
+
+
 //    CREATE CHANNEL, SEARCH & URL LIST FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
