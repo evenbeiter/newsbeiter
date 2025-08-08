@@ -617,6 +617,62 @@ function jsonToHtml(data) {
   return data.map(renderParagraphOrImage).join('\n');
 }
 
+function transformToParagraphs(targets) {
+  const elements = (targets instanceof NodeList || Array.isArray(targets))
+    ? Array.from(targets)
+    : [targets];
+
+  elements.forEach(element => {
+    processElement(element);
+  });
+
+  function processElement(el) {
+    const blockTagsToKeep = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'LI'];
+    const inlineTags = ['SPAN', 'B', 'I', 'U', 'EM', 'STRONG', 'A', 'SMALL', 'BIG', 'MARK'];
+
+    const newElements = [];
+    let currentText = '';
+
+    for (const node of Array.from(el.childNodes)) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        currentText += node.textContent;
+      } else if (node.nodeName === 'BR') {
+        if (currentText.trim()) {
+          const p = document.createElement('p');
+          p.textContent = currentText.trim();
+          newElements.push(p);
+          currentText = '';
+        }
+      } else if (inlineTags.includes(node.nodeName)) {
+        const temp = document.createElement('div');
+        temp.append(...Array.from(node.childNodes));
+        currentText += temp.textContent;
+      } else if (blockTagsToKeep.includes(node.nodeName)) {
+        if (currentText.trim()) {
+          const p = document.createElement('p');
+          p.textContent = currentText.trim();
+          newElements.push(p);
+          currentText = '';
+        }
+        newElements.push(node);
+      } else {
+        currentText += node.textContent;
+      }
+    }
+
+    if (currentText.trim()) {
+      const p = document.createElement('p');
+      p.textContent = currentText.trim();
+      newElements.push(p);
+    }
+
+    el.innerHTML = '';
+    for (const newEl of newElements) {
+      el.appendChild(newEl);
+    }
+  }
+}
+
 function getLastNSats(n) {
   const saturdays = [];const today = new Date();
   const dayOfWeek = today.getDay(); // Sunday = 0, Saturday = 6
@@ -869,27 +925,48 @@ function attachNoteEventListeners() {
 }
 
 
-async function loadNoteTitles() {
-  const res = await fetch('/notes/list');
-  const list = await res.json();
+// async function loadNoteTitles() {
+//   const res = await fetch('/notes/list');
+//   const list = await res.json();
 
-  const ul = document.getElementById('note-title-list');
-  ul.innerHTML = '';
+//   const ul = document.getElementById('note-title-list');
+//   ul.innerHTML = '';
 
-  list.forEach(item => {
-    const li = document.createElement('li');
-    li.textContent = item.title;
-    li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-    li.dataset.path = item.path;
+//   list.forEach(item => {
+//     const li = document.createElement('li');
+//     li.textContent = item.title;
+//     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
+//     li.dataset.path = item.path;
 
-    // 點擊載入筆記
-    li.addEventListener('click', () => {
-      loadNotes(item.path);
-    });
+//     // 點擊載入筆記
+//     li.addEventListener('click', () => {
+//       loadNotes(item.path);
+//     });
 
-    ul.appendChild(li);
-  });
-}
+//     ul.appendChild(li);
+//   });
+// }
+
+
+// async function loadNotes(path) {
+//   try {
+//     const res = await fetch('/notes/read', {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ path })
+//     });
+
+//     if (!res.ok) throw new Error('無法讀取筆記');
+
+//     const { content } = await res.json();
+//     const notes = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
+
+//     renderNotes(notes, path); // 顯示筆記，第二個參數是 data-path
+//   } catch (err) {
+//     console.error('讀取筆記錯誤:', err.message);
+//     renderNotes([], path); // 沒有內容就顯示空
+//   }
+// }
 
 
 async function noteGetList(siteName,t){
@@ -899,27 +976,6 @@ async function noteGetList(siteName,t){
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
-
-async function loadNotes(path) {
-  try {
-    const res = await fetch('/notes/read', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ path })
-    });
-
-    if (!res.ok) throw new Error('無法讀取筆記');
-
-    const { content } = await res.json();
-    const notes = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
-
-    renderNotes(notes, path); // 顯示筆記，第二個參數是 data-path
-  } catch (err) {
-    console.error('讀取筆記錯誤:', err.message);
-    renderNotes([], path); // 沒有內容就顯示空
-  }
-}
-
 
 async function noteGetContent(id){console.log(id);
   try{url=`${backendURL}/notes/read`;
@@ -3101,61 +3157,7 @@ async function kdGetList(siteName,t){
 
 
 
-function transformToParagraphs(targets) {
-  const elements = (targets instanceof NodeList || Array.isArray(targets))
-    ? Array.from(targets)
-    : [targets];
 
-  elements.forEach(element => {
-    processElement(element);
-  });
-
-  function processElement(el) {
-    const blockTagsToKeep = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'LI'];
-    const inlineTags = ['SPAN', 'B', 'I', 'U', 'EM', 'STRONG', 'A', 'SMALL', 'BIG', 'MARK'];
-
-    const newElements = [];
-    let currentText = '';
-
-    for (const node of Array.from(el.childNodes)) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        currentText += node.textContent;
-      } else if (node.nodeName === 'BR') {
-        if (currentText.trim()) {
-          const p = document.createElement('p');
-          p.textContent = currentText.trim();
-          newElements.push(p);
-          currentText = '';
-        }
-      } else if (inlineTags.includes(node.nodeName)) {
-        const temp = document.createElement('div');
-        temp.append(...Array.from(node.childNodes));
-        currentText += temp.textContent;
-      } else if (blockTagsToKeep.includes(node.nodeName)) {
-        if (currentText.trim()) {
-          const p = document.createElement('p');
-          p.textContent = currentText.trim();
-          newElements.push(p);
-          currentText = '';
-        }
-        newElements.push(node);
-      } else {
-        currentText += node.textContent;
-      }
-    }
-
-    if (currentText.trim()) {
-      const p = document.createElement('p');
-      p.textContent = currentText.trim();
-      newElements.push(p);
-    }
-
-    el.innerHTML = '';
-    for (const newEl of newElements) {
-      el.appendChild(newEl);
-    }
-  }
-}
 
 
 // const output = input.replace(/class="([^"]*)"/g, (match, classNames) => {
