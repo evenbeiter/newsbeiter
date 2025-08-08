@@ -1,7 +1,4 @@
-// var onEVBT=true; if (window.location.href.indexOf('evenbeiter.github.io')==-1){onEVBT=false;}
-// const params=new URLSearchParams(location.search);
-// if(params.get('mode')==='desktop'){document.documentElement.classList.add('desktop-force')};
-
+var onEVBT=true; if (window.location.href.indexOf('evenbeiter.github.io')==-1){onEVBT=false;}
 const ab=[['','Latest']];
 const apollo=[['','Latest']];
 const bbc=[['','首頁'],['topics/c83plve5vmjt','國際'],['topics/cd6qem06z92t','台灣'],['topics/cpydz21p2zmt','經濟'],['topics/cq8nqywy37yt','財經'],['topics/cgqny5mmrezt','股市'],['topics/cn05jy5nv81t','川普關稅'],['topics/cgvl47l38e1t','影片']];
