@@ -1,10 +1,11 @@
-// functions-init > main-page > functions-fetch > functions-notes > opencc-cn2t
+// functions-init > main > functions-fetch > functions-notes > opencc-cn2t
 
-//    DEFINE NAME OF ELEMENTS (same in main-bml.js)
+//    DEFINE NAME OF ELEMENTS (same in main.bml.js)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const options=document.getElementById('btn-group');
 const btn=document.getElementById('btn');
+const uploadBtn = document.getElementById('uploadBtn');
 const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
 const ecoMagList=document.getElementById('ecoMagList');

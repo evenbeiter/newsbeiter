@@ -91,6 +91,7 @@ document.documentElement.innerHTML=`
 
 const options=document.getElementById('btn-group');
 const btn=document.getElementById('btn');
+const uploadBtn = document.getElementById('uploadBtn');
 const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
 const ecoMagList=document.getElementById('ecoMagList');
