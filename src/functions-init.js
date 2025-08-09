@@ -259,6 +259,7 @@ async function getContent(siteName,clickedId,id){
         if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
         try{
           if (msnALL.includes(siteName)){cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()}
+          else if (siteName!=='kd') {cEl.previousElementSibling.previousElementSibling.scrollIntoView()}
         } catch {document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
       }
     }
@@ -567,5 +568,6 @@ function shareLink(url){return `<p class="text-end"><a href="${url}" target="_bl
 // window.getLastNSats=getLastNSats;window.showTop=showTop;window.newNews=newNews;window.openChannelList=openChannelList;window.openSearchList=openSearchList;window.openUrlList=openUrlList;window.openEcoMagList=openEcoMagList;window.openOptions=openOptions;window.ping=ping;window.cvt2Timezone=cvt2Timezone;window.sCC=sCC;window.openUrl=openUrl;window.decodeHTMLEntities=decodeHTMLEntities;window.cnTest=cnTest;window.convertTextInsideTags=convertTextInsideTags;window.hideOverlay=hideOverlay;window.showOverlay=showOverlay;
 // window.cvtS2HHMMSS=cvtS2HHMMSS;window.startLazyTranslation=startLazyTranslation;
 // window.translateGoogle=translateGoogle;window.jsonToHtml=jsonToHtml;window.transformToParagraphs=transformToParagraphs;window.shareLink=shareLink;
+
 
 // })();
