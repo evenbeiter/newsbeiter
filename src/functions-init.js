@@ -259,7 +259,7 @@ async function getContent(siteName,clickedId,id){
         if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
         try{
           if (msnALL.includes(siteName)){cEl.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.scrollIntoView()}
-          else if (siteName!=='kd') {cEl.previousElementSibling.previousElementSibling.scrollIntoView()}
+          else {cEl.previousElementSibling.previousElementSibling.scrollIntoView()}
         } catch {document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
       }
     }
@@ -571,3 +571,4 @@ function shareLink(url){return `<p class="text-end"><a href="${url}" target="_bl
 
 
 // })();
+
