@@ -328,7 +328,7 @@ async function getTranslation(all){
     //if (a.innerText!==''){
       var t=await translate(a.outerHTML);
       //var t=await translate(a.textContent);
-      if (t!==''&&t!==undefined){a.outerHTML+=`<div class="fs12">${t}</div>`};
+      if (t!==''&&t!==undefined){a.outerHTML+=t};
       //if (t!==''&&t!==undefined){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
     }
   }
@@ -346,7 +346,7 @@ function startLazyTranslation(containerElement) {
 
       //const translated = await translateText(rawText);
       const translated = await translate(rawText);
-      el.insertAdjacentHTML('afterend',`<div class="fs12">${translated}</div>`)
+      el.insertAdjacentHTML('afterend',translated)
       //insertTranslationAfter(el, translated);
       el.setAttribute('data-translated', 'true');
       observer.unobserve(el);
