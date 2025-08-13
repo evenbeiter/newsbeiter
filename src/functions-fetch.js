@@ -1447,9 +1447,15 @@ async function yahooTWGetList(siteName,t){
   var data=str.g0.data.stream_items.slice((rr-1)*50,rr*50);
       
   if (t!=='00390a14-17cc-49d2-9e32-79365335f0ca'){
-    for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher])};
-    for (let h of items){
-      html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
+    for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.url])};
+    if(coun=='atoms'){
+      for (let h of items){
+        html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
+      }
+    } else {
+      for (let h of items){
+        html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}</p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
+      }
     }
   } else {
     for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.images.original.url,h.url])};
@@ -1463,10 +1469,11 @@ async function yahooTWGetList(siteName,t){
 
 async function yahooTWGetContent(id){
     try{
-    let res = await fetch(preStr+encodeURIComponent('https://tw.news.yahoo.com/share/'+id));
+    if(coun=='atoms'){url='https://tw.news.yahoo.com/share/'+id;} else {url=id;}
+    let res = await fetch(preStr+encodeURIComponent(url));
     let str = await res.text();
     var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-    html=doc.querySelector(coun).innerHTML.replaceAll('data-src=','src=') + '<p class="text-end"><a href="https://tw.news.yahoo.com/share/' + id + '" target="_blank">分享</a></p><br>';
+    html=doc.querySelector(coun).innerHTML.replaceAll('data-src=','src=') + '<p class="text-end"><a href="' + url + '" target="_blank">分享</a></p><br>';
   }catch{html='<p>尚無內容</p><br>'}
   return html;
 }
