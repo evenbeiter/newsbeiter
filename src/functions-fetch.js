@@ -1448,7 +1448,7 @@ async function yahooTWGetList(siteName,t){
       
   if (t!=='00390a14-17cc-49d2-9e32-79365335f0ca'){
     for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.url])};
-    if(coun=='atoms'){
+    if(coun=='.atoms'){
       for (let h of items){
         html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
       }
@@ -1825,4 +1825,5 @@ async function noteGetSearchResults(siteName,t){
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
+
 }
