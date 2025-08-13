@@ -336,7 +336,6 @@ async function getTranslation(all){
 
 function startLazyTranslation(containerElement) {
   const selector='p:not(.translated-text):not(.time):not(.xtl), h2, h3, li, div.description';
-  const translatedCache = new Map();
 
   const observer = new IntersectionObserver(async (entries) => {
     for (const entry of entries) {
@@ -345,7 +344,8 @@ function startLazyTranslation(containerElement) {
       const rawText = getTextOnly(el).trim();if (!rawText) {observer.unobserve(el);continue;}
 
       const translated = await translateText(rawText);
-      insertTranslationAfter(el, translated);
+      el.insertAdjacentHTML('afterend',translated)
+      //insertTranslationAfter(el, translated);
       el.setAttribute('data-translated', 'true');
       observer.unobserve(el);
     }
@@ -373,10 +373,6 @@ function startLazyTranslation(containerElement) {
   }
 
   async function translateText(text) {
-    // const translated=await translateGoogle(text);
-    // return translated;
-    
-    //if (translatedCache.has(text)) return translatedCache.get(text);
     const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&format=html&q=${encodeURIComponent(text)}`;
     try {
       const res=await fetch(url);const json=await res.json();const translated=json[0][0].replace(/ onclick=[\s\S]*?\)"/g,'') || '';
@@ -384,15 +380,15 @@ function startLazyTranslation(containerElement) {
     } catch (e) {console.error('Failed to translate.', e);return '';}
   }
 
-  function insertTranslationAfter(el, translatedText) {
-    const div = document.createElement('p');
-    div.className = 'translated-text';
-    div.setAttribute('data-translated', 'true');
-    div.textContent = translatedText;
-    el.parentNode.insertBefore(div,el.nextSibling);
-    // const lastTextNode = Array.from(el.childNodes).reverse().find(n => n.nodeType === Node.TEXT_NODE);
-    // if (lastTextNode && lastTextNode.nextSibling) {el.insertBefore(div, lastTextNode.nextSibling)} else {el.appendChild(div)}
-  }
+  // function insertTranslationAfter(el, translatedText) {
+  //   const div = document.createElement('p');
+  //   div.className = 'translated-text';
+  //   div.setAttribute('data-translated', 'true');
+  //   div.textContent = translatedText;
+  //   el.parentNode.insertBefore(div,el.nextSibling);
+  //   // const lastTextNode = Array.from(el.childNodes).reverse().find(n => n.nodeType === Node.TEXT_NODE);
+  //   // if (lastTextNode && lastTextNode.nextSibling) {el.insertBefore(div, lastTextNode.nextSibling)} else {el.appendChild(div)}
+  // }
 }
 
 function jsonToHtml(data) {
