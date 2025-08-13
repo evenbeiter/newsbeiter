@@ -1469,7 +1469,7 @@ async function yahooTWGetList(siteName,t){
 
 async function yahooTWGetContent(id){
     try{
-    if(coun=='atoms'){url='https://tw.news.yahoo.com/share/'+id;} else {url=id;}
+    if(coun=='.atoms'){url='https://tw.news.yahoo.com/share/'+id;} else {url=id;}
     let res = await fetch(preStr+encodeURIComponent(url));
     let str = await res.text();
     var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
