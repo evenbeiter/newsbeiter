@@ -326,9 +326,9 @@ async function getTranslation(all){
   for (let a of all){
     if (a.innerText!=='' && cnTest(a.innerText)!==true){
     //if (a.innerText!==''){
-      var t=await translate(a.innerHTML);
+      var t=await translate(a.outerHTML);
       //var t=await translate(a.textContent);
-      if (t!==''&&t!==undefined){a.innerHTML+=t};
+      if (t!==''&&t!==undefined){a.outerHTML+=`<div class="fs12">${t}</div>`};
       //if (t!==''&&t!==undefined){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
     }
   }
@@ -343,8 +343,9 @@ function startLazyTranslation(containerElement) {
       const el = entry.target;if (shouldIgnore(el)) {observer.unobserve(el);continue;}
       const rawText = getTextOnly(el).trim();if (!rawText) {observer.unobserve(el);continue;}
 
-      const translated = await translateText(rawText);
-      el.insertAdjacentHTML('afterend',translated)
+      //const translated = await translateText(rawText);
+      const translated = await translate(rawText);
+      el.insertAdjacentHTML('afterend',`<div class="fs12">${translated}</div>`)
       //insertTranslationAfter(el, translated);
       el.setAttribute('data-translated', 'true');
       observer.unobserve(el);
@@ -372,13 +373,13 @@ function startLazyTranslation(containerElement) {
       .trim();
   }
 
-  async function translateText(text) {
-    const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&format=html&q=${encodeURIComponent(text)}`;
-    try {
-      const res=await fetch(url);const json=await res.json();const translated=json[0][0].replace(/ onclick=[\s\S]*?\)"/g,'') || '';
-      return translated;
-    } catch (e) {console.error('Failed to translate.', e);return '';}
-  }
+  // async function translateText(text) {
+  //   const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&format=html&q=${encodeURIComponent(text)}`;
+  //   try {
+  //     const res=await fetch(url);const json=await res.json();const translated=json[0][0].replace(/ onclick=[\s\S]*?\)"/g,'') || '';
+  //     return translated;
+  //   } catch (e) {console.error('Failed to translate.', e);return '';}
+  // }
 
   // function insertTranslationAfter(el, translatedText) {
   //   const div = document.createElement('p');
