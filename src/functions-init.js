@@ -341,7 +341,8 @@ function startLazyTranslation(containerElement) {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;
       const el = entry.target;if (shouldIgnore(el)) {observer.unobserve(el);continue;}
-      const rawText = getTextOnly(el).trim();if (!rawText) {observer.unobserve(el);continue;}
+      const rawText = el.outerHTML.trim();if (!rawText) {observer.unobserve(el);continue;}
+      //      const rawText = getTextOnly(el).trim();if (!rawText) {observer.unobserve(el);continue;}
 
       //const translated = await translateText(rawText);
       const translated = await translate(rawText);
