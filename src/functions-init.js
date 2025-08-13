@@ -291,10 +291,10 @@ function cvtS2HHMMSS(sec,rescale) {
 
 async function translate(a){
   try{
-    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q='+encodeURIComponent(a);
+    var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&format=html&q='+encodeURIComponent(a);
     var res=await fetch(url);
     var raw=await res.json();
-    return raw[0][0]||''
+    return raw[0][0].replace(/ onclick=[\s\S]*?\)"/g,'')||''
   }catch (error) {console.error(error)}
 }
 
@@ -326,9 +326,10 @@ async function getTranslation(all){
   for (let a of all){
     if (a.innerText!=='' && cnTest(a.innerText)!==true){
     //if (a.innerText!==''){
-      var t=await translate(a.textContent);
+      var t=await translate(a.innerHTML);
       //var t=await translate(a.textContent);
-      if (t!==''&&t!==undefined){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
+      if (t!==''&&t!==undefined){a.innerHTML+=t};
+      //if (t!==''&&t!==undefined){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
     }
   }
 }
@@ -376,9 +377,9 @@ function startLazyTranslation(containerElement) {
     // return translated;
     
     //if (translatedCache.has(text)) return translatedCache.get(text);
-    const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&q=${encodeURIComponent(text)}`;
+    const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&format=html&q=${encodeURIComponent(text)}`;
     try {
-      const res=await fetch(url);const json=await res.json();const translated=json[0][0] || '';translatedCache.set(text, translated);
+      const res=await fetch(url);const json=await res.json();const translated=json[0][0].replace(/ onclick=[\s\S]*?\)"/g,'') || '';
       return translated;
     } catch (e) {console.error('Failed to translate.', e);return '';}
   }
