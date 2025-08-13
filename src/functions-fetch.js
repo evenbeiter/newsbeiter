@@ -1454,7 +1454,7 @@ async function yahooTWGetList(siteName,t){
       }
     } else {
       for (let h of items){
-        html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}</p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
+        html+=`<div onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="title t-tl pb-0">${h[1]}</p><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"></div><hr>`
       }
     }
   } else {
