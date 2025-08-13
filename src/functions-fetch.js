@@ -1480,7 +1480,7 @@ async function yahooTWGetSearchResults(siteName,t){
   let str=await res.json();
   var data=str.data;
   for (let h of data){
-    items.push([h.id,h.title,h.published_at,h.provider_name])
+    items.push([h.url,h.title,h.published_at,h.provider_name])
   }
   }
   for (let h of items){
