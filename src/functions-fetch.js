@@ -1480,7 +1480,7 @@ async function yahooTWGetContent(id){
 
 async function yahooTWGetSearchResults(siteName,t){
   try{
-  coun='TW'; var k=3;
+  coun='.atoms'; var k=3;
   for (let i=0;i<k;i++){
   url='https://tw.news.yahoo.com/_td-news/api/resource/NuwaSearchService.newsSearch;loadMore=true;query='+t+';offset='+(k*10*(rr-1)+(i*10));console.log(url);
   let res=await fetch(preStr+encodeURIComponent(url));
