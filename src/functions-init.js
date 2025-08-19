@@ -67,7 +67,7 @@ const allSitesB=[['bbg','BBG',bbg,'bloomberg.com','https://www.bloomberg.com'],[
 
 const openContentDirectly=['apollo','cnyeshao','ecoMag'];
 const cvtSc2Tc=['wscn','jin','sina','wiki','xueqiu'];
-const sites2Translate=['ab','apollo','bbg','blk','boa','ecoMag','gsam','invesco','ishares','jpm','jpmpb','ms','msnUS','nb','peInsights','pimco','ssga','substack','yahooTW'];
+const sites2Translate=['ab','apollo','bbg','blk','boa','ecoMag','gsam','invesco','ishares','jpm','jpmpb','ms','msnUS','nb','peInsights','pimco','schroders','ssga','substack','yahooTW'];
 const kr=['ytn'];
 const noNextPage=['ecoMag'];
 const msnALL=['msnTW','msnUS'];
@@ -579,6 +579,7 @@ function shareLink(url){return `<p class="text-end"><a href="${url}" target="_bl
 
 
 // })();
+
 
 
 
