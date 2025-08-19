@@ -374,6 +374,15 @@ function startLazyTranslation(containerElement) {
       .trim();
   }
 
+  async function translate(a){
+    try{
+      var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&format=html&q='+encodeURIComponent(a);
+      var res=await fetch(url);
+      var raw=await res.json();
+      return raw[0][0].replace(/ onclick=[\s\S]*?\)"/g,'')||''
+    }catch (error) {console.error(error)}
+  }
+
   // async function translateText(text) {
   //   const url = `https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&format=html&q=${encodeURIComponent(text)}`;
   //   try {
