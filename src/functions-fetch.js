@@ -1787,13 +1787,13 @@ async function noteGetList(siteName,t){console.log(t);
   }
 }
 
-async function noteGetList(siteName,t){
-  try{url=`${backendURL}/notes/list`;
-  const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
-  for (let h of data){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
-  }catch{html='<p>尚無內容</p>'}
-  return html;
-}
+// async function noteGetList(siteName,t){
+//   try{url=`${backendURL}/notes/list`;
+//   const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
+//   for (let h of data){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
+//   }catch{html='<p>尚無內容</p>'}
+//   return html;
+// }
 
 async function noteGetContent(id){console.log(id);
   try{url=`${backendURL}/notes/read`;
