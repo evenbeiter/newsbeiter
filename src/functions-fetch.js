@@ -1775,7 +1775,20 @@ async function ecoMagGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function noteGetList(siteName,t){
-  try{url=`${backendURL}/notes/list/${t}`;
+  if(t===''){
+  try{url=`${backendURL}/notes/list?category=note&rr=${rr}`;
+  const res = await fetch(url);const str = await res.json();
+    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
+
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+  } else {
+  lessonGetSearchResults(siteName,t);
+  }
+}
+
+async function noteGetList(siteName,t){
+  try{url=`${backendURL}/notes/list/`;
   const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
   for (let h of data){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
   }catch{html='<p>尚無內容</p>'}
@@ -1826,6 +1839,7 @@ async function noteGetSearchResults(siteName,t){
   let res=await fetch(url);
   let str=await res.json();
   for (let h of str){
+
     html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`;
   }
   }catch{html='<p>尚無內容</p>'}
