@@ -1806,7 +1806,7 @@ async function noteGetContent(id){console.log(id);
       <div id="${h.src}" class="content" onclick="getContent('${h.siteName}',this.id,'${h.src}')"></div>
       <hr>`
       } else if (h.content.startsWith('http')){
-        html+=`<p><a href="${h.content}" target="_blank">原文連結</a></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span><hr>`;
+        html+=`<p><a href="${h.content.slice(0,h.content.indexOf('?'))}" target="_blank">原文連結</a></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span><hr>`;
       }else{
       html+=`<p>${h.content.replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`;
     }
