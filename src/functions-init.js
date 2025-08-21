@@ -122,6 +122,7 @@ async function get1stList(siteName,top,t){
   rr=0;cursor='';
   getList(siteName,t);
   showTop(top);
+  notebookBtn.style.display='none';
 }
 
 async function get1stSearchResults(siteName,top){
@@ -135,11 +136,13 @@ async function get1stSearchResults(siteName,top){
   } else {
     openUrl([...allSites1,...allSites2,...allSitesB].find(pair=>pair[0]===siteName)?.[4]);
   }
+  notebookBtn.style.display='none';
 }
 
 function getFAQSearchResults(siteName,top,t){
   document.getElementById('search-term').value=t;
   get1stSearchResults(siteName,top);
+  notebookBtn.style.display='none';
 }
 
 async function getList(siteName,t){
