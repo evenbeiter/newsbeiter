@@ -138,69 +138,8 @@ function escapeHTML(str) {
   );
 }
 
-function attachNoteEventListeners() {
-  document.querySelectorAll('.deleteNoteBtn').forEach(btn => {
-    btn.addEventListener('click', async e => {
-      const noteEl = e.target.closest('.note-item');
-      const path = noteEl.dataset.path;
-      const timestamp = noteEl.dataset.timestamp;
-
-      const confirmed = confirm('確定要刪除這則筆記嗎？');
-      if (!confirmed) return;
-
-      const res = await fetch('/note/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path, timestamp })
-      });
-
-      if (res.ok) {
-        noteEl.remove();
-      } else {
-        alert('刪除失敗');
-      }
-    });
-  });
-
-  document.querySelectorAll('.editNoteBtn').forEach(btn => {
-    btn.addEventListener('click', e => {
-      const noteEl = e.target.closest('.note-item');
-      const textEl = noteEl.querySelector('p');
-      const textarea = document.createElement('textarea');
-      textarea.className = 'form-control mb-2';
-      textarea.value = textEl.innerText;
-      textarea.style.height = 'auto';
-
-      textEl.replaceWith(textarea);
-
-      const uploadBtn = document.createElement('button');
-      uploadBtn.textContent = '上傳修改';
-      uploadBtn.className = 'btn btn-sm btn-primary';
-      uploadBtn.onclick = async () => {
-        const path = noteEl.dataset.path;
-        const timestamp = noteEl.dataset.timestamp;
-        const newText = textarea.value;
-
-        const res = await fetch('/note/update', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ path, timestamp, text: newText })
-        });
-
-        if (res.ok) {
-          textarea.replaceWith(document.createElement('p')).textContent = newText;
-          uploadBtn.remove();
-        } else {
-          alert('更新失敗');
-        }
-      };
-
-      noteEl.querySelector('.btn-group').appendChild(uploadBtn);
-    });
-  });
-}
-
 const noteBtnGroup='';
+
 // const noteBtnGroup=`
 //     <div class="d-flex">
 //     <div class="btn-group ms-auto">
@@ -224,3 +163,66 @@ const noteBtnGroup='';
 //     </div>
 //     </div>
 // `;
+
+
+// function attachNoteEventListeners() {
+//   document.querySelectorAll('.deleteNoteBtn').forEach(btn => {
+//     btn.addEventListener('click', async e => {
+//       const noteEl = e.target.closest('.note-item');
+//       const path = noteEl.dataset.path;
+//       const timestamp = noteEl.dataset.timestamp;
+
+//       const confirmed = confirm('確定要刪除這則筆記嗎？');
+//       if (!confirmed) return;
+
+//       const res = await fetch('/note/delete', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ path, timestamp })
+//       });
+
+//       if (res.ok) {
+//         noteEl.remove();
+//       } else {
+//         alert('刪除失敗');
+//       }
+//     });
+//   });
+
+//   document.querySelectorAll('.editNoteBtn').forEach(btn => {
+//     btn.addEventListener('click', e => {
+//       const noteEl = e.target.closest('.note-item');
+//       const textEl = noteEl.querySelector('p');
+//       const textarea = document.createElement('textarea');
+//       textarea.className = 'form-control mb-2';
+//       textarea.value = textEl.innerText;
+//       textarea.style.height = 'auto';
+
+//       textEl.replaceWith(textarea);
+
+//       const uploadBtn = document.createElement('button');
+//       uploadBtn.textContent = '上傳修改';
+//       uploadBtn.className = 'btn btn-sm btn-primary';
+//       uploadBtn.onclick = async () => {
+//         const path = noteEl.dataset.path;
+//         const timestamp = noteEl.dataset.timestamp;
+//         const newText = textarea.value;
+
+//         const res = await fetch('/note/update', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify({ path, timestamp, text: newText })
+//         });
+
+//         if (res.ok) {
+//           textarea.replaceWith(document.createElement('p')).textContent = newText;
+//           uploadBtn.remove();
+//         } else {
+//           alert('更新失敗');
+//         }
+//       };
+
+//       noteEl.querySelector('.btn-group').appendChild(uploadBtn);
+//     });
+//   });
+// }
