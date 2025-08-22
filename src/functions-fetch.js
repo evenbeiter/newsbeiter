@@ -1804,6 +1804,24 @@ async function noteGetContent(id){console.log(id);
   });
   if (!res.ok) throw new Error('無法讀取筆記');
   const str=await res.json();//const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
+  html=parseNoteFromServer(str);
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function noteGetSearchResults(siteName,t){
+  try{url=`${backendURL}/notes/search?category=note&q=${encodeURIComponent(t)}`;
+  let res=await fetch(url);
+  let str=await res.json();
+  html=parseNoteFromServer(str);
+  // for (let h of str){
+  //   html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`;
+  // }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+function parseNoteFromServer(str){
   for (let s of str){
     if (s) {var h=JSON.parse(s);//console.log(h);
       if (h.src){
@@ -1829,20 +1847,5 @@ async function noteGetContent(id){console.log(id);
   }
   if (html==='') html+='<p>尚無內容</p>';
   else html=html.slice(0,html.length-4);
-  //else html+=`<button class="btn sepia-contrast me-1 mb-1" type="button" onclick="clearNote()">清空筆記</button><br>`;
-  }catch{html='<p>尚無內容</p>'}
   return html;
-}
-
-async function noteGetSearchResults(siteName,t){
-  try{url=`${backendURL}/notes/search?q=${encodeURIComponent(t)}`;
-  let res=await fetch(url);
-  let str=await res.json();
-  for (let h of str){
-
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`;
-  }
-  }catch{html='<p>尚無內容</p>'}
-  return html;
-
 }
