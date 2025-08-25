@@ -123,7 +123,7 @@ async function get1stList(siteName,top,t){
   rr=0;cursor='';
   getList(siteName,t);
   showTop(top);
-  notebookBtn.style.display='none';
+  // notebookBtn.style.display='none';
 }
 
 async function get1stSearchResults(siteName,top){
@@ -137,13 +137,13 @@ async function get1stSearchResults(siteName,top){
   } else {
     openUrl([...allSites1,...allSites2,...allSitesB].find(pair=>pair[0]===siteName)?.[4]);
   }
-  notebookBtn.style.display='none';
+  // notebookBtn.style.display='none';
 }
 
 function getFAQSearchResults(siteName,top,t){
   document.getElementById('search-term').value=t;
   get1stSearchResults(siteName,top);
-  notebookBtn.style.display='none';
+  // notebookBtn.style.display='none';
 }
 
 async function getList(siteName,t){
@@ -548,7 +548,7 @@ function openChannelList(){channelList.style.display='block';searchList.style.di
 function openSearchList(){document.getElementById('search-term').value='';channelList.style.display='none';searchList.style.display='block';ecoMagList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
 function openUrlList(){channelList.style.display='none';searchList.style.display='none';ecoMagList.style.display='none';urlList.style.display='block';options.style.display='block';topdiv.style.display='none';}
 function openEcoMagList(){channelList.style.display='none';searchList.style.display='none';ecoMagList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
-function openOptions(){if (options.style.display=='none'){options.style.display='block';notebookBtn.style.display='block';topdiv.style.display='none';} else {options.style.display='none';notebookBtn.style.display='none';topdiv.style.display='block';}}
+function openOptions(){if (options.style.display=='none'){options.style.display='block';topdiv.style.display='none';} else {options.style.display='none';topdiv.style.display='block';}}
 async function ping(){var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');}
 function cvt2Timezone(timestamp) {const date = new Date(timestamp);return date.toLocaleString('zh-TW',{timeZone:'Asia/Taipei'});}
 function sCC(a,ii){let result='';for (const i of ii){if (i>=0 && i<a.length){result+=a[i]}}return result;}

@@ -5,7 +5,7 @@
 
 const options=document.getElementById('btn-group');
 const btn=document.getElementById('btn');
-const notebookBtn = document.getElementById('notebookBtn');
+// const notebookBtn = document.getElementById('notebookBtn');
 const uploadBtn = document.getElementById('uploadBtn');
 const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
