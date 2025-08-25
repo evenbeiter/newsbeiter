@@ -1791,14 +1791,6 @@ async function noteGetList(siteName,t){console.log(t);
   }
 }
 
-// async function noteGetList(siteName,t){
-//   try{url=`${backendURL}/notes/list`;
-//   const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
-//   for (let h of data){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`}
-//   }catch{html='<p>尚無內容</p>'}
-//   return html;
-// }
-
 async function noteGetContent(id){console.log(id);
   try{url=`${backendURL}/notes/read`;
   const res = await fetch(url, {
@@ -1807,7 +1799,7 @@ async function noteGetContent(id){console.log(id);
     body: JSON.stringify({category:siteNameVar, path:id})
   });
   if (!res.ok) throw new Error('無法讀取筆記');
-  const str=await res.json();//const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
+  const str=await res.json();
   html=parseNoteFromServer(str);
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -1818,16 +1810,13 @@ async function noteGetSearchResults(siteName,t){
   let res=await fetch(url);
   let str=await res.json();
   html=parseNoteFromServer(str);
-  // for (let h of str){
-  //   html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.path}')">${h.title}</p><div id="${h.path}" class="content" onclick="getContent('${siteName}',this.id,'${h.path}')"></div><hr>`;
-  // }
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 function parseNoteFromServer(str){
   for (let s of str){
-    if (s) {var h=JSON.parse(s);//console.log(h);
+    if (s) {var h=JSON.parse(s);
       if (h.src){
     html+=`<p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p><a href="${h.src}" target="_blank">原文連結</a>
       <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
@@ -1845,8 +1834,6 @@ function parseNoteFromServer(str){
       }else{
       html+=`<p>${h.content.replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`;
     }
-    // html+=h.src?`<p>${h.content.replaceAll('\n\n','</p><p>')}</p><a href="${h.src}" target="_blank">原文連結</a><br><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`
-    //   :`<p>${h.content.replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`
     }
   }
   if (html==='') html+='<p>尚無內容</p>';
