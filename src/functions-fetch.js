@@ -1825,7 +1825,7 @@ function parseNoteFromServer(str){
   for (let s of str){
     if (s) {var h=JSON.parse(s);//console.log(h);
       if (h.src){
-    html+=`<p>${h.content.replaceAll('\n\n','</p><p>')}</p><a href="${h.src}" target="_blank">原文連結</a>
+    html+=`<p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p><a href="${h.src}" target="_blank">原文連結</a>
       <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
           <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
