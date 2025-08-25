@@ -134,14 +134,14 @@ const preStr=sCC(uLi,iOd).replace('/api/fetch?url=','');
   });
 
 async function noteGetList(siteName,t){var rr=1;
-  try{url=`${preStr}/notes/list/${t}`;
+  try{url=`${preStr}/note/list/${t}`;
   const res = await fetch(url);const str = await res.json();const data=str.slice((rr-1)*30,rr*30);
   for (let h of data){noteList.innerHTML+=`<p class="title" onclick="noteGetContent('${h.path}')">${h.title}</p><hr>`}
   }catch{noteList.innerHTML='<p>尚無內容</p>'}
 }
 
 async function noteGetContent(id){
-  try{url=preStr+'/notes/read';
+  try{url=preStr+'/note/read';
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 📖 讀取筆記
   async function loadNote(path) {
-    const res = await fetch(preStr+"/notes/read", {
+    const res = await fetch(preStr+"/note/read", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ path })
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const res = await fetch(`${preStr}/notes/search?q=${encodeURIComponent(q)}`);
+    const res = await fetch(`${preStr}/note/search?q=${encodeURIComponent(q)}`);
     const results = await res.json();
     searchResults.innerHTML = "";
     results.forEach(r => {

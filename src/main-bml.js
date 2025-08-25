@@ -1,6 +1,6 @@
 // (function(){
 
-// functions-init > functions-fetchbml > main-bml > functions-notes > opencc-cn2t
+// functions-init > functions-fetchbml > main-bml > functions-note > opencc-cn2t
 
 //    RENDER HTML FOR BOOKMARKLET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

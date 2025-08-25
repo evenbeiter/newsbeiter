@@ -1,4 +1,4 @@
-// functions-init > main > functions-fetch > functions-notes > opencc-cn2t
+// functions-init > main > functions-fetch > functions-note > opencc-cn2t
 
 //    DEFINE NAME OF ELEMENTS (same in main.bml.js)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
