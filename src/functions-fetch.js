@@ -1774,9 +1774,9 @@ async function ecoMagGetList(siteName,t){
 //    NOTES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function ideaGetList(siteName,t){noteGetList(siteName,t)}
-async function ideaGetContent(id){noteGetContent(id)}
-async function ideaGetSearchResults(siteName,t){noteGetSearchResults(siteName,t)}
+async function ideaGetList(siteName,t){await noteGetList(siteName,t)}
+async function ideaGetContent(id){await noteGetContent(id)}
+async function ideaGetSearchResults(siteName,t){await noteGetSearchResults(siteName,t)}
 
 async function noteGetList(siteName,t){console.log(t);
   if(t===''){
