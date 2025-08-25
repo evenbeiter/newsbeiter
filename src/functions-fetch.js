@@ -1774,9 +1774,13 @@ async function ecoMagGetList(siteName,t){
 //    NOTES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+async function ideaGetList(siteName,t){noteGetList(siteName,t)}
+async function ideaGetContent(id){noteGetContent(id)}
+async function ideaGetSearchResults(siteName,t){noteGetSearchResults(siteName,t)}
+
 async function noteGetList(siteName,t){console.log(t);
   if(t===''){
-  try{url=`${backendURL}/notes/list?category=note&rr=${rr}`;
+  try{url=`${backendURL}/notes/list?category=${siteName}&rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
     for (let h of str.files){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
 
@@ -1800,7 +1804,7 @@ async function noteGetContent(id){console.log(id);
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({category:'note', path:id})
+    body: JSON.stringify({category:siteName, path:id})
   });
   if (!res.ok) throw new Error('無法讀取筆記');
   const str=await res.json();//const { content } = await res.json();const str = JSON.parse(content); // 你存的是 JSON-style 的筆記陣列
@@ -1810,7 +1814,7 @@ async function noteGetContent(id){console.log(id);
 }
 
 async function noteGetSearchResults(siteName,t){
-  try{url=`${backendURL}/notes/search?category=note&q=${encodeURIComponent(t)}`;
+  try{url=`${backendURL}/notes/search?category=${siteName}&q=${encodeURIComponent(t)}`;
   let res=await fetch(url);
   let str=await res.json();
   html=parseNoteFromServer(str);
