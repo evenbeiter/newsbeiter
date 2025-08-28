@@ -1782,7 +1782,7 @@ async function noteGetList(siteName,t){console.log(t);
   if(t===''){
   try{url=`${backendURL}/note/list?category=${siteName}&rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
-    for (let h of str.files){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
+    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
 
   }catch{html='<p>尚無內容</p>'}
   return html;
