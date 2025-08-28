@@ -1842,7 +1842,7 @@ async function parseNoteFromServer(str){
           console.error("HEIC 轉換失敗:", err);
         }
       } else {
-      html+=`<p>${h.content.replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`;
+      html+=`<p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`;
     }
     }
   }
