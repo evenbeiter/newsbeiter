@@ -18,7 +18,7 @@ async function uploadFromClipboard(){
       fetch(`${backendURL}/note/add`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({category:'note',content:textContent})
+          body: JSON.stringify({category:'daily',content:textContent})
       }).then(res => {
           if (!res.ok) alert('❌ 上傳失敗');
       });
@@ -61,7 +61,7 @@ uploadBtn.addEventListener('click', () => {
       fetch(`${backendURL}/note/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category:'note', content: lastSelectedText, siteName: siteNameVar, src: articleUrl })
+        body: JSON.stringify({ category:'daily', content: lastSelectedText, siteName: siteNameVar, src: articleUrl })
       }).then(res => {
         if (!res.ok) alert('❌ 上傳失敗');
         uploadBtn.style.display = 'none';
