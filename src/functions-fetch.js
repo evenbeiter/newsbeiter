@@ -1774,6 +1774,10 @@ async function ecoMagGetList(siteName,t){
 //    NOTE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+async function dailyGetList(siteName,t){return html=await noteGetList(siteName,t)}
+async function dailyGetContent(id){return html=await noteGetContent(id)}
+async function dailyGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
+
 async function ideaGetList(siteName,t){return html=await noteGetList(siteName,t)}
 async function ideaGetContent(id){return html=await noteGetContent(id)}
 async function ideaGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
