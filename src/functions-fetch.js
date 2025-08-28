@@ -1814,7 +1814,7 @@ async function noteGetSearchResults(siteName,t){
   return html;
 }
 
-function parseNoteFromServer(str){
+async function parseNoteFromServer(str){
   for (let s of str){
     if (s) {var h=JSON.parse(s);
       if (h.src){
@@ -1831,7 +1831,17 @@ function parseNoteFromServer(str){
       <hr>`
       } else if (h.content.startsWith('http')){
         html+=`<p><a href="${h.content.slice(0,h.content.indexOf('?'))}" target="_blank">原文連結</a></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span><hr>`;
-      }else{
+      } else if (h.content.slice(-6)==='heic">'){
+        try {
+          const response = await fetch(h.content.match(/https[\s\S]*?heic/g)[0]);
+          const blob = await response.blob();
+          // 前端轉換 heic → jpg
+          const convertedBlob = await heic2any({ blob, toType: "image/jpeg" });
+          html+=`<p><img src="${URL.createObjectURL(convertedBlob)}"></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`;
+        } catch (err) {
+          console.error("HEIC 轉換失敗:", err);
+        }
+      } else {
       html+=`<p>${h.content.replaceAll('\n\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`;
     }
     }
