@@ -1831,7 +1831,7 @@ async function parseNoteFromServer(str){
       <hr>`
       } else if (h.content.startsWith('http')){
         html+=`<p><a href="${h.content.slice(0,h.content.indexOf('?'))}" target="_blank">原文連結</a></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span><hr>`;
-      } else if (h.content.slice(-6)==='heic">'){
+      } else if (h.content.endsWith('heic">')){
         try {
           const response = await fetch(h.content.match(/https[\s\S]*?heic/g)[0]);
           const blob = await response.blob();
@@ -1847,6 +1847,6 @@ async function parseNoteFromServer(str){
     }
   }
   if (html==='') html+='<p>尚無內容</p>';
-  else html=html.slice(0,html.length-4);
+  else html=html.slice(0,html.length-4)+'<a href="" style="display:none">分享</a>';
   return html;
 }
