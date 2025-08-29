@@ -1804,7 +1804,7 @@ async function noteGetContent(id){console.log(id);
   });
   if (!res.ok) throw new Error('無法讀取筆記');
   const str=await res.json();
-  html=parseNoteFromServer(str);
+  html=await parseNoteFromServer(str);
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
@@ -1813,7 +1813,7 @@ async function noteGetSearchResults(siteName,t){
   try{url=`${backendURL}/note/search?category=${siteName}&q=${encodeURIComponent(t)}`;
   let res=await fetch(url);
   let str=await res.json();
-  html=parseNoteFromServer(str);
+  html=await parseNoteFromServer(str);
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
