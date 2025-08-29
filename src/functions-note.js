@@ -23,7 +23,6 @@ async function uploadFromClipboard(){
           if (!res.ok) alert('❌ 上傳失敗');
       });
   }
-  // notebookBtn.style.display='none';
 }
 
 
