@@ -372,7 +372,7 @@ async function cnyesGetList(siteName,t){
     for (let a of str.items.data){
       html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${a.newsId}')">${a.title}</p><div id="${a.newsId}" class="content" onclick="getContent('${siteName}',this.id,'${a.newsId}')">
             <p class="time">${cvt2Timezone(a.publishAt*1000)}</p>${decodeHTMLEntities(a.content).replace(
-      /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"\s+target="_blank">\[(\d+)\]<\/a>/g,
+      /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"[\s\S]*?]>\[(\d+)\]<\/a>/g,
       (match, id, num) => {
         return `<button onclick="popupContent('${id}')">[${num}]</button>`;
     })}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
@@ -397,13 +397,10 @@ async function cnyesGetContent(id){
     const res=await fetch(preStr+'https://api.cnyes.com/media/api/v1/news/'+id+'?status=no_token');
     const str=await res.json();
     html=decodeHTMLEntities(str.items.content);
-    const regex = /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"\s+target="_blank">\[(\d+)\]<\/a>/g;
+    const regex = /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"[\s\S]*?]>\[(\d+)\]<\/a>/g;
     html=html.replace(
       regex,
       (match, id, num) => {
-        console.log('match:', match);
-        console.log('id:', id);
-        console.log('num:', num);
         return `<button onclick="functionName('${id}')">[${num}]</button>`;
     });
   }
