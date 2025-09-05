@@ -396,8 +396,12 @@ async function cnyesGetContent(id){
     const regex = /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"\s+target="_blank">$(\d+)$<\/a>/g;
     html=html.replace(
       regex,
-      (match, id, num) => `<button onclick="popupContent('${id}')">[${num}]</button>`
-    );
+      (match, id, num) => {
+        console.log('match:', match);
+        console.log('id:', id);
+        console.log('num:', num);
+        return `<button onclick="functionName('${id}')">[${num}]</button>`;
+    });
 
     // let res=await fetch(preStr+encodeURIComponent('https://news.cnyes.com/news/id/'+id));
     // let str=await res.text();
