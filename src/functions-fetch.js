@@ -393,7 +393,7 @@ async function cnyesGetContent(id){
     const res=await fetch(preStr+'https://api.cnyes.com/media/api/v1/news/'+id+'?status=no_token');
     const str=await res.json();
     html=decodeHTMLEntities(str.items.content);
-    const regex = /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"\s+target="_blank">$(\d+)$<\/a>/g;
+    const regex = /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"\s+target="_blank">\[(\d+)\]<\/a>/g;
     html=html.replace(
       regex,
       (match, id, num) => {
@@ -402,12 +402,6 @@ async function cnyesGetContent(id){
         console.log('num:', num);
         return `<button onclick="functionName('${id}')">[${num}]</button>`;
     });
-
-    // let res=await fetch(preStr+encodeURIComponent('https://news.cnyes.com/news/id/'+id));
-    // let str=await res.text();
-    // var parser = new DOMParser();
-    // var doc = parser.parseFromString(str, "text/html");
-    // html=doc.querySelector('#article-container').outerHTML.replaceAll('src="/_next/image?url=','src="')+shareLink('https://news.cnyes.com/news/id/'+id);
   }
   }catch{html='<p><a href="https://news.cnyes.com/news/id/' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html
