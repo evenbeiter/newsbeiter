@@ -390,9 +390,14 @@ async function cnyesGetContent(id){
       html+=c.innerHTML
     }
   } else {
-    let res=await fetch(preStr+'https://api.cnyes.com/media/api/v1/news/'+id+'?status=no_token');
-    let str=await res.json();
+    const res=await fetch(preStr+'https://api.cnyes.com/media/api/v1/news/'+id+'?status=no_token');
+    const str=await res.json();
     html=decodeHTMLEntities(str.items.content);
+    const regex = /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"\s+target="_blank">$(\d+)$<\/a>/g;
+    html=html.replace(
+      regex,
+      (match, id, num) => `<button onclick="popupContent('${id}')">[${num}]</button>`
+    );
 
     // let res=await fetch(preStr+encodeURIComponent('https://news.cnyes.com/news/id/'+id));
     // let str=await res.text();

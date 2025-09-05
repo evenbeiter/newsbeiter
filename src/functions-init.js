@@ -521,6 +521,11 @@ function getLastNSats(n) {
   }
   return saturdays;
 }
+
+async function popupContent(id){
+  overlay.style.display='block';
+  popupChart.innerHTML+=await window[`${siteNameVar}GetContent`](id);
+}
   
 let scrollTimeout;
 window.onscroll = function () {
