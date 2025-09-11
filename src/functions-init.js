@@ -547,8 +547,8 @@ window.onscroll = function () {
 };
 
 document.addEventListener("click", (e) => {
-  if (e.target.closest(".copyNoteBtn")) {
-    const btn = e.target.closest(".copyNoteBtn");
+  if (e.target.closest(".copy-note-btn")) {
+    const btn = e.target.closest(".copyt-note-btn");
     const originalHTML = btn.innerHTML;
 
     // 這裡放 copy 的內容，可以依需求改
