@@ -771,13 +771,28 @@ async function lineTodayGetList(siteName,tt){
       data=data.filter(d=>d.source=='LISTING');
       data=data.map(d=>d.listings[0].id);
       
-      for (let d of data){
-        res=await fetch(preStr+encodeURIComponent('https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+(rr-1)*20+'&length=20'));
-        str=await res.json();
-        for (let a of str.items){
-            items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
+      // for (let d of data){
+      //   res=await fetch(preStr+encodeURIComponent('https://today.line.me/api/v6/listings/'+d+'?country=tw&offset='+(rr-1)*20+'&length=20'));
+      //   str=await res.json();
+      //   for (let a of str.items){
+      //       items.push(JSON.stringify([a.url.hash,a.publishTimeUnix,a.title]))
+      //   }
+      // } 
+
+      const promises = data.map(d => 
+        fetch(preStr + encodeURIComponent(
+          'https://today.line.me/api/v6/listings/' + d + '?country=tw&offset=' + (rr - 1) * 20 + '&length=20'))
+        .then(res => res.json())
+      );
+
+      // 等待所有 fetch 完成
+      const results = await Promise.all(promises);
+
+      for (let str of results) {
+        for (let a of str.items) {
+          items.push(JSON.stringify([a.url.hash, a.publishTimeUnix, a.title]));
         }
-      } 
+      }
     }
   }
   items=[...new Set(items)];
