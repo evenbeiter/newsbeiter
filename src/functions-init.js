@@ -547,7 +547,7 @@ window.onscroll = function () {
 };
 
 document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".copyt-note-btn");
+  const btn = e.target.closest(".copyt-note-btn");console.log(btn);
   if (!btn) return;
   console.log(btn);
   const originalHTML = btn.innerHTML;
