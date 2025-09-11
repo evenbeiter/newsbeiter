@@ -255,7 +255,7 @@ async function getContent(siteName,clickedId,id){
       }
   } else {
     var e=window.event;
-    if (e && (e.target.tagName==='VIDEO' || isImageLikeElement(e.target) || e.target.closest('button') || e.target.closest('.safe-click'))){return}else{
+    if (e && (e.target.tagName==='VIDEO' || e.target.tagName==='A' || isImageLikeElement(e.target) || e.target.closest('button') || e.target.closest('.safe-click'))){return}else{
       const selection=window.getSelection();
       const selectedText=selection.toString().trim();
       if (selectedText.length===0){

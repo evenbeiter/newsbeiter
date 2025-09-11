@@ -1851,13 +1851,13 @@ async function parseNoteFromServer(str){
         <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
         <div class="d-flex gap-2">
           <a href="${h.src}" target="_blank">原文連結</a>
-          <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
+          <button type="button" class="btn btn-secondary position-relative sepia-contrast opacity-50" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
               <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
               <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
             </svg>
           </button>
-          <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25 copy-note-btn">
+          <button type="button" class="btn btn-secondary position-relative sepia-contrast opacity-50 copy-note-btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/>
             </svg>
@@ -1870,7 +1870,7 @@ async function parseNoteFromServer(str){
       <p><a href="${h.content.slice(0,h.content.indexOf('?'))}" target="_blank">原文連結</a></p>
       <div class="d-flex justify-content-between align-items-center">
         <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
-        <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25 copy-note-btn">
+        <button type="button" class="btn btn-secondary position-relative sepia-contrast opacity-50 copy-note-btn">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-copy" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"/>
           </svg>
