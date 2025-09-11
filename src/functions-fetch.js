@@ -606,22 +606,63 @@ async function isblGetList(siteName,t){
     var doc = parser.parseFromString(str, "text/html");
 
     let ts=doc.querySelectorAll('.entry-title');
-    for (let t of ts){
-      res=await fetch(preStr+encodeURIComponent(t.firstChild.href));
-      str=await res.text();
-      parser = new DOMParser();
-      doc = parser.parseFromString(str, "text/html");
-      ss=doc.querySelectorAll('section');
-      var hh=doc.querySelector('h2');
-      var dt=doc.querySelector('.date-meta').innerText.replaceAll('\\n',' ');
-      var pg=doc.querySelector('.elementor-text-editor');
-      if (doc.querySelector('.gallery-icon')){var img=doc.querySelector('.gallery-icon')}else{var img=doc.querySelector('.elementor-image')};
-      html+='<p class="title">'+hh.textContent+'</p><p class="time">'+dt+'</p>'+pg.innerHTML+img.innerHTML+'<br><br><hr>';
-      html=html.replaceAll('<p>Image:','<p class=\"fs10\">Image:'); 
+
+    // 建立 promises (保留 index)
+    const promises = ts.map((t, i) =>
+      fetch(preStr + encodeURIComponent(t.firstChild.href))
+        .then(res => res.text())
+        .then(str => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(str, "text/html");
+          const ss = doc.querySelectorAll("section"); // 看你有沒有要用
+          const hh = doc.querySelector("h2");
+          const dt = doc.querySelector(".date-meta").innerText.replaceAll("\\n", " ");
+          const pg = doc.querySelector(".elementor-text-editor");
+          const img = doc.querySelector(".gallery-icon") || doc.querySelector(".elementor-image");
+
+          let block =
+            '<p class="title">' +
+            hh.textContent +
+            '</p><p class="time">' +
+            dt +
+            "</p>" +
+            pg.innerHTML +
+            img.innerHTML +
+            "<br><br><hr>";
+          block = block.replaceAll('<p>Image:', '<p class="fs10">Image:');
+
+          return { i, block };
+        })
+    );
+
+    // 等待全部完成
+    const results = await Promise.all(promises);
+
+    // 按照原順序組合 html
+    results.sort((a, b) => a.i - b.i);
+    for (let r of results) {
+      html += r.block;
     }
+
   }catch{html='<p>No Content.</p>'}
   return html;
 }
+
+
+// for (let t of ts){
+//   res=await fetch(preStr+encodeURIComponent(t.firstChild.href));
+//   str=await res.text();
+//   parser = new DOMParser();
+//   doc = parser.parseFromString(str, "text/html");
+//   ss=doc.querySelectorAll('section');
+//   var hh=doc.querySelector('h2');
+//   var dt=doc.querySelector('.date-meta').innerText.replaceAll('\\n',' ');
+//   var pg=doc.querySelector('.elementor-text-editor');
+//   if (doc.querySelector('.gallery-icon')){var img=doc.querySelector('.gallery-icon')}else{var img=doc.querySelector('.elementor-image')};
+//   html+='<p class="title">'+hh.textContent+'</p><p class="time">'+dt+'</p>'+pg.innerHTML+img.innerHTML+'<br><br><hr>';
+//   html=html.replaceAll('<p>Image:','<p class=\"fs10\">Image:'); 
+// }
+
 
 
 //    JIN10
@@ -1850,7 +1891,7 @@ async function parseNoteFromServer(str){
       <div class="d-flex justify-content-between align-items-center">
         <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
         <div class="d-flex gap-2 align-items-center">
-          <a href="${h.src}" target="_blank">原文連結</a>
+          <a href="${h.src}" target="_blank">原文</a>
           <button type="button" class="btn btn-secondary position-relative sepia opacity-50" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
             ${svgDownload}
           </button>
