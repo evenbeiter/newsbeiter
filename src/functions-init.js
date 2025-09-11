@@ -548,11 +548,17 @@ window.onscroll = function () {
 
 document.addEventListener("click", (e) => {
   if (e.target.closest(".copy-note-btn")) {
-    const btn = e.target.closest(".copyt-note-btn");
+    const btn = e.target.closest(".copyt-note-btn");console.log(btn);
     const originalHTML = btn.innerHTML;
-
+    const container = btn.closest('div.note-block');console.log(container);
+    const htmlContent = container.innerHTML.replace(btn.outerHTML,'');
     // 這裡放 copy 的內容，可以依需求改
-    navigator.clipboard.writeText("要複製的內容").then(() => {
+    navigator.clipboard.write([
+      new ClipboardItem({
+        "text/html": new Blob([htmlContent], { type: "text/html" }),
+        "text/plain": new Blob([container.innerText], { type: "text/plain" })
+      })
+    ]).then(() => {
       btn.innerHTML = `
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
              fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
