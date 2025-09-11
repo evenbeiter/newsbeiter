@@ -1830,7 +1830,7 @@ async function parseNoteFromServer(str){
   for (let s of str){
     if (s) {var h=JSON.parse(s);
       if (h.src){
-    html+=`<p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p><a href="${h.src}" target="_blank">原文連結</a>
+    html+=`<div class="note-block"><p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p><a href="${h.src}" target="_blank">原文連結</a>
       <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
           <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
@@ -1839,22 +1839,21 @@ async function parseNoteFromServer(str){
       </button>
       <br><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
       ${noteBtnGroup}
-      <div id="${h.src}" class="content" onclick="getContent('${h.siteName}',this.id,'${h.src}')"></div>
-      <hr>`
+      </div><hr>`
       } else if (h.content.startsWith('http')){
-        html+=`<p><a href="${h.content.slice(0,h.content.indexOf('?'))}" target="_blank">原文連結</a></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span><hr>`;
+        html+=`<div class="note-block"><p><a href="${h.content.slice(0,h.content.indexOf('?'))}" target="_blank">原文連結</a></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span></div><hr>`;
       } else if (h.content.endsWith('heic">')){
         try {
           const response = await fetch(h.content.match(/https[\s\S]*?heic/g)[0]);
           const blob = await response.blob();
           // 前端轉換 heic → jpg
           const convertedBlob = await heic2any({ blob, toType: "image/jpeg" });
-          html+=`<p><img src="${URL.createObjectURL(convertedBlob)}"></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`;
+          html+=`<div class="note-block"><p><img src="${URL.createObjectURL(convertedBlob)}"></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}</div><hr>`;
         } catch (err) {
           console.error("HEIC 轉換失敗:", err);
         }
       } else {
-      html+=`<p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}<hr>`;
+      html+=`<div class="note-block"><p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>${noteBtnGroup}</div><hr>`;
     }
     }
   }

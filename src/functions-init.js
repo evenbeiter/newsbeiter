@@ -546,6 +546,29 @@ window.onscroll = function () {
   }, 1000);
 };
 
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".copyNoteBtn")) {
+    const btn = e.target.closest(".copyNoteBtn");
+    const originalHTML = btn.innerHTML;
+
+    // 這裡放 copy 的內容，可以依需求改
+    navigator.clipboard.writeText("要複製的內容").then(() => {
+      btn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+             fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+          <path d="M12.736 3.97a.733.733 0 0 1 1.047 
+                   0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 
+                   0 0 1-1.065.02L3.217 8.384a.757.757 
+                   0 0 1 0-1.06.733.733 0 0 1 
+                   1.047 0l3.052 3.093 5.4-6.425z"/>
+        </svg>`;
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+      }, 1000);
+    });
+  }
+});
+
 
 function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
 function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
