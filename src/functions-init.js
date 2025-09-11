@@ -547,32 +547,32 @@ window.onscroll = function () {
 };
 
 document.addEventListener("click", (e) => {
-  if (e.target.closest(".copy-note-btn")) {
-    const btn = e.target.closest(".copyt-note-btn");console.log(btn);
-    const originalHTML = btn.innerHTML;
-    const container = btn.closest('div.note-block');console.log(container);
-    const htmlContent = container.innerHTML.replace(btn.outerHTML,'');
-    // 這裡放 copy 的內容，可以依需求改
-    navigator.clipboard.write([
-      new ClipboardItem({
-        "text/html": new Blob([htmlContent], { type: "text/html" }),
-        "text/plain": new Blob([container.innerText], { type: "text/plain" })
-      })
-    ]).then(() => {
-      btn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
-             fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-          <path d="M12.736 3.97a.733.733 0 0 1 1.047 
-                   0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 
-                   0 0 1-1.065.02L3.217 8.384a.757.757 
-                   0 0 1 0-1.06.733.733 0 0 1 
-                   1.047 0l3.052 3.093 5.4-6.425z"/>
-        </svg>`;
-      setTimeout(() => {
-        btn.innerHTML = originalHTML;
-      }, 1000);
-    });
-  }
+  const btn = e.target.closest(".copyt-note-btn");
+  if (!btn) return;
+  console.log(btn);
+  const originalHTML = btn.innerHTML;
+  const container = btn.closest('div.note-block');console.log(container);
+  const htmlContent = container.innerHTML.replace(btn.outerHTML,'');
+
+  navigator.clipboard.write([
+    new ClipboardItem({
+      "text/html": new Blob([htmlContent], { type: "text/html" }),
+      "text/plain": new Blob([container.innerText], { type: "text/plain" })
+    })
+  ]).then(() => {
+    btn.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+            fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+        <path d="M12.736 3.97a.733.733 0 0 1 1.047 
+                  0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 
+                  0 0 1-1.065.02L3.217 8.384a.757.757 
+                  0 0 1 0-1.06.733.733 0 0 1 
+                  1.047 0l3.052 3.093 5.4-6.425z"/>
+      </svg>`;
+    setTimeout(() => {
+      btn.innerHTML = originalHTML;
+    }, 1000);
+  });
 });
 
 
