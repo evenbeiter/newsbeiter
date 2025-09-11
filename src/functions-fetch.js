@@ -1849,7 +1849,7 @@ async function parseNoteFromServer(str){
       <p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p>
       <div class="d-flex justify-content-between align-items-center">
         <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
-        <div class="d-flex gap-2">
+        <div class="d-flex gap-2 align-items-center">
           <a href="${h.src}" target="_blank">原文連結</a>
           <button type="button" class="btn btn-secondary position-relative sepia opacity-50" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
             ${svgDownload}
@@ -1877,7 +1877,14 @@ async function parseNoteFromServer(str){
           // 前端轉換 heic → jpg
           const convertedBlob = await heic2any({ blob, toType: "image/jpeg" });
           html+=`<div class="note-block">
-          <p><img src="${URL.createObjectURL(convertedBlob)}"></p><span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span></div><hr>`;
+          <p><img src="${URL.createObjectURL(convertedBlob)}"></p>
+          <div class="d-flex justify-content-between align-items-center">
+          <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
+          <button type="button" class="btn btn-secondary position-relative sepia opacity-50 copy-note-btn" onclick="copyNote(this)">
+            ${svgCopy}
+          </button>
+          </div>
+          </div><hr>`;
         } catch (err) {
           console.error("HEIC 轉換失敗:", err);
         }
