@@ -1890,12 +1890,12 @@ async function parseNoteFromServer(str){
       <p>${h.content.replaceAll('\n\n','</p><p>').replaceAll('\n','</p><p>')}</p>
       <div class="d-flex justify-content-between align-items-center">
         <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
-        <div class="d-flex gap-2 align-items-center">
-          <a href="${h.src}" target="_blank">原文</a>
-          <button type="button" class="btn btn-secondary position-relative sepia opacity-50" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
+        <div class="d-flex gap-0 align-items-center">
+          <a class="fs10 p-1" href="${h.src}" target="_blank">原文</a>
+          <button type="button" class="btn btn-light position-relative sepia opacity-50" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
             ${svgDownload}
           </button>
-          <button type="button" class="btn btn-secondary position-relative sepia opacity-50 copy-note-btn" onclick="copyNote(this)">
+          <button type="button" class="btn btn-light position-relative sepia opacity-50 copy-note-btn" onclick="copyNote(this)">
             ${svgCopy}
           </button>
         </div>
@@ -1906,7 +1906,7 @@ async function parseNoteFromServer(str){
       <p><a href="${h.content.slice(0,h.content.indexOf('?'))}" target="_blank">原文連結</a></p>
       <div class="d-flex justify-content-between align-items-center">
         <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
-        <button type="button" class="btn btn-secondary position-relative sepia opacity-50 copy-note-btn" onclick="copyNote(this)">
+        <button type="button" class="btn btn-light position-relative sepia opacity-50 copy-note-btn" onclick="copyNote(this)">
           ${svgCopy}
         </button>
       </div>
@@ -1921,7 +1921,7 @@ async function parseNoteFromServer(str){
           <p><img src="${URL.createObjectURL(convertedBlob)}"></p>
           <div class="d-flex justify-content-between align-items-center">
           <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
-          <button type="button" class="btn btn-secondary position-relative sepia opacity-50 copy-note-btn" onclick="copyNote(this)">
+          <button type="button" class="btn btn-light position-relative sepia opacity-50 copy-note-btn" onclick="copyNote(this)">
             ${svgCopy}
           </button>
           </div>
