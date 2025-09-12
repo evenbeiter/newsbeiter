@@ -396,7 +396,7 @@ async function cnyesGetContent(id){
   } else {
     const res=await fetch(preStr+'https://api.cnyes.com/media/api/v1/news/'+id+'?status=no_token');
     const str=await res.json();
-    html=decodeHTMLEntities(str.items.content);
+    html=`${decodeHTMLEntities(str.items.content)}<p class="text-end"><a href="https://news.cnyes.com/news/id/${id}" target="_blank">分享</a></p><br>`;
     const regex = /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"[\s\S]*?]>\[(\d+)\]<\/a>/g;
     html=html.replace(
       regex,
