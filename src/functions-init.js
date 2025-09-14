@@ -377,13 +377,13 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
 }
 
 // 建立一個全域翻譯器
-const translate = createThrottledTranslator();
+//const translate = createThrottledTranslator();
 
 // 包成可呼叫的函數
-async function translateSentence(text) {
-  const translated = await translate(text);
-  return `原文: ${text} / 翻譯: ${translated}`;
-}
+//async function translateSentence(text) {
+//  const translated = await translate(text);
+//  return `原文: ${text} / 翻譯: ${translated}`;
+//}
 
 
 async function translatePapago(a){
@@ -753,6 +753,7 @@ const svgDelete = `
 
 
 // })();
+
 
 
 
