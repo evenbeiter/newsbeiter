@@ -314,7 +314,7 @@ async function translateGoogle(a){
   }catch (error) {return '';console.error(error)}
 }
 
-// async function translateGoogle(a){
+// async function translate(a){
 //   var i = [[[`<p class="ArticleBodyText_articleBodyContent__17wqE typography_articleBody__3UcBa paywall" data-component="paragraph">Counting all the people at work in a country the size of the US isn’t easy. That said, the latest revision to the official non-farm payroll data, which found<strong> </strong>that jobs were over-counted by 910,000<strong> </strong>in the 12 months to March, does nothing to salve confidence. This was the largest change on record and toward the lower end of expectations. However, it came as no great surprise, and the history of revisions to the number shows that initial inaccuracy isn’t a new phenomenon:</p>`], "en", "zh-TW"], "te_lib"];
 //   var res = await fetch("https://translate-pa.googleapis.com/v1/translateHtml", {
 //     method: 'POST',
@@ -325,6 +325,11 @@ async function translateGoogle(a){
 //   console.log(str);
 //   console.log(Array.isArray(str) && Array.isArray(str[0]) ? str[0] : str);
 // }
+
+//const throttledTranslate = _.throttle(async (text) => {
+//  return fetch("https://translate-pa.googleapis.com/v1/translateHtml", { ... });
+//}, 105); // 1000ms / 10 ≈ 100ms
+
 
 async function translatePapago(a){
   try{
@@ -693,6 +698,7 @@ const svgDelete = `
 
 
 // })();
+
 
 
 
