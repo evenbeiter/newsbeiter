@@ -330,6 +330,61 @@ async function translateGoogle(a){
 //  return fetch("https://translate-pa.googleapis.com/v1/translateHtml", { ... });
 //}, 105); // 1000ms / 10 ≈ 100ms
 
+function createThrottledTranslator(limit = 10, interval = 1050) {
+  let queue = [];
+  let activeCount = 0;
+
+  async function worker() {
+    if (queue.length === 0 || activeCount >= limit) return;
+
+    const { text, resolve, reject } = queue.shift();
+    activeCount++;
+
+    try {
+      const res = await fetch("https://translate-pa.googleapis.com/v1/translateHtml", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": "你的 publicKey"
+        },
+        body: JSON.stringify({
+          q: text,
+          source: "en",
+          target: "zh-TW",
+          format: "html"
+        })
+      });
+
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+      const data = await res.json();
+      resolve(data.translations[0].translatedText);
+    } catch (err) {
+      reject(err);
+    } finally {
+      setTimeout(() => {
+        activeCount--;
+        worker();
+      }, interval / limit);
+    }
+  }
+
+  return function translate(text) {
+    return new Promise((resolve, reject) => {
+      queue.push({ text, resolve, reject });
+      worker();
+    });
+  };
+}
+
+// 建立一個全域翻譯器
+const translate = createThrottledTranslator();
+
+// 包成可呼叫的函數
+async function translateSentence(text) {
+  const translated = await translate(text);
+  return `原文: ${text} / 翻譯: ${translated}`;
+}
+
 
 async function translatePapago(a){
   try{
@@ -698,6 +753,7 @@ const svgDelete = `
 
 
 // })();
+
 
 
 
