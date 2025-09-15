@@ -293,7 +293,7 @@ function cvtS2HHMMSS(sec,rescale) {
     return mm+':'+ss;
 }
 
-async function translate(a){
+async function translateOld(a){
   try{
     var url = 'https://translate.googleapis.com/translate_a/t?anno=3&client=gtx&dt=t&sl=auto&tl=zh-TW&format=html&q='+encodeURIComponent(a);
     var res=await fetch(url);
@@ -345,7 +345,7 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": "你的 publicKey"
+          "x-goog-api-key": "AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520"
         },
         body: JSON.stringify({
           q: text,
@@ -368,7 +368,7 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
     }
   }
 
-  return function translate(text) {
+  return function translateIR(text) {
     return new Promise((resolve, reject) => {
       queue.push({ text, resolve, reject });
       worker();
@@ -377,13 +377,13 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
 }
 
 // 建立一個全域翻譯器
-//const translate = createThrottledTranslator();
+const translate = createThrottledTranslator();
 
 // 包成可呼叫的函數
-//async function translateSentence(text) {
-//  const translated = await translate(text);
-//  return `原文: ${text} / 翻譯: ${translated}`;
-//}
+async function translate(text) {
+ const translated = await translateIR(text);
+ return translated;
+}
 
 
 async function translatePapago(a){
@@ -402,7 +402,7 @@ async function getTranslation(all){
   for (let a of all){
     if (a.innerText!=='' && cnTest(a.innerText)!==true){
     //if (a.innerText!==''){
-      var t=await translate(a.outerHTML);
+      var t=await translate(a.outerHTML.trim());
       //var t=await translate(a.textContent);
       if (t!==''&&t!==undefined){a.outerHTML+=t};
       //if (t!==''&&t!==undefined){a.innerHTML+='<br><span class="fs10 d-inline-block py-3">'+t+'</span>'};
