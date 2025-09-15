@@ -377,7 +377,7 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
 }
 
 // 建立一個全域翻譯器
-const translate = createThrottledTranslator();
+const translateIR = createThrottledTranslator();
 
 // 包成可呼叫的函數
 async function translate(text) {
