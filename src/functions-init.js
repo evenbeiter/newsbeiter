@@ -347,8 +347,7 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
         body: JSON.stringify([[[text], "en", "zh-TW"], "te_lib"]),
     });
 
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-      const str = await res.json();console.log(str);
+      const str = await res.json();
       resolve(Array.isArray(str) && Array.isArray(str[0]) ? str[0][0] : str[0]);
     } catch (err) {
       reject(err);
@@ -368,6 +367,8 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
   };
 }
 
+//Array.isArray(str) && Array.isArray(str[0]) ? str[0] : str
+
 // 建立一個全域翻譯器
 const translateIR = createThrottledTranslator();
 
@@ -375,6 +376,24 @@ const translateIR = createThrottledTranslator();
 async function translate(text) {
  const translated = await translateIR(text);
  return translated;
+}
+
+async function translateMSFT(text){
+  let res=await fetch('https://edge.microsoft.com/translate/auth');
+  let at=await res.text();
+  // const raw=at.split('.')[1].replace(/-/g, "+").replace(/_/g, "/");
+  // const exp=JSON.parse(decodeURIComponent(window.atob(raw))).exp;
+
+  res = await fetch("https://api-edge.cognitive.microsofttranslator.com/translate?from=&to=zh-Hant&api-version=3.0&includeSentenceLength=true", {
+        method: 'POST',
+        headers: {"content-type": "application/json", "authorization": "Bearer " + at,},
+        body: JSON.stringify([{text:text}]),
+      });
+  let str = await res.json();
+  // if (str && str.length > 0 && str[0].translations && str[0].translations.length > 0){
+  //   console.log(str.map(m => m.translations[0]?.text || ""));
+  // };
+  return str[0].translations[0]?.text || "";
 }
 
 
