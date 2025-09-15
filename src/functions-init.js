@@ -348,8 +348,8 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
     });
 
       if (!res.ok) throw new Error(`API error: ${res.status}`);
-      const data = await res.json();
-      resolve(data.translations[0].translatedText);
+      const str = await res.json();console.log(str);
+      resolve(Array.isArray(str) && Array.isArray(str[0]) ? str[0][0] : str[0]);
     } catch (err) {
       reject(err);
     } finally {
