@@ -343,17 +343,9 @@ function createThrottledTranslator(limit = 10, interval = 1050) {
     try {
       const res = await fetch("https://translate-pa.googleapis.com/v1/translateHtml", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": "AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520"
-        },
-        body: JSON.stringify({
-          q: text,
-          source: "en",
-          target: "zh-TW",
-          format: "html"
-        })
-      });
+        headers: {"content-type": "application/json+protobuf","x-goog-api-key": "AIzaSyATBXajvzQLTDHEQbcpq0Ihe0vWDHmO520"},
+        body: JSON.stringify([[[text], "en", "zh-TW"], "te_lib"]),
+    });
 
       if (!res.ok) throw new Error(`API error: ${res.status}`);
       const data = await res.json();
