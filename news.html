@@ -14,6 +14,18 @@
 </head>
 <body>
 <div id="container">
+
+<div id="auth-form">
+  <h3>請輸入通關密語：</h3>
+  <input type="password" id="code-input" />
+  <button onclick="submitCode()">確認</button>
+  <p id="error" style="color: red;">授權失敗</p>
+</div>
+
+<div id="main-content" style="display: none;">
+  <h1>歡迎來到新聞被</h1>
+</div>
+
 <div class="sticky-top position-fixed m-2 top-0 end-0" style="z-index:1030;padding-top:3rem">
   <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="openOptions()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">

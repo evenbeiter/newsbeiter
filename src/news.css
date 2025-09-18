@@ -8,6 +8,7 @@ h1,h2,h3,h4,h5,h6,.title{font-size:1.2rem;color:#3B3B3B !important;font-weight:b
 #loading{width:5rem;height:5rem}
 
 .content{display:none;cursor:pointer}
+#auth-form, #error { display: none; }
 #uploadBtn{display:none}
 iframe{width:100% !important;height:auto !important}
 iframe[id^="video"], iframe[src^="https://player.vimeo.com/video/"]{width:100%;aspect-ratio:1.78;height:auto;margin-top:0.5rem;border:none;border-radius:0.375rem}
