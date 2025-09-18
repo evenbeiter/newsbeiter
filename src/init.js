@@ -29,7 +29,7 @@ async function submitCode() {
 }
 
 function showMain() {
-  document.getElementById('auth-form').style.display = 'none';
+  document.getElementById('auth-form').classList.remove('d-block');document.getElementById('auth-form').classList.add('d-none');
   document.getElementById('container').style.display = 'block';
 }
 
@@ -38,6 +38,6 @@ function showMain() {
   if (token && await validateToken(token)) {
     showMain();
   } else {
-    document.getElementById('auth-form').style.display = 'block';
+    document.getElementById('auth-form').classList.add('d-block');document.getElementById('auth-form').classList.remove('d-none');
   }
 })();
