@@ -1,8 +1,8 @@
 {
   "name": "뉴스베이터",
   "short_name": "뉴스베이터",
-  "start_url": "/news.html",
-  "scope": "/",
+  "start_url": "./news.html",
+  "scope": "./",
   "display": "standalone",
   "icons": [
     {
