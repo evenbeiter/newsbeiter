@@ -1,7 +1,7 @@
 //    FUNCTIONS FOR NOTE-UPLOADER
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const backendURL = preStr.replace('/api/fetch?url=','');
+//const backendURL = preStr.replace('/api/fetch?url=','');
 
 async function uploadFromClipboard(){
   let textContent = '';
