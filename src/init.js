@@ -22,6 +22,7 @@ async function submitCode() {
     const data = await res.json();
     localStorage.setItem('authToken', data.token);
     showMain();
+    alert('뉴스베이터 입니다!');
   } else {
     document.getElementById('error').style.display = 'block';
   }
@@ -36,7 +37,6 @@ function showMain() {
   const token = localStorage.getItem('authToken');
   if (token && await validateToken(token)) {
     showMain();
-    alert('뉴스베이터 입니다!');
   } else {
     document.getElementById('auth-form').style.display = 'block';
   }
