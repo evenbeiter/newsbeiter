@@ -278,7 +278,7 @@ async function businessWeeklyGetContent(id){
   } else {
     html = '<p class="time">'+(doc.querySelector('.articleinfo')?.innerText??'')+'</p>'+(doc.querySelector('.postbody')?.outerHTML??'')+shareLink(id);    
   }
-  }catch{html='<p><a href="' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  }catch{html='<p><a href="' + id.replace('evenbeiter.github.io','www.businessweekly.com.tw') + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
 
