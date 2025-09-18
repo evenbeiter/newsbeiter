@@ -39,5 +39,6 @@ function showMain() {
     showMain();
   } else {
     document.getElementById('auth-form').classList.add('d-block');document.getElementById('auth-form').classList.remove('d-none');
+    document.getElementById('auth-form-content').classList.remove('d-none');document.getElementById('auth-form-content').classList.add('d-block');
   }
 })();
