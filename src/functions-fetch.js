@@ -600,42 +600,39 @@ async function invescoGetContent(id){
 async function isblGetList(siteName,t){
   try{
     url='https://www.isabelnet.com/blog/page/'+rr;console.log(url);
-    var res=await fetch(preStr+encodeURIComponent(url));
+    var res=await fetch(preStr+url);
     var str=await res.text();
     var parser = new DOMParser();
     var doc = parser.parseFromString(str, "text/html");
 
     let ts=doc.querySelectorAll('.entry-title');
 
-    // 建立 promises (保留 index)
-    const promises = ts.map((t, i) =>
-      fetch(preStr + encodeURIComponent(t.firstChild.href))
-        .then(res => res.text())
-        .then(str => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(str, "text/html");
-          const ss = doc.querySelectorAll("section"); // 看你有沒有要用
-          const hh = doc.querySelector("h2");
-          const dt = doc.querySelector(".date-meta").innerText.replaceAll("\\n", " ");
-          const pg = doc.querySelector(".elementor-text-editor");
-          const img = doc.querySelector(".gallery-icon") || doc.querySelector(".elementor-image");
+    const promises = Array.from(ts).map(async (t, i) => {
+      const link = t.querySelector("a")?.href;
+      if (!link) return { i, block: "" };
 
-          let block =
-            '<p class="title">' +
-            hh.textContent +
-            '</p><p class="time">' +
-            dt +
-            "</p>" +
-            pg.innerHTML +
-            img.innerHTML +
-            "<br><br><hr>";
-          block = block.replaceAll('<p>Image:', '<p class="fs10">Image:');
+      const res = await fetch(preStr + link);
+      const str = await res.text();
 
-          return { i, block };
-        })
-    );
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(str, "text/html");
 
-    // 等待全部完成
+      const hh = doc.querySelector("h2");
+      const dt = doc.querySelector(".date-meta")?.innerText.replaceAll("\\n", " ") || "";
+      const pg = doc.querySelector(".elementor-text-editor") || { innerHTML: "" };
+      const img = doc.querySelector(".gallery-icon") || doc.querySelector(".elementor-image") || { innerHTML: "" };
+
+      let block =
+        `<p class="title">${hh?.textContent || ""}</p>` +
+        `<p class="time">${dt}</p>` +
+        pg.innerHTML +
+        img.innerHTML +
+        "<br><br><hr>";
+      block = block.replaceAll('<p>Image:', '<p class="fs10">Image:');
+
+      return { i, block };
+    });
+
     const results = await Promise.all(promises);
 
     // 按照原順序組合 html
