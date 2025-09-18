@@ -36,7 +36,7 @@ function showMain() {
   const token = localStorage.getItem('authToken');
   if (token && await validateToken(token)) {
     showMain();
-    alert('歡迎來到新聞被！');
+    alert('뉴스베이터 입니다!');
   } else {
     document.getElementById('auth-form').style.display = 'block';
   }
