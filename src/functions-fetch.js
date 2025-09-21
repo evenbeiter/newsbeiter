@@ -1950,7 +1950,7 @@ async function parseNoteFromServer(str){
 
   function mdToHtml(str){
   for (let s of str){
-    if (s) {const h=JSON.parse(s);consttext=h.content;
+    if (s) {const h=JSON.parse(s);const text=h.content;
     if (!text || typeof text !== "string") return text;
 
     // 用 marked 轉換
@@ -1969,3 +1969,4 @@ async function parseNoteFromServer(str){
   }
   }
 }
+
