@@ -1950,7 +1950,7 @@ async function parseNoteFromServer(str){
 
   function mdToHtml(str){
   for (let s of str){
-    if (s) {const h=JSON.parse(s);const=h.content;
+    if (s) {const h=JSON.parse(s);consttext=h.content;
     if (!text || typeof text !== "string") return text;
 
     // 用 marked 轉換
@@ -1965,5 +1965,7 @@ async function parseNoteFromServer(str){
     } else {
       // 有套用 Markdown 語法，回傳 HTML
       return html;
-    }
+    } 
   }
+  }
+}
