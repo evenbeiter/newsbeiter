@@ -1843,6 +1843,10 @@ async function ideaGetList(siteName,t){return html=await noteGetList(siteName,t)
 async function ideaGetContent(id){return html=await noteGetContent(id)}
 async function ideaGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
 
+async function speakGetList(siteName,t){return html=await noteGetList(siteName,t)}
+async function speakGetContent(id){return html=await noteGetContent(id)}
+async function speakGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
+
 async function noteGetList(siteName,t){console.log(t);
   if(t===''){
   try{url=`${backendURL}/note/list?category=${siteName}&rr=${rr}`;
@@ -1943,3 +1947,4 @@ async function parseNoteFromServer(str){
   else html=html.slice(0,html.length-4)+'<a href="" style="display:none">分享</a>';
   return html;
 }
+
