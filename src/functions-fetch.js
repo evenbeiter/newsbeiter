@@ -1869,7 +1869,7 @@ async function noteGetContent(id){console.log(id);
   });
   if (!res.ok) throw new Error('無法讀取筆記');
   const str=await res.json();
-  html=await parseNoteFromServer(str);
+  if (siteNameVar!=='speak'){html=await parseNoteFromServer(str)}else{html=mdToHtml(str)}
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
@@ -1948,3 +1948,22 @@ async function parseNoteFromServer(str){
   return html;
 }
 
+  function mdToHtml(str){
+  for (let s of str){
+    if (s) {const h=JSON.parse(s);const=h.content;
+    if (!text || typeof text !== "string") return text;
+
+    // 用 marked 轉換
+    const html = marked.parse(text);
+
+    // 檢查轉換後是否只是 <p>包起來的純文字
+    const strippedHtml = html.replace(/^<p>|<\/p>\n?$/g, '');
+
+    if (strippedHtml === text) {
+      // 純文字，沒有 Markdown 語法
+      return text;
+    } else {
+      // 有套用 Markdown 語法，回傳 HTML
+      return html;
+    }
+  }
