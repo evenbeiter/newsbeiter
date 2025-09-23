@@ -1941,11 +1941,11 @@ async function parseNoteFromServer(str){
       </div>
       </div><hr>`;
     }
-    }
   }
   if (html==='') html+='<p>尚無內容</p>';
   else html=html.slice(0,html.length-4)+'<a href="" style="display:none">分享</a>';
   return html;
+}
 }
 
   function mdToHtml(str){
@@ -1969,4 +1969,3 @@ async function parseNoteFromServer(str){
   }
   }
 }
-
