@@ -365,7 +365,7 @@ async function cnyesGetList(siteName,t){
     for (let a of str.items.data){
       html+=`<p class="title" onclick="openUrl('${a.link}')">${a.title}</p><hr>`;
     }
-  } else if (t.startsWith('#')){await cnyesGetSearchResults(siteName,t.slice(1))} else {
+  } else if (t.startsWith('#')){return html=await cnyesGetSearchResults(siteName,t.slice(1))} else {
     url=preStr+encodeURIComponent('https://api.cnyes.com/media/api/v1/newslist/category/'+t+'?limit=30&page='+rr);
     let res=await fetch(url);
     let str=await res.json();
