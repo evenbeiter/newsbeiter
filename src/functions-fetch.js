@@ -1835,29 +1835,27 @@ async function ecoMagGetList(siteName,t){
 //    NOTE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function dailyGetList(siteName,t){return html=await noteGetList(siteName,t)}
-async function dailyGetContent(id){return html=await noteGetContent(id)}
-async function dailyGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
+// async function dailyGetList(siteName,t){return html=await noteGetList(siteName,t)}
+// async function dailyGetContent(id){return html=await noteGetContent(id)}
+// async function dailyGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
 
-async function ideaGetList(siteName,t){return html=await noteGetList(siteName,t)}
-async function ideaGetContent(id){return html=await noteGetContent(id)}
-async function ideaGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
+// async function ideaGetList(siteName,t){return html=await noteGetList(siteName,t)}
+// async function ideaGetContent(id){return html=await noteGetContent(id)}
+// async function ideaGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
 
-async function speakGetList(siteName,t){return html=await noteGetList(siteName,t)}
-async function speakGetContent(id){return html=await noteGetContent(id)}
-async function speakGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
+// async function speakGetList(siteName,t){return html=await noteGetList(siteName,t)}
+// async function speakGetContent(id){return html=await noteGetContent(id)}
+// async function speakGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
 
-async function noteGetList(siteName,t){console.log(t);
-  if(t===''){
-  try{url=`${backendURL}/note/list?category=${siteName}&rr=${rr}`;
+var noteCat='';
+
+async function noteGetList(siteName,t){console.log(t);noteCate=t;
+  try{url=`${backendURL}/note/list?category=${t}&rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
-    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content${siteName==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
+    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content${t==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
 
   }catch{html='<p>尚無內容</p>'}
   return html;
-  } else {
-  lessonGetSearchResults(siteName,t);
-  }
 }
 
 async function noteGetContent(id){console.log(id);
@@ -1865,17 +1863,17 @@ async function noteGetContent(id){console.log(id);
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({category:siteNameVar, path:id})
+    body: JSON.stringify({category:noteCat, path:id})
   });
   if (!res.ok) throw new Error('無法讀取筆記');
   const str=await res.json();
-  if (siteNameVar!=='speak'){html=await parseNoteFromServer(str)}else{html=mdToHtml(str)}
+  if (noteCat!=='speak'){html=await parseNoteFromServer(str)}else{html=mdToHtml(str)}
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function noteGetSearchResults(siteName,t){
-  try{url=`${backendURL}/note/search?category=${siteName}&q=${encodeURIComponent(t)}`;
+  try{url=`${backendURL}/note/search?category=${noteCat}&q=${encodeURIComponent(t)}`;
   let res=await fetch(url);
   let str=await res.json();
   html=await parseNoteFromServer(str);
