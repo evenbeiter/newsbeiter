@@ -1849,7 +1849,7 @@ async function ecoMagGetList(siteName,t){
 
 var noteCat='';
 
-async function noteGetList(siteName,t){console.log(t);noteCate=t;
+async function noteGetList(siteName,t){console.log(t);noteCat=t;
   try{url=`${backendURL}/note/list?category=${t}&rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
     for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content${t==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
