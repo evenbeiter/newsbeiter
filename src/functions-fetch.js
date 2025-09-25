@@ -1837,15 +1837,15 @@ async function ecoMagGetList(siteName,t){
 
 // async function dailyGetList(siteName,t){return html=await noteGetList(siteName,t)}
 // async function dailyGetContent(id){return html=await noteGetContent(id)}
-// async function dailyGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
+async function dailyGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
 
 // async function ideaGetList(siteName,t){return html=await noteGetList(siteName,t)}
 // async function ideaGetContent(id){return html=await noteGetContent(id)}
-// async function ideaGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
+async function ideaGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
 
 // async function speakGetList(siteName,t){return html=await noteGetList(siteName,t)}
 // async function speakGetContent(id){return html=await noteGetContent(id)}
-// async function speakGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
+async function speakGetSearchResults(siteName,t){return html=await noteGetSearchResults(siteName,t)}
 
 var noteCat='';
 
@@ -1873,7 +1873,7 @@ async function noteGetContent(id){console.log(id);
 }
 
 async function noteGetSearchResults(siteName,t){
-  try{url=`${backendURL}/note/search?category=${noteCat}&q=${encodeURIComponent(t)}`;
+  try{url=`${backendURL}/note/search?category=${siteName}&q=${encodeURIComponent(t)}`;
   let res=await fetch(url);
   let str=await res.json();
   html=await parseNoteFromServer(str);

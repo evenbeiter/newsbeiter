@@ -27,6 +27,6 @@ document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'E
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
   //ping();
-  createUrlListDiv([allSites1,allSites2,videoSites]);
+  createUrlListDiv([allSites,videoSites]);
   createSearchListDiv(faq,searchSites);
   openUrlList();
