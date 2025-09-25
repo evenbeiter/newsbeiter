@@ -693,7 +693,6 @@ function newNews(){options.style.display='none';document.body.scrollTop = 0;docu
 function openChannelList(){channelList.style.display='block';searchList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
 function openSearchList(){document.getElementById('search-term').value='';channelList.style.display='none';searchList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
 function openUrlList(){channelList.style.display='none';searchList.style.display='none';urlList.style.display='block';options.style.display='block';topdiv.style.display='none';}
-function openNoteList(){channelList.style.display='none';searchList.style.display='none';noteList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
 
 //function openEcoMagList(){channelList.style.display='none';searchList.style.display='none';ecoMagList.style.display='block';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
 function openOptions(){if (options.style.display=='none'){options.style.display='block';topdiv.style.display='none';} else {options.style.display='none';topdiv.style.display='block';}}
