@@ -1884,6 +1884,13 @@ async function noteGetSearchResults(siteName,t){
 }
 
 async function parseNoteFromServer(str){
+  html+=`
+    <div class="text-end">
+      <button type="button" class="btn btn-light position-relative sepia opacity-50 copy-note-btn copy-all" onclick="copyNote(this)">
+        ${svgCopy}
+      </button>
+    </div>
+    `;
   for (let s of str){
     if (s) {var h=JSON.parse(s);
       if (h.src){

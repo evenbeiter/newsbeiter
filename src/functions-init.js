@@ -661,7 +661,7 @@ window.onscroll = function () {
 
 function copyNote(btn){
   const originalHTML = btn.innerHTML;
-  const container = btn.closest('div.note-block');console.log(container);
+  const container = btn.classList.contains('copy-all')? btn.closest('div.content') : btn.closest('div.note-block');
   const htmlContent = container.innerHTML.replace(btn.outerHTML,'');
 
   navigator.clipboard.write([
