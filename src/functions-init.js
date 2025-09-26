@@ -164,7 +164,9 @@ async function getList(siteName,t){
 }
 
 async function getContent(siteName,clickedId,id){
-  var cEl=document.getElementById(id);html='';
+  var e=window.event;
+  if (e && e.target.closest('button')){var cEl=overlay;}else{var cEl=document.getElementById(id);}
+  html='';
   try{document.getElementById('dateAuthor-'+id).style.display='none'}catch{};
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
@@ -173,8 +175,9 @@ async function getContent(siteName,clickedId,id){
       //need to get content for others (open div for apollo)
       if (cEl.querySelector('a')==null){
         //get content
-        if (msnALL.includes(siteName)){cEl.innerHTML+=await msnGetContent(id)}
-        else {cEl.innerHTML+=await window[`${siteName}GetContent`](id)};
+        if (cEl==overlay){var cElDiv=popupContent;}else{var cElDiv=cEl;}
+        if (msnALL.includes(siteName)){cElDiv.innerHTML+=await msnGetContent(id)}
+        else {cElDiv.innerHTML+=await window[`${siteName}GetContent`](id)};
         
         //handle videos for line
         if (siteName=='lineToday'){
@@ -610,7 +613,7 @@ function getLastNSats(n) {
 
 async function popupContent(id){
   overlay.style.display='block';
-  popupChart.innerHTML+=await window[`${siteNameVar}GetContent`](id);
+  popupContent.innerHTML+=await window[`${siteNameVar}GetContent`](id);
 }
   
 let scrollTimeout;
@@ -708,7 +711,7 @@ function hideOverlay(){document.getElementById('customOverlay').classList.add('d
 function showOverlay(el,elSrc){
   document.getElementById('customOverlay').classList.remove('d-none');
   if (el='blkIframe'){
-    document.getElementById('popupChart').dataset.src=elSrc;document.getElementById('gtmImg').src='';
+    document.getElementById('popupContent').dataset.src=elSrc;document.getElementById('gtmImg').src='';
   } else {document.getElementById('gtmImg').src=elSrc;}
 }
 function shareLink(url){return `<p class="text-end"><a href="${url}" target="_blank">分享</a></p><br>`}

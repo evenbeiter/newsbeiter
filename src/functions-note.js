@@ -30,6 +30,7 @@ async function uploadFromClipboard(){
 
 let lastSelectedText = '';
 let articleUrl='';
+let articleId='';
 
 // 📱 偵測選取文字（含 iOS）
 document.addEventListener('selectionchange', () => {
@@ -47,6 +48,7 @@ document.addEventListener('click', function (e) {
   if (isImageLikeElement(el)) {
     lastSelectedText = getImageSrc(el);
     articleUrl=findNextShareLink(el);
+    articleId=getContentId();
     showUploadBtn();
   }
 });
@@ -60,7 +62,7 @@ uploadBtn.addEventListener('click', () => {
       fetch(`${backendURL}/note/add`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category:'daily', content: lastSelectedText, siteName: siteNameVar, src: articleUrl })
+        body: JSON.stringify({ category:'daily', content: lastSelectedText, siteName: siteNameVar, id: articleId, src: articleUrl })
       }).then(res => {
         if (!res.ok) alert('❌ 上傳失敗');
         uploadBtn.style.display = 'none';
@@ -129,6 +131,23 @@ function getArticleUrl() {
   const selectedElement = getSelectionElement();
   if (!selectedElement) return null;
   return findNextShareLink(selectedElement);
+}
+
+function getContentId(){
+  const selection = window.getSelection();
+  if (!selection.isCollapsed) {
+    // 找到選取範圍起點所在的 element
+    const anchorNode = selection.anchorNode;
+    const element = anchorNode.nodeType === 3 ? anchorNode.parentElement : anchorNode;
+
+    // 往上找最近的 onclick="getContent(...)" element
+    const target = element.closest('[onclick^="getContent("]');
+    if (target) {
+      console.log("找到的 element:", target);
+      console.log("onclick 屬性:", target.getAttribute("onclick"));
+      return target.id;
+    }
+  }
 }
 
 function escapeHTML(str) {

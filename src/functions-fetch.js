@@ -1898,9 +1898,9 @@ async function parseNoteFromServer(str){
         <span class="time fw-normal">${cvt2Timezone(h.timestamp)}</span>
         <div class="d-flex gap-0 align-items-center">
           <a class="fs10 p-1" href="${h.src}" target="_blank">原文</a>
-          <button type="button" class="btn btn-light position-relative sepia opacity-50" onclick="getContent('${h.siteName}',this.id,'${h.src}')">
+          ${h.id ? `<button type="button" class="btn btn-light position-relative sepia opacity-50" onclick="getContent('${h.siteName}',this.id,'${h.id}')">
             ${svgDownload}
-          </button>
+          </button>`:''}
           <button type="button" class="btn btn-light position-relative sepia opacity-50 copy-note-btn" onclick="copyNote(this)">
             ${svgCopy}
           </button>
