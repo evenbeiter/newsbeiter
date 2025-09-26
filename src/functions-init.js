@@ -611,7 +611,7 @@ function getLastNSats(n) {
   return saturdays;
 }
 
-async function popupContent(id){
+async function popup(id){
   overlay.style.display='block';
   popupContent.innerHTML+=await window[`${siteNameVar}GetContent`](id);
 }
@@ -711,7 +711,7 @@ function hideOverlay(){document.getElementById('customOverlay').classList.add('d
 function showOverlay(el,elSrc){
   document.getElementById('customOverlay').classList.remove('d-none');
   if (el='blkIframe'){
-    document.getElementById('popupContent').dataset.src=elSrc;document.getElementById('gtmImg').src='';
+    popupContent.dataset.src=elSrc;document.getElementById('gtmImg').src='';
   } else {document.getElementById('gtmImg').src=elSrc;}
 }
 function shareLink(url){return `<p class="text-end"><a href="${url}" target="_blank">分享</a></p><br>`}

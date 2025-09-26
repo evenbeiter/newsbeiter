@@ -374,7 +374,7 @@ async function cnyesGetList(siteName,t){
             <p class="time">${cvt2Timezone(a.publishAt*1000)}</p>${decodeHTMLEntities(a.content).replace(
       /<a\s+href="https:\/\/news\.cnyes\.com\/news\/id\/(\d+)"[\s\S]*?]>\[(\d+)\]<\/a>/g,
       (match, id, num) => {
-        return `<button onclick="popupContent('${id}')">[${num}]</button>`;
+        return `<button onclick="popup('${id}')">[${num}]</button>`;
     })}<p class="text-end"><a href="https://news.cnyes.com/news/id/${a.newsId}" target="_blank">分享</a></p><br>
             </div><hr>`;
     }
