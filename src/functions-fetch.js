@@ -1965,13 +1965,14 @@ async function parseNoteFromServer(str){
 
     if (strippedHtml === text) {
       // 純文字，沒有 Markdown 語法
-      html+=text;
+      html+=text+'<hr>';
     } else {
       // 有套用 Markdown 語法，回傳 HTML
-      html+=rawhtml;
+      html+=rawhtml+'<hr>';
     } 
   }
   }
     return html;
 }
+
 
