@@ -1955,21 +1955,23 @@ async function parseNoteFromServer(str){
   function mdToHtml(str){
   for (let s of str){
     if (s) {const h=JSON.parse(s);const text=h.content;
-    if (!text || typeof text !== "string") return text;
+    //if (!text || typeof text !== "string") return text;
 
     // 用 marked 轉換
-    const html = marked.parse(text);
+    const rawhtml = marked.parse(text);
 
     // 檢查轉換後是否只是 <p>包起來的純文字
-    const strippedHtml = html.replace(/^<p>|<\/p>\n?$/g, '');
+    const strippedHtml = rawhtml.replace(/^<p>|<\/p>\n?$/g, '');
 
     if (strippedHtml === text) {
       // 純文字，沒有 Markdown 語法
-      return text;
+      html+=text;
     } else {
       // 有套用 Markdown 語法，回傳 HTML
-      return html;
+      html+=rawhtml;
     } 
   }
   }
+    return html;
 }
+
