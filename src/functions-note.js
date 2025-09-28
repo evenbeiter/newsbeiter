@@ -91,7 +91,8 @@ document.querySelectorAll('.upload-btn').forEach(btn => {
       })
     }).then(res => {
       if (!res.ok) alert('❌ 上傳失敗');
-      btn.style.display = 'none';
+      // btn.style.display = 'none';
+      toggleUploadBtn();
     });
   });
 });
@@ -268,6 +269,7 @@ function escapeHTML(str) {
 //     });
 //   });
 // }
+
 
 
 
