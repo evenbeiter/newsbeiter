@@ -55,7 +55,7 @@ document.addEventListener('click', function (e) {
 
 // function showUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {btn.style.display = 'none'})};
 function toggleUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {
-  if (btn.style.display = 'none') {
+  if (btn.style.display === 'none') {
     btn.style.display = 'block';
     return;
   }
@@ -269,6 +269,7 @@ function escapeHTML(str) {
 //     });
 //   });
 // }
+
 
 
 
