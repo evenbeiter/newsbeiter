@@ -37,10 +37,10 @@ document.addEventListener('selectionchange', () => {
   const selection = window.getSelection();
   if (selection.rangeCount === 0) return;
   const text = selection.toString().trim();
-  if (!text) {uploadBtn.style.display = 'none';return;}
+  if (!text) {toggleUploadBtn();return;}
   lastSelectedText = text;
   articleUrl=getArticleUrl();
-  showUploadBtn();
+  toggleUploadBtn();
 });
 
 document.addEventListener('click', function (e) {
@@ -49,28 +49,20 @@ document.addEventListener('click', function (e) {
     lastSelectedText = getImageSrc(el);
     articleUrl=findNextShareLink(el);
     articleId=getContentId();
-    showUploadBtn();
+    toggleUploadBtn();
   }
 });
 
-// function showUploadBtn() {uploadBtn.style.display = 'block';}
-function showUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {btn.style.display = 'none'})};
-
-uploadBtn.addEventListener('click', () => {
-  if (!lastSelectedText) {alert('尚未選取筆記')} else {
-    const confirmUpload = confirm('是否上傳筆記？');
-    if (!confirmUpload) {uploadBtn.style.display = 'none';return;} else {
-      fetch(`${backendURL}/note/add`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category:'daily', content: lastSelectedText, siteName: siteNameVar, id: articleId, src: articleUrl })
-      }).then(res => {
-        if (!res.ok) alert('❌ 上傳失敗');
-        uploadBtn.style.display = 'none';
-      });
-    }
+// function showUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {btn.style.display = 'none'})};
+function toggleUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {
+  if (btn.style.display = 'none') {
+    btn.style.display = 'block';
+    return;
   }
-});
+  btn.style.display = 'none';
+  }
+)};
+
 
 document.querySelectorAll('.upload-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -276,4 +268,5 @@ function escapeHTML(str) {
 //     });
 //   });
 // }
+
 
