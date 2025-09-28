@@ -37,7 +37,7 @@ document.addEventListener('selectionchange', () => {
   const selection = window.getSelection();
   if (selection.rangeCount === 0) return;
   const text = selection.toString().trim();
-  if (!text) {toggleUploadBtn();return;}
+  // if (!text) {toggleUploadBtn();return;}
   lastSelectedText = text;
   articleUrl=getArticleUrl();
   toggleUploadBtn();
@@ -268,5 +268,6 @@ function escapeHTML(str) {
 //     });
 //   });
 // }
+
 
 
