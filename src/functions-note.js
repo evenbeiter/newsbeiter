@@ -53,7 +53,8 @@ document.addEventListener('click', function (e) {
   }
 });
 
-function showUploadBtn() {uploadBtn.style.display = 'block';}
+// function showUploadBtn() {uploadBtn.style.display = 'block';}
+function showUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {btn.style.display = 'none'})};
 
 uploadBtn.addEventListener('click', () => {
   if (!lastSelectedText) {alert('尚未選取筆記')} else {
@@ -70,6 +71,39 @@ uploadBtn.addEventListener('click', () => {
     }
   }
 });
+
+document.querySelectorAll('.upload-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!lastSelectedText) {
+      alert('尚未選取筆記');
+      return;
+    }
+
+    const confirmUpload = confirm('是否上傳筆記？');
+    if (!confirmUpload) {
+      btn.style.display = 'none';
+      return;
+    }
+
+    const category = btn.dataset.category; // 讀取 button 上的 category
+
+    fetch(`${backendURL}/note/add`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        category,
+        content: lastSelectedText,
+        siteName: siteNameVar,
+        id: articleId,
+        src: articleUrl
+      })
+    }).then(res => {
+      if (!res.ok) alert('❌ 上傳失敗');
+      btn.style.display = 'none';
+    });
+  });
+});
+
 
 function isImageLikeElement(el) {
   if (!el || !(el instanceof Element)) return false;
@@ -242,3 +276,4 @@ function escapeHTML(str) {
 //     });
 //   });
 // }
+
