@@ -40,7 +40,7 @@ document.addEventListener('selectionchange', () => {
   // if (!text) {toggleUploadBtn();return;}
   lastSelectedText = text;
   articleUrl=getArticleUrl();
-  toggleUploadBtn();
+  showUploadBtn();
 });
 
 document.addEventListener('click', function (e) {
@@ -49,20 +49,12 @@ document.addEventListener('click', function (e) {
     lastSelectedText = getImageSrc(el);
     articleUrl=findNextShareLink(el);
     articleId=getContentId();
-    toggleUploadBtn();
+    showUploadBtn();
   }
 });
 
-// function showUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {btn.style.display = 'none'})};
-function toggleUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {
-  if (btn.style.display === 'none') {
-    btn.style.display = 'block';
-    return;
-  }
-  btn.style.display = 'none';
-  }
-)};
-
+function showUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {btn.style.display = 'block'})};
+function hideUploadBtn() {document.querySelectorAll('.upload-btn').forEach(btn => {btn.style.display = 'none'})};
 
 document.querySelectorAll('.upload-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -73,7 +65,8 @@ document.querySelectorAll('.upload-btn').forEach(btn => {
 
     const confirmUpload = confirm('是否上傳筆記？');
     if (!confirmUpload) {
-      btn.style.display = 'none';
+      // btn.style.display = 'none';
+      hideUploadBtn();
       return;
     }
 
@@ -92,7 +85,7 @@ document.querySelectorAll('.upload-btn').forEach(btn => {
     }).then(res => {
       if (!res.ok) alert('❌ 上傳失敗');
       // btn.style.display = 'none';
-      toggleUploadBtn();
+      hideUploadBtn();
     });
   });
 });
@@ -269,6 +262,7 @@ function escapeHTML(str) {
 //     });
 //   });
 // }
+
 
 
 
