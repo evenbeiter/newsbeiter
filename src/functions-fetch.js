@@ -905,7 +905,7 @@ async function liveABCGetList(siteName,t){
       group.forEach(item => {
         block += `<p>${item.english}<br>${item.local}</p>`;
       });
-      html += `<div id="${publishAt.slice(0,10)}" class="content fs12" onclick="getContent('${siteName}',this.id,'${publishAt.slice(0,10)}')">${block}</div><br><hr>`
+      html += `<div id="${publishAt.slice(0,10)}" class="content fs12" onclick="getContent('${siteName}',this.id,'${publishAt.slice(0,10)}')">${block}<br></div><hr>`
     }
   }
   }catch{html='<p>尚無內容</p>'}
@@ -2005,5 +2005,6 @@ async function parseNoteFromServer(str){
   }
     return html;
 }
+
 
 
