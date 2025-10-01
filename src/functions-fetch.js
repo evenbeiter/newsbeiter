@@ -882,6 +882,31 @@ async function lineTodayGetSearchResults(siteName,t){
 }
 
 
+//    LIVEABC
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function liveABCGetList(siteName,t){
+  try{url='https://api.liveabc.com/v1/daily-sentences?page='+rr+'&pageSize=30&category='+t;
+  let res=await fetch(url);
+  let str=await res.json();
+  const arr = str.data;
+  for (let i = 0; i < arr.length; i += 3) {
+    const group = arr.slice(i, i + 3);
+    if (group.length === 3) {
+      const publishAt = group[0].publish_at;
+      html += `<p class="title" onclick=getContent('${siteName}',this.id,'${publishAt.slice(10)}')">${publishAt.slice(10)}</p>`;
+      let block = '';
+      group.forEach(item => {
+        block += `<p>${item.english}<br>${item.local}</p>`;
+      });
+      html += `<div id="${publishAt.slice(10)}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    }
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+
 //    MORGAN STANLEY
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
