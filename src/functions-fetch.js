@@ -895,7 +895,13 @@ async function liveABCGetList(siteName,t){
     if (group.length === 3) {
       const publishAt = group[0].publish_at;
       html += `<p class="title" onclick="getContent('${siteName}',this.id,'${publishAt.slice(0,10)}')">${publishAt.slice(0,10)}</p>`;
-      let block = '';
+      let block = `
+        <div class="text-end">
+          <button type="button" class="btn btn-light position-relative sepia opacity-50 copy-note-btn copy-all" onclick="copyNote(this)">
+            ${svgCopy}
+          </button>
+        </div>
+      `;
       group.forEach(item => {
         block += `<p>${item.english}<br>${item.local}</p>`;
       });
