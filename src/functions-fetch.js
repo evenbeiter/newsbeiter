@@ -886,7 +886,7 @@ async function lineTodayGetSearchResults(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function liveABCGetList(siteName,t){
-  try{url='https://api.liveabc.com/v1/daily-sentences?page='+rr+'&pageSize=30&category='+t;
+  try{url='https://api.liveabc.com/v1/daily-sentences?page='+rr+'&pageSize=60&category='+t;
   let res=await fetch(url);
   let str=await res.json();
   const arr = str.data;
