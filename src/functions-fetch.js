@@ -536,10 +536,11 @@ async function dwGetContent(id){
 async function eastMoneyGetList(siteName,t){
   try{
   var attempts=0, str=''; const maxRetries=10, current=new Date();
-  const dd=`${current.getFullYear().toString()}-${String(current.getMonth() + 1).padStart(2, '0')}-${String(current.getDate()).padStart(2, '0')}`;
+  const et=`${current.getFullYear().toString()}-${String(current.getMonth() + 1).padStart(2, '0')}-${String(current.getDate()).padStart(2, '0')}`;
+  const bt=`${(current.getFullYear()-2).toString()}${et.slice(-6)}`;
   while (attempts<maxRetries){
     try {
-      const res=await fetch(`https://reportapi.eastmoney.com/report/jg?pageSize=30&beginTime=${dd}&endTime=${dd}&pageNo=${rr}&qType=${t}`);
+      const res=await fetch(`https://reportapi.eastmoney.com/report/jg?pageSize=30&beginTime=${bt}&endTime=${nt}&pageNo=${rr}&qType=${t}`);
       if (res.status===200) {
           const raw=await res.text();
           str=JSON.parse(raw).data;
