@@ -557,7 +557,7 @@ async function eastMoneyGetList(siteName,t){
     items.push([h.encodeUrl,h.title,h.publishDate.slice(0,10),h.orgSName])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])} <span class="time fw-normal">${s2t(h[3])} | ${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])}<br><span class="time fw-normal">${s2t(h[3])} | ${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
 
   }catch{html='<p>尚無內容</p>'}
