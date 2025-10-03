@@ -530,6 +530,52 @@ async function dwGetContent(id){
 }
 
 
+//    EASTMONEY
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function eastMoneyGetList(siteName,t){
+  try{
+  var attempts=0, str=''; const maxRetries=10, current=new Date();
+  const dd=`${current.getFullYear().toString()}-${String(current.getMonth() + 1).padStart(2, '0')}-${String(current.getDate()).padStart(2, '0')}`;
+  while (attempts<maxRetries){
+    try {
+      const res=await fetch(`https://reportapi.eastmoney.com/report/jg?pageSize=30&beginTime=${dd}&endTime=${dd}&pageNo=${rr}&qType=${t}`);
+      if (res.status===200) {
+          const raw=await res.text();
+          str=JSON.parse(raw).data;
+          break;
+      }
+    } catch(error){
+      if (!(error.message.includes('timeout') || error.message.includes('net::ERR_TIMED_OUT'))) {throw error;}
+    }
+    attempts++;
+    await new Promise(res=>setTimeout(res,2000))
+  }
+
+  for (let h of str){
+    items.push([h.encodeUrl,h.title,h.publishDate.slice(0,10),h.orgSName])
+  }
+  for (let h of items){
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]} <span class="time fw-normal">${h[3]} | ${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function eastMoneyGetContent(id){
+  try{const res = await fetch(preStr+'https://data.eastmoney.com/report/zw_macresearch.jshtml?encodeUrl='+id);
+  const str=await res.text();
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  const scripts = doc.querySelectorAll('script');
+  const data = Array.from(scripts).filter(script => script.innerText.includes('var zwinfo'));
+  const d=JSON.parse(data[0].innerText.trim().slice(12,-1));
+  html = `<p class="time">${d.eitime}</p><p>${d.notice_content}</p><a href="${d.attach_url} target="_blank">全文PDF</a>${shareLink('https://data.eastmoney.com/report/zw_macresearch.jshtml?encodeUrl='+id)}`;
+  }catch{html='<p><a href="https://data.eastmoney.com/report/zw_macresearch.jshtml?encodeUrl=' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
 //    GSAM
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
