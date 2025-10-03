@@ -540,7 +540,7 @@ async function eastMoneyGetList(siteName,t){
   const bt=`${(current.getFullYear()-2).toString()}${et.slice(-6)}`;
   while (attempts<maxRetries){
     try {
-      const res=await fetch(`https://reportapi.eastmoney.com/report/jg?pageSize=30&beginTime=${bt}&endTime=${nt}&pageNo=${rr}&qType=${t}`);
+      const res=await fetch(`https://reportapi.eastmoney.com/report/jg?pageSize=30&beginTime=${bt}&endTime=${et}&pageNo=${rr}&qType=${t}`);
       if (res.status===200) {
           const raw=await res.text();
           str=JSON.parse(raw).data;
@@ -557,7 +557,7 @@ async function eastMoneyGetList(siteName,t){
     items.push([h.encodeUrl,h.title,h.publishDate.slice(0,10),h.orgSName])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]} <span class="time fw-normal">${h[3]} | ${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${s2t(h[1])} <span class="time fw-normal">${s2t(h[3])} | ${h[2]}</span></p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
 
   }catch{html='<p>尚無內容</p>'}
@@ -571,7 +571,7 @@ async function eastMoneyGetContent(id){
   const scripts = doc.querySelectorAll('script');
   const data = Array.from(scripts).filter(script => script.innerText.includes('var zwinfo'));
   const d=JSON.parse(data[0].innerText.trim().slice(12,-1));
-  html = `<p class="time">${d.eitime}</p><p>${d.notice_content}</p><a href="${d.attach_url} target="_blank">全文PDF</a>${shareLink('https://data.eastmoney.com/report/zw_macresearch.jshtml?encodeUrl='+id)}`;
+  html = `<p class="time">${d.eitime}</p><p>${d.notice_content.replaceAll('\n','</p><p>')}</p><a href="${d.attach_url}" target="_blank">全文PDF</a>${shareLink('https://data.eastmoney.com/report/zw_macresearch.jshtml?encodeUrl='+id)}`;
   }catch{html='<p><a href="https://data.eastmoney.com/report/zw_macresearch.jshtml?encodeUrl=' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
