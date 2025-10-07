@@ -37,6 +37,7 @@ async function pdGetContent(clickedId,id,transcriptionId){
 
   res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${id}.json`);
   str=await res.json();
+  const ts=word2sentence(str);console.log(ts);
 
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
@@ -70,4 +71,39 @@ async function pdGetContent(clickedId,id,transcriptionId){
       cEl.previousElementSibling.previousElementSibling.scrollIntoView()}catch{document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
     }
   }
+
+}
+
+function word2sentence(raw){
+const sentences = [];
+let currentSentence = [];
+let currentStart = null;
+
+// 定義句子結尾的條件
+const sentenceEnders = /[.!?]/;
+
+for (const item of raw) {
+  if (currentStart === null) currentStart = item.startTime;
+  currentSentence.push(item.word);
+
+  // 如果word結尾是句點、問號或驚嘆號，視為一句
+  if (sentenceEnders.test(item.word)) {
+    sentences.push({
+      startTime: currentStart,
+      sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1") // 修正標點前的空格
+    });
+    currentSentence = [];
+    currentStart = null;
+  }
+}
+
+// 若最後一組沒有結尾符號，也當作一句
+if (currentSentence.length > 0) {
+  sentences.push({
+    startTime: currentStart,
+    sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
+  });
+}
+
+return sentences;
 }
