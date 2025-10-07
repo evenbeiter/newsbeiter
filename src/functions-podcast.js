@@ -12,7 +12,9 @@ async function pdGetList(siteName,t){
       if (h.episodes[0].transcriptionId!==undefined){pdId=h.episodes[0].transcriptionId}
       else {
         url=`${preStr}https://backend.podscribe.ai/api/episode?id=${h.id}`;
-
+        res=await fetch(url);
+        str=await res.text();
+        pdId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)[0].replace('","Done"','');
       }
     } else {pdId='';}
     items.push([h.id,h.title,h.uploadedAt,h.duration,pdId])
@@ -29,8 +31,12 @@ async function pdGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function pdGetContent(clickedId,id,transcriptionId){
-  const res = await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${id}.json`);
-  const str=await res.json();
+  let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${h.id}`);
+  let str=await res.text();
+  const audioUrl=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)[0];
+
+  res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${id}.json`);
+  str=await res.json();
 
   var cEl=document.getElementById(id);
   if (cEl.style.display=='none' || cEl.style.display==''){
