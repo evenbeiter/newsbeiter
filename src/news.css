@@ -1,6 +1,6 @@
 @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
 body {margin:0;background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
-#container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8;display:none}
+#container, #toc{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8;display:none}
 .upload-btn{display:none}
 .sepia{background-color:#F8F8F8;color:#3B3B3B}
 .sepia-contrast{background-color:#3B3B3B;color:#F8F8F8}
