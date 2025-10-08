@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 監聽點擊表格列
   document.addEventListener("click", async (e) => {
-    const row = e.target.closest("[id^='lines-'] tr");
+    const row = e.target.closest("[id^='lines-'] tr");console.log(row);
     if (!row) return;
 
     const startCell = row.children[1];
@@ -304,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const startTime = Number(startCell ? startCell.textContent : 0);
     const endTime = Number(nextCell ? nextCell.textContent : audio.duration);
+    console.log('start: '+startTime+'; end: '+endTime);
 
     // 清除舊樣式
     document.querySelectorAll("[id^='lines-'] tr").forEach(tr => {
