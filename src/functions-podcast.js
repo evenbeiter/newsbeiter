@@ -31,12 +31,12 @@ async function pdGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function pdGetContent(clickedId,id,transcriptionId){
-  toggleTOC();
+  toc.style.display='none';
   let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
   let str=await res.text();
   const audioUrl=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)[0];
 
-  res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${id}.json`);
+  res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
   str=await res.json();
   const ts=word2sentence(str);console.log(ts);
   getLinesTable(ts);
@@ -81,24 +81,26 @@ function word2sentence(raw){
   let currentSentence = [];
   let currentStart = null;
 
-  // 定義句子結尾的條件
-  const sentenceEnders = /[.!?]/;
-
   for (const item of raw) {
     if (currentStart === null) currentStart = item.startTime;
     currentSentence.push(item.word);
 
-    // 如果word結尾是句點、問號或驚嘆號，視為一句
-    if (sentenceEnders.test(item.word)) {
+    const word = item.word;
+    // 嚴格判斷句子結尾
+    const endsWithExclamationOrQuestion = /[!?]$/.test(word);
+    const endsWithPeriod = /\.$/.test(word);
+    // 判斷小數點情況: 如果是數字前後有數字，則不是句尾
+    const isDecimal = /^\d+\.$/.test(word) && currentSentence.length > 1 && /\d$/.test(currentSentence[currentSentence.length-2]);
+
+    if ((endsWithExclamationOrQuestion) || (endsWithPeriod && !isDecimal)) {
       sentences.push({
         startTime: currentStart,
-        sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1") // 修正標點前的空格
+        sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
       });
       currentSentence = [];
       currentStart = null;
     }
   }
-
   // 若最後一組沒有結尾符號，也當作一句
   if (currentSentence.length > 0) {
     sentences.push({
@@ -106,7 +108,6 @@ function word2sentence(raw){
       sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
     });
   }
-
   return sentences;
 }
 
