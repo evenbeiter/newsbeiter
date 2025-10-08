@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const options=document.getElementById('btn-group');
-const toc=document.getElementById('toc');
+// const toc=document.getElementById('toc');
 const btn=document.getElementById('btn');
 const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
