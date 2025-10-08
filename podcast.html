@@ -58,7 +58,11 @@
     <div id="urlList" style="display:none"></div>
   </div>
 </form>
-<div id="list" class="mx-3 pt-3 sepia"></div>
+<div id="list" class="mx-3 pt-3 sepia">
+  <table class="table">
+    <tbody id="data" class=""></tbody>
+  </table>
+</div>
 <div id="loading" class="position-fixed w-100 top-0 start-0" style="height:100vh;display:none"><div id="loading-gif" class="position-absolute top-50 start-50 translate-middle" style="z-index:1030;width:3rem;height:3rem">
 <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="#555">
   <g fill="none" fill-rule="evenodd">
@@ -83,6 +87,31 @@
     <div class="p-4 h-100 overflow-auto"><div id="popupContent" class="w-100"></div><img id="gtmImg" class="img-fluid" style="max-height:100%;object-fit:contain"></div>
   </div>
 </div>
+
+<div style="height:100px"></div> <!-- end of .table -->
+<div id="bottom" class="mx-3 py-1 row fixed-bottom disable-dbl-tap-zoom">
+  <div class="col-2 form-check form-switch">
+    <input class="form-check-input d-block" type="checkbox" id="edit" onclick="checkEdit()" checked>
+    <label class="form-check-label d-block" for="flexSwitchCheckDefault"></label>
+  </div>
+  <button class="col-2 btn btn-outline-secondary" type="button" onclick="rw5()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rewind" viewBox="0 0 16 16">
+      <path d="M9.196 8 15 4.633v6.734zm-.792-.696a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696z"/>
+      <path d="M1.196 8 7 4.633v6.734zm-.792-.696a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696z"/>
+    </svg>
+  </button>
+  <button class="col-2 btn btn-outline-secondary" type="button" onclick="fw5()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fast-forward" viewBox="0 0 16 16">
+      <path d="M6.804 8 1 4.633v6.734zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C.713 12.69 0 12.345 0 11.692V4.308c0-.653.713-.998 1.233-.696z"/>
+      <path d="M14.804 8 9 4.633v6.734zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C8.713 12.69 8 12.345 8 11.692V4.308c0-.653.713-.998 1.233-.696z"/>
+    </svg>
+  </button>
+  <button class="col-2 btn btn-outline-secondary" id="btnPlay" type="button" onclick="playMedia()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
+      <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393"/>
+    </svg>
+  </button>
+</div> <!-- end of #bottom -->   
 </div>
 
 <script src="src/init.js"></script>
