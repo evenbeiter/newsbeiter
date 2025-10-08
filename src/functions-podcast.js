@@ -167,13 +167,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextRow = row.nextElementSibling;
     const nextCell = nextRow ? nextRow.children[1] : null;
 
+    const playbackRate = 1;
     const startTime = Number(startCell ? startCell.textContent : 0);
     const endTime = Number(nextCell ? nextCell.textContent : 0);
 
     await startPlay(startTime, endTime, row);
   });
 
-  async function startPlay(startTime, endTime, activeRow) {
+  async function startPlay(playbackRate,startTime, endTime, activeRow) {
     let audio = document.getElementById("ap");
 
     // const vp = document.getElementById("vp");
@@ -193,6 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dr = audio.duration;
     }
 
+    audio.playbackRate= playbackRate;
     audio.currentTime = startTime;
     audio.play();
 

@@ -1,4 +1,4 @@
-.table {--bs-table-bg: transparent;--bs-table-color-state:transparent;}
+.table {--bs-table-bg: transparent;}
 @font-face{font-family:"Microsoft JhengHei" !important;src:local("Microsoft JhengHei") !important;unicode-range:U+4E00-9FFF !important}
 body {margin:0;background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
 #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8;display:none}

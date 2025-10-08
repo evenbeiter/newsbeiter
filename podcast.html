@@ -49,11 +49,15 @@
 <div id="top" class="z-2 fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:none">
   <span></span>
   <div class="pt-3"><audio id="ap" controls preload="auto"></audio></div>
-  <div>
-    <div class="col-2 form-check form-switch">
+  <div class="p-2">
+    <div class="col-6 form-check form-switch">
       <input class="form-check-input d-block" type="checkbox" id="autoNextSwitch" checked>
       <label class="form-check-label d-block" for="flexSwitchCheckDefault"></label>
       <span>自動跳下一行播放</span>
+    </div>
+    <div class="col-6" style="margin-top:10px;">
+      <label for="speedSlider">播放速度: <span id="speedLabel">1.0x</span></label>
+      <input type="range" id="speedSlider" min="0.5" max="1.5" step="0.1" value="1">
     </div>
   </div>
 
