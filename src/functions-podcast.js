@@ -38,74 +38,84 @@ async function pdGetContent(clickedId,id,transcriptionId){
   res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${id}.json`);
   str=await res.json();
   const ts=word2sentence(str);console.log(ts);
+  getLinesTable(ts);
 
-  var cEl=document.getElementById(id);
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-    var html = '';
-    cEl.innerHTML=html;
-    const video = document.getElementById('video-'+id);
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = m3u8Url;
-        video.play();
-    } else if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(m3u8Url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play();
-        });
-    } else {
-        console.error("HLS is not supported in this browser.");
-    }
+  // var cEl=document.getElementById(id);
+  // if (cEl.style.display=='none' || cEl.style.display==''){
+  //   loading.style.display='block';
+  //   cEl.style.display='block';
+  //   var html = '';
+  //   cEl.innerHTML=html;
+  //   const video = document.getElementById('video-'+id);
+  //   if (video.canPlayType('application/vnd.apple.mpegurl')) {
+  //       video.src = m3u8Url;
+  //       video.play();
+  //   } else if (Hls.isSupported()) {
+  //       const hls = new Hls();
+  //       hls.loadSource(m3u8Url);
+  //       hls.attachMedia(video);
+  //       hls.on(Hls.Events.MANIFEST_PARSED, () => {
+  //           video.play();
+  //       });
+  //   } else {
+  //       console.error("HLS is not supported in this browser.");
+  //   }
 
-    document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
-    loading.style.display='none';
-  } else {
-      var e=window.event;
-      if (e && e.target.tagName==='VIDEO'){return}else{
-      cEl.style.display='none';
-      if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
-      try{cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
-      cEl.previousElementSibling.previousElementSibling.scrollIntoView()}catch{document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
-    }
-  }
+  //   document.getElementById('video-'+id).parentElement.previousElementSibling.firstChild.setAttribute('style', 'display: none !important;');
+  //   loading.style.display='none';
+  // } else {
+  //     var e=window.event;
+  //     if (e && e.target.tagName==='VIDEO'){return}else{
+  //     cEl.style.display='none';
+  //     if (cEl.querySelectorAll('video').length>0){cEl.querySelectorAll('video').forEach(v=>v.pause())};
+  //     try{cEl.previousElementSibling.firstChild.setAttribute('style', 'display: block !important;');
+  //     cEl.previousElementSibling.previousElementSibling.scrollIntoView()}catch{document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
+  //   }
+  // }
 
 }
 
 function word2sentence(raw){
-const sentences = [];
-let currentSentence = [];
-let currentStart = null;
+  const sentences = [];
+  let currentSentence = [];
+  let currentStart = null;
 
-// 定義句子結尾的條件
-const sentenceEnders = /[.!?]/;
+  // 定義句子結尾的條件
+  const sentenceEnders = /[.!?]/;
 
-for (const item of raw) {
-  if (currentStart === null) currentStart = item.startTime;
-  currentSentence.push(item.word);
+  for (const item of raw) {
+    if (currentStart === null) currentStart = item.startTime;
+    currentSentence.push(item.word);
 
-  // 如果word結尾是句點、問號或驚嘆號，視為一句
-  if (sentenceEnders.test(item.word)) {
+    // 如果word結尾是句點、問號或驚嘆號，視為一句
+    if (sentenceEnders.test(item.word)) {
+      sentences.push({
+        startTime: currentStart,
+        sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1") // 修正標點前的空格
+      });
+      currentSentence = [];
+      currentStart = null;
+    }
+  }
+
+  // 若最後一組沒有結尾符號，也當作一句
+  if (currentSentence.length > 0) {
     sentences.push({
       startTime: currentStart,
-      sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1") // 修正標點前的空格
+      sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
     });
-    currentSentence = [];
-    currentStart = null;
   }
+
+  return sentences;
 }
 
-// 若最後一組沒有結尾符號，也當作一句
-if (currentSentence.length > 0) {
-  sentences.push({
-    startTime: currentStart,
-    sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
-  });
-}
-
-return sentences;
+function getLinesTable(ss) {
+  var k = '';
+  var j = 0;
+  for (let s of ss){
+    k+=`<tr><td class="fs07 fw-lighter">${++j}</td><td class="d-none">${s.startTime}</td><td>${s.sentence}</td></tr>`;
+  }
+  lines.innerHTML=k;
 }
 
 

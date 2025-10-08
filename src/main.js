@@ -8,6 +8,7 @@ const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
 const urlList=document.getElementById('urlList');
 const list=document.getElementById('list');
+const lines=document.getElementById('lines');
 const topdiv=document.getElementById('top');
 const loading=document.getElementById('loading');
 
