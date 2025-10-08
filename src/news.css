@@ -2,7 +2,7 @@
 body {margin:0;background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
 #container{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8;display:none}
 #toc{height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8;display:none}
-#bottom{max-width:600px;margin:auto;background-color:#F8F8F8;display:none}
+#bottom{max-width:600px;margin:auto;background-color:#F8F8F8;}
 .upload-btn{display:none}
 .sepia{background-color:#F8F8F8 !important;color:#3B3B3B !important}
 .sepia-contrast{background-color:#3B3B3B !important;color:#F8F8F8 !important}
