@@ -15,8 +15,8 @@ const ctee=[['livenews/ctee/','即時'],['category/finance/','要聞'],['categor
 const dw=[['經濟/s-1682','經濟'],['政治/s-1681','政治'],['科技創新/s-1686','科技創新'],['文化/s-1683','文化']];
 const eastMoney=[['3','宏觀'],['2','策略'],['4','晨報'],['1','產業']];
 const gsam=[['','Latest']];
-const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6,15];
-const uLi=['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
+// const iOd=[9,11,0,20,18,18,2,5,1,13,7,12,14,8,13,7,16,17,18,4,19,18,10,21,3,22,6,15];
+// const uLi=['ps','it','new','?','ap','sbe','rl','.','nd','h','fet','tt','on','er','re','=','co','m','/','i',':','ch','u'];
 const invesco=[['insights/topic/market-and-economic-insights/jcr:content/root/responsivegrid/container_component__66575723/container-par/content_cards','Market & Economic'],['insights/topic/investment-related-insights/jcr:content/root/responsivegrid/container_component_1874952832/container-par/content_cards','Investment'],['solutions/invesco-etfs/etf-insights/jcr:content/root/responsivegrid/container_component/container-par/content_cards_463948_1078104609','ETF']];
 const invtCom=[['rates-bonds/u.s.-10-year-bond-yield-news/','債市'],['news/forex-news/','匯市'],['news/latest-news/','最新'],['news/economy/','財經'],['news/economic-indicators/','經濟數據'],['news/commodities-news/','原物料'],['news/cryptocurrency-news/','加密貨幣'],['indices/japan-ni225-news/','日經'],['indices/topix-news/','東證'],['analysis/market-overview/','市場評論'],['analysis/editors-picks/','精選評論']];
 const isbl=[['','Latest']];
