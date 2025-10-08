@@ -2,6 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const options=document.getElementById('btn-group');
+const toc=document.getElementById('toc');
 const btn=document.getElementById('btn');
 const channelList=document.getElementById('channelList');
 const searchList=document.getElementById('searchList');
@@ -21,6 +22,12 @@ document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'E
 //    CREATE URL LIST & SEARCH LIST FOR NEWSBEITER
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  createUrlListDiv([allSites||[],videoSites||[]]);
-  createSearchListDiv(faq||[],searchSites||[]);
+if (window.location.href.slice(-4)==='news'){
+  createUrlListDiv([allSites,videoSites]);
+  createSearchListDiv(faq,searchSites);
   openUrlList();
+} else {
+  //podcast.html
+  createUrlListDiv([allSites]);
+  openUrlList();
+}

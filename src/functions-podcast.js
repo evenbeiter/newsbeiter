@@ -112,6 +112,8 @@ return sentences;
 //    OPERATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function openTOC(){toc.style.display = toc.style.display === 'block' ? 'none' : 'block';}
+
 function rw5() {
   const audio = document.getElementById('ap');
   const btnPlay = document.getElementById('btnPlay');
