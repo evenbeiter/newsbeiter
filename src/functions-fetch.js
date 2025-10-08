@@ -988,6 +988,10 @@ async function msGetContent(id){
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+async function msnTWGetList(siteName,t){return html=await msnGetList(siteName,t)};
+async function msnUSGetList(siteName,t){return html=await msnGetList(siteName,t)};
+
+
 async function msnGetList(siteName,t){
   if(siteName.slice(-2)=='TW'){coun='zh-tw'}else{coun='en-us'};
   try{if (t.slice(0,2)==='Y_'){

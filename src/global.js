@@ -1,6 +1,14 @@
 //    GLOBAL VARIABLES
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+const openContentDirectly=['apollo','cnyeshao','ecoMag','liveABC'];
+const cvtSc2Tc=['eastMoney','jin','sina','wiki','wscn','xueqiu'];
+const sites2Translate=['ab','apollo','bbg','blk','boa','ecoMag','gsam','invesco','ishares','jpm','jpmpb','ms','msnUS','nb','pd','peInsights','pimco','schroders','ssga','substack','yahooTW'];
+const kr=['ytn'];
+const noNextPage=['ecoMag'];
+const msnALL=['msnTW','msnUS'];
+const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-17ytifv, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
+
 var siteNameVar='',docTitle='',tabs=[];
 var items=[],ytnCoverImg='',ytnVideo='',ecoMagContent,url='',html='',coun='',t='',uuids='',lastId='',cursor='',payload={},rt='',rr=0,buildId='';
 
@@ -73,8 +81,10 @@ async function getList(siteName,t){
   siteNameVar=siteName;rr++;rt=t;cursor='';
   if (rr==1){newNews()};
   items=[];html='';
-  if (msnALL.includes(siteName)){list.innerHTML+=await msnGetList(siteName,t)}
-  else {list.innerHTML+=await window[`${siteName}GetList`](siteName,t)};
+  // if (msnALL.includes(siteName)){list.innerHTML+=await msnGetList(siteName,t)}
+  // else {
+    list.innerHTML+=await window[`${siteName}GetList`](siteName,t)
+  // };
   loading.style.display='none';
   if (sites2Translate.includes(siteName)){
     var all=document.querySelectorAll('.t-tl');

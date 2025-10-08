@@ -66,10 +66,3 @@ const videoSites=[['msnVideo','MSN'],['yahooVideo','Yahoo',yahooVideo,'finance.y
 
 const allSitesB=[['bbg','BBG',bbg,'bloomberg.com','https://www.bloomberg.com'],['nb','NB',nb,'nb.com','https://www.nb.com'],['ab','AB',ab,'alliancebernstein.com','https://www.alliancebernstein.com'],['invtCom','Investing.com',invtCom,'investing.com','https://hk.investing.com/'],['mindi','敏迪',mindi,'mindiworldnews','https://www.mindiworldnews.com/'],['schroders','Schroders',schroders,'schroders.com','https://www.schroders.com/en-us/us/non-resident-clients/insights'],['xueqiu','雪球',xueqiu,'xueqiu.com','https://xueqiu.com/']];
 
-const openContentDirectly=['apollo','cnyeshao','ecoMag','liveABC'];
-const cvtSc2Tc=['eastMoney','jin','sina','wiki','wscn','xueqiu'];
-const sites2Translate=['ab','apollo','bbg','blk','boa','ecoMag','gsam','invesco','ishares','jpm','jpmpb','ms','msnUS','nb','peInsights','pimco','schroders','ssga','substack','yahooTW'];
-const kr=['ytn'];
-const noNextPage=['ecoMag'];
-const msnALL=['msnTW','msnUS'];
-const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-17ytifv, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
