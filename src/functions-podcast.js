@@ -266,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
   speedLabel.textContent = audio.playbackRate.toFixed(1) + "x";
 
   let mode = "continuous"; // 模式: continuous / single / loop
-  let autoNext = autoNextSwitch.checked;
+  // let autoNext = autoNextSwitch.checked;
 
   // 播放速率 slider
   speedSlider.addEventListener("input", () => {
