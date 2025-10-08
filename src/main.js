@@ -21,6 +21,6 @@ document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'E
 //    CREATE URL LIST & SEARCH LIST FOR NEWSBEITER
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  createUrlListDiv([allSites,videoSites]);
-  createSearchListDiv(faq,searchSites);
+  createUrlListDiv([allSites||[],videoSites||[]]);
+  createSearchListDiv(faq||[],searchSites||[]);
   openUrlList();
