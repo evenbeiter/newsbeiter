@@ -90,7 +90,7 @@ async function getList(siteName,t){
     var all=document.querySelectorAll('.t-tl');
     getTranslation(all);
   }
-  if (window.location.href.slice(-7)==='podcast'){toc.style.display='block'};
+  // if (window.location.href.slice(-7)==='podcast'){toc.style.display='block'};
 }
 
 async function getContent(siteName,clickedId,id){

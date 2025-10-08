@@ -25,23 +25,9 @@
   </div>
 </div>
 
-<div id="toc" class="vh-100 d-flex flex-column align-items-center justify-content-center d-none" style="z-index:1000;">
-  <div id="top" class="z-2 fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:block"></div>
-  <div id="list" class="mx-3 pt-3 sepia"></div>
-</div>
-
 <div id="container">
-<form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
-  <div id="btn" class="p-2">
-    <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
-    <hr style="margin-right:3rem">
-    <div id="channelList"></div>
-    <div id="searchList" style="display:none"></div>
-    <div id="urlList" style="display:none"></div>
-  </div>
-</form>
 <div class="sticky-top position-fixed m-2 top-0 end-0" style="z-index:1030;padding-top:3rem">
-  <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="toggleTOC()">
+  <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="openOptions()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"></path>
     </svg>
@@ -60,16 +46,17 @@
   </button>
 
 </div>
-<!-- <div id="top" class="z-2 fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:block"></div> -->
-<div class="p-3 z-2 fs10 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast"><audio id="ap" controls preload="auto" class="sticky-top" style="top:40px"></audio></div>
-
-
-<div class="mx-3 pt-3 sepia">
-  <table class="table table-auto">
-    <tbody id="lines" class=""></tbody>
-  </table>
-  <div style="height:50vh"></div> <!-- end of .table -->
-</div>
+<div id="top" class="z-2 fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:none"></div>
+  <form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
+    <div id="btn" class="p-2">
+      <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
+      <hr style="margin-right:3rem">
+      <div id="channelList"></div>
+      <div id="searchList" style="display:none"></div>
+      <div id="urlList" style="display:none"></div>
+    </div>
+  </form>
+<div id="list" class="mx-3 pt-3 sepia"></div>
 <div id="loading" class="position-fixed w-100 top-0 start-0" style="height:100vh;display:none"><div id="loading-gif" class="position-absolute top-50 start-50 translate-middle" style="z-index:1030;width:3rem;height:3rem">
 <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="#555">
   <g fill="none" fill-rule="evenodd">
@@ -87,21 +74,16 @@
 </svg>
 </div></div>
   
-<!-- <div id="customOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none z-3">
+<div id="customOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none z-3">
   <div id="overlayBackdrop" class="position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-25" onclick="hideOverlay()"></div>
   <div class="position-absolute top-50 start-50 translate-middle bg-white border rounded shadow p-4" style="width: 90vw; height: 90vh; overflow: auto;">
     <button id="overlayCloseBtn" type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" onclick="hideOverlay()"></button>
     <div class="p-4 h-100 overflow-auto"><div id="popupContent" class="w-100"></div><img id="gtmImg" class="img-fluid" style="max-height:100%;object-fit:contain"></div>
   </div>
-</div> -->
+</div>
 
 <div id="bottom" class="mx-3 py-1 row fixed-bottom disable-dbl-tap-zoom">
   <div class="col-2 form-check form-switch">
-    <!-- <label class="switch">
-      <input type="checkbox" id="autoNextSwitch" checked>
-      <span class="slider round"></span>
-    </label> -->
-
     <input class="form-check-input d-block" type="checkbox" id="autoNextSwitch" checked>
     <label class="form-check-label d-block" for="flexSwitchCheckDefault"></label>
     <span>自動跳下一行播放</span>
@@ -139,5 +121,6 @@
 <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/heic2any/dist/heic2any.min.js"></script> -->
+</body>
 </body>
 </html>
