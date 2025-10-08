@@ -68,7 +68,7 @@
   <table class="table table-auto">
     <tbody id="lines" class=""></tbody>
   </table>
-  <div style="height:100px"></div> <!-- end of .table -->
+  <div style="height:300px"></div> <!-- end of .table -->
 </div>
 <div id="loading" class="position-fixed w-100 top-0 start-0" style="height:100vh;display:none"><div id="loading-gif" class="position-absolute top-50 start-50 translate-middle" style="z-index:1030;width:3rem;height:3rem">
 <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="#555">
@@ -97,14 +97,15 @@
 
 <div id="bottom" class="mx-3 py-1 row fixed-bottom disable-dbl-tap-zoom">
   <div class="col-2 form-check form-switch">
-    <label class="switch">
+    <!-- <label class="switch">
       <input type="checkbox" id="autoNextSwitch" checked>
       <span class="slider round"></span>
-    </label>
+    </label> -->
+
+    <input class="form-check-input d-block" type="checkbox" id="autoNextSwitch" checked>
+    <label class="form-check-label d-block" for="flexSwitchCheckDefault"></label>
     <span>自動跳下一行播放</span>
 
-    <!-- <input class="form-check-input d-block" type="checkbox" id="autoNextSwitch" checked>
-    <label class="form-check-label d-block" for="flexSwitchCheckDefault"></label> -->
   </div>
   <button class="col-2 btn btn-outline-secondary" type="button" onclick="rw5()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-rewind" viewBox="0 0 16 16">

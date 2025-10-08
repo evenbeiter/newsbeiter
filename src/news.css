@@ -2,8 +2,8 @@
 body {margin:0;background-color:#E5E4E2;color:#3B3B3B;font-size:1.2rem;font-family:arial,'Microsoft JhengHei', sans-serif !important}
 #container, #toc{min-height:100vh;max-width:600px;margin:auto;background-color:#F8F8F8;display:none}
 .upload-btn{display:none}
-.sepia{background-color:#F8F8F8;color:#3B3B3B}
-.sepia-contrast{background-color:#3B3B3B;color:#F8F8F8}
+.sepia{background-color:#F8F8F8 !important;color:#3B3B3B !important}
+.sepia-contrast{background-color:#3B3B3B !important;color:#F8F8F8 !important}
 h1,h2,h3,h4,h5,h6,.title{font-size:1.2rem;color:#3B3B3B !important;font-weight:bold}.en-us,.fs12{font-size:1.2rem} 
 #list, .btn {font-weight:600}
 #loading{width:5rem;height:5rem}
@@ -62,8 +62,8 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
 @media screen and (-webkit-min-device-pixel-ratio: 2) {
   body{margin:0;background-color:#FFF1E5;color:#33302E;font-size:1.5rem;font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;}
   #container{min-height:100vh;max-width:100%;margin:auto;background-color:#FFF1E5}
-  .sepia{background-color:#FFF1E5;color:#33302E}
-  .sepia-contrast{background-color:#33302E;color:#FFF1E5}
+  .sepia{background-color:#FFF1E5 !important;color:#33302E !important}
+  .sepia-contrast{background-color:#33302E !important;color:#FFF1E5 !important}
   h1,h2,h3,h4,h5,h6,.title{font-size:1.5rem;color:#33302E !important;font-weight:bold}
   #list, .btn {font-weight:normal}
   #loading{width:3rem;height:3rem}
