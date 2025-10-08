@@ -180,15 +180,15 @@ document.addEventListener("DOMContentLoaded", () => {
   async function startPlay(startTime, endTime, activeRow) {
     let audio = document.getElementById("ap");
 
-    const vp = document.getElementById("vp");
-    if (vp && vp.offsetParent !== null) {
-      audio = vp;
-    } else {
-      const plyrVideo = document.querySelector(".plyr--video");
-      if (plyrVideo && plyrVideo.offsetParent !== null && typeof player !== "undefined") {
-        audio = player;
-      }
-    }
+    // const vp = document.getElementById("vp");
+    // if (vp && vp.offsetParent !== null) {
+    //   audio = vp;
+    // } else {
+    //   const plyrVideo = document.querySelector(".plyr--video");
+    //   if (plyrVideo && plyrVideo.offsetParent !== null && typeof player !== "undefined") {
+    //     audio = player;
+    //   }
+    // }
 
     // 確保 duration 可用
     let dr = audio.duration;
