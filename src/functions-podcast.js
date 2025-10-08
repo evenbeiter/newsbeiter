@@ -145,10 +145,9 @@ function fw5() {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  let autoNext = false;  // 是否自動跳下一行
   const autoNextSwitch = document.getElementById("autoNextSwitch");
+  let autoNext = autoNextSwitch.checked; // 根據預設是否 checked
 
-  // 開關事件
   autoNextSwitch.addEventListener("change", (e) => {
     autoNext = e.target.checked;
   });
