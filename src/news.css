@@ -25,6 +25,13 @@ audio{margin-right:auto;margin-left:auto;width:100%}
 .disable-dbl-tap-zoom{touch-action:manipulation}
 .b-highlight{color:green;background-color:#E5E4E2}
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th{color:green}
+.table-auto {
+  table-layout: auto !important;  /* 讓欄位寬度依內容決定 */
+  width: auto !important;
+}
+.text-nowrap {
+  white-space: nowrap !important; /* 不換行 */
+}
 
 .highlight {margin-top: 0;margin-bottom: 1rem} /* same as <p> */
 .mw-heading1, .mw-heading2 {padding-top:3rem;color:#FF4D00;border-bottom:1px solid;border-color:#a2a9b1}

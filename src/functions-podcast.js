@@ -116,7 +116,7 @@ function getLinesTable(ss) {
   var k = '';
   var j = 0;
   for (let s of ss){
-    k+=`<tr><td class="fs07 fw-lighter">${++j}</td><td class="d-none">${s.startTime}</td><td>${s.sentence}</td></tr>`;
+    k+=`<tr><td class="fs07 fw-lighter text-nowrap">${++j}</td><td class="d-none">${s.startTime}</td><td>${s.sentence}</td></tr>`;
   }
   lines.innerHTML=k;
 }
