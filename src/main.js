@@ -11,6 +11,7 @@ const list=document.getElementById('list');
 const lines=document.getElementById('lines');
 const topdiv=document.getElementById('top');
 const loading=document.getElementById('loading');
+const audio = document.getElementById('ap');
 
 const closeBtn=document.getElementById('overlayCloseBtn');
 const backdrop=document.getElementById('overlayBackdrop');

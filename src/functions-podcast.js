@@ -35,7 +35,7 @@ async function pdGetContent(clickedId,id,transcriptionId){
   toc.classList.add('d-none');
   let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
   let str=await res.text();
-  const audioUrl=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)[0];
+  audio.src=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)[0];
 
   res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
   str=await res.json();
@@ -128,7 +128,7 @@ function getLinesTable(ss) {
 function toggleTOC(){toc.style.display = toc.style.display === 'block' ? 'none' : 'block';}
 
 function rw5() {
-  const audio = document.getElementById('ap');
+  // const audio = document.getElementById('ap');
   const btnPlay = document.getElementById('btnPlay');
   audio.currentTime = Math.max(0, audio.currentTime - 5); // 避免小於 0
   audio.play();
@@ -136,7 +136,7 @@ function rw5() {
 }
 
 function fw5() {
-  const audio = document.getElementById('ap');
+  // const audio = document.getElementById('ap');
   const btnPlay = document.getElementById('btnPlay');
   audio.currentTime = Math.min(audio.duration, audio.currentTime + 5); // 避免超出音檔長度
   audio.play();
