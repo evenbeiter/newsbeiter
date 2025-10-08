@@ -1,7 +1,6 @@
 //    FUNCTIONS FOR NOTE-UPLOADER
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//const backendURL = preStr.replace('/api/fetch?url=','');
 
 async function uploadFromClipboard(){
   let textContent = '';
@@ -15,7 +14,7 @@ async function uploadFromClipboard(){
     alert('無筆記可上傳');
   }
   if (textContent && confirmUpload) {
-      fetch(`${backendURL}/note/add`, {
+      fetch(`${preStr}/note/add`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({category:'daily',content:textContent})
@@ -72,7 +71,7 @@ document.querySelectorAll('.upload-btn').forEach(btn => {
 
     const category = btn.dataset.category; // 讀取 button 上的 category
 
-    fetch(`${backendURL}/note/add`, {
+    fetch(`${preStr}/note/add`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

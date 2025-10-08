@@ -611,7 +611,7 @@ function openUrlList(){channelList.style.display='none';searchList.style.display
 function openOptions(){if (options.style.display=='none'){options.style.display='block';topdiv.style.display='none';} else {options.style.display='none';topdiv.style.display='block';}}
 async function ping(){var res=await fetch(preStr+'https://date.nager.at/api/v3/publicholidays/2025/US');}
 function cvt2Timezone(timestamp) {const date = new Date(timestamp);return date.toLocaleString('zh-TW',{timeZone:'Asia/Taipei'});}
-function sCC(a,ii){let result='';for (const i of ii){if (i>=0 && i<a.length){result+=a[i]}}return result;}
+// function sCC(a,ii){let result='';for (const i of ii){if (i>=0 && i<a.length){result+=a[i]}}return result;}
 function openUrl(url){window.open(url,'_blank')}
 function decodeHTMLEntities(str){var ta=document.createElement('textarea');ta.innerHTML = str;return ta.value;}
 function cnTest(str) {const chineseCharRegex = /[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF]/;return chineseCharRegex.test(str);}

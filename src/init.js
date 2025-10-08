@@ -1,7 +1,7 @@
-const backendURL = 'https://newsbeiter.onrender.com';
+const preStr = 'https://newsbeiter.onrender.com';
 
 async function validateToken(token) {
-  const res = await fetch(`${backendURL}/validate`, {
+  const res = await fetch(`${preStr}/validate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ token })
@@ -12,7 +12,7 @@ async function validateToken(token) {
 
 async function submitCode() {
   const code = document.getElementById('code-input').value;
-  const res = await fetch(`${backendURL}/verify`, {
+  const res = await fetch(`${preStr}/verify`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ code })

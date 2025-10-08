@@ -1928,7 +1928,7 @@ async function speakGetSearchResults(siteName,t){return html=await noteGetSearch
 var noteCat='';
 
 async function noteGetList(siteName,t){console.log(t);noteCat=t;
-  try{url=`${backendURL}/note/list?category=${t}&rr=${rr}`;
+  try{url=`${preStr}/note/list?category=${t}&rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
     for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content${t==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
 
@@ -1937,7 +1937,7 @@ async function noteGetList(siteName,t){console.log(t);noteCat=t;
 }
 
 async function noteGetContent(id){console.log(id);
-  try{url=`${backendURL}/note/read`;
+  try{url=`${preStr}/note/read`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1951,7 +1951,7 @@ async function noteGetContent(id){console.log(id);
 }
 
 async function noteGetSearchResults(siteName,t){
-  try{url=`${backendURL}/note/search?category=${siteName}&q=${encodeURIComponent(t)}`;
+  try{url=`${preStr}/note/search?category=${siteName}&q=${encodeURIComponent(t)}`;
   let res=await fetch(url);
   let str=await res.json();
   html=await parseNoteFromServer(str);
