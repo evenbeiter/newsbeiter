@@ -24,7 +24,8 @@ document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'E
 //    CREATE URL LIST & SEARCH LIST FOR NEWSBEITER
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-if (window.location.pathname.endsWith('/news')){
+// if (window.location.pathname.endsWith('/news')){
+if (window.location.href.indexOf('podcast')==-1){
   createUrlListDiv([allSites,videoSites]);
   createSearchListDiv(faq,searchSites);
   openUrlList();
