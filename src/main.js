@@ -17,7 +17,7 @@ const closeBtn=document.getElementById('overlayCloseBtn');
 const backdrop=document.getElementById('overlayBackdrop');
 const overlay=document.getElementById('customOverlay');
 const popupContent=document.getElementById('popupContent');
-const isVisible=!overlay.classList.contains('d-none');
+const isVisible=!overlay?.classList.contains('d-none');
 document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'Escape') {hideOverlay()}});
 
 
