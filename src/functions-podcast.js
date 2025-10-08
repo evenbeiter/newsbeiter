@@ -208,11 +208,19 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.pause();
         audio.currentTime = startTime;
 
+        // if (autoNext) {
+        //   const nextRow = activeRow.nextElementSibling;
+        //   if (nextRow) {
+        //     nextRow.click(); // 自動觸發下一行播放
+        //   }
+        // }
+
         if (autoNext) {
-          const nextRow = activeRow.nextElementSibling;
-          if (nextRow) {
-            nextRow.click(); // 自動觸發下一行播放
+          // 忽略逐句播放，直接播放整段音檔
+          if (audio.paused) {
+            audio.play();
           }
+          return;
         }
       }
 
@@ -233,8 +241,8 @@ document.addEventListener("DOMContentLoaded", () => {
           tr.style.color = "";
           tr.style.backgroundColor = "";
         });
-        row.style.color = "green";
-        row.style.backgroundColor = "#E5E4E2";
+        row.style.setProperty("color", "green", "important");
+        row.style.setProperty("background-color", "#E5E4E2", "important");
 
         const rect = row.getBoundingClientRect();
         if (rect.top < 0 || rect.bottom > window.innerHeight) {
