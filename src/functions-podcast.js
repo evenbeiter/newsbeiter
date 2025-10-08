@@ -318,7 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 播放邏輯
     if (mode === "continuous") {
-      audio.currentTime = 0;
+      audio.currentTime = startTime;
       audio.play();
       audio.ontimeupdate = () => highlightCurrentRow(audio.currentTime);
     } else {
@@ -331,9 +331,9 @@ document.addEventListener("DOMContentLoaded", () => {
           if (mode === "single") audio.pause();
           else if (mode === "loop") audio.currentTime = startTime; // 單句循環
 
-          if (mode === "single" && autoNext && nextRow) {
-            nextRow.click(); // 自動跳下一行
-          }
+          // if (mode === "single" && autoNext && nextRow) {
+          //   nextRow.click(); // 自動跳下一行
+          // }
         }
       };
     }
