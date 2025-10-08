@@ -138,119 +138,229 @@ function fw5() {
   btnPlay.innerHTML = svgPause;
 }
 
+// document.addEventListener("DOMContentLoaded", () => {
+
+//   const autoNextSwitch = document.getElementById("autoNextSwitch");
+//   let autoNext = autoNextSwitch.checked; // 根據預設是否 checked
+
+//   autoNextSwitch.addEventListener("change", (e) => {
+//     autoNext = e.target.checked;
+//   });
+
+//   // 監聽表格列點擊事件
+//   document.addEventListener("click", async (e) => {
+//     const row = e.target.closest("#lines tr");
+//     if (!row) return;
+
+//     // 清除所有列的樣式
+//     document.querySelectorAll("#lines tr").forEach(tr => {
+//       tr.style.color = "";
+//       tr.style.backgroundColor = "";
+//     });
+
+//     // 標記被點擊的列
+//     row.style.color = "green";
+//     row.style.backgroundColor = "#E5E4E2";
+
+//     // 取得 startTime 與 endTime
+//     const startCell = row.children[1];
+//     const nextRow = row.nextElementSibling;
+//     const nextCell = nextRow ? nextRow.children[1] : null;
+
+//     const playbackRate = 1;
+//     const startTime = Number(startCell ? startCell.textContent : 0);
+//     const endTime = Number(nextCell ? nextCell.textContent : 0);
+
+//     await startPlay(startTime, endTime, row);
+//   });
+
+//   async function startPlay(playbackRate,startTime, endTime, activeRow) {
+//     let audio = document.getElementById("ap");
+
+//     // const vp = document.getElementById("vp");
+//     // if (vp && vp.offsetParent !== null) {
+//     //   audio = vp;
+//     // } else {
+//     //   const plyrVideo = document.querySelector(".plyr--video");
+//     //   if (plyrVideo && plyrVideo.offsetParent !== null && typeof player !== "undefined") {
+//     //     audio = player;
+//     //   }
+//     // }
+
+//     // 確保 duration 可用
+//     let dr = audio.duration;
+//     while (isNaN(dr) || dr === Infinity) {
+//       await new Promise(resolve => setTimeout(resolve, 200));
+//       dr = audio.duration;
+//     }
+
+//     audio.playbackRate= playbackRate;
+//     audio.currentTime = startTime;
+//     audio.play();
+
+//     activeRow.scrollIntoView({ behavior: "smooth", block: "center" });
+
+//     audio.ontimeupdate = function () {
+//       if (audio.currentTime > endTime) {
+//         audio.pause();
+//         audio.currentTime = startTime;
+
+//         // if (autoNext) {
+//         //   const nextRow = activeRow.nextElementSibling;
+//         //   if (nextRow) {
+//         //     nextRow.click(); // 自動觸發下一行播放
+//         //   }
+//         // }
+
+//         if (autoNext) {
+//           // 忽略逐句播放，直接播放整段音檔
+//           if (audio.paused) {
+//             audio.play();
+//           }
+//           return;
+//         }
+//       }
+
+//       // 同步高亮
+//       highlightCurrentRow(audio.currentTime);
+//     };
+//   }
+
+//   function highlightCurrentRow(currentTime) {
+//     const rows = document.querySelectorAll("#lines tr");
+//     for (let i = 0; i < rows.length - 1; i++) {
+//       const start = Number(rows[i].children[1]?.textContent || 0);
+//       const end = Number(rows[i + 1].children[1]?.textContent || Infinity);
+//       const row = rows[i];
+
+//       if (currentTime >= start && currentTime < end) {
+//         rows.forEach(tr => {
+//           tr.style.color = "";
+//           tr.style.backgroundColor = "";
+//         });
+//         row.style.setProperty("color", "green", "important");
+//         row.style.setProperty("background-color", "#E5E4E2", "important");
+
+//         const rect = row.getBoundingClientRect();
+//         if (rect.top < 0 || rect.bottom > window.innerHeight) {
+//           row.scrollIntoView({ behavior: "smooth", block: "center" });
+//         }
+//         break;
+//       }
+//     }
+//   }
+
+// });
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
-
+  // const audio = document.getElementById("ap");
+  const speedSlider = document.getElementById("speedSlider");
+  const speedLabel = document.getElementById("speedLabel");
+  const modeBtn = document.getElementById("modeBtn");
   const autoNextSwitch = document.getElementById("autoNextSwitch");
-  let autoNext = autoNextSwitch.checked; // 根據預設是否 checked
 
+  // 初始設定
+  audio.playbackRate = parseFloat(speedSlider.value);
+  speedLabel.textContent = audio.playbackRate.toFixed(1) + "x";
+
+  let mode = "continuous"; // 模式: continuous / single / loop
+  let autoNext = autoNextSwitch.checked;
+
+  // 播放速率 slider
+  speedSlider.addEventListener("input", () => {
+    audio.playbackRate = parseFloat(speedSlider.value);
+    speedLabel.textContent = audio.playbackRate.toFixed(1) + "x";
+  });
+
+  // 切換播放模式
+  modeBtn.addEventListener("click", () => {
+    if (mode === "continuous") mode = "single";
+    else if (mode === "single") mode = "loop";
+    else mode = "continuous";
+
+    let label = "";
+    if (mode === "continuous") label = "模式：不間斷播放";
+    else if (mode === "single") label = "模式：單句播放一次";
+    else label = "模式：單句循環播放";
+
+    modeBtn.textContent = label;
+  });
+
+  // Switch 開關
   autoNextSwitch.addEventListener("change", (e) => {
     autoNext = e.target.checked;
   });
 
-  // 監聽表格列點擊事件
+  // 監聽點擊表格列
   document.addEventListener("click", async (e) => {
     const row = e.target.closest("#lines tr");
     if (!row) return;
 
-    // 清除所有列的樣式
-    document.querySelectorAll("#lines tr").forEach(tr => {
-      tr.style.color = "";
-      tr.style.backgroundColor = "";
-    });
-
-    // 標記被點擊的列
-    row.style.color = "green";
-    row.style.backgroundColor = "#E5E4E2";
-
-    // 取得 startTime 與 endTime
     const startCell = row.children[1];
     const nextRow = row.nextElementSibling;
     const nextCell = nextRow ? nextRow.children[1] : null;
 
-    const playbackRate = 1;
     const startTime = Number(startCell ? startCell.textContent : 0);
-    const endTime = Number(nextCell ? nextCell.textContent : 0);
+    const endTime = Number(nextCell ? nextCell.textContent : audio.duration);
 
-    await startPlay(startTime, endTime, row);
-  });
+    // 清除舊樣式
+    document.querySelectorAll("#lines tr").forEach(tr => {
+      tr.style.setProperty("color", "", "important");
+      tr.style.setProperty("background-color", "", "important");
+    });
 
-  async function startPlay(playbackRate,startTime, endTime, activeRow) {
-    let audio = document.getElementById("ap");
+    row.style.setProperty("color", "green", "important");
+    row.style.setProperty("background-color", "#E5E4E2", "important");
+    row.scrollIntoView({ behavior: "smooth", block: "center" });
 
-    // const vp = document.getElementById("vp");
-    // if (vp && vp.offsetParent !== null) {
-    //   audio = vp;
-    // } else {
-    //   const plyrVideo = document.querySelector(".plyr--video");
-    //   if (plyrVideo && plyrVideo.offsetParent !== null && typeof player !== "undefined") {
-    //     audio = player;
-    //   }
-    // }
+    // 播放邏輯
+    if (mode === "continuous") {
+      audio.currentTime = 0;
+      audio.play();
+      audio.ontimeupdate = () => highlightCurrentRow(audio.currentTime);
+    } else {
+      audio.currentTime = startTime;
+      audio.play();
+      audio.ontimeupdate = function () {
+        highlightCurrentRow(audio.currentTime);
 
-    // 確保 duration 可用
-    let dr = audio.duration;
-    while (isNaN(dr) || dr === Infinity) {
-      await new Promise(resolve => setTimeout(resolve, 200));
-      dr = audio.duration;
-    }
+        if (audio.currentTime >= endTime) {
+          if (mode === "single") audio.pause();
+          else if (mode === "loop") audio.currentTime = startTime; // 單句循環
 
-    audio.playbackRate= playbackRate;
-    audio.currentTime = startTime;
-    audio.play();
-
-    activeRow.scrollIntoView({ behavior: "smooth", block: "center" });
-
-    audio.ontimeupdate = function () {
-      if (audio.currentTime > endTime) {
-        audio.pause();
-        audio.currentTime = startTime;
-
-        // if (autoNext) {
-        //   const nextRow = activeRow.nextElementSibling;
-        //   if (nextRow) {
-        //     nextRow.click(); // 自動觸發下一行播放
-        //   }
-        // }
-
-        if (autoNext) {
-          // 忽略逐句播放，直接播放整段音檔
-          if (audio.paused) {
-            audio.play();
+          if (mode === "single" && autoNext && nextRow) {
+            nextRow.click(); // 自動跳下一行
           }
-          return;
         }
-      }
-
-      // 同步高亮
-      highlightCurrentRow(audio.currentTime);
-    };
-  }
+      };
+    }
+  });
 
   function highlightCurrentRow(currentTime) {
     const rows = document.querySelectorAll("#lines tr");
-    for (let i = 0; i < rows.length - 1; i++) {
+    for (let i = 0; i < rows.length; i++) {
       const start = Number(rows[i].children[1]?.textContent || 0);
-      const end = Number(rows[i + 1].children[1]?.textContent || Infinity);
-      const row = rows[i];
-
+      const end = Number(rows[i + 1]?.children[1]?.textContent || audio.duration);
       if (currentTime >= start && currentTime < end) {
         rows.forEach(tr => {
-          tr.style.color = "";
-          tr.style.backgroundColor = "";
+          tr.style.setProperty("color", "", "important");
+          tr.style.setProperty("background-color", "", "important");
         });
-        row.style.setProperty("color", "green", "important");
-        row.style.setProperty("background-color", "#E5E4E2", "important");
+        rows[i].style.setProperty("color", "green", "important");
+        rows[i].style.setProperty("background-color", "#E5E4E2", "important");
 
-        const rect = row.getBoundingClientRect();
+        const rect = rows[i].getBoundingClientRect();
         if (rect.top < 0 || rect.bottom > window.innerHeight) {
-          row.scrollIntoView({ behavior: "smooth", block: "center" });
+          rows[i].scrollIntoView({ behavior: "smooth", block: "center" });
         }
         break;
       }
     }
   }
-
 });
+
 
 
 const svgPlay=`

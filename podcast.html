@@ -50,12 +50,26 @@
   <span></span>
   <div class="pt-3"><audio id="ap" controls preload="auto"></audio></div>
   <div class="pt-3 px-3 row">
+
+<div class="col-6">
+<!-- 切換逐句播放 / 單句循環 -->
+<button id="modeBtn">模式：不間斷播放</button>
+
+<!-- switch 控制自動跳下一行（只在逐句模式可用） -->
+<label class="switch">
+  <input type="checkbox" id="autoNextSwitch">
+  <span class="slider round"></span>
+</label>
+<span id="autoNextLabel">自動跳下一行播放</span>
+
+</div>
+
     <div class="col-6 form-check form-switch">
       <input class="form-check-input d-block" type="checkbox" id="autoNextSwitch" checked>
       <label class="form-check-label d-block" for="flexSwitchCheckDefault"></label>
       <span>自動跳下一行播放</span>
     </div>
-    <div class="col-6" style="margin-top:10px;">
+    <div class="col-6">
       <label for="speedSlider">播放速度: <span id="speedLabel">1.0x</span></label>
       <input type="range" id="speedSlider" min="0.5" max="1.5" step="0.1" value="1">
     </div>
