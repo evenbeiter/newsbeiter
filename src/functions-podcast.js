@@ -31,7 +31,8 @@ async function pdGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function pdGetContent(clickedId,id,transcriptionId){
-  toc.style.display='none';
+  toc.classList.remove('d-block');
+  toc.classList.add('d-none');
   let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
   let str=await res.text();
   const audioUrl=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)[0];
@@ -144,11 +145,12 @@ function fw5() {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  let autoNext = false; // 是否自動跳下一行
-  const toggleBtn = document.getElementById("autoNextToggle");
-  toggleBtn.addEventListener("click", () => {
-    autoNext = !autoNext;
-    toggleBtn.textContent = `自動跳下一行：${autoNext ? "開" : "關"}`;
+  let autoNext = false;  // 是否自動跳下一行
+  const autoNextSwitch = document.getElementById("autoNextSwitch");
+
+  // 開關事件
+  autoNextSwitch.addEventListener("change", (e) => {
+    autoNext = e.target.checked;
   });
 
   // 監聽表格列點擊事件

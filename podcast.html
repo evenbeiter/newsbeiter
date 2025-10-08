@@ -61,7 +61,7 @@
 
 </div>
 <!-- <div id="top" class="z-2 fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:block"></div> -->
-<div class="p-3"><audio id="ap" controls preload="auto" class="sticky-top" style="top:40px"></audio></div>
+<div class="p-3 z-2 fs10 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast"><audio id="ap" controls preload="auto" class="sticky-top" style="top:40px"></audio></div>
 
 
 <div class="mx-3 pt-3 sepia">
@@ -86,18 +86,18 @@
 </svg>
 </div></div>
   
-<div id="customOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none z-3">
+<!-- <div id="customOverlay" class="position-fixed top-0 start-0 w-100 h-100 d-none z-3">
   <div id="overlayBackdrop" class="position-absolute top-0 start-0 w-100 h-100 bg-secondary bg-opacity-25" onclick="hideOverlay()"></div>
   <div class="position-absolute top-50 start-50 translate-middle bg-white border rounded shadow p-4" style="width: 90vw; height: 90vh; overflow: auto;">
     <button id="overlayCloseBtn" type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" onclick="hideOverlay()"></button>
     <div class="p-4 h-100 overflow-auto"><div id="popupContent" class="w-100"></div><img id="gtmImg" class="img-fluid" style="max-height:100%;object-fit:contain"></div>
   </div>
-</div>
+</div> -->
 
 <div style="height:100px"></div> <!-- end of .table -->
 <div id="bottom" class="mx-3 py-1 row fixed-bottom disable-dbl-tap-zoom">
   <div class="col-2 form-check form-switch">
-    <input class="form-check-input d-block" type="checkbox" id="autoNextToggle" onclick="checkEdit()" checked>
+    <input class="form-check-input d-block" type="checkbox" id="autoNextSwitch" onclick="checkEdit()" checked>
     <label class="form-check-label d-block" for="flexSwitchCheckDefault"></label>
   </div>
   <button class="col-2 btn btn-outline-secondary" type="button" onclick="rw5()">
