@@ -125,7 +125,7 @@ function getLinesTable(ss) {
 //    OPERATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function toggleTOC(){toc.style.display = toc.style.display === 'block' ? 'none' : 'block';}
+function toggleTOC(){toc.classList.toggle('d-none');}
 
 function rw5() {
   // const audio = document.getElementById('ap');
