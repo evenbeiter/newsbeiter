@@ -534,7 +534,7 @@ function copyNote(btn){
 }
 
 
-function showTop(t){topdiv.innerText=t;topdiv.style.display='block';}
+function showTop(t){topdiv.querySelector('span').innerText=t;topdiv.style.display='block';}
 function newNews(){options.style.display='none';document.body.scrollTop = 0;document.documentElement.scrollTop = 0;list.innerHTML='';}
 
 function openChannelList(){channelList.style.display='block';searchList.style.display='none';urlList.style.display='none';options.style.display='block';topdiv.style.display='none';}
