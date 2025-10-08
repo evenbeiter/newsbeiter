@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const speedSlider = document.getElementById("speedSlider");
   const speedLabel = document.getElementById("speedLabel");
   const modeBtn = document.getElementById("modeBtn");
-  const autoNextSwitch = document.getElementById("autoNextSwitch");
+  // const autoNextSwitch = document.getElementById("autoNextSwitch");
 
   // 初始設定
   audio.playbackRate = parseFloat(speedSlider.value);
@@ -289,13 +289,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Switch 開關
-  autoNextSwitch.addEventListener("change", (e) => {
-    autoNext = e.target.checked;
-  });
+  // autoNextSwitch.addEventListener("change", (e) => {
+  //   autoNext = e.target.checked;
+  // });
 
   // 監聽點擊表格列
   document.addEventListener("click", async (e) => {
-    const row = e.target.closest("#lines tr");
+    const row = e.target.closest("[id^='lines-'] tr");
     if (!row) return;
 
     const startCell = row.children[1];
@@ -306,7 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const endTime = Number(nextCell ? nextCell.textContent : audio.duration);
 
     // 清除舊樣式
-    document.querySelectorAll("#lines tr").forEach(tr => {
+    document.querySelectorAll("[id^='lines-'] tr").forEach(tr => {
       tr.style.setProperty("color", "", "important");
       tr.style.setProperty("background-color", "", "important");
     });
