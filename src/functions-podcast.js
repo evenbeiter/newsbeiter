@@ -64,6 +64,14 @@ async function pdGetContent(clickedId,id,transcriptionId){
 
 }
 
+// 假設綁定 click 事件到整個表格或 document
+document.addEventListener('click', function(e) {
+  const tbody = e.target.closest('tbody');
+  if (tbody && tbody.id && tbody.id.startsWith('lines-')) return;
+  tbody.parentElement.parentElement.parentElement.style.display='none';
+  try{tbody.parentElement.parentElement.parentElement.previousElementSibling.scrollIntoView()}catch{document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
+});
+
 function word2sentence(raw){
   const sentences = [];
   let currentSentence = [];
