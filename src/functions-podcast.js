@@ -31,7 +31,8 @@ async function pdGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function pdGetContent(clickedId,id,transcriptionId){
-  let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${h.id}`);
+  toggleTOC();
+  let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
   let str=await res.text();
   const audioUrl=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)[0];
 
@@ -122,7 +123,7 @@ function getLinesTable(ss) {
 //    OPERATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function openTOC(){toc.style.display = toc.style.display === 'block' ? 'none' : 'block';}
+function toggleTOC(){toc.style.display = toc.style.display === 'block' ? 'none' : 'block';}
 
 function rw5() {
   const audio = document.getElementById('ap');

@@ -25,25 +25,23 @@
   </div>
 </div>
 
-<div id="toc" class="position-fixed w-100 top-0 start-0" style="height:100vh">
+<div id="toc" class="vh-100 d-flex flex-column align-items-center justify-content-center">
   <div id="top" class="z-2 fs10 py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="display:block"></div>
-
-  <form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
-    <div id="btn" class="p-2">
-      <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
-      <hr style="margin-right:3rem">
-      <div id="channelList"></div>
-      <div id="searchList" style="display:none"></div>
-      <div id="urlList" style="display:none"></div>
-    </div>
-  </form>
-
   <div id="list" class="mx-3 pt-3 sepia"></div>
 </div>
 
 <div id="container">
+<form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
+  <div id="btn" class="p-2">
+    <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
+    <hr style="margin-right:3rem">
+    <div id="channelList"></div>
+    <div id="searchList" style="display:none"></div>
+    <div id="urlList" style="display:none"></div>
+  </div>
+</form>
 <div class="sticky-top position-fixed m-2 top-0 end-0" style="z-index:1030;padding-top:3rem">
-  <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="openTOC()">
+  <button type="button" class="btn btn-light position-relative sepia-contrast opacity-25" onclick="toggleTOC()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"></path>
     </svg>
