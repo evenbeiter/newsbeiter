@@ -22,7 +22,7 @@ async function pdGetList(siteName,t){
   for (let h of items){
     html+=`<p class="title" onclick="pdGetContent(this.id,'${h[0]}','${h[4]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
-      <table class="table table-auto">
+      <table class="table table-auto fs12 sepia">
         <tbody id="lines-${h[0]}" class=""></tbody>
       </table>
     </div>
