@@ -142,6 +142,110 @@ function fw5() {
   btnPlay.innerHTML = svgPause;
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+
+  let autoNext = false; // 是否自動跳下一行
+  const toggleBtn = document.getElementById("autoNextToggle");
+  toggleBtn.addEventListener("click", () => {
+    autoNext = !autoNext;
+    toggleBtn.textContent = `自動跳下一行：${autoNext ? "開" : "關"}`;
+  });
+
+  // 監聽表格列點擊事件
+  document.addEventListener("click", async (e) => {
+    const row = e.target.closest("#lines tr");
+    if (!row) return;
+
+    // 清除所有列的樣式
+    document.querySelectorAll("#lines tr").forEach(tr => {
+      tr.style.color = "";
+      tr.style.backgroundColor = "";
+    });
+
+    // 標記被點擊的列
+    row.style.color = "green";
+    row.style.backgroundColor = "#E5E4E2";
+
+    // 取得 startTime 與 endTime
+    const startCell = row.children[1];
+    const nextRow = row.nextElementSibling;
+    const nextCell = nextRow ? nextRow.children[1] : null;
+
+    const startTime = Number(startCell ? startCell.textContent : 0);
+    const endTime = Number(nextCell ? nextCell.textContent : 0);
+
+    await startPlay(startTime, endTime, row);
+  });
+
+  async function startPlay(startTime, endTime, activeRow) {
+    let audio = document.getElementById("ap");
+
+    const vp = document.getElementById("vp");
+    if (vp && vp.offsetParent !== null) {
+      audio = vp;
+    } else {
+      const plyrVideo = document.querySelector(".plyr--video");
+      if (plyrVideo && plyrVideo.offsetParent !== null && typeof player !== "undefined") {
+        audio = player;
+      }
+    }
+
+    // 確保 duration 可用
+    let dr = audio.duration;
+    while (isNaN(dr) || dr === Infinity) {
+      await new Promise(resolve => setTimeout(resolve, 200));
+      dr = audio.duration;
+    }
+
+    audio.currentTime = startTime;
+    audio.play();
+
+    activeRow.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    audio.ontimeupdate = function () {
+      if (audio.currentTime > endTime) {
+        audio.pause();
+        audio.currentTime = startTime;
+
+        if (autoNext) {
+          const nextRow = activeRow.nextElementSibling;
+          if (nextRow) {
+            nextRow.click(); // 自動觸發下一行播放
+          }
+        }
+      }
+
+      // 同步高亮
+      highlightCurrentRow(audio.currentTime);
+    };
+  }
+
+  function highlightCurrentRow(currentTime) {
+    const rows = document.querySelectorAll("#lines tr");
+    for (let i = 0; i < rows.length - 1; i++) {
+      const start = Number(rows[i].children[1]?.textContent || 0);
+      const end = Number(rows[i + 1].children[1]?.textContent || Infinity);
+      const row = rows[i];
+
+      if (currentTime >= start && currentTime < end) {
+        rows.forEach(tr => {
+          tr.style.color = "";
+          tr.style.backgroundColor = "";
+        });
+        row.style.color = "green";
+        row.style.backgroundColor = "#E5E4E2";
+
+        const rect = row.getBoundingClientRect();
+        if (rect.top < 0 || rect.bottom > window.innerHeight) {
+          row.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        break;
+      }
+    }
+  }
+
+});
+
 
 const svgPlay=`
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
