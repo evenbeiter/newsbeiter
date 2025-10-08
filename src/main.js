@@ -31,5 +31,6 @@ if (window.location.href.slice(-4)==='news'){
 } else {
   //podcast.html
   createUrlListDiv([allSites]);
+  createChannelList(pd,'pd','Podcast');
   openUrlList();
 }
