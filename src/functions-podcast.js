@@ -122,7 +122,7 @@ function getLinesTable(ss,id) {
     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
     <td class="d-none">${s.startTime}</td>
     <td class="pdstn">${s.sentence}</td>
-    <td class="p-0">
+    <td class="p-0" style="width:3rem">
       <button type="button" class="btn btn-light position-relative sepia opacity-50 mt-1" onclick="getPodcastTranslate(this)">
         ${svgTranslate}
       </button>
