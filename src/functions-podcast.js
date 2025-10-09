@@ -20,10 +20,10 @@ async function pdGetList(siteName,t){
     items.push([h.id,h.title,h.uploadedAt,h.duration,h.episodes[0].hasTranscription,h.episodes[0].transcriptionId])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="pdGetContent(this.id,'${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title fs12" onclick="pdGetContent(this.id,'${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
-      <table class="table table-auto fs12 sepia">
-        <tbody id="lines-${h[0]}" class=""></tbody>
+      <table class="table table-auto fs11 sepia">
+        <tbody id="lines-${h[0]}"></tbody>
       </table>
     </div>
     </div><hr>`;
@@ -122,7 +122,7 @@ function getLinesTable(ss,id) {
     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
     <td class="d-none">${s.startTime}</td>
     <td class="position-relative">${s.sentence}
-      <button type="button" class="btn btn-light position-relative sepia opacity-50 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">
+      <button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">
         ${svgTranslate}
       </button>
     </td>
@@ -133,7 +133,7 @@ function getLinesTable(ss,id) {
 
 async function getPodcastTranslate(btn) {
   const container = btn.closest('td');
-  container.innerHTML += `<br>${await translate(container.innerHTML)}`;
+  container.innerHTML += `<br><span class="fs09em">${await translate(container.innerHTML)}</span>`;
 }
 
 
@@ -431,3 +431,4 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
