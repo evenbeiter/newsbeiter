@@ -7,20 +7,20 @@ async function pdGetList(siteName,t){
   let str=await res.json();
   cursor=str.next_cursor;
   for (let h of str.data){
-    var pdId;
-    if (h.episodes[0].hasTranscription===true){
-      if (h.episodes[0].transcriptionId!==undefined){pdId=h.episodes[0].transcriptionId}
-      else {
-        url=`${preStr}https://backend.podscribe.ai/api/episode?id=${h.id}`;
-        res=await fetch(url);
-        str=await res.text();
-        pdId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
-      }
-    } else {pdId='';}
-    items.push([h.id,h.title,h.uploadedAt,h.duration,pdId])
+    // var pdId;
+    // if (h.episodes[0].hasTranscription===true){
+    //   if (h.episodes[0].transcriptionId!==undefined){pdId=h.episodes[0].transcriptionId}
+    //   else {
+    //     url=`${preStr}https://backend.podscribe.ai/api/episode?id=${h.id}`;
+    //     res=await fetch(url);
+    //     str=await res.text();
+    //     pdId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
+    //   }
+    // } else {pdId='';}
+    items.push([h.id,h.title,h.uploadedAt,h.duration,h.episodes[0].hasTranscription,h.episodes[0].transcriptionId])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="pdGetContent(this.id,'${h[0]}','${h[4]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title" onclick="pdGetContent(this.id,'${h[0]}','${h[4]}','${h[5]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs12 sepia">
         <tbody id="lines-${h[0]}" class=""></tbody>
@@ -36,26 +36,33 @@ async function pdGetList(siteName,t){
 //    PODCAST GET CONTENT
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function pdGetContent(clickedId,id,transcriptionId){
+async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
 
   const cEl=document.getElementById(id);
 
-  let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
-  let str=await res.text();
-  audio.src=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)[0];
-
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
-    if (cEl.innerText.length>10) return;
+    if (cEl.innerText.length>10) return; // already got transcription in cEl
 
-    loading.style.display='block';
-    res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
-    str=await res.json();
-    const ts=word2sentence(str);console.log(ts);
-    getLinesTable(ts,id);
-    loading.style.display='none';
+    try{
+    let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
+    let str=await res.text();
+    audio.src=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0];
+    if (!hasTranscription || transcriptionId==='') cEl.innerHTML=`<p>尚未提供文稿</p>`;
+    if (hasTranscription && transcriptionId===undefined) transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
+
+    if (transcriptionId.length>3){
+      loading.style.display='block';
+      res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
+      str=await res.json();
+      const ts=word2sentence(str);
+      getLinesTable(ts,id);
+      loading.style.display='none';
+    }
+    } catch {cEl.appendChild(`<p>尚未提供文稿</p>`)}
 
   } else {
+    cEl.style.display='none';
     // const e = window.event;
     // const tbody = e.target.closest('tbody');
     // if (tbody && tbody.id && tbody.id.startsWith('lines-')) return;
@@ -111,16 +118,29 @@ function getLinesTable(ss,id) {
   var k = '';
   var j = 0;
   for (let s of ss){
-    k+=`<tr><td class="fs07 fw-lighter text-nowrap">${++j}</td><td class="d-none">${s.startTime}</td><td>${s.sentence}</td></tr>`;
+    k+=`<tr>
+    <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
+    <td class="d-none">${s.startTime}</td>
+    <td class="pdstn">${s.sentence}</td>
+    <td>
+      <button type="button" class="btn btn-light position-relative sepia opacity-50" onclick="getPodcastTranslate(this)">
+        ${svgTranslate}
+      </button>
+    </td>
+    </tr>`;
   }
   document.querySelector(`#lines-${id}`).innerHTML=k;
+}
+
+async function getPodcastTranslate(btn) {
+  const container = btn.closest('tr').children[2];
+  container.innerHTML += `<br>${await translate(container.innerHTML)}`;
 }
 
 
 //    OPERATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// function toggleTOC(){toc.classList.toggle('d-none');}
 
 function rw5() {
   // const audio = document.getElementById('ap');
@@ -363,6 +383,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+const svgTranslate=`
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-translate" viewBox="0 0 16 16">
+  <path d="M4.545 6.714 4.11 8H3l1.862-5h1.284L8 8H6.833l-.435-1.286zm1.634-.736L5.5 3.956h-.049l-.679 2.022z"/>
+  <path d="M0 2a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm7.138 9.995q.289.451.63.846c-.748.575-1.673 1.001-2.768 1.292.178.217.451.635.555.867 1.125-.359 2.08-.844 2.886-1.494.777.665 1.739 1.165 2.93 1.472.133-.254.414-.673.629-.89-1.125-.253-2.057-.694-2.82-1.284.681-.747 1.222-1.651 1.621-2.757H14V8h-3v1.047h.765c-.318.844-.74 1.546-1.272 2.13a6 6 0 0 1-.415-.492 2 2 0 0 1-.94.31"/>
+</svg>
+`;
 
 const svgPlay=`
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-fill" viewBox="0 0 16 16">
