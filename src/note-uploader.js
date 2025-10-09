@@ -148,8 +148,9 @@ function getSelectionElement() {
 
 function getArticleUrl() {
   const selectedElement = getSelectionElement();
-  if (!selectedElement) return null;
-  return findNextShareLink(selectedElement);
+  if (!selectedElement) return '';
+  const link = findNextShareLink(selectedElement);
+  return link || '';
 }
 
 function getContentId(){
@@ -261,6 +262,7 @@ function escapeHTML(str) {
 //     });
 //   });
 // }
+
 
 
 
