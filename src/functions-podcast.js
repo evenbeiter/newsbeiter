@@ -132,8 +132,9 @@ function getLinesTable(ss,id) {
 }
 
 async function getPodcastTranslate(btn) {
-  const container = btn.closest('td');
-  container.innerHTML += `<br><span class="fs09em">${await translate(container.innerHTML)}</span>`;
+  const a = btn.closest('td');
+  if (a.innerText!=='' && cnTest(a.innerText)!==true)
+  a.innerHTML += `<br><span class="fs09em">${await translate(a.innerHTML)}</span>`;
 }
 
 
@@ -431,5 +432,6 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
