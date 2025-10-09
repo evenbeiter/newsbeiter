@@ -59,7 +59,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       getLinesTable(ts,id);
       loading.style.display='none';
     }
-    } catch {cEl.appendChild(`<p>尚未提供文稿</p>`)}
+    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
 
   } else {
     cEl.style.display='none';
