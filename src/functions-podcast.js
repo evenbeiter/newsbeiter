@@ -158,6 +158,15 @@ function fw5() {
   btnPlay.innerHTML = svgPause;
 }
 
+function closeContent(){
+  document.querySelectorAll('[id]').forEach(el=>{
+    if (/^\d+$/.test(el.id)){el.style.display='none';
+    document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
+  }
+  });
+}
+
+
 // document.addEventListener("DOMContentLoaded", () => {
 
 //   const autoNextSwitch = document.getElementById("autoNextSwitch");
