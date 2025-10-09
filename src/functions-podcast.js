@@ -122,7 +122,7 @@ function getLinesTable(ss,id) {
     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
     <td class="d-none">${s.startTime}</td>
     <td class="position-relative">${s.sentence}
-      <button type="button" class="btn btn-light position-relative sepia opacity-50 position-absolute bottom-0 end-0" onclick="getPodcastTranslate(this)">
+      <button type="button" class="btn btn-light position-relative sepia opacity-50 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">
         ${svgTranslate}
       </button>
     </td>
@@ -132,7 +132,7 @@ function getLinesTable(ss,id) {
 }
 
 async function getPodcastTranslate(btn) {
-  const container = btn.closest('tr').children[2];
+  const container = btn.closest('td');
   container.innerHTML += `<br>${await translate(container.innerHTML)}`;
 }
 
