@@ -20,7 +20,7 @@ async function pdGetList(siteName,t){
     items.push([h.id,h.title,h.uploadedAt,h.duration,h.episodes[0].hasTranscription,h.episodes[0].transcriptionId])
   }
   for (let h of items){
-    html+=`<p class="title" onclick="pdGetContent(this.id,'${h[0]}','${h[4]}','${h[5]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title" onclick="pdGetContent(this.id,'${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs12 sepia">
         <tbody id="lines-${h[0]}" class=""></tbody>
@@ -49,7 +49,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     let str=await res.text();
     audio.src=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0];
     if (!hasTranscription || transcriptionId==='') cEl.innerHTML=`<p>尚未提供文稿</p>`;
-    if (hasTranscription && transcriptionId===undefined) transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
+    if (hasTranscription && transcriptionId==='undefined') transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
 
     if (transcriptionId.length>3){
       loading.style.display='block';
@@ -122,8 +122,8 @@ function getLinesTable(ss,id) {
     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
     <td class="d-none">${s.startTime}</td>
     <td class="pdstn">${s.sentence}</td>
-    <td>
-      <button type="button" class="btn btn-light position-relative sepia opacity-50" onclick="getPodcastTranslate(this)">
+    <td class="p-0">
+      <button type="button" class="btn btn-light position-relative sepia opacity-50 mt-1" onclick="getPodcastTranslate(this)">
         ${svgTranslate}
       </button>
     </td>
@@ -315,7 +315,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 監聽點擊表格列
   document.addEventListener("click", async (e) => {
-    const row = e.target.closest("[id^='lines-'] tr");console.log(row);
+    if (e.target.closest('button')) return;
+    const row = e.target.closest("[id^='lines-'] tr");
     if (!row) return;
 
     const startCell = row.children[1];
