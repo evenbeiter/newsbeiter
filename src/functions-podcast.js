@@ -121,7 +121,7 @@ function getLinesTable(ss,id) {
     k+=`<tr>
     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
     <td class="d-none">${s.startTime}</td>
-    <td class="position-relative">${s.sentence}
+    <td class="position-relative p-2">${s.sentence}
       <button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">
         ${svgTranslate}
       </button>
@@ -431,4 +431,5 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
