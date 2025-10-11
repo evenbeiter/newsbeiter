@@ -84,12 +84,12 @@ async function keGetContent(id){
     audio.src='https://k6.kekenet.com/'+contentData.mp3;
 
     let ts=[];
-    for (let s of rawLrc){console.log(s);
+    for (let s of rawLrc){
       ts.push({
         startTime: s.millisecond/1000,
         sentence: `${s.en}<br>${s2t(s.cn)}`
       });     
-    } console.log(ts);
+    }
     getLinesTable(ts,id);
     loading.style.display='none';
 
