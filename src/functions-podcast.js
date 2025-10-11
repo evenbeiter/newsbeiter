@@ -442,6 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modeBtn = document.getElementById("modeBtn");
 
   // 初始設定
+  media = ap;
   media.playbackRate = parseFloat(speedSlider.value);
   speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
 
