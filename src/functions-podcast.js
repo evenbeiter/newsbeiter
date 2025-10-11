@@ -97,7 +97,7 @@ async function keGetContent(id){
     const rawLrc = contentData.content;
 
     const mediaSrc = 'https://k6.kekenet.com/'+contentData.playurl;
-    if (mediaSrc.endsWith('.mp3') {
+    if (mediaSrc.endsWith('.mp3')) {
       audio.src= 'https://k6.kekenet.com/'+contentData.playurl;vp.src='';
       audio.style.display='block';vp.style.display='none';
     } else {
