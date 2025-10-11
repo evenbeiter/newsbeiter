@@ -186,7 +186,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     try{
     let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
     let str=await res.text();
-    audio.src=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0];
+    media.src=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0];
     if (!hasTranscription || transcriptionId==='') cEl.innerHTML=`<p>尚未提供文稿</p>`;
     if (hasTranscription && transcriptionId==='undefined') transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
 
@@ -284,16 +284,16 @@ async function getPodcastTranslate(btn) {
 function rw5() {
   // const audio = document.getElementById('ap');
   const btnPlay = document.getElementById('btnPlay');
-  audio.currentTime = Math.max(0, audio.currentTime - 5); // 避免小於 0
-  audio.play();
+  media.currentTime = Math.max(0, media.currentTime - 5); // 避免小於 0
+  media.play();
   btnPlay.innerHTML = svgPause;
 }
 
 function fw5() {
   // const audio = document.getElementById('ap');
   const btnPlay = document.getElementById('btnPlay');
-  audio.currentTime = Math.min(audio.duration, audio.currentTime + 5); // 避免超出音檔長度
-  audio.play();
+  media.currentTime = Math.min(media.duration, media.currentTime + 5); // 避免超出音檔長度
+  media.play();
   btnPlay.innerHTML = svgPause;
 }
 
