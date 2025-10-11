@@ -3,7 +3,21 @@
 
 
 async function keGetList(siteName,t) {
-  const payload = {
+  if (t===''){
+    const payload = {
+      Method: "web_waikan_webgetfeaturethedaylist",
+      Params: { level: 0, PageSize:20, PageIndex:rr },
+      Token: "",
+      Terminal: 13,
+      Version: "4.0",
+      UID: "",
+      AppFlag: 18,
+      Sign: "",
+      ApTime: Date.now(),
+      ApVersionCode: 100
+    };
+  } else {
+    const payload = {
       Method: "web_waikan_wknewslist",
       Params: { catid: t, PageSize:20, PageIndex:rr, Sort: "inputtime desc" },
       Token: "",
@@ -14,7 +28,8 @@ async function keGetList(siteName,t) {
       Sign: "",
       ApTime: Date.now(),
       ApVersionCode: 100
-  };
+    };
+  }
 
   try {
   const res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
@@ -32,7 +47,7 @@ async function keGetList(siteName,t) {
     items.push([h.id,h.title,h.updatetime,h.mp3len])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="keGetContent('${h[0]}')">${h[1]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title fs12" onclick="keGetContent('${h[0]}')">${s2t(h[1])}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
         <tbody id="lines-${h[0]}"></tbody>
@@ -81,7 +96,14 @@ async function keGetContent(id){
     const contentData = data.IsDecode == 1 ? await decryptAES(data.Data) : data.Data;
     const rawLrc = contentData.content;
 
-    audio.src='https://k6.kekenet.com/'+contentData.mp3;
+    const mediaSrc = 'https://k6.kekenet.com/'+contentData.playurl;
+    if (mediaSrc.endsWith('.mp3') {
+      audio.src= 'https://k6.kekenet.com/'+contentData.playurl;vp.src='';
+      audio.style.display='block';vp.style.display='none';
+    } else {
+      vp.src= 'https://k6.kekenet.com/'+contentData.playurl;audio.src='';
+      vp.style.display='block';audio.style.display='none';
+    }
 
     let ts=[];
     for (let s of rawLrc){
@@ -414,23 +436,36 @@ function closeContent(){
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  // const audio = document.getElementById("ap");
   const speedSlider = document.getElementById("speedSlider");
   const speedLabel = document.getElementById("speedLabel");
   const modeBtn = document.getElementById("modeBtn");
-  // const autoNextSwitch = document.getElementById("autoNextSwitch");
+
+  // 🔹 自動辨識播放元素
+  function getMediaElement() {
+    // 若 video 存在且目前顯示，優先使用 video
+    if (vp && vp.offsetParent !== null) return vp;
+    // 否則使用 audio
+    if (ap) return ap;
+    return null;
+  }
+
+  let media = getMediaElement();
+  if (!media) {
+    console.warn("找不到音訊或影片元素 (#audio 或 #vp)");
+    return;
+  }
 
   // 初始設定
-  audio.playbackRate = parseFloat(speedSlider.value);
-  speedLabel.textContent = audio.playbackRate.toFixed(1) + "x";
+  media.playbackRate = parseFloat(speedSlider.value);
+  speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
 
   let mode = "continuous"; // 模式: continuous / single / loop
   // let autoNext = autoNextSwitch.checked;
 
   // 播放速率 slider
   speedSlider.addEventListener("input", () => {
-    audio.playbackRate = parseFloat(speedSlider.value);
-    speedLabel.textContent = audio.playbackRate.toFixed(1) + "x";
+    media.playbackRate = parseFloat(speedSlider.value);
+    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
   });
 
   // 切換播放模式
@@ -447,11 +482,6 @@ document.addEventListener("DOMContentLoaded", () => {
     modeBtn.textContent = label;
   });
 
-  // Switch 開關
-  // autoNextSwitch.addEventListener("change", (e) => {
-  //   autoNext = e.target.checked;
-  // });
-
   // 監聽點擊表格列
   document.addEventListener("click", async (e) => {
     if (e.target.closest('button')) return;
@@ -463,7 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextCell = nextRow ? nextRow.children[1] : null;
 
     const startTime = Number(startCell ? startCell.textContent : 0);
-    const endTime = Number(nextCell ? nextCell.textContent : audio.duration);
+    const endTime = Number(nextCell ? nextCell.textContent : media.duration);
     console.log('start: '+startTime+'; end: '+endTime);
 
     // 清除舊樣式
@@ -478,18 +508,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 播放邏輯
     if (mode === "continuous") {
-      audio.currentTime = startTime;
-      audio.play();
-      audio.ontimeupdate = () => highlightCurrentRow(audio.currentTime);
+      media.currentTime = startTime;
+      media.play();
+      media.ontimeupdate = () => highlightCurrentRow(media.currentTime);
     } else {
-      audio.currentTime = startTime;
-      audio.play();
-      audio.ontimeupdate = function () {
-        highlightCurrentRow(audio.currentTime);
+      media.currentTime = startTime;
+      media.play();
+      media.ontimeupdate = function () {
+        highlightCurrentRow(media.currentTime);
 
-        if (audio.currentTime >= endTime) {
-          if (mode === "single") audio.pause();
-          else if (mode === "loop") audio.currentTime = startTime; // 單句循環
+        if (media.currentTime >= endTime) {
+          if (mode === "single") media.pause();
+          else if (mode === "loop") media.currentTime = startTime; // 單句循環
 
           // if (mode === "single" && autoNext && nextRow) {
           //   nextRow.click(); // 自動跳下一行
@@ -503,7 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const rows = document.querySelectorAll("#lines tr");
     for (let i = 0; i < rows.length; i++) {
       const start = Number(rows[i].children[1]?.textContent || 0);
-      const end = Number(rows[i + 1]?.children[1]?.textContent || audio.duration);
+      const end = Number(rows[i + 1]?.children[1]?.textContent || media.duration);
       if (currentTime >= start && currentTime < end) {
         rows.forEach(tr => {
           tr.style.setProperty("color", "", "important");
@@ -562,7 +592,3 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
-
-
-
-
