@@ -40,9 +40,11 @@ async function keGetList(siteName,t) {
     </div>
     </div><hr>`;
   }
-  ap.style.display='block';vp.style.display='none';ap.src='';vp.src='';
 
   }catch{html='<p>尚無內容</p>'}
+
+  ap.style.display='block';vp.style.display='none';ap.src='';vp.src='';
+
   return html;
 }
 
@@ -171,6 +173,9 @@ async function pdGetList(siteName,t){
     </div><hr>`;
   }
   }catch{html='<p>尚無內容</p>'}
+  
+  ap.style.display='block';vp.style.display='none';ap.src='';vp.src='';
+
   return html;
 }
 
