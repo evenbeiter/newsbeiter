@@ -32,5 +32,6 @@ if (window.location.href.indexOf('podcast')==-1){
 } else {
   //podcast.html
   createUrlListDiv([allSites]);
-  createChannelList(pd,'pd','Podcast');
+  openUrlList();
+  // createChannelList(pd,'pd','Podcast');
 }
