@@ -3,33 +3,18 @@
 
 
 async function keGetList(siteName,t) {
-  if (t===''){
-    const payload = {
-      Method: "web_waikan_webgetfeaturethedaylist",
-      Params: { level: 0, PageSize:20, PageIndex:rr },
-      Token: "",
-      Terminal: 13,
-      Version: "4.0",
-      UID: "",
-      AppFlag: 18,
-      Sign: "",
-      ApTime: Date.now(),
-      ApVersionCode: 100
-    };
-  } else {
-    const payload = {
-      Method: "web_waikan_wknewslist",
-      Params: { catid: t, PageSize:20, PageIndex:rr, Sort: "inputtime desc" },
-      Token: "",
-      Terminal: 13,
-      Version: "4.0",
-      UID: "",
-      AppFlag: 18,
-      Sign: "",
-      ApTime: Date.now(),
-      ApVersionCode: 100
-    };
-  }
+  const payload = {
+    Method: "web_waikan_wknewslist",
+    Params: { catid: t, PageSize:20, PageIndex:rr, Sort: "inputtime desc" },
+    Token: "",
+    Terminal: 13,
+    Version: "4.0",
+    UID: "",
+    AppFlag: 18,
+    Sign: "",
+    ApTime: Date.now(),
+    ApVersionCode: 100
+  };
 
   try {
   const res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
