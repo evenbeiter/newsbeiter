@@ -498,7 +498,8 @@ document.addEventListener("DOMContentLoaded", () => {
       media.ontimeupdate = () => highlightCurrentRow(media.currentTime);
     } else {
       media.currentTime = startTime;
-      media.play();
+      // media.play();
+      await safePlay(media, startTime);
       media.ontimeupdate = function () {
         highlightCurrentRow(media.currentTime);
 
@@ -537,6 +538,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+async function safePlay(media, startTime = 0) {
+  if (!media) return;
+
+  try {
+    // 確保媒體載入正常
+    if (media.error) {
+      const src = media.src;
+      media.src = "";
+      await new Promise(r => setTimeout(r, 100));
+      media.src = src;
+      media.load();
+    }
+
+    // 若未載入完成，等待可播放
+    if (media.readyState < 2) {
+      await new Promise(resolve => {
+        media.oncanplay = () => resolve();
+        media.load();
+      });
+    }
+
+    // 設定時間並嘗試播放
+    media.currentTime = startTime;
+
+    const playPromise = media.play();
+    if (playPromise !== undefined) {
+      await playPromise.catch(err => {
+        console.warn("⚠️ play() 被阻擋，嘗試靜音播放後恢復:", err);
+        media.muted = true;
+        return media.play().then(() => {
+          setTimeout(() => (media.muted = false), 300);
+        });
+      });
+    }
+  } catch (err) {
+    console.warn("播放失敗:", err);
+  }
+}
 
 
 const svgTranslate=`
