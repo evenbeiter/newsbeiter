@@ -468,7 +468,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // 監聽點擊表格列
-  document.addEventListener("click", async (e) => {
+  document.addEventListener("click", async (e) => {console.log(media);
     if (e.target.closest('button')) return;
     const row = e.target.closest("[id^='lines-'] tr");
     if (!row) return;
@@ -498,8 +498,8 @@ document.addEventListener("DOMContentLoaded", () => {
       media.ontimeupdate = () => highlightCurrentRow(media.currentTime);
     } else {
       media.currentTime = startTime;
-      // media.play();
-      await safePlay(media, startTime);
+      media.play();
+      // await safePlay(media, startTime);
       media.ontimeupdate = function () {
         highlightCurrentRow(media.currentTime);
 
