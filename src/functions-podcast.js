@@ -40,6 +40,7 @@ async function keGetList(siteName,t) {
     </div>
     </div><hr>`;
   }
+  ap.style.display='block';vp.style.display='none';
 
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -52,6 +53,8 @@ async function keGetContent(id){
 
   if (cEl.style.display=='none' || cEl.style.display==''){
     cEl.style.display='block';
+    loading.style.display='block';
+
     if (cEl.innerText.length>10) return; // already got transcription in cEl
 
     const payload = {
