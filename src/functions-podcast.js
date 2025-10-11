@@ -83,9 +83,11 @@ async function keGetContent(id){
 
     const mediaSrc = 'https://k6.kekenet.com/'+contentData.playurl;
     if (mediaSrc.endsWith('.mp3')) {
+      media=ap;
       ap.src= 'https://k6.kekenet.com/'+contentData.playurl;vp.src='';
       ap.style.display='block';vp.style.display='none';
     } else {
+      media=vp;
       vp.src= 'https://k6.kekenet.com/'+contentData.playurl;ap.src='';
       vp.style.display='block';ap.style.display='none';
     }
@@ -303,6 +305,20 @@ function closeContent(){
   });
 }
 
+  // // 🔹 自動辨識播放元素
+  // function getMediaElement() {
+  //   // 若 video 存在且目前顯示，優先使用 video
+  //   if (vp && vp.offsetParent !== null) return vp;
+  //   // 否則使用 audio
+  //   if (ap) return ap;
+  //   return null;
+  // }
+
+  // let media = getMediaElement();
+  // if (!media) {
+  //   console.warn("找不到音訊或影片元素 (#audio 或 #vp)");
+  //   return;
+  // }
 
 // document.addEventListener("DOMContentLoaded", () => {
 
@@ -424,21 +440,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const speedSlider = document.getElementById("speedSlider");
   const speedLabel = document.getElementById("speedLabel");
   const modeBtn = document.getElementById("modeBtn");
-
-  // 🔹 自動辨識播放元素
-  function getMediaElement() {
-    // 若 video 存在且目前顯示，優先使用 video
-    if (vp && vp.offsetParent !== null) return vp;
-    // 否則使用 audio
-    if (ap) return ap;
-    return null;
-  }
-
-  let media = getMediaElement();
-  if (!media) {
-    console.warn("找不到音訊或影片元素 (#audio 或 #vp)");
-    return;
-  }
 
   // 初始設定
   media.playbackRate = parseFloat(speedSlider.value);
