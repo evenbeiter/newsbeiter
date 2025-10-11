@@ -1,3 +1,143 @@
+//    KEKENET
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+async function keGetList(siteName,t) {
+  const payload = {
+      Method: "web_waikan_wknewslist",
+      Params: { catid: t, PageSize:20, PageIndex:rr, Sort: "inputtime desc" },
+      Token: "",
+      Terminal: 13,
+      Version: "4.0",
+      UID: "",
+      AppFlag: 18,
+      Sign: "",
+      ApTime: Date.now(),
+      ApVersionCode: 100
+  };
+
+  try {
+  const res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+
+  if (data.Code !== 200) throw new Error(data.Msg || "API 返回錯誤");
+
+  const contentData = data.IsDecode == 1 ? await decryptAES(data.Data) : data.Data;
+
+  for (let h of contentData.list){
+    items.push([h.id,h.title,h.updatetime,h.mp3len])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="keGetContent('${h[0]}')">${h[1]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
+    <div class="pt-2 sepia">
+      <table class="table table-auto fs11 p-0 sepia">
+        <tbody id="lines-${h[0]}"></tbody>
+      </table>
+    </div>
+    </div><hr>`;
+  }
+
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+
+async function keGetContent(id){
+
+  const cEl=document.getElementById(id);
+
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    cEl.style.display='block';
+    if (cEl.innerText.length>10) return; // already got transcription in cEl
+
+    const payload = {
+        Method: "web_waikan_wkgetcontent",
+        Params: { id: id, version_flag: 1 },
+        Token: "",
+        Terminal: 13,
+        Version: "4.0",
+        UID: "",
+        AppFlag: 18,
+        Sign: "",
+        ApTime: Date.now(),
+        ApVersionCode: 100
+    };
+
+    try{
+
+    const res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (data.Code !== 200) throw new Error(data.Msg || "API 返回錯誤");
+
+    const contentData = data.IsDecode == 1 ? await decryptAES(data.Data) : data.Data;
+    const rawLrc = contentData.content;
+
+    audio.src='https://k6.kekenet.com/'+contentData.mp3;
+
+    let ts=[];
+    for (let s of rawLrc){
+      ts.push({
+        startTime: s.millisecond/1000,
+        sentence: `${s.en}<br>${s2t(s.cn)}`
+      });     
+    }
+    getLinesTable(ts,id);
+    loading.style.display='none';
+
+    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+
+  } else {
+    cEl.style.display='none';
+  }
+
+}
+
+
+function hexToBytes(hex) {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < bytes.length; i++) {
+        bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+    }
+    return bytes;
+}
+
+function stringToBytes(str) {
+    return new TextEncoder().encode(str);
+}
+
+async function decryptAES(hexData) {
+  const keyBuffer = stringToBytes('51E881E6F2A6Y9K8');
+  const ivBuffer = stringToBytes('9F0885C2D686C418');
+  const dataBuffer = hexToBytes(hexData);
+
+  // 返回一個 Promise，解密完成後得到文字
+  const cryptoKey = await crypto.subtle.importKey(
+      "raw",
+      keyBuffer,
+      { name: "AES-CBC" },
+      false,
+      ["decrypt"]
+  );
+
+  const decryptedBuffer = await crypto.subtle.decrypt(
+      { name: "AES-CBC", iv: ivBuffer },
+      cryptoKey,
+      dataBuffer
+  );
+console.log(JSON.parse(new TextDecoder().decode(decryptedBuffer)));
+  return JSON.parse(new TextDecoder().decode(decryptedBuffer));
+}
+
+
 //    PODCAST
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -7,16 +147,6 @@ async function pdGetList(siteName,t){
   let str=await res.json();
   cursor=str.next_cursor;
   for (let h of str.data){
-    // var pdId;
-    // if (h.episodes[0].hasTranscription===true){
-    //   if (h.episodes[0].transcriptionId!==undefined){pdId=h.episodes[0].transcriptionId}
-    //   else {
-    //     url=`${preStr}https://backend.podscribe.ai/api/episode?id=${h.id}`;
-    //     res=await fetch(url);
-    //     str=await res.text();
-    //     pdId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
-    //   }
-    // } else {pdId='';}
     items.push([h.id,h.title,h.uploadedAt,h.duration,h.episodes[0].hasTranscription,h.episodes[0].transcriptionId])
   }
   for (let h of items){
