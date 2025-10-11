@@ -83,11 +83,11 @@ async function keGetContent(id){
 
     const mediaSrc = 'https://k6.kekenet.com/'+contentData.playurl;
     if (mediaSrc.endsWith('.mp3')) {
-      audio.src= 'https://k6.kekenet.com/'+contentData.playurl;vp.src='';
-      audio.style.display='block';vp.style.display='none';
+      ap.src= 'https://k6.kekenet.com/'+contentData.playurl;vp.src='';
+      ap.style.display='block';vp.style.display='none';
     } else {
-      vp.src= 'https://k6.kekenet.com/'+contentData.playurl;audio.src='';
-      vp.style.display='block';audio.style.display='none';
+      vp.src= 'https://k6.kekenet.com/'+contentData.playurl;ap.src='';
+      vp.style.display='block';ap.style.display='none';
     }
 
     let ts=[];
@@ -97,7 +97,7 @@ async function keGetContent(id){
         sentence: `${s.en}<br>${s2t(s.cn)}`
       });     
     }
-    getLinesTable(ts,id);
+    getLinesTable(ts,id,false);
     loading.style.display='none';
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
@@ -193,7 +193,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
       str=await res.json();
       const ts=word2sentence(str);
-      getLinesTable(ts,id);
+      getLinesTable(ts,id,true);
       loading.style.display='none';
     }
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
@@ -251,7 +251,7 @@ function word2sentence(raw){
   return sentences;
 }
 
-function getLinesTable(ss,id) {
+function getLinesTable(ss,id,toTS) {
   var k = '';
   var j = 0;
   for (let s of ss){
@@ -259,7 +259,9 @@ function getLinesTable(ss,id) {
     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
     <td class="d-none">${s.startTime}</td>
     <td class="position-relative">${s.sentence}
-    <button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>
+    ${toTS===true
+      ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
+      : ''}
     </td>
     </tr>`;
   }
