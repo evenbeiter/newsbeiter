@@ -97,7 +97,7 @@ async function keGetContent(id){
         sentence: `${s.en}<br>${s2t(s.cn)}`
       });     
     }
-    getLinesTable(ts,id,false);
+    getLinesTable(ts,id);
     loading.style.display='none';
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
@@ -193,7 +193,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
       str=await res.json();
       const ts=word2sentence(str);
-      getLinesTable(ts,id,true);
+      getLinesTable(ts,id);
       loading.style.display='none';
     }
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
@@ -251,7 +251,7 @@ function word2sentence(raw){
   return sentences;
 }
 
-function getLinesTable(ss,id,toTS) {
+function getLinesTable(ss,id) {
   var k = '';
   var j = 0;
   for (let s of ss){
@@ -259,9 +259,7 @@ function getLinesTable(ss,id,toTS) {
     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
     <td class="d-none">${s.startTime}</td>
     <td class="position-relative">${s.sentence}
-      ${toTS===true
-      ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
-      : ''}
+    <button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>
     </td>
     </tr>`;
   }
@@ -515,7 +513,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function highlightCurrentRow(currentTime) {
-    const rows = document.querySelectorAll("#lines tr");
+    const rows = document.querySelectorAll("[id^='lines-'] tr");
     for (let i = 0; i < rows.length; i++) {
       const start = Number(rows[i].children[1]?.textContent || 0);
       const end = Number(rows[i + 1]?.children[1]?.textContent || media.duration);
@@ -535,6 +533,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
+
 });
 
 
