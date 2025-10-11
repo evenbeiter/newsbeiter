@@ -260,7 +260,7 @@ function getLinesTable(ss,id,toTS) {
     <td class="d-none">${s.startTime}</td>
     <td class="position-relative">${s.sentence}
       ${toTS===true
-      ? <button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>
+      ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
       : ''}
     </td>
     </tr>`;
