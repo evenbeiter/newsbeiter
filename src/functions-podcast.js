@@ -624,12 +624,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 清除舊樣式
     document.querySelectorAll("[id^='lines-'] tr").forEach(tr => {
-      tr.style.setProperty("color", "", "important");
-      tr.style.setProperty("background-color", "", "important");
+      tr.children[2].style.setProperty("color", "", "important");
+      tr.children[2].style.setProperty("background-color", "", "important");
     });
 
-    row.style.setProperty("color", "blue", "important");
-    row.style.setProperty("background-color", "#E5E4E2", "important");
+    row.children[2].style.setProperty("color", "green", "important");
+    row.children[2].style.setProperty("background-color", "#E5E4E2", "important");
     row.scrollIntoView({ behavior: "smooth", block: "center" });
 
     // 播放邏輯
@@ -665,8 +665,8 @@ document.addEventListener("DOMContentLoaded", () => {
           tr.style.setProperty("color", "", "important");
           tr.style.setProperty("background-color", "", "important");
         });
-        rows[i].style.setProperty("color", "blue", "important");
-        rows[i].style.setProperty("background-color", "#E5E4E2", "important");
+        rows[i].children[2].style.setProperty("color", "green", "important");
+        rows[i].children[2].style.setProperty("background-color", "#E5E4E2", "important");
 
         const rect = rows[i].getBoundingClientRect();
         if (rect.top < 0 || rect.bottom > window.innerHeight) {
