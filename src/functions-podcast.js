@@ -5,22 +5,33 @@
 async function euGetList(siteName,t) {
 
   try {
-  const res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-  });
-  const data = await res.json();
 
-  if (data.Code !== 200) throw new Error(data.Msg || "API 返回錯誤");
+  if (t===''){
+    const res = await fetch('https://dict.eudic.net/home/HomePageList');
+    const str = await res.json();
+    for (let h of str.ting) {
+      items.push([h.uuid,h.title,h.update_time])
+    }
+  } else {
+    const res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    const contentData = data.IsDecode == 1 ? await decryptAES(data.Data) : data.Data;
 
-  const contentData = data.IsDecode == 1 ? await decryptAES(data.Data) : data.Data;
-
-  for (let h of contentData.list){
-    items.push([h.id,h.title,h.updatetime,h.mp3len])
+    for (let h of contentData.list){
+      items.push([h.id,h.title,h.updatetime,h.mp3len])
+    }
   }
+
   for (let h of items){
-    html+=`<p class="title fs12" onclick="keGetContent('${h[0]}')">${s2t(h[1])}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title fs12" onclick="keGetContent('${h[0]}')">${s2t(h[1])}<br><span class="time">${h[2]}
+     ${h[3]
+      ?`| </span><span class="fs10 fw-bold">${h[3]}`
+      :''}
+     </span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
         <tbody id="lines-${h[0]}"></tbody>
@@ -48,7 +59,7 @@ async function euGetContent(id){
 
     try{
 
-    const res = await fetch('https://dict.eudic.net/webting/desktopplay?id=';
+    const res = await fetch('https://dict.eudic.net/webting/desktopplay?id=');
     const str = await res.text();
     const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
 
