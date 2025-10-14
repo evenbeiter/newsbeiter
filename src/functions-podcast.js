@@ -437,6 +437,9 @@ function closeContent(){
   });
 }
 
+function isMobile() {return window.matchMedia("(max-width: 768px)").matches;}
+const trLvl = isMobile() ? 0.5 : 0.6;
+
 document.addEventListener("DOMContentLoaded", () => {
   const speedSlider = document.getElementById("speedSlider");
   const speedLabel = document.getElementById("speedLabel");
@@ -496,7 +499,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const rect = row.getBoundingClientRect();
     const absoluteY = window.scrollY + rect.top;
-    const targetY = absoluteY - (window.innerHeight * 0.5);
+    const targetY = absoluteY - (window.innerHeight * trLvl);
     if (rect.top < 0 || rect.bottom > window.innerHeight) {
       window.scrollTo({
         top: targetY,
@@ -542,7 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const rect = rows[i].getBoundingClientRect();
         const absoluteY = window.scrollY + rect.top;
-        const targetY = absoluteY - (window.innerHeight * 0.5);
+        const targetY = absoluteY - (window.innerHeight * trLvl);
         if (rect.top < 0 || rect.bottom > window.innerHeight) {
           window.scrollTo({
             top: targetY,
