@@ -496,7 +496,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const rect = row.getBoundingClientRect();
     const absoluteY = window.scrollY + rect.top;
-    const targetY = absoluteY - (window.innerHeight * 0.4);
+    const targetY = absoluteY - (window.innerHeight * 0.5);
     window.scrollTo({
       top: targetY,
       behavior: 'smooth'
@@ -540,7 +540,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const rect = rows[i].getBoundingClientRect();
         const absoluteY = window.scrollY + rect.top;
-        const targetY = absoluteY - (window.innerHeight * 0.4);
+        const targetY = absoluteY - (window.innerHeight * 0.5);
         window.scrollTo({
           top: targetY,
           behavior: 'smooth'
