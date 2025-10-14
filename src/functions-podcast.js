@@ -492,7 +492,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     row.children[2].style.setProperty("color", "green", "important");
     row.children[2].style.setProperty("background-color", "#E5E4E2", "important");
-    row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    // row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    const rect = row.getBoundingClientRect();
+    const absoluteY = window.scrollY + rect.top;
+    const targetY = absoluteY - (window.innerHeight * 0.4);
+    window.scrollTo({
+      top: targetY,
+      behavior: 'smooth'
+    });
 
     // 播放邏輯
     if (mode === "continuous") {
@@ -531,9 +539,16 @@ document.addEventListener("DOMContentLoaded", () => {
         rows[i].children[2].style.setProperty("background-color", "#E5E4E2", "important");
 
         const rect = rows[i].getBoundingClientRect();
-        if (rect.top < 0 || rect.bottom > window.innerHeight) {
-          rows[i].scrollIntoView({ behavior: "smooth", block: "nearest" });
-        }
+        const absoluteY = window.scrollY + rect.top;
+        const targetY = absoluteY - (window.innerHeight * 0.4);
+        window.scrollTo({
+          top: targetY,
+          behavior: 'smooth'
+        });
+
+        // if (rect.top < 0 || rect.bottom > window.innerHeight) {
+        //   rows[i].scrollIntoView({ behavior: "smooth", block: "nearest" });
+        // }
         break;
       }
     }
