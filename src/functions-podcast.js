@@ -500,12 +500,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const rect = row.getBoundingClientRect();
     const absoluteY = window.scrollY + rect.top;
     const targetY = absoluteY - (window.innerHeight * trLvl);
-    if (rect.top < 0 || rect.bottom > window.innerHeight) {
-      window.scrollTo({
-        top: targetY,
-        behavior: 'smooth'
-      });
-    }
+    window.scrollTo({
+      top: targetY,
+      behavior: 'smooth'
+    });
+    
 
     // 播放邏輯
     if (mode === "continuous") {
@@ -546,12 +545,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const rect = rows[i].getBoundingClientRect();
         const absoluteY = window.scrollY + rect.top;
         const targetY = absoluteY - (window.innerHeight * trLvl);
-        if (rect.top < 0 || rect.bottom > window.innerHeight) {
-          window.scrollTo({
-            top: targetY,
-            behavior: 'smooth'
-          });
-        }
+        window.scrollTo({
+          top: targetY,
+          behavior: 'smooth'
+        });
 
         // if (rect.top < 0 || rect.bottom > window.innerHeight) {
         //   rows[i].scrollIntoView({ behavior: "smooth", block: "nearest" });
