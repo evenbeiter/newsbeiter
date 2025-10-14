@@ -662,8 +662,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const end = Number(rows[i + 1]?.children[1]?.textContent || media.duration);
       if (currentTime >= start && currentTime < end) {
         rows.forEach(tr => {
-          tr.style.setProperty("color", "", "important");
-          tr.style.setProperty("background-color", "", "important");
+          tr.children[2].style.setProperty("color", "", "important");
+          tr.children[2].style.setProperty("background-color", "", "important");
         });
         rows[i].children[2].style.setProperty("color", "green", "important");
         rows[i].children[2].style.setProperty("background-color", "#E5E4E2", "important");
