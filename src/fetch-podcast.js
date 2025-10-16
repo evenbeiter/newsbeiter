@@ -413,22 +413,6 @@ async function getPodcastTranslate(btn) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function rw5() {
-  // const audio = document.getElementById('ap');
-  const btnPlay = document.getElementById('btnPlay');
-  media.currentTime = Math.max(0, media.currentTime - 5); // 避免小於 0
-  media.play();
-  btnPlay.innerHTML = svgPause;
-}
-
-function fw5() {
-  // const audio = document.getElementById('ap');
-  const btnPlay = document.getElementById('btnPlay');
-  media.currentTime = Math.min(media.duration, media.currentTime + 5); // 避免超出音檔長度
-  media.play();
-  btnPlay.innerHTML = svgPause;
-}
-
 function closeContent(){
   document.querySelectorAll('[id]').forEach(el=>{
     if (/^\d+$/.test(el.id)){el.style.display='none';
@@ -438,26 +422,43 @@ function closeContent(){
 }
 
 function isMobile() {return window.matchMedia("(max-width: 768px)").matches;}
-const trLvl = isMobile() ? 0.5 : 0.6;
+const trLvl = isMobile() ? 0.4 : 0.6;
 
 document.addEventListener("DOMContentLoaded", () => {
-  const speedSlider = document.getElementById("speedSlider");
+  const speedDown = document.getElementById("speedDown");
+  const speedUp = document.getElementById("speedUp");
   const speedLabel = document.getElementById("speedLabel");
   const modeBtn = document.getElementById("modeBtn");
 
+  const playBtn = document.getElementById("playBtn");
+  const rwBtn = document.getElementById("playBtn");
+  const fwBtn = document.getElementById("playBtn");
+
   // 初始設定
   media = ap;
-  media.playbackRate = parseFloat(speedSlider.value);
+  media.playbackRate = 1;
   speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
 
   let mode = "continuous"; // 模式: continuous / single / loop
-  // let autoNext = autoNextSwitch.checked;
+
+  // 控制速率變化
+  const changeSpeed = (delta) => {
+    let newRate = media.playbackRate + delta;
+    // 限制範圍在 0.5x ~ 2.0x
+    newRate = Math.max(0.5, Math.min(2.0, newRate));
+    media.playbackRate = newRate;
+    speedLabel.textContent = newRate.toFixed(1) + "x";
+  };
+
+  // 綁定事件
+  speedDown.addEventListener("click", () => changeSpeed(-0.1));
+  speedUp.addEventListener("click", () => changeSpeed(+0.1));
 
   // 播放速率 slider
-  speedSlider.addEventListener("input", () => {
-    media.playbackRate = parseFloat(speedSlider.value);
-    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
-  });
+  // speedSlider.addEventListener("input", () => {
+  //   media.playbackRate = parseFloat(speedSlider.value);
+  //   speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+  // });
 
   // 切換播放模式
   modeBtn.addEventListener("click", () => {
@@ -471,6 +472,32 @@ document.addEventListener("DOMContentLoaded", () => {
     else label = "單句循環";
 
     modeBtn.textContent = label;
+  });
+
+  // 綁定 play, rw, fw
+  playBtn.addEventListener("click", () => {
+    if (media.paused) {
+      media.play();
+      playBtn.innerHTML = svgPause;
+    } else {
+      media.pause();
+      playBtn.innerHTML = svgPlay;
+    }
+  });
+
+  // 當音頻播放結束時，自動恢復按鈕文字
+  media.addEventListener("ended", () => {
+    playBtn.innerHTML = svgPlay;
+  });
+
+  rwBtn.addEventListener("click", () => {
+    media.currentTime = Math.max(0, media.currentTime - 5); // 避免小於 0
+    media.play();
+  });
+
+  fwBtn.addEventListener("click", () => {
+    media.currentTime = Math.min(media.duration, media.currentTime + 5); // 避免超出音檔長度
+    media.play();
   });
 
   // 監聽點擊表格列
