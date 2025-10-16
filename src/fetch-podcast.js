@@ -520,9 +520,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = e.target.closest("[id^='lines-'] tr");
     if (!row) return;
 
-    const startCell = row.children[1];
+    // const startCell = row.children[0];
     const nextRow = row.nextElementSibling;
-    const nextCell = nextRow ? nextRow.children[1] : null;
+    // const nextCell = nextRow ? nextRow.children[0] : null;
 
     const startTime = Number(row.children[0]?.dataset.start : 0);
     const endTime = Number(nextRow.children[0].dataset.start : media.duration);
