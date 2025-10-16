@@ -48,7 +48,7 @@ async function euGetList(siteName,t) {
 }
 
 async function euGetContent(id){
-
+  contentId = id;
   const cEl=document.getElementById(id);
 
   if (cEl.style.display=='none' || cEl.style.display==''){
@@ -181,7 +181,7 @@ async function keGetList(siteName,t) {
 
 
 async function keGetContent(id){
-
+  contentId = id;
   const cEl=document.getElementById(id);
 
   if (cEl.style.display=='none' || cEl.style.display==''){
@@ -315,7 +315,7 @@ async function pdGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
-
+  contentId = id;
   const cEl=document.getElementById(id);
 
   if (cEl.style.display=='none' || cEl.style.display==''){
@@ -428,15 +428,23 @@ async function getPodcastTranslate(btn) {
 
 
 function closeContent(){
-  document.querySelectorAll('[id]').forEach(el=>{
-    if (/^\d+$/.test(el.id)){el.style.display='none';
-    document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
-  }
-  });
+  const el = document.querySelector('#'+contentId);
+  el.style.display='none';
+  el.previousElementSibling.scrollIntoView();
+  // document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
 }
+
+// function closeContent(){
+//   document.querySelector('[id]').forEach(el=>{
+//     if (/^\d+$/.test(el.id)){el.style.display='none';
+//     document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
+//   }
+//   });
+// }
 
 function isMobile() {return window.matchMedia("(max-width: 768px)").matches;}
 const trLvl = isMobile() ? 0.4 : 0.6;
+let contentId = '';
 
 document.addEventListener("DOMContentLoaded", () => {
   const speedDown = document.getElementById("speedDown");
@@ -507,17 +515,19 @@ document.addEventListener("DOMContentLoaded", () => {
   rwBtn.addEventListener("click", () => {
     media.currentTime = Math.max(0, media.currentTime - 5); // 避免小於 0
     media.play();
+    playBtn.innerHTML = svgPause;
   });
 
   fwBtn.addEventListener("click", () => {
     media.currentTime = Math.min(media.duration, media.currentTime + 5); // 避免超出音檔長度
     media.play();
+    playBtn.innerHTML = svgPause;
   });
 
   // 監聽點擊表格列
-  document.addEventListener("click", async (e) => {console.log(media);
+  document.addEventListener("click", async (e) => {
     if (e.target.closest('button')) return;
-    const row = e.target.closest("[id^='lines-'] tr");
+    const row = e.target.closest(`[id='lines-${contentId}'] tr`);
     if (!row) return;
 
     // const startCell = row.children[0];
@@ -529,7 +539,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('start: '+startTime+'; end: '+endTime);
 
     // 清除舊樣式
-    document.querySelectorAll("[id^='lines-'] tr").forEach(tr => {
+    document.querySelectorAll(`[id='lines-${contentId}'] tr`).forEach(tr => {
       tr.children[0].style.setProperty("color", "", "important");
       tr.children[0].style.setProperty("background-color", "", "important");
     });
@@ -551,16 +561,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (mode === "continuous") {
       media.currentTime = startTime;
       media.play();
+      playBtn.innerHTML = svgPause;
       media.ontimeupdate = () => highlightCurrentRow(media.currentTime);
     } else {
       media.currentTime = startTime;
       media.play();
+      playBtn.innerHTML = svgPause;
       media.ontimeupdate = function () {
         highlightCurrentRow(media.currentTime);
 
         if (media.currentTime >= endTime) {
-          if (mode === "single") media.pause();
-          else if (mode === "loop") media.currentTime = startTime; // 單句循環
+          if (mode === "single") {media.pause();playBtn.innerHTML = svgPlay;}
+          else if (mode === "loop") {media.currentTime = startTime;} // 單句循環
 
           // if (mode === "single" && autoNext && nextRow) {
           //   nextRow.click(); // 自動跳下一行
@@ -571,11 +583,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function highlightCurrentRow(currentTime) {
-    const rows = document.querySelectorAll("[id^='lines-'] tr");
+    const rows = document.querySelectorAll(`[id='lines-${contentId}'] tr`);
     for (let i = 0; i < rows.length; i++) {
       const start = Number(rows[i].children[0]?.dataset.start || 0);
       const end = Number(rows[i + 1]?.children[0]?.dataset.start || media.duration);
-      if (currentTime >= start && currentTime < end) {
+      if (currentTime > start && currentTime <= end) {
         rows.forEach(tr => {
           tr.children[0].style.setProperty("color", "", "important");
           tr.children[0].style.setProperty("background-color", "", "important");
