@@ -431,8 +431,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const modeBtn = document.getElementById("modeBtn");
 
   const playBtn = document.getElementById("playBtn");
-  const rwBtn = document.getElementById("playBtn");
-  const fwBtn = document.getElementById("playBtn");
+  const rwBtn = document.getElementById("rwBtn");
+  const fwBtn = document.getElementById("fwBtn");
 
   // 初始設定
   media = ap;
