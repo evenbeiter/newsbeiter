@@ -582,35 +582,93 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  let lastHighlightIndex = -1;
 
-  function highlightCurrentRow(currentTime) {
-    const rows = document.querySelectorAll(`[id='lines-${contentId}'] tr`);
-    for (let i = 0; i < rows.length; i++) {
-      const start = Number(rows[i].children[0]?.dataset.start || 0);
-      const end = Number(rows[i + 1]?.children[0]?.dataset.start || media.duration);
-      if (currentTime >= start && currentTime < end) {
-        if (lastHighlightIndex !== i) {
-          rows.forEach(tr => {
-            tr.children[0].style.setProperty("color", "", "important");
-            tr.children[0].style.setProperty("background-color", "", "important");
-          });
-          rows[i].children[0].style.setProperty("color", "green", "important");
-          rows[i].children[0].style.setProperty("background-color", "#E5E4E2", "important");
+// 在外層宣告一次
+let lastHighlightIndex = -1;
 
-          const rect = rows[i].getBoundingClientRect();
-          const absoluteY = window.scrollY + rect.top;
-          const targetY = absoluteY - (window.innerHeight * trLvl);
-          window.scrollTo({
-            top: targetY,
-            behavior: 'smooth'
-          });
-          lastHighlightIndex = i;
-        }
-        break;
-      }
+// 更穩健的 highlight 函式
+function highlightCurrentRow(currentTime) {
+  const rows = Array.from(document.querySelectorAll(`[id='lines-${contentId}'] tr`));
+  if (!rows.length) return;
+
+  const epsilon = 0.05; // 容差（秒） —— 可調整
+  const starts = rows.map(r => Number(r.children[0]?.dataset.start || 0));
+  const duration = media && !isNaN(media.duration) ? media.duration : Infinity;
+
+  // 找出符合的 index（使用 epsilon，並以下一行 start 作為區間上界）
+  let foundIndex = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const start = starts[i];
+    const nextStart = (i + 1 < starts.length) ? starts[i + 1] : duration;
+    // 判斷：只在 currentTime 落入 [start - epsilon, nextStart - epsilon) 才視為該行
+    if (currentTime + epsilon >= start && currentTime < (nextStart - epsilon)) {
+      foundIndex = i;
+      break;
     }
   }
+
+  // 如果沒找到合適的 index，則不改變現有高亮（避免跳到下一行）
+  if (foundIndex === -1) {
+    return;
+  }
+
+  // 若找到且與上次不同，才更新樣式與滾動
+  if (foundIndex !== lastHighlightIndex) {
+    // 清除先前樣式
+    rows.forEach(tr => {
+      const cell = tr.children[0];
+      if (cell) {
+        cell.style.setProperty("color", "", "important");
+        cell.style.setProperty("background-color", "", "important");
+      }
+    });
+
+    const targetCell = rows[foundIndex].children[0];
+    if (targetCell) {
+      targetCell.style.setProperty("color", "green", "important");
+      targetCell.style.setProperty("background-color", "#E5E4E2", "important");
+    }
+
+    // scroll 到視窗中合理位置
+    const rect = rows[foundIndex].getBoundingClientRect();
+    const absoluteY = window.scrollY + rect.top;
+    const targetY = absoluteY - (window.innerHeight * trLvl);
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
+
+    lastHighlightIndex = foundIndex;
+  }
+}
+
+
+  // let lastHighlightIndex = -1;
+
+  // function highlightCurrentRow(currentTime) {
+  //   const rows = document.querySelectorAll(`[id='lines-${contentId}'] tr`);
+  //   for (let i = 0; i < rows.length; i++) {
+  //     const start = Number(rows[i].children[0]?.dataset.start || 0);
+  //     const end = Number(rows[i + 1]?.children[0]?.dataset.start || media.duration);
+  //     if (currentTime >= start && currentTime < end) {
+  //       if (lastHighlightIndex !== i) {
+  //         rows.forEach(tr => {
+  //           tr.children[0].style.setProperty("color", "", "important");
+  //           tr.children[0].style.setProperty("background-color", "", "important");
+  //         });
+  //         rows[i].children[0].style.setProperty("color", "green", "important");
+  //         rows[i].children[0].style.setProperty("background-color", "#E5E4E2", "important");
+
+  //         const rect = rows[i].getBoundingClientRect();
+  //         const absoluteY = window.scrollY + rect.top;
+  //         const targetY = absoluteY - (window.innerHeight * trLvl);
+  //         window.scrollTo({
+  //           top: targetY,
+  //           behavior: 'smooth'
+  //         });
+  //         lastHighlightIndex = i;
+  //       }
+  //       break;
+  //     }
+  //   }
+  // }
 
 });
 
