@@ -456,6 +456,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const rwBtn = document.getElementById("rwBtn");
   const fwBtn = document.getElementById("fwBtn");
 
+  let autoScrollEnabled = true;
+  let userScrolling = false;
+  let scrollTimeout = null;
+
   // 初始設定
   media = ap;
   media.playbackRate = 1;
@@ -475,12 +479,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // 綁定事件
   speedDown.addEventListener("click", () => changeSpeed(-0.1));
   speedUp.addEventListener("click", () => changeSpeed(+0.1));
-
-  // 播放速率 slider
-  // speedSlider.addEventListener("input", () => {
-  //   media.playbackRate = parseFloat(speedSlider.value);
-  //   speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
-  // });
 
   // 切換播放模式
   modeBtn.addEventListener("click", () => {
@@ -579,6 +577,37 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // ======= 偵測使用者滾動 =======
+  function handleUserScroll() {
+    userScrolling = true;
+    autoScrollEnabled = false;
+    clearTimeout(scrollTimeout);
+
+    // 若使用者停止滾動 1500ms，恢復自動滾動
+    scrollTimeout = setTimeout(() => {
+      userScrolling = false;
+      autoScrollEnabled = true;
+    }, 1500);
+  }
+
+  // 桌面 + 手機都能偵測
+  window.addEventListener('wheel', handleUserScroll, { passive: true });
+  window.addEventListener('touchmove', handleUserScroll, { passive: true });
+  window.addEventListener('scroll', handleUserScroll, { passive: true });
+
+  // ======= 自動捲軸函數 =======
+  function autoScrollToRow(row) {
+    if (!autoScrollEnabled) return; // 若使用者在滾動，略過
+
+    const rect = row.getBoundingClientRect();
+    const absoluteY = window.scrollY + rect.top;
+    const targetY = absoluteY - (window.innerHeight * trLvl);
+
+    window.scrollTo({
+      top: targetY,
+      behavior: 'smooth'
+    });
+  }
 
   // let lastHighlightIndex = -1;
 
@@ -596,13 +625,15 @@ document.addEventListener("DOMContentLoaded", () => {
           rows[i].children[0].style.setProperty("color", "green", "important");
           rows[i].children[0].style.setProperty("background-color", "#E5E4E2", "important");
 
-          const rect = rows[i].getBoundingClientRect();
-          const absoluteY = window.scrollY + rect.top;
-          const targetY = absoluteY - (window.innerHeight * trLvl);
-          window.scrollTo({
-            top: targetY,
-            behavior: 'smooth'
-          });
+          autoScrollToRow(rows[i]);
+          
+          // const rect = rows[i].getBoundingClientRect();
+          // const absoluteY = window.scrollY + rect.top;
+          // const targetY = absoluteY - (window.innerHeight * trLvl);
+          // window.scrollTo({
+          //   top: targetY,
+          //   behavior: 'smooth'
+          // });
         //   lastHighlightIndex = i;
         // }
         break;
