@@ -568,16 +568,17 @@ document.addEventListener("DOMContentLoaded", () => {
       media.play();
       playBtn.innerHTML = svgPause;
       media.ontimeupdate = function () {
-        highlightCurrentRow(media.currentTime);
+        // highlightCurrentRow(media.currentTime);
 
         if (media.currentTime >= endTime) {
           if (mode === "single") {media.pause();playBtn.innerHTML = svgPlay;}
           else if (mode === "loop") {media.currentTime = startTime;} // 單句循環
 
-          // if (mode === "single" && autoNext && nextRow) {
-          //   nextRow.click(); // 自動跳下一行
-          // }
+          highlightCurrentRow(endTime - 0.005);
+          return;
         }
+
+        highlightCurrentRow(media.currentTime);
       };
     }
   });
