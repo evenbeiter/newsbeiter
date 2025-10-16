@@ -524,8 +524,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextRow = row.nextElementSibling;
     // const nextCell = nextRow ? nextRow.children[0] : null;
 
-    const startTime = Number(row.children[0]?.dataset.start : 0);
-    const endTime = Number(nextRow.children[0].dataset.start : media.duration);
+    const startTime = Number(row.children[0]?.dataset.start || 0);
+    const endTime = Number(nextRow?.children[0]?.dataset.start || media.duration);
     console.log('start: '+startTime+'; end: '+endTime);
 
     // 清除舊樣式
