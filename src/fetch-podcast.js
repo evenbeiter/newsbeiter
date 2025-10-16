@@ -325,7 +325,16 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     try{
     let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
     let str=await res.text();
-    media.src=str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0];
+    const mediaSrc = str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0];
+        if (mediaSrc.endsWith('.mp3')) {
+      media=ap;
+      ap.src= mediaSrc;vp.src='';
+      ap.style.display='block';vp.style.display='none';
+    } else {
+      media=vp;
+      vp.src= mediaSrc;ap.src='';
+      vp.style.display='block';ap.style.display='none';
+    }
     if (!hasTranscription || transcriptionId==='') cEl.innerHTML=`<p>尚未提供文稿</p>`;
     if (hasTranscription && transcriptionId==='undefined') transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
 
