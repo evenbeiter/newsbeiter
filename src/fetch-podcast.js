@@ -582,30 +582,31 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  let lastHighlightIndex = -1;
+
   function highlightCurrentRow(currentTime) {
     const rows = document.querySelectorAll(`[id='lines-${contentId}'] tr`);
     for (let i = 0; i < rows.length; i++) {
       const start = Number(rows[i].children[0]?.dataset.start || 0);
       const end = Number(rows[i + 1]?.children[0]?.dataset.start || media.duration);
-      if (currentTime > start && currentTime <= end) {
-        rows.forEach(tr => {
-          tr.children[0].style.setProperty("color", "", "important");
-          tr.children[0].style.setProperty("background-color", "", "important");
-        });
-        rows[i].children[0].style.setProperty("color", "green", "important");
-        rows[i].children[0].style.setProperty("background-color", "#E5E4E2", "important");
+      if (currentTime >= start && currentTime < end) {
+        if (lastHighlightIndex !== i) {
+          rows.forEach(tr => {
+            tr.children[0].style.setProperty("color", "", "important");
+            tr.children[0].style.setProperty("background-color", "", "important");
+          });
+          rows[i].children[0].style.setProperty("color", "green", "important");
+          rows[i].children[0].style.setProperty("background-color", "#E5E4E2", "important");
 
-        const rect = rows[i].getBoundingClientRect();
-        const absoluteY = window.scrollY + rect.top;
-        const targetY = absoluteY - (window.innerHeight * trLvl);
-        window.scrollTo({
-          top: targetY,
-          behavior: 'smooth'
-        });
-
-        // if (rect.top < 0 || rect.bottom > window.innerHeight) {
-        //   rows[i].scrollIntoView({ behavior: "smooth", block: "nearest" });
-        // }
+          const rect = rows[i].getBoundingClientRect();
+          const absoluteY = window.scrollY + rect.top;
+          const targetY = absoluteY - (window.innerHeight * trLvl);
+          window.scrollTo({
+            top: targetY,
+            behavior: 'smooth'
+          });
+          lastHighlightIndex = i;
+        }
         break;
       }
     }
