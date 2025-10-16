@@ -467,9 +467,9 @@ document.addEventListener("DOMContentLoaded", () => {
     else mode = "continuous";
 
     let label = "";
-    if (mode === "continuous") label = "連續播放";
-    else if (mode === "single") label = "單句播放";
-    else label = "單句循環";
+    if (mode === "continuous") label = "連續";
+    else if (mode === "single") label = "單句";
+    else label = "循環";
 
     modeBtn.textContent = label;
   });
