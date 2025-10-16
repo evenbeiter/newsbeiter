@@ -387,12 +387,9 @@ function word2sentence(raw){
 
 function getLinesTable(ss,id,toTS) {
   var k = '';
-  var j = 0;
   for (let s of ss){
     k+=`<tr>
-    <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
-    <td class="d-none">${s.startTime}</td>
-    <td class="position-relative">${s.sentence}
+    <td class="position-relative" data-start="${s.startTime}">${s.sentence}
     ${toTS===true
       ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
       : ''}
@@ -401,6 +398,23 @@ function getLinesTable(ss,id,toTS) {
   }
   document.querySelector(`#lines-${id}`).innerHTML=k;
 }
+
+// function getLinesTable(ss,id,toTS) {
+//   var k = '';
+//   var j = 0;
+//   for (let s of ss){
+//     k+=`<tr>
+//     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
+//     <td class="d-none">${s.startTime}</td>
+//     <td class="position-relative">${s.sentence}
+//     ${toTS===true
+//       ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
+//       : ''}
+//     </td>
+//     </tr>`;
+//   }
+//   document.querySelector(`#lines-${id}`).innerHTML=k;
+// }
 
 async function getPodcastTranslate(btn) {
   const a = btn.closest('td');
@@ -510,18 +524,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextRow = row.nextElementSibling;
     const nextCell = nextRow ? nextRow.children[1] : null;
 
-    const startTime = Number(startCell ? startCell.textContent : 0);
-    const endTime = Number(nextCell ? nextCell.textContent : media.duration);
+    const startTime = Number(row.children[0]?.dataset.start : 0);
+    const endTime = Number(nextRow.children[0].dataset.start : media.duration);
     console.log('start: '+startTime+'; end: '+endTime);
 
     // 清除舊樣式
     document.querySelectorAll("[id^='lines-'] tr").forEach(tr => {
-      tr.children[2].style.setProperty("color", "", "important");
-      tr.children[2].style.setProperty("background-color", "", "important");
+      tr.children[0].style.setProperty("color", "", "important");
+      tr.children[0].style.setProperty("background-color", "", "important");
     });
 
-    row.children[2].style.setProperty("color", "green", "important");
-    row.children[2].style.setProperty("background-color", "#E5E4E2", "important");
+    row.children[0].style.setProperty("color", "green", "important");
+    row.children[0].style.setProperty("background-color", "#E5E4E2", "important");
     // row.scrollIntoView({ behavior: "smooth", block: "nearest" });
 
     const rect = row.getBoundingClientRect();
@@ -559,15 +573,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function highlightCurrentRow(currentTime) {
     const rows = document.querySelectorAll("[id^='lines-'] tr");
     for (let i = 0; i < rows.length; i++) {
-      const start = Number(rows[i].children[1]?.textContent || 0);
-      const end = Number(rows[i + 1]?.children[1]?.textContent || media.duration);
+      const start = Number(rows[i].children[0]?.dataset.start || 0);
+      const end = Number(rows[i + 1]?.children[0]?.dataset.start || media.duration);
       if (currentTime >= start && currentTime < end) {
         rows.forEach(tr => {
-          tr.children[2].style.setProperty("color", "", "important");
-          tr.children[2].style.setProperty("background-color", "", "important");
+          tr.children[0].style.setProperty("color", "", "important");
+          tr.children[0].style.setProperty("background-color", "", "important");
         });
-        rows[i].children[2].style.setProperty("color", "green", "important");
-        rows[i].children[2].style.setProperty("background-color", "#E5E4E2", "important");
+        rows[i].children[0].style.setProperty("color", "green", "important");
+        rows[i].children[0].style.setProperty("background-color", "#E5E4E2", "important");
 
         const rect = rows[i].getBoundingClientRect();
         const absoluteY = window.scrollY + rect.top;
