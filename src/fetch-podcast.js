@@ -428,7 +428,7 @@ async function getPodcastTranslate(btn) {
 
 
 function closeContent(){
-  const el = document.querySelector('#'+contentId);
+  const el = document.getElementById(contentId);
   el.style.display='none';
   el.previousElementSibling.scrollIntoView();
   // document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
