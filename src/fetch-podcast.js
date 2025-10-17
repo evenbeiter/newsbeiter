@@ -190,7 +190,7 @@ async function keGetContent(id){
 
     if (cEl.innerText.length>10) return; // already got transcription in cEl
 
-    const payload = {
+    let payload = {
         Method: "web_waikan_wkgetcontent",
         Params: { id: id, version_flag: 1 },
         Token: "",
@@ -204,13 +204,13 @@ async function keGetContent(id){
     };
 
     try{
-
-    const res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
+    let res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
     });
-    const data = await res.json();
+    let data = await res.json();
+    } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; return;}
 
     if (data.Code !== 200) throw new Error(data.Msg || "API 返回錯誤");
 
@@ -218,6 +218,7 @@ async function keGetContent(id){
     const rawLrc = contentData.content;
 
     let mediaSrc = 'https://k6.kekenet.com/'+contentData.playurl;
+    if (mediaSrc = '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
@@ -227,7 +228,7 @@ async function keGetContent(id){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';
     }
-
+    try{
     let ts=[];
     for (let s of rawLrc){
       ts.push({
@@ -325,8 +326,11 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     try{
     let res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
     let str=await res.text();
-    const mediaSrc = str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0];
-        if (mediaSrc.endsWith('.mp3')) {
+    } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; return;}
+
+    const mediaSrc = str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0] ?? '';
+    if (mediaSrc = '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; return;}
+    if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
       ap.style.display='block';vp.style.display='none';
@@ -338,6 +342,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     if (!hasTranscription || transcriptionId==='') cEl.innerHTML=`<p>尚未提供文稿</p>`;
     if (hasTranscription && transcriptionId==='undefined') transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
 
+    try{
     if (transcriptionId.length>3){
       loading.style.display='block';
       res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
@@ -692,3 +697,4 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
