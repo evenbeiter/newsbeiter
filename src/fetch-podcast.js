@@ -185,10 +185,12 @@ async function keGetContent(id){
   const cEl=document.getElementById(id);
 
   if (cEl.style.display=='none' || cEl.style.display==''){
-    cEl.style.display='block';
     loading.style.display='block';
+    cEl.style.display='block';
 
     if (cEl.innerText.length>10) return; // already got transcription in cEl
+
+    let data = '';
 
     let payload = {
         Method: "web_waikan_wkgetcontent",
@@ -204,12 +206,12 @@ async function keGetContent(id){
     };
 
     try{
-    let res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
+    const res = await fetch(preStr+'https://mob2015.kekenet.com/keke/mobile/index.php', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
     });
-    let data = await res.json();
+    data = await res.json();
     } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; return;}
 
     if (data.Code !== 200) throw new Error(data.Msg || "API 返回錯誤");
@@ -218,7 +220,7 @@ async function keGetContent(id){
     const rawLrc = contentData.content;
 
     let mediaSrc = 'https://k6.kekenet.com/'+contentData.playurl;
-    if (mediaSrc = '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; return;}
+    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
@@ -323,7 +325,9 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
   const cEl=document.getElementById(id);
 
   if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
     cEl.style.display='block';
+
     if (cEl.innerText.length>10) return; // already got transcription in cEl
 
     let str = '';
@@ -332,7 +336,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     str=await res.text();
     } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; return;}
 
-    const mediaSrc =
+    let mediaSrc =
       typeof str === 'string'
         ? str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
           str.match(/https:\/\/chrt\.fm\/track[\s\S]*?\.mp3/)?.[0] ??
@@ -356,22 +360,19 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     if (hasTranscription && transcriptionId==='undefined') transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
 
     try{
-    if (transcriptionId.length>3){
-      loading.style.display='block';
+    // if (transcriptionId.length>3){
+    if (transcriptionId !== undefined && transcriptionId !== 'undefined'){
       res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
       str=await res.json();
       const ts=word2sentence(str);
       getLinesTable(ts,id,true);
-      loading.style.display='none';
     }
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
 
+    loading.style.display='none';
+
   } else {
     cEl.style.display='none';
-    // const e = window.event;
-    // const tbody = e.target.closest('tbody');
-    // if (tbody && tbody.id && tbody.id.startsWith('lines-')) return;
-    // try{cEl.previousElementSibling.previousElementSibling.scrollIntoView()}catch{document.body.scrollTop = 0;document.documentElement.scrollTop = 0}
   }
 
 }
@@ -426,22 +427,6 @@ function getLinesTable(ss,id,toTS) {
   document.querySelector(`#lines-${id}`).innerHTML=k;
 }
 
-// function getLinesTable(ss,id,toTS) {
-//   var k = '';
-//   var j = 0;
-//   for (let s of ss){
-//     k+=`<tr>
-//     <td class="fs07 fw-lighter text-nowrap d-none">${++j}</td>
-//     <td class="d-none">${s.startTime}</td>
-//     <td class="position-relative">${s.sentence}
-//     ${toTS===true
-//       ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
-//       : ''}
-//     </td>
-//     </tr>`;
-//   }
-//   document.querySelector(`#lines-${id}`).innerHTML=k;
-// }
 
 async function getPodcastTranslate(btn) {
   const a = btn.closest('td');
@@ -460,14 +445,6 @@ function closeContent(){
   el.previousElementSibling.scrollIntoView();
   // document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
 }
-
-// function closeContent(){
-//   document.querySelector('[id]').forEach(el=>{
-//     if (/^\d+$/.test(el.id)){el.style.display='none';
-//     document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
-//   }
-//   });
-// }
 
 function isMobile() {return window.matchMedia("(max-width: 768px)").matches;}
 const trLvl = isMobile() ? 0.4 : 0.6;
