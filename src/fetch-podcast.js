@@ -338,12 +338,12 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
 
     let mediaSrc = '';
 
-    if (hasTranscription && transcriptionId!=='undefined'){
+    if (hasTranscription && transcriptionId!=='undefined' && transcriptionId !== undefined && transcriptionId !== ''){
 const regex2 = new RegExp(`"${transcriptionId}","(https:\\/\\/[^\\s"]+?\\.mp3)"`);
 const match = str.match(regex2);
 
   mediaSrc = match?.[1];
-} else if (hasTranscription && transcriptionId==='undefined') {
+} else if (hasTranscription && transcriptionId==='undefined' && transcriptionId === undefined) {
 
 const regex = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","(https:\/\/[^\s"]+?\.mp3)"/g;
 const matches = [...str.matchAll(regex)];
@@ -358,10 +358,10 @@ if (last) {
     }
 
 else{
+  mediaSrc =
     str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
     str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
-    ''
-    : '';
+    '';
 }
 if (mediaSrc=='') {
   cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;
@@ -711,6 +711,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
