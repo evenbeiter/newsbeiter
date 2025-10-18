@@ -228,6 +228,9 @@ async function keGetContent(id){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';
     }
+    media.playbackRate = 1;
+    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+    
     try{
     let ts=[];
     for (let s of rawLrc){
@@ -323,9 +326,10 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     cEl.style.display='block';
     if (cEl.innerText.length>10) return; // already got transcription in cEl
 
+    let str = '';
     try{
     const res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
-    var str=await res.text();
+    str=await res.text();
     } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; return;}
 
     const mediaSrc = str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0] ?? '';
@@ -339,6 +343,9 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';
     }
+    media.playbackRate = 1;
+    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+    
     if (!hasTranscription || transcriptionId==='') cEl.innerHTML=`<p>尚未提供文稿</p>`;
     if (hasTranscription && transcriptionId==='undefined') transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
 
@@ -697,5 +704,6 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
