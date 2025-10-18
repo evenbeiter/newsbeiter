@@ -337,25 +337,13 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; loading.style.display='none'; return;}
 
     let mediaSrc = '';
-      typeof str === 'string'
-        ? str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
-          str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
-          ''
-        : '';
 
     if (hasTranscription && transcriptionId!=='undefined'){
 const regex2 = new RegExp(`"${transcriptionId}","(https:\\/\\/[^\\s"]+?\\.mp3)"`);
 const match = str.match(regex2);
 
-if (match) {
-  mediaSrc = match[1];
-} else {
-  cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;
-}
-    }
-
-    if (!hasTranscription || transcriptionId==='') {cEl.innerHTML=`<p>尚未提供文稿</p>`; loading.style.display='none'; return;}
-    if (hasTranscription && transcriptionId==='undefined') {
+  mediaSrc = match?.[1];
+} else if (hasTranscription && transcriptionId==='undefined') {
 
 const regex = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","(https:\/\/[^\s"]+?\.mp3)"/g;
 const matches = [...str.matchAll(regex)];
@@ -365,11 +353,22 @@ if (last) {
   const [full, uuid, url] = last;
   transcriptionId = uuid;
   mediaSrc = url;
-} else {
-  cEl.innerHTML+=`<p>尚未提供文稿</p>`
-}
+} 
 
     }
+
+else{
+    str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
+    str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
+    ''
+    : '';
+}
+if (mediaSrc=='') {
+  cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;
+}
+
+    if (!hasTranscription || transcriptionId==='') {cEl.innerHTML=`<p>尚未提供文稿</p>`; loading.style.display='none'; return;}
+    
 
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
