@@ -212,7 +212,7 @@ async function keGetContent(id){
         body: JSON.stringify(payload)
     });
     data = await res.json();
-    } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; return;}
+    } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; loading.style.display='none'; return;}
 
     if (data.Code !== 200) throw new Error(data.Msg || "API 返回錯誤");
 
@@ -220,7 +220,7 @@ async function keGetContent(id){
     const rawLrc = contentData.content;
 
     let mediaSrc = 'https://k6.kekenet.com/'+contentData.playurl;
-    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; return;}
+    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
@@ -242,9 +242,9 @@ async function keGetContent(id){
       });     
     }
     getLinesTable(ts,id,false);
-    loading.style.display='none';
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+    loading.style.display='none';
 
   } else {
     cEl.style.display='none';
@@ -334,7 +334,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     try{
     const res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
     str=await res.text();
-    } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; return;}
+    } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; loading.style.display='none'; return;}
 
     let mediaSrc =
       typeof str === 'string'
@@ -343,7 +343,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
           ''
         : '';
 
-    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; return;}
+    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
@@ -356,7 +356,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     media.playbackRate = 1;
     speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
     
-    if (!hasTranscription || transcriptionId==='') cEl.innerHTML=`<p>尚未提供文稿</p>`;
+    if (!hasTranscription || transcriptionId==='') {cEl.innerHTML=`<p>尚未提供文稿</p>`; loading.style.display='none'; return;}
     if (hasTranscription && transcriptionId==='undefined') transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
 
     try{
