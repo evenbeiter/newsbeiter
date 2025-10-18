@@ -336,14 +336,41 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     str=await res.text();
     } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; loading.style.display='none'; return;}
 
-    let mediaSrc =
+    let mediaSrc = '';
       typeof str === 'string'
         ? str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
           str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
           ''
         : '';
 
-    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
+    if (hasTranscription && transcriptionId!=='undefined'){
+const regex2 = new RegExp(`"${transcriptionId}","(https:\\/\\/[^\\s"]+?\\.mp3)"`);
+const match = str.match(regex2);
+
+if (match) {
+  mediaSrc = match[1];
+} else {
+  cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;
+}
+    }
+
+    if (!hasTranscription || transcriptionId==='') {cEl.innerHTML=`<p>尚未提供文稿</p>`; loading.style.display='none'; return;}
+    if (hasTranscription && transcriptionId==='undefined') {
+
+const regex = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","(https:\/\/[^\s"]+?\.mp3)"/g;
+const matches = [...str.matchAll(regex)];
+const last = matches.at(-1);
+
+if (last) {
+  const [full, uuid, url] = last;
+  transcriptionId = uuid;
+  mediaSrc = url;
+} else {
+  cEl.innerHTML+=`<p>尚未提供文稿</p>`
+}
+
+    }
+
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
@@ -356,8 +383,6 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     media.playbackRate = 1;
     speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
     
-    if (!hasTranscription || transcriptionId==='') {cEl.innerHTML=`<p>尚未提供文稿</p>`; loading.style.display='none'; return;}
-    if (hasTranscription && transcriptionId==='undefined') transcriptionId=str.match(/[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}","Done"/g)?.[0]?.replace('","Done"','') || '';
 
     try{
     // if (transcriptionId.length>3){
@@ -687,6 +712,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
