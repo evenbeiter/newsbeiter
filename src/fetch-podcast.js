@@ -326,14 +326,20 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     cEl.style.display='block';
     if (cEl.innerText.length>10) return; // already got transcription in cEl
 
-    var str = '';
+    let str = '';
     try{
     const res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
     str=await res.text();
     } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; return;}
 
-    const mediaSrc = str.match(/https:\/\/jfe93e.s3[\s\S]*?.mp3/g)?.[0] ?? '';
-    if (mediaSrc = '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; return;}
+    const mediaSrc =
+      typeof str === 'string'
+        ? str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
+          str.match(/https:\/\/chrt\.fm\/track[\s\S]*?\.mp3/)?.[0] ??
+          ''
+        : '';
+
+    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
