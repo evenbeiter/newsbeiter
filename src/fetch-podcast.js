@@ -339,7 +339,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     let mediaSrc =
       typeof str === 'string'
         ? str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
-          str.match(/https:\/\/chrt\.fm\/track[\s\S]*?\.mp3/)?.[0] ??
+          str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
           ''
         : '';
 
