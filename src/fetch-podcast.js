@@ -365,8 +365,8 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
         transcriptionId = match3?.[0] : '';console.log(transcriptionId);
 
         mediaSrc =
-          str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
-          str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
+          str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ||
+          str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ||
           '';console.log(mediaSrc);
       }
     }
@@ -392,7 +392,7 @@ console.log(mediaSrc);
     // 沒文稿
     if (!hasTranscription || transcriptionId==='') {cEl.innerHTML=`<p>尚未提供文稿</p>`; loading.style.display='none'; return;}
     // 有文稿
-    if (transcriptionId !== undefined && transcriptionId !== 'undefined' && transcriptionId !== ''){
+    if (transcriptionId && transcriptionId !== 'undefined'){
       res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
       str=await res.json();
       const ts=word2sentence(str);
@@ -718,6 +718,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
