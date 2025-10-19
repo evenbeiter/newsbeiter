@@ -340,7 +340,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     if (hasTranscription && transcriptionId!=='undefined' && transcriptionId !== undefined && transcriptionId !== ''){
       const regex2 = new RegExp(`"${transcriptionId}","(https:\\/\\/[^\\s"]+?\\.mp3)"`);
       const match = str.match(regex2);
-      mediaSrc = match?.[1];
+      mediaSrc = match?.[1];console.log(mediaSrc);
     } 
     // 有文稿但沒 id, 取出 id 和音頻
     else if (hasTranscription && (transcriptionId==='undefined' || transcriptionId===undefined || transcriptionId=='')) {
@@ -352,7 +352,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       if (last) {
         const [full, uuid, url] = last;
         transcriptionId = uuid;
-        mediaSrc = url;
+        mediaSrc = url;console.log(mediaSrc);
       }
       // id 和音頻不在一起, 分別取 id 和音頻
       else {
@@ -363,16 +363,16 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
         mediaSrc =
           str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
           str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
-          '';
+          '';console.log(mediaSrc);
       }
     }
-
+console.log(mediaSrc);
     // 處理音頻
     if (mediaSrc=='') {
       cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;
     }
     
-    if (mediaSrc.endsWith('.mp3')) {
+    if (mediaSrc.endsWith('.mp3')) {console.log(mediaSrc);
       media=ap;
       ap.src= mediaSrc;vp.src='';
       ap.style.display='block';vp.style.display='none';
@@ -714,6 +714,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
