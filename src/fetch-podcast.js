@@ -340,8 +340,12 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     if (hasTranscription && transcriptionId!=='undefined' && transcriptionId !== undefined && transcriptionId !== ''){
       const regex2 = new RegExp(`"${transcriptionId}","(https:\\/\\/[^\\s"]+?\\.mp3)"`);
       const match = str.match(regex2);
-      mediaSrc = match?.[1];console.log(mediaSrc);
-    } 
+      mediaSrc = 
+        match?.[1] ??
+        str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
+        str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
+        '';console.log(mediaSrc);
+    }
     // 有文稿但沒 id, 取出 id 和音頻
     else if (hasTranscription && (transcriptionId==='undefined' || transcriptionId===undefined || transcriptionId=='')) {
       // id 和音頻在一起
@@ -714,6 +718,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
