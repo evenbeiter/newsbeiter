@@ -397,9 +397,9 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       str=await res.json();
       const ts=word2sentence(str);
 
-      res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}&includeAds=true&includeOriginal=false`)
-      const episodeMeta = res.text();
-      const adSegments = extractAdSegments(JSON.parse(episodeMeta));
+      res=await fetch(`${preStr}${encodeURIComponent(`https://backend.podscribe.ai/api/episode?id=${id}&includeAds=true&includeOriginal=false`)}`);
+      str = await res.text();console.log(JSON.parse(str));
+      const adSegments = extractAdSegments(JSON.parse(str));
       getLinesTable(ts,id,adSegments,true);
     } else {
       cEl.innerHTML+=`<p>尚未提供文稿</p>`;
