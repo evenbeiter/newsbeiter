@@ -359,10 +359,10 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
         mediaSrc = url;console.log(mediaSrc);
       }
       // id 和音頻不在一起, 分別取 id 和音頻
-      else {console.log('split'));
+      else {console.log('split');
         const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
         const match3 = str.match(regex3);console.log(match3);
-        transcriptionId = match3?.[0] : '';console.log(transcriptionId);
+        transcriptionId = match3?.[0] || '';console.log(transcriptionId);
 
         mediaSrc =
           str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ||
@@ -718,6 +718,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
