@@ -397,7 +397,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       str=await res.json();
       const ts=word2sentence(str);
 
-      res=await fetch(`https://backend.podscribe.ai/api/episode?id=${id}&includeAds=true&includeOriginal=false`)
+      res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}&includeAds=true&includeOriginal=false`)
       const episodeMeta = res.text();
       const adSegments = extractAdSegments(JSON.parse(episodeMeta));
       getLinesTable(ts,id,adSegments,true);
