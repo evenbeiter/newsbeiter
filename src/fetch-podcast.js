@@ -323,7 +323,7 @@ async function pdGetList(siteName,t){
 async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
   contentId = id;
   const cEl=document.getElementById(id);
-  let res, str;
+  let res, str, mediaSrc;
 
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
@@ -336,40 +336,42 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     str=await res.text();
     } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; loading.style.display='none'; return;}
 
-    let mediaSrc = '';
-
+    // 有文稿且有 id, 取出音頻
     if (hasTranscription && transcriptionId!=='undefined' && transcriptionId !== undefined && transcriptionId !== ''){
-const regex2 = new RegExp(`"${transcriptionId}","(https:\\/\\/[^\\s"]+?\\.mp3)"`);
-const match = str.match(regex2);
+      const regex2 = new RegExp(`"${transcriptionId}","(https:\\/\\/[^\\s"]+?\\.mp3)"`);
+      const match = str.match(regex2);
+      mediaSrc = match?.[1];
+    } 
+    // 有文稿但沒 id, 取出 id 和音頻
+    else if (hasTranscription && (transcriptionId==='undefined' || transcriptionId===undefined || transcriptionId=='')) {
+      // id 和音頻在一起
+      const regex = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","(https:\/\/[^\s"]+?\.mp3)"/g;
+      const matches = [...str.matchAll(regex)];
+      const last = matches.at(-1);
 
-  mediaSrc = match?.[1];
-} else if (hasTranscription && transcriptionId==='undefined' && transcriptionId === undefined) {
+      if (last) {
+        const [full, uuid, url] = last;
+        transcriptionId = uuid;
+        mediaSrc = url;
+      }
+      // id 和音頻不在一起, 分別取 id 和音頻
+      else {
+        const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
+        const match3 = str.match(regex3);
+        transcriptionId = match3?.[0];
 
-const regex = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","(https:\/\/[^\s"]+?\.mp3)"/g;
-const matches = [...str.matchAll(regex)];
-const last = matches.at(-1);
-
-if (last) {
-  const [full, uuid, url] = last;
-  transcriptionId = uuid;
-  mediaSrc = url;
-} 
-
+        mediaSrc =
+          str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
+          str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
+          '';
+      }
     }
 
-else{
-  mediaSrc =
-    str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ??
-    str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ??
-    '';
-}
-if (mediaSrc=='') {
-  cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;
-}
-
-    if (!hasTranscription || transcriptionId==='') {cEl.innerHTML=`<p>尚未提供文稿</p>`; loading.style.display='none'; return;}
+    // 處理音頻
+    if (mediaSrc=='') {
+      cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;
+    }
     
-
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
@@ -381,18 +383,19 @@ if (mediaSrc=='') {
     }
     media.playbackRate = 1;
     speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
-    
 
-    try{
-    // if (transcriptionId.length>3){
-    if (transcriptionId !== undefined && transcriptionId !== 'undefined'){
+    // 取文稿
+    // 沒文稿
+    if (!hasTranscription || transcriptionId==='') {cEl.innerHTML=`<p>尚未提供文稿</p>`; loading.style.display='none'; return;}
+    // 有文稿
+    if (transcriptionId !== undefined && transcriptionId !== 'undefined' && transcriptionId !== ''){
       res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
       str=await res.json();
       const ts=word2sentence(str);
       getLinesTable(ts,id,true);
+    } else {
+      cEl.innerHTML+=`<p>尚未提供文稿</p>`;
     }
-    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
-
     loading.style.display='none';
 
   } else {
@@ -711,6 +714,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
