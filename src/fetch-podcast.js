@@ -190,8 +190,6 @@ async function keGetContent(id){
 
     if (cEl.innerText.length>10) return; // already got transcription in cEl
 
-    let data = '';
-
     let payload = {
         Method: "web_waikan_wkgetcontent",
         Params: { id: id, version_flag: 1 },
@@ -241,7 +239,7 @@ async function keGetContent(id){
         sentence: `${s.en}<br>${s2t(s.cn)}`
       });     
     }
-    getLinesTable(ts,id,adSegments,false);
+    getLinesTable(ts,id,[],false);
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
     loading.style.display='none';
