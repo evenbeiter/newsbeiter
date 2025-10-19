@@ -466,6 +466,97 @@ async function getPodcastTranslate(btn) {
 }
 
 
+// ===== 取廣告 =====
+// var res=await fetch(window.location.href);
+// var episodeMeta=await res.text();
+
+
+// 解析 URL 中的時間，例如 "_00.06.49-00.07.23.mp3"
+function parseAdTimeFromUrl(url) {
+  const match = url.match(/_(\d{2}\.\d{2}\.\d{2})-(\d{2}\.\d{2}\.\d{2})\.mp3/);
+  if (!match) return null;
+
+  const [ , start, end ] = match;
+  const toSeconds = t => {
+    const [h, m, s] = t.split('.').map(Number);
+    return h * 3600 + m * 60 + s;
+  };
+  return { startTime: toSeconds(start), endTime: toSeconds(end) };
+}
+
+// 遞迴找出 JSON 裡所有廣告 mp3 URL
+function extractAllAdUrls(obj) {
+  const urls = [];
+  function walk(value) {
+    if (!value) return;
+    if (typeof value === 'string') {
+      if (value.endsWith('.mp3') && value.includes('_00.')) {
+        urls.push(value);
+      }
+    } else if (Array.isArray(value)) {
+      value.forEach(walk);
+    } else if (typeof value === 'object') {
+      Object.values(value).forEach(walk);
+    }
+  }
+  walk(obj);
+  return urls;
+}
+
+// 從 episodeMeta 取出所有廣告段
+function extractAdSegments(meta) {
+  const mp3Urls = extractAllAdUrls(meta);
+  const segments = [];
+
+  mp3Urls.forEach(url => {
+    const times = parseAdTimeFromUrl(url);console.log(times);
+    if (times) {
+      // 嘗試抓廣告主名稱（靠近 URL 的 name 欄位）
+      let advertiser = 'Unknown';
+      const flat = JSON.stringify(meta);
+      const idx = flat.indexOf(url);
+      if (idx > -1) {
+        const nearby = flat.slice(Math.max(0, idx - 200), idx);
+        const match = nearby.match(/"([A-Z][a-zA-Z0-9 &]+)"/g);
+        if (match) advertiser = match[match.length - 1].replace(/"/g,'');
+      }
+
+      segments.push({ ...times });
+
+   
+    }
+  });
+
+    // 1. 先依 startTime 排序
+segments.sort((a, b) => a.startTime - b.startTime);
+
+// 2. 合併相鄰或重疊區間
+const merged = [];
+for (const t of segments) {
+    if (!merged.length) {
+        merged.push({ ...t });
+    } else {
+        const last = merged[merged.length - 1];
+        if (t.startTime <= last.endTime + 1) { // 相鄰或重疊
+            last.endTime = Math.max(last.endTime, t.endTime);
+        } else {
+            merged.push({ ...t });
+        }
+    }
+}
+
+console.log(merged);
+    
+  return merged;
+}
+
+// 執行
+// const adSegments = extractAdSegments(JSON.parse(episodeMeta));
+// console.log(adSegments);
+
+
+
+
 //    OPERATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
