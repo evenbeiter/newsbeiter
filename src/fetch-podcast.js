@@ -113,7 +113,7 @@ async function euGetContent(id){
       }
     }
 
-    getLinesTable(ts,id,true);
+    getLinesTable(ts,id,adSegments,true);
     loading.style.display='none';
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
@@ -241,7 +241,7 @@ async function keGetContent(id){
         sentence: `${s.en}<br>${s2t(s.cn)}`
       });     
     }
-    getLinesTable(ts,id,false);
+    getLinesTable(ts,id,adSegments,false);
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
     loading.style.display='none';
@@ -396,7 +396,11 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
       str=await res.json();
       const ts=word2sentence(str);
-      getLinesTable(ts,id,true);
+
+      res=await fetch(`https://backend.podscribe.ai/api/episode?id=${id}&includeAds=true&includeOriginal=false`)
+      const episodeMeta = res.text();
+      const adSegments = extractAdSegments(JSON.parse(episodeMeta));
+      getLinesTable(ts,id,adSegments,true);
     } else {
       cEl.innerHTML+=`<p>尚未提供文稿</p>`;
     }
@@ -444,16 +448,30 @@ function word2sentence(raw){
   return sentences;
 }
 
-function getLinesTable(ss,id,toTS) {
+function getLinesTable(ss,id,adSegments,toTS) {
   var k = '';
-  for (let s of ss){
-    k+=`<tr>
-    <td class="position-relative" data-start="${s.startTime}">${s.sentence}
-    ${toTS===true
-      ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
-      : ''}
-    </td>
-    </tr>`;
+  if (siteNameVar==='pd') {
+    for (let s of ss){
+      if (isInAdSegment(adSegments, s.startTime)) continue;
+      k+=`<tr>
+      <td class="position-relative" data-start="${s.startTime}">${s.sentence}
+      ${toTS===true
+        ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
+        : ''}
+      </td>
+      </tr>`;
+    }
+  }
+  else {
+    for (let s of ss){
+      k+=`<tr>
+      <td class="position-relative" data-start="${s.startTime}">${s.sentence}
+      ${toTS===true
+        ? `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
+        : ''}
+      </td>
+      </tr>`;
+    }
   }
   document.querySelector(`#lines-${id}`).innerHTML=k;
 }
@@ -467,6 +485,11 @@ async function getPodcastTranslate(btn) {
 
 
 // ===== 取廣告 =====
+
+function isInAdSegment(adSegments, currentTime) {
+  return adSegments.some(seg => currentTime >= seg.startTime && currentTime <= seg.endTime);
+}
+
 // var res=await fetch(window.location.href);
 // var episodeMeta=await res.text();
 
@@ -509,21 +532,19 @@ function extractAdSegments(meta) {
   const segments = [];
 
   mp3Urls.forEach(url => {
-    const times = parseAdTimeFromUrl(url);console.log(times);
+    const times = parseAdTimeFromUrl(url);
     if (times) {
       // 嘗試抓廣告主名稱（靠近 URL 的 name 欄位）
-      let advertiser = 'Unknown';
-      const flat = JSON.stringify(meta);
-      const idx = flat.indexOf(url);
-      if (idx > -1) {
-        const nearby = flat.slice(Math.max(0, idx - 200), idx);
-        const match = nearby.match(/"([A-Z][a-zA-Z0-9 &]+)"/g);
-        if (match) advertiser = match[match.length - 1].replace(/"/g,'');
-      }
+      // let advertiser = 'Unknown';
+      // const flat = JSON.stringify(meta);
+      // const idx = flat.indexOf(url);
+      // if (idx > -1) {
+      //   const nearby = flat.slice(Math.max(0, idx - 200), idx);
+      //   const match = nearby.match(/"([A-Z][a-zA-Z0-9 &]+)"/g);
+      //   if (match) advertiser = match[match.length - 1].replace(/"/g,'');
+      // }
 
       segments.push({ ...times });
-
-   
     }
   });
 
