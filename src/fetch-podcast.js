@@ -700,12 +700,14 @@ document.addEventListener("DOMContentLoaded", () => {
       media.play();
       playBtn.innerHTML = svgPause;
       media.ontimeupdate = function () {
-        const current = media.currentTime;
-        if (isInAdSegment(current)) {console.log(adSegments);
-          const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);console.log(seg);
-          media.currentTime = seg.endTime;
-          console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
-          return; // 跳過後不執行其他高亮邏輯
+        if (siteNameVar === 'pd'){
+          const current = media.currentTime;
+          if (isInAdSegment(current)) {console.log(adSegments);
+            const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);console.log(seg);
+            media.currentTime = seg.endTime;
+            console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
+            return; // 跳過後不執行其他高亮邏輯
+          }
         }
         highlightCurrentRow(media.currentTime);
       }
@@ -832,6 +834,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
