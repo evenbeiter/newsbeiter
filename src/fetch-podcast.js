@@ -113,7 +113,7 @@ async function euGetContent(id){
       }
     }
 
-    getLinesTable(ts,id,adSegments,true);
+    getLinesTable(ts,id,true);
     loading.style.display='none';
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
@@ -239,7 +239,7 @@ async function keGetContent(id){
         sentence: `${s.en}<br>${s2t(s.cn)}`
       });     
     }
-    getLinesTable(ts,id,[],false);
+    getLinesTable(ts,id,false);
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
     loading.style.display='none';
@@ -396,9 +396,9 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       const ts=word2sentence(str);
 
       res=await fetch(`${preStr}${encodeURIComponent(`https://backend.podscribe.ai/api/episode?id=${id}&includeAds=true&includeOriginal=false`)}`);
-      str = await res.text();
-      const adSegments = extractAdSegments(JSON.parse(str));
-      getLinesTable(ts,id,adSegments,true);
+      str = await res.json();
+      adSegments = extractAdSegments(str);
+      getLinesTable(ts,id,true);
     } else {
       cEl.innerHTML+=`<p>尚未提供文稿</p>`;
     }
@@ -446,11 +446,11 @@ function word2sentence(raw){
   return sentences;
 }
 
-function getLinesTable(ss,id,adSegments,toTS) {
+function getLinesTable(ss,id,toTS) {
   var k = '';
   if (siteNameVar==='pd') {
     for (let s of ss){
-      if (isInAdSegment(adSegments, s.startTime)) continue;
+      if (isInAdSegment(s.startTime)) continue;
       k+=`<tr>
       <td class="position-relative" data-start="${s.startTime}">${s.sentence}
       ${toTS===true
@@ -484,7 +484,7 @@ async function getPodcastTranslate(btn) {
 
 // ===== 取廣告 =====
 
-function isInAdSegment(adSegments, currentTime) {
+function isInAdSegment(currentTime) {
   return adSegments.some(seg => currentTime >= seg.startTime && currentTime <= seg.endTime);
 }
 
@@ -532,48 +532,31 @@ function extractAdSegments(meta) {
   mp3Urls.forEach(url => {
     const times = parseAdTimeFromUrl(url);
     if (times) {
-      // 嘗試抓廣告主名稱（靠近 URL 的 name 欄位）
-      // let advertiser = 'Unknown';
-      // const flat = JSON.stringify(meta);
-      // const idx = flat.indexOf(url);
-      // if (idx > -1) {
-      //   const nearby = flat.slice(Math.max(0, idx - 200), idx);
-      //   const match = nearby.match(/"([A-Z][a-zA-Z0-9 &]+)"/g);
-      //   if (match) advertiser = match[match.length - 1].replace(/"/g,'');
-      // }
-
       segments.push({ ...times });
     }
   });
 
-    // 1. 先依 startTime 排序
-segments.sort((a, b) => a.startTime - b.startTime);
+  // 1. 先依 startTime 排序
+  segments.sort((a, b) => a.startTime - b.startTime);
 
-// 2. 合併相鄰或重疊區間
-const merged = [];
-for (const t of segments) {
-    if (!merged.length) {
-        merged.push({ ...t });
-    } else {
-        const last = merged[merged.length - 1];
-        if (t.startTime <= last.endTime + 1) { // 相鄰或重疊
-            last.endTime = Math.max(last.endTime, t.endTime);
-        } else {
-            merged.push({ ...t });
-        }
-    }
-}
+  // 2. 合併相鄰或重疊區間
+  const merged = [];
+  for (const t of segments) {
+      if (!merged.length) {
+          merged.push({ ...t });
+      } else {
+          const last = merged[merged.length - 1];
+          if (t.startTime <= last.endTime + 1) { // 相鄰或重疊
+              last.endTime = Math.max(last.endTime, t.endTime);
+          } else {
+              merged.push({ ...t });
+          }
+      }
+  }
 
-console.log(merged);
-    
+  console.log(merged);
   return merged;
 }
-
-// 執行
-// const adSegments = extractAdSegments(JSON.parse(episodeMeta));
-// console.log(adSegments);
-
-
 
 
 //    OPERATION
@@ -600,6 +583,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const playBtn = document.getElementById("playBtn");
   const rwBtn = document.getElementById("rwBtn");
   const fwBtn = document.getElementById("fwBtn");
+  let adSegments = [];
 
   let autoScrollEnabled = true;
   let userScrolling = false;
@@ -705,12 +689,16 @@ document.addEventListener("DOMContentLoaded", () => {
       media.currentTime = startTime;
       media.play();
       playBtn.innerHTML = svgPause;
-      media.ontimeupdate = () => highlightCurrentRow(media.currentTime);
+      media.ontimeupdate = function () {
+        skipAds(media.currentTime);
+        highlightCurrentRow(media.currentTime);
+      }
     } else {
       media.currentTime = startTime;
       media.play();
       playBtn.innerHTML = svgPause;
       media.ontimeupdate = function () {
+        skipAds(media.currentTime);
         highlightCurrentRow(media.currentTime);
 
         if (media.currentTime >= endTime) {
@@ -721,6 +709,17 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     }
   });
+
+
+  // ======= ontimeupdate 跳過廣告 =======
+  function skipAds(current){
+    if (isInAdSegment(current)) {
+      const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);
+      media.currentTime = seg.endTime;
+      console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
+      return; // 跳過後不執行其他高亮邏輯
+    }
+  }
 
   // ======= 偵測使用者滾動 =======
   function handleUserScroll() {
