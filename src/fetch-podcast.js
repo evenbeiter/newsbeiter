@@ -700,8 +700,8 @@ document.addEventListener("DOMContentLoaded", () => {
       media.play();
       playBtn.innerHTML = svgPause;
       media.ontimeupdate = function () {
-        if (isInAdSegment(current)) {console.log(adSegments);
-          const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);console.log(seg);
+        if (isInAdSegment(media.currentTime)) {console.log(adSegments);
+          const seg = adSegments.find(s => media.currentTime >= s.startTime && current < s.endTime);console.log(seg);
           media.currentTime = seg.endTime;
           console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
           return; // 跳過後不執行其他高亮邏輯
