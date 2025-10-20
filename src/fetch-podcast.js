@@ -574,6 +574,16 @@ function isMobile() {return window.matchMedia("(max-width: 768px)").matches;}
 const trLvl = isMobile() ? 0.4 : 0.6;
 let contentId = '';
 
+// ======= ontimeupdate 跳過廣告 =======
+function skipAds(current){
+  if (isInAdSegment(current)) {console.log('ad: '+adSegments);
+    const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);console.log(seg);
+    media.currentTime = seg.endTime;
+    console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
+    return; // 跳過後不執行其他高亮邏輯
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const speedDown = document.getElementById("speedDown");
   const speedUp = document.getElementById("speedUp");
@@ -709,17 +719,6 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     }
   });
-
-
-  // ======= ontimeupdate 跳過廣告 =======
-  function skipAds(current){
-    if (isInAdSegment(current)) {
-      const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);
-      media.currentTime = seg.endTime;
-      console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
-      return; // 跳過後不執行其他高亮邏輯
-    }
-  }
 
   // ======= 偵測使用者滾動 =======
   function handleUserScroll() {
