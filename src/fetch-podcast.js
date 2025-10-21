@@ -341,7 +341,8 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       mediaSrc =
         match?.[1] ||
         str.match(/https:\/\/jfe93e\.s3[^\s"]+?\.mp3/)?.[0] ||
-        str.match(/https:\/\/[^\s"]+?\.mp3/)?.[0] ||
+        str.match(/https:\/\/[^\s"]+?\.mp3"/)?.[0].slice(0,-1) ||
+        str.match(/https:\/\/[^\s"]+?\.mp3\?/)?.[0].slice(0,-1) ||
         '';
     }
     // 有文稿但沒 id, 取出 id 和音頻
@@ -356,18 +357,19 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
         transcriptionId = uuid;
         mediaSrc = url;
       }
-      // id 和音頻不在一起, 分別取 id 和音頻
-      else {console.log('split');
-        const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
-        const match3 = str.match(regex3);
-        transcriptionId = match3?.[0] || '';
-
-        mediaSrc =
-          str.match(/https:\/\/jfe93e\.s3[\s\S]*?\.mp3/)?.[0] ||
-          str.match(/https:\/\/[\s\S]*?\.mp3/)?.[0] ||
-          '';
-      }
     }
+    // id 和音頻不在一起, 或沒有文稿, 分別取 id 和音頻
+    else {console.log('split');
+      const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
+      const match3 = str.match(regex3);
+      transcriptionId = match3?.[0] || '';
+
+      mediaSrc =
+        str.match(/https:\/\/[^\s"]+?\.mp3"/)?.[0].slice(0,-1) ||
+        str.match(/https:\/\/[^\s"]+?\.mp3\?/)?.[0].slice(0,-1) ||
+        '';
+    }
+    
 
     // 處理音頻
     if (mediaSrc=='') {
