@@ -336,7 +336,7 @@ async function ytbGetList(siteName,t){
     //const blob = res.blob();
     //const str = blob.text();
     //const str=raw.replace(/\\x7b/g,'{').replace(/\\x7d/g,'}').replace(/\\x22/g,'"');console.log(str);
-    const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*'([\s\S]*?)';<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
+    const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
     for (let d of data){
       items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
     }
