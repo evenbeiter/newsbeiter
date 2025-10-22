@@ -487,6 +487,12 @@ async function popup(id){
   overlay.style.display='block';
   popupContent.innerHTML+=await window[`${siteNameVar}GetContent`](id);
 }
+
+function loadScript(path) {
+  const s = document.createElement('script');
+  s.src = `${backendUrl}/load-js?path=${encodeURIComponent(path)}`;
+  document.body.appendChild(s);
+}
   
 let scrollTimeout;
 window.onscroll = function () {

@@ -30,9 +30,12 @@ if (window.location.href.indexOf('podcast')==-1){
   createUrlListDiv([allSites,videoSites]);
   createSearchListDiv(faq,searchSites);
   openUrlList();
+  loadScript('js/fetch-news.js');
 } else {
   //podcast.html
   createUrlListDiv([allSites]);
   openUrlList();
+  loadScript('js/fetch-podcast.js');
   // createChannelList(pd,'pd','Podcast');
 }
+loadScript('js/note-uploader.js');
