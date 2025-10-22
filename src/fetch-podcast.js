@@ -327,7 +327,7 @@ async function ytbGetList(siteName,t){
   adSegments = [];
 
   try{
-    const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list=PL9LBhAIppMmcBJiH9uD-bLmRbZ1E4TgUf'));
+    const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list='+t));
     const str=await res.text();
     const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
     for (let d of data){
