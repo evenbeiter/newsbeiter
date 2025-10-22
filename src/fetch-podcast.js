@@ -328,14 +328,14 @@ async function ytbGetList(siteName,t){
 
   try{
     const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list='+t));
-    //const str=await res.text();
+    const raw=await res.text();
     //const buf=await res.arrayBuffer();
     //const raw=new TextDecoder('utf-8').decode(buf);
     //const str=raw.replace(/\\x([0-9A-Fa-f]{2})/g, (_, p1) =>String.fromCharCode(parseInt(p1, 16)));    
 
-    const blob = res.blob();
-    const str = blob.text();
-
+    //const blob = res.blob();
+    //const str = blob.text();
+    const str=raw.replace(/\\x7b/g,'{').replace(/\\x7d/g,'}').replace(/\\x22/g,'"');console.log(str);
     const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
     for (let d of data){
       items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
@@ -826,6 +826,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
