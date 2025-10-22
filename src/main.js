@@ -31,12 +31,12 @@ if (window.location.href.indexOf('podcast')==-1){
   createUrlListDiv([allSites,videoSites]);
   createSearchListDiv(faq,searchSites);
   openUrlList();
-  loadScript('newsbeiter/fetch-news.js');
+  // loadScript('newsbeiter/fetch-news.js');
 } else {
   //podcast.html
   createUrlListDiv([allSites]);
   openUrlList();
-  loadScript('newsbeiter/fetch-podcast.js');
+  // loadScript('newsbeiter/fetch-podcast.js');
   // createChannelList(pd,'pd','Podcast');
 }
-loadScript('newsbeiter/note-uploader.js');
+// loadScript('newsbeiter/note-uploader.js');

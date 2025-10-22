@@ -42,7 +42,7 @@ async function euGetList(siteName,t) {
 
   }catch{html='<p>尚無內容</p>'}
 
-  ap.style.display='block';vp.style.display='none';ap.src='';vp.src='';
+  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
 
   return html;
 }
@@ -87,11 +87,11 @@ async function euGetContent(id){
     if (doc.querySelectorAll('audio').length!==0) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';
+      ap.style.display='block';vp.style.display='none';yt.style.display='none';
     } else if (doc.querySelectorAll('video').length!==0) {
       media=vp;
       vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';
+      vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
 
     let ts=[];
@@ -174,7 +174,7 @@ async function keGetList(siteName,t) {
 
   }catch{html='<p>尚無內容</p>'}
 
-  ap.style.display='block';vp.style.display='none';ap.src='';vp.src='';
+  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
 
   return html;
 }
@@ -222,11 +222,11 @@ async function keGetContent(id){
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';
+      ap.style.display='block';vp.style.display='none';yt.style.display='none';
     } else {
       media=vp;
       vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';
+      vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
     media.playbackRate = 1;
     speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
@@ -309,7 +309,7 @@ async function pdGetList(siteName,t){
   }
   }catch{html='<p>尚無內容</p>'}
 
-  ap.style.display='block';vp.style.display='none';ap.src='';vp.src='';
+  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
 
   return html;
 }
@@ -379,11 +379,11 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';
+      ap.style.display='block';vp.style.display='none';yt.style.display='none';
     } else {
       media=vp;
       vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';
+      vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
     media.playbackRate = 1;
     speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
@@ -411,7 +411,6 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
   }
 
 }
-
 
 function word2sentence(raw){
   const sentences = [];
@@ -446,6 +445,35 @@ function word2sentence(raw){
     });
   }
   return sentences;
+}
+
+//    YOUTUBE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function ytbGetList(siteName,t){
+  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+
+  try{
+    const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list=PL9LBhAIppMmcBJiH9uD-bLmRbZ1E4TgUf'));
+    const str=await res.text();
+    const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
+    for (let d of data){
+      items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.accessibility.accessibilityData.label]);
+    }
+
+    for (let h of items){
+      html+=`<p class="title fs12" onclick="ytbGetContent('${h[0]}')">${h[1]}<br></p><hr>`;
+    }
+
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+async function ytbGetContent(id){
+  ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+  media = ytPlayer;
+  createYouTubePlayer(id);
 }
 
 function getLinesTable(ss,id,toTS) {
@@ -576,6 +604,39 @@ function isMobile() {return window.matchMedia("(max-width: 768px)").matches;}
 const trLvl = isMobile() ? 0.4 : 0.6;
 let contentId = '';
 
+let ytPlayer = null; let ytReady = false;
+
+// --- 建立 YouTube Player ---
+function createYouTubePlayer(videoId) {
+  if (ytPlayer && ytReady) {
+    ytPlayer.loadVideoById(videoId);
+    // mediaType = 'youtube';
+    media = ytPlayer;
+    return;
+  }
+
+  ytPlayer = new YT.Player('ytPlayer', {
+    // height: '360',
+    // width: '640',
+    height: '100%',
+    width: '100%',
+    videoId,
+    playerVars: { modestbranding: 1, rel: 0, controls: 0 },
+    events: {
+      onReady: () => {
+        ytReady = true;
+        // mediaType = 'youtube';
+        media = ytPlayer;
+      },
+      onStateChange: (e) => {
+        // 播放/暫停按鈕狀態同步
+        if (e.data === YT.PlayerState.PLAYING) playBtn.innerHTML = svgPause;
+        else if (e.data === YT.PlayerState.PAUSED) playBtn.innerHTML = svgPlay;
+      }
+    }
+  });
+}
+
 // ======= ontimeupdate 跳過廣告 =======
 // function skipAds(current){
 //   if (isInAdSegment(current)) {console.log(adSegments);
@@ -602,24 +663,12 @@ document.addEventListener("DOMContentLoaded", () => {
   let scrollTimeout = null;
 
   // 初始設定
+  // let mediaType = 'audio'; // audio, video, or youtube
   media = ap;
   media.playbackRate = 1;
   speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
 
   let mode = "continuous"; // 模式: continuous / single / loop
-
-  // 控制速率變化
-  const changeSpeed = (delta) => {
-    let newRate = media.playbackRate + delta;
-    // 限制範圍在 0.5x ~ 2.0x
-    newRate = Math.max(0.5, Math.min(2.0, newRate));
-    media.playbackRate = newRate;
-    speedLabel.textContent = newRate.toFixed(1) + "x";
-  };
-
-  // 綁定事件
-  speedDown.addEventListener("click", () => changeSpeed(-0.1));
-  speedUp.addEventListener("click", () => changeSpeed(+0.1));
 
   // 切換播放模式
   modeBtn.addEventListener("click", () => {
@@ -635,33 +684,55 @@ document.addEventListener("DOMContentLoaded", () => {
     modeBtn.textContent = label;
   });
 
-  // 綁定 play, rw, fw
-  playBtn.addEventListener("click", () => {
-    if (media.paused) {
-      media.play();
-      playBtn.innerHTML = svgPause;
-    } else {
-      media.pause();
-      playBtn.innerHTML = svgPlay;
+  // --- 播放 / 暫停 ---
+  // function playPause() {console.log(media);
+  //   // if (mediaType === 'youtube') {
+  //   if (media === ytPlayer) {console.log('youtube');
+  //     const state = ytPlayer.getPlayerState();
+  //     if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
+  //     else ytPlayer.playVideo();
+  //   } else {
+  //     if (media.paused) {media.play();playBtn.innerHTML = svgPause;}
+  //     else {media.pause();playBtn.innerHTML = svgPlay;}
+  //   }
+  // }
+
+  function playPause(){
+    if (media === ap || media === vp){
+      if (media.paused) {media.play();playBtn.innerHTML = svgPause;}
+      else {media.pause();playBtn.innerHTML = svgPlay;}      
+    } else if (media?.playVideo) {
+      const state = ytPlayer.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
+      else ytPlayer.playVideo();      
     }
-  });
+  }
 
-  // 當音頻播放結束時，自動恢復按鈕文字
-  media.addEventListener("ended", () => {
-    playBtn.innerHTML = svgPlay;
-  });
+  // --- 倒退 / 快轉 ---
+  function skip(seconds) {console.log(media);
+    if (media === ap || media === vp){
+      media.currentTime = Math.max(0, Math.min(media.duration, media.currentTime + seconds));
+    } else if (media?.playVideo) {
+      const cur = ytPlayer.getCurrentTime();
+      ytPlayer.seekTo(cur + seconds, true);
+    }
+  }
 
-  rwBtn.addEventListener("click", () => {
-    media.currentTime = Math.max(0, media.currentTime - 5); // 避免小於 0
-    media.play();
-    playBtn.innerHTML = svgPause;
-  });
+  // 控制速率變化
+  const changeSpeed = (delta) => {
+    let newRate = media.playbackRate + delta;
+    // 限制範圍在 0.5x ~ 2.0x
+    newRate = Math.max(0.5, Math.min(2.0, newRate));
+    media.playbackRate = newRate;
+    speedLabel.textContent = newRate.toFixed(1) + "x";
+  };
 
-  fwBtn.addEventListener("click", () => {
-    media.currentTime = Math.min(media.duration, media.currentTime + 5); // 避免超出音檔長度
-    media.play();
-    playBtn.innerHTML = svgPause;
-  });
+  // 按鈕事件綁定
+  speedDown.addEventListener("click", () => changeSpeed(-0.1));
+  speedUp.addEventListener("click", () => changeSpeed(+0.1));
+  playBtn.addEventListener("click", playPause);
+  rwBtn.addEventListener("click", () => skip(-5));
+  fwBtn.addEventListener("click", () => skip(+5));
 
   // 監聽點擊表格列
   document.addEventListener("click", async (e) => {
@@ -699,7 +770,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 播放邏輯
     if (mode === "continuous") {
       media.currentTime = startTime;
-      media.play();
+      playMedia(media);
       playBtn.innerHTML = svgPause;
       media.ontimeupdate = function () {
         if (siteNameVar === 'pd'){
@@ -715,19 +786,32 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     } else {
       media.currentTime = startTime;
-      media.play();
+      playMedia(media);
       playBtn.innerHTML = svgPause;
       media.ontimeupdate = function () {
         // skipAds(media.currentTime);
         highlightCurrentRow(media.currentTime);
 
         if (media.currentTime >= endTime) {
-          if (mode === "single") {media.pause();playBtn.innerHTML = svgPlay;}
+          if (mode === "single") {pauseMedia(media);playBtn.innerHTML = svgPlay;}
           else if (mode === "loop") {media.currentTime = startTime;} // 單句循環
         }
 
       };
     }
+
+    function playMedia(media) {
+      if (media === ap) media.play();
+      else if (media === vp) media.play();
+      else if (media?.playVideo) media.playVideo();
+    }
+
+    function pauseMedia(media) {
+      if (media === ap) media.pause();
+      else if (media === vp) media.pause();
+      else if (media?.pauseVideo) media.pauseVideo();
+    }
+
   });
 
   // ======= 偵測使用者滾動 =======
@@ -836,20 +920,3 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
