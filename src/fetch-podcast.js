@@ -3,6 +3,7 @@
 
 async function keGetList(siteName,t) {
   ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
 
   const payload = {
     Method: "web_waikan_wknewslist",
@@ -50,6 +51,7 @@ async function keGetList(siteName,t) {
 
 async function keGetContent(id){
   contentId = id;
+  adSegments = [];
   const cEl=document.getElementById(id);
 
   if (cEl.style.display=='none' || cEl.style.display==''){
@@ -160,6 +162,7 @@ console.log(JSON.parse(new TextDecoder().decode(decryptedBuffer)));
 
 async function pdGetList(siteName,t){
   ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
 
   try{url=`${preStr}${encodeURIComponent('https://backend.podscribe.ai/api/series/v2/'+t+'/episodes?archivedIncludedFilter=false&count=50&cursor='+cursor+'&episodeTitle=&seriesId='+t)}`;console.log(url);
   let res=await fetch(url);
@@ -188,6 +191,7 @@ async function pdGetList(siteName,t){
 
 async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
   contentId = id;
+  adSegments = [];
   const cEl=document.getElementById(id);
   let res, str, mediaSrc;
 
@@ -320,6 +324,7 @@ function word2sentence(raw){
 
 async function ytbGetList(siteName,t){
   ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
 
   try{
     const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list=PL9LBhAIppMmcBJiH9uD-bLmRbZ1E4TgUf'));
@@ -340,6 +345,7 @@ async function ytbGetList(siteName,t){
 
 async function ytbGetContent(id){
   ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+  adSegments = [];
   media = ytPlayer;
   createYouTubePlayer(id);
 }
@@ -640,18 +646,43 @@ function createYouTubePlayer(videoId) {
       media.currentTime = startTime;
       playMedia(media);
       playBtn.innerHTML = svgPause;
+      // media.ontimeupdate = function () {
+      //   if (siteNameVar === 'pd'){
+      //     const current = media.currentTime;
+      //     if (isInAdSegment(current)) {console.log(adSegments);
+      //       const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);console.log(seg);
+      //       media.currentTime = seg.endTime;
+      //       console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
+      //       return; // 跳過後不執行其他高亮邏輯
+      //     }
+      //   }
+      //   highlightCurrentRow(media.currentTime);
+      // }
+
+      let lastSkippedSegment = null;
+
       media.ontimeupdate = function () {
-        if (siteNameVar === 'pd'){
+        if (siteNameVar === 'pd') {
           const current = media.currentTime;
-          if (isInAdSegment(current)) {console.log(adSegments);
-            const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);console.log(seg);
+          const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);
+
+          if (seg && seg !== lastSkippedSegment) {
+            lastSkippedSegment = seg;
             media.currentTime = seg.endTime;
             console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
-            return; // 跳過後不執行其他高亮邏輯
+            return;
+          }
+
+          // 如果已經離開上次跳過的區段，就重置
+          if (lastSkippedSegment && current > lastSkippedSegment.endTime) {
+            lastSkippedSegment = null;
           }
         }
+
         highlightCurrentRow(media.currentTime);
-      }
+      };
+
+
     } else {
       media.currentTime = startTime;
       playMedia(media);
