@@ -13,7 +13,7 @@ const topdiv=document.getElementById('top');
 const loading=document.getElementById('loading');
 const ap = document.getElementById('ap');
 const vp = document.getElementById('vp');
-const yt = document.getElementById('ytPlayer');
+const yt = document.getElementById('ytContainer');
 
 const closeBtn=document.getElementById('overlayCloseBtn');
 const backdrop=document.getElementById('overlayBackdrop');
