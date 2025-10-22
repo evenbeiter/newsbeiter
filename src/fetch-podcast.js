@@ -528,7 +528,7 @@ function createYouTubePlayer(videoId) {
 
   let autoScrollEnabled = true;
   let userScrolling = false;
-  let scrollTimeout = null;
+  let userScrollTimeout = null;
 
   // 初始設定
   // let mediaType = 'audio'; // audio, video, or youtube
@@ -686,10 +686,10 @@ function createYouTubePlayer(videoId) {
   function handleUserScroll() {
     userScrolling = true;
     autoScrollEnabled = false;
-    clearTimeout(scrollTimeout);
+    clearTimeout(userScrollTimeout);
 
     // 若使用者停止滾動 1500ms，恢復自動滾動
-    scrollTimeout = setTimeout(() => {
+    userScrollTimeout = setTimeout(() => {
       userScrolling = false;
       autoScrollEnabled = true;
     }, 1500);
