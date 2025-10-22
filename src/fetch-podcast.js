@@ -458,11 +458,11 @@ async function ytbGetList(siteName,t){
     const str=await res.text();
     const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
     for (let d of data){
-      items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.accessibility.accessibilityData.label]);
+      items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
     }
 
     for (let h of items){
-      html+=`<p class="title fs12" onclick="ytbGetContent('${h[0]}')">${h[1]}<br></p><hr>`;
+      html+=`<p class="title fs12" onclick="ytbGetContent('${h[0]}')">${h[1]} | <span class="fs10 fw-bold">${h[2]}</span></p><hr>`;
     }
 
   }catch{html='<p>尚無內容</p>'}
