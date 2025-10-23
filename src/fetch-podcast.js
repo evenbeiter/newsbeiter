@@ -502,7 +502,7 @@ function createYouTubePlayer(videoId) {
     height: '100%',
     width: '100%',
     videoId,
-    playerVars: { modestbranding: 1, rel: 0, controls: 0 },
+    playerVars: { modestbranding: 1, rel: 0, controls: 1, showinfo: 0 },
     events: {
       onReady: () => {
         ytReady = true;
@@ -826,6 +826,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
