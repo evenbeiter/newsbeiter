@@ -319,43 +319,6 @@ function word2sentence(raw){
   return sentences;
 }
 
-//    YOUTUBE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-async function ytbGetList(siteName,t){
-  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
-  adSegments = [];
-
-  try{
-    const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list='+t));
-    //const raw=await res.text();
-    const buf=await res.arrayBuffer();
-    const raw=new TextDecoder('utf-8').decode(buf);
-    const str=raw.replace(/\\x([0-9A-Fa-f]{2})/g, (_, p1) =>String.fromCharCode(parseInt(p1, 16)));    
-
-    //const blob = res.blob();
-    //const str = blob.text();
-    //const str=raw.replace(/\\x7b/g,'{').replace(/\\x7d/g,'}').replace(/\\x22/g,'"');console.log(str);
-    const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
-    for (let d of data){
-      items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
-    }
-
-    for (let h of items){
-      html+=`<p class="title fs12" onclick="ytbGetContent('${h[0]}')">${h[1]} | <span class="fs10 fw-bold">${h[2]}</span></p><hr>`;
-    }
-
-  }catch{html='<p>尚無內容</p>'}
-
-  return html;
-}
-
-async function ytbGetContent(id){
-  ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
-  adSegments = [];
-  media = ytPlayer;
-  createYouTubePlayer(id);
-}
 
 function getLinesTable(ss,id,toTS) {
   var k = '';
@@ -470,6 +433,112 @@ function extractAdSegments(meta) {
 }
 
 
+//    YOUTUBE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function ytbGetList(siteName,t){
+  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
+
+  try{
+    const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list='+t));
+    //const raw=await res.text();
+    const buf=await res.arrayBuffer();
+    const raw=new TextDecoder('utf-8').decode(buf);
+    const str=raw.replace(/\\x([0-9A-Fa-f]{2})/g, (_, p1) =>String.fromCharCode(parseInt(p1, 16)));    
+
+    const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
+    for (let d of data){
+      items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
+    }
+
+    for (let h of items){
+      html+=`<p class="title fs12" onclick="ytbGetContent('${h[0]}')">${h[1]} | <span class="fs10 fw-bold">${h[2]}</span></p><hr>`;
+    }
+
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+async function ytbGetContent(id){
+  ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+  adSegments = [];
+  media = ytPlayer;
+  createYouTubePlayer(id);
+}
+
+
+//    VOICETUBE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function vtGetList(siteName,t){
+  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
+
+  try{
+  const res = await fetch('https://vtapi.voicetube.com/v2.2/videos?platform=Web&language=zh-TW', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json','authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiZWEyNDllMGU5OWM0Yjc2Y2NhYWFiZDcxMjFjNDI5ODA5NjdlNzc3MjRmYzI1YjZkODA2N2I3Zjk2M2UzZTgzZDc3NjUxOTkyMjJkNzI1NWEiLCJpYXQiOjE3MzMzODk4ODIuMTg1NzAxLCJuYmYiOjE3MzMzODk4ODIuMTg1NzA1LCJleHAiOjE3NjQ5MjU4ODIuMTY5MDM2LCJzdWIiOiIzMjgyMzciLCJzY29wZXMiOltdfQ.o6XGBpF6VeLF21CmuW7UJYVQ7qX9khKPv7_59M-0MIX5VjBzgWJLYUqkXwRf2k67AnOW1IEtgH1phs0YQWrbcvLh86LKmngcLDGlOvwDjKUNV59t_he5en82DirCA9RiregEF6jr5xC7uIdL2GXuwf6IVaV8P_s9u_e1q8MJzfTmN_1EXsLQ8lK21HuEAaZ1Sng4GIq6HO8rc9fTVcwlgeLjlGyyDSbiQk00zMFWuxASQOdSk0pg7WSF_pAzQh39xV9ZqR9drbCMliWXANPmk9gqG89W8uk2k-SpGOhiQ1_ZTDnQNFF68181D60VQ2gLVSdad9qzt-dIdcY6mVvNQV3ftaEC2JNCw_F-B1z62tnfRSVT8NxCPPrnpgAxS-q_mpDN8DXsTfz7GYjS4jEnbwaANWlybfRUNdkfB2Nz7TpsXqfZtjfmEJkQYyRAoDySBFpsTrI5j0xe59z5LBo7iVI1npEI-QJuIbljIA41OefQsWdvnte60WSzYGeCQu1gQ0w7SEZbZY0Le13rJUGzbJuy5qRWvMoCqB1yZuZdRrFgEW5oWPfUXIf_l4maEOUZGnVKEyEj7O12GSt8YQqGEVgVsssHuDt4US0bgI0DgWcS0EzBwNJmFmGphcUN8nsU6hMPM-ugK0v-VBgxSq3P8wfGyrPNiX-VLpJmhqQnNWg'},
+    body: `{"page":${rr},"perPage":30,"sortMode":"DESC","channel":"${t}","sortBy":"publishedAt"}`,
+    });
+  const str=await res.json();
+
+  for (let h of str.data.items){
+    items.push([h.id,h.title,h.cefrLevel,h.durationText,h.isTranslated,h.youtubeId])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="vtGetContent(this.id,'${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
+    <div class="pt-2 sepia">
+      <table class="table table-auto fs11 p-0 sepia">
+        <tbody id="lines-${h[0]}"></tbody>
+      </table>
+    </div>
+    </div><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+
+async function vtGetContent(clickedId,id,isTranslated,youtubeId){
+  ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+  adSegments = [];
+
+  createYouTubePlayer(youtubeId);
+
+  try {
+  const res=await fetch(`https://vtapi.voicetube.com/v2.1.1/zh-TW/videos/${id}?platform=Web&language=zh-TW`);
+  const str=await res.json();
+
+  const rawLrc = str.data.captionLines ? str.data.captionLines : [];
+
+  if (rawLrc!==[]){
+    try{
+    let ts=[];
+    for (let s of rawLrc){
+      ts.push({
+        startTime: s.startAt,
+        sentence: `${s.originalText.text}${isTranslated == true ? `<br>${s.translatedText.text}` : `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`}`
+      });     
+    }
+    getLinesTable(ts,id,isTranslated == true ? false : true);
+
+    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+
+  } else {
+    cEl.innerHTML+=`<p>尚未提供文稿</p>`;
+  }
+
+
+    var res=await fetch(`https://vtapi.voicetube.com/v2.1.1/zh-TW/videos/${id}/words?platform=Web&language=zh-TW`);
+  var str=await res.json();
+
+  loading.style.display='none';
+
+}
+
 //    OPERATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -493,6 +562,8 @@ function createYouTubePlayer(videoId) {
     ytPlayer.loadVideoById(videoId);
     // mediaType = 'youtube';
     media = ytPlayer;
+    media.playbackRate = 1;
+    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
     return;
   }
 
