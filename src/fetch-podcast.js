@@ -786,7 +786,8 @@ function createYouTubePlayer(videoId) {
           }
         }
 
-        const currentTime = getCurrentTime(media);
+        const currentTime = getCurrentTime(media);console.log(currentTime);
+        console.log(endTime);
 
         // 更新高亮
         highlightCurrentRow(currentTime);
