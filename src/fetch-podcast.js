@@ -727,6 +727,11 @@ document.addEventListener("click", (e) => {
     return media.playVideo ? media.getCurrentTime() : media.currentTime;
   }
 
+  function getDuration(media) {
+    return media.playVideo ? media.getDuration() : media.duration;
+  }
+
+
 
   const table = document.getElementById(`lines-${contentId}`);
   const row = e.target.closest('tr');
@@ -734,7 +739,9 @@ document.addEventListener("click", (e) => {
 
   const nextRow = row.nextElementSibling;
   const startTime = Number(row.children[0]?.dataset.start || 0);
-  const endTime = Number(nextRow?.children[0]?.dataset.start || (media.playVideo ? media.getDuration() : media.duration));
+  // const endTime = Number(nextRow?.children[0]?.dataset.start || (media.playVideo ? media.getDuration() : media.duration));
+  const endTime = Number(nextRow?.children[0]?.dataset.start || getDuration(media));
+
 
   // 清除舊高亮
   document.querySelectorAll(`#lines-${contentId} tr`).forEach(tr => {
@@ -781,7 +788,7 @@ document.addEventListener("click", (e) => {
         const currentRow = Array.from(document.querySelectorAll(`#lines-${contentId} tr`))
           .find(tr => {
             const st = Number(tr.children[0]?.dataset.start || 0);
-            const next = Number(tr.nextElementSibling?.children[0]?.dataset.start || media.getDuration());
+            const next = Number(tr.nextElementSibling?.children[0]?.dataset.start || getDuration(media));
             return current >= st && current < next;
           });
         if (currentRow) {
