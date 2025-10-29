@@ -480,7 +480,7 @@ async function vtGetList(siteName,t){
   const res = await fetch('https://vtapi.voicetube.com/v2.2/videos?platform=Web&language=zh-TW', {
     method: 'POST',
     headers: {'Content-Type': 'application/json','authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiZWEyNDllMGU5OWM0Yjc2Y2NhYWFiZDcxMjFjNDI5ODA5NjdlNzc3MjRmYzI1YjZkODA2N2I3Zjk2M2UzZTgzZDc3NjUxOTkyMjJkNzI1NWEiLCJpYXQiOjE3MzMzODk4ODIuMTg1NzAxLCJuYmYiOjE3MzMzODk4ODIuMTg1NzA1LCJleHAiOjE3NjQ5MjU4ODIuMTY5MDM2LCJzdWIiOiIzMjgyMzciLCJzY29wZXMiOltdfQ.o6XGBpF6VeLF21CmuW7UJYVQ7qX9khKPv7_59M-0MIX5VjBzgWJLYUqkXwRf2k67AnOW1IEtgH1phs0YQWrbcvLh86LKmngcLDGlOvwDjKUNV59t_he5en82DirCA9RiregEF6jr5xC7uIdL2GXuwf6IVaV8P_s9u_e1q8MJzfTmN_1EXsLQ8lK21HuEAaZ1Sng4GIq6HO8rc9fTVcwlgeLjlGyyDSbiQk00zMFWuxASQOdSk0pg7WSF_pAzQh39xV9ZqR9drbCMliWXANPmk9gqG89W8uk2k-SpGOhiQ1_ZTDnQNFF68181D60VQ2gLVSdad9qzt-dIdcY6mVvNQV3ftaEC2JNCw_F-B1z62tnfRSVT8NxCPPrnpgAxS-q_mpDN8DXsTfz7GYjS4jEnbwaANWlybfRUNdkfB2Nz7TpsXqfZtjfmEJkQYyRAoDySBFpsTrI5j0xe59z5LBo7iVI1npEI-QJuIbljIA41OefQsWdvnte60WSzYGeCQu1gQ0w7SEZbZY0Le13rJUGzbJuy5qRWvMoCqB1yZuZdRrFgEW5oWPfUXIf_l4maEOUZGnVKEyEj7O12GSt8YQqGEVgVsssHuDt4US0bgI0DgWcS0EzBwNJmFmGphcUN8nsU6hMPM-ugK0v-VBgxSq3P8wfGyrPNiX-VLpJmhqQnNWg'},
-    body: `{"page":${rr},"perPage":30,"sortMode":"DESC","channel":"${t}","sortBy":"publishedAt"}`,
+    body: `{"page":${rr},"perPage":30,"sortMode":"DESC",${t.endsWith('_')?`"channel":"${t}"`:`"levels":["${t}"]`},"sortBy":"publishedAt"}`,
     });
   const str=await res.json();
 
