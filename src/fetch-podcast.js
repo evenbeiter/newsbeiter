@@ -615,6 +615,7 @@ function createYouTubePlayer(videoId) {
   });
 }
 
+
 // ======= ontimeupdate 跳過廣告 =======
 // function skipAds(current){
 //   if (isInAdSegment(current)) {console.log(adSegments);
@@ -765,6 +766,8 @@ function createYouTubePlayer(videoId) {
 
       let lastSkippedSegment = null;
 
+
+      // 主要 ontimeupdate
       media.ontimeupdate = function () {
         if (siteNameVar === 'pd') {
           const current = media.currentTime;
@@ -783,33 +786,88 @@ function createYouTubePlayer(videoId) {
           }
         }
 
-        highlightCurrentRow(media.playVideo ? media.getCurrentTime() : media.currentTime);
+        const currentTime = getCurrentTime(media);
+
+        // 更新高亮
+        highlightCurrentRow(currentTime);
+
+        // 檢查是否到結束時間
+        if (currentTime >= endTime) {
+          if (mode === "single") {
+            pauseMedia(media);
+            playBtn.innerHTML = svgPlay;
+          } else if (mode === "loop") {
+            seekMedia(media, startTime); // 單句循環
+          }
+        }
       };
+
+      // media.ontimeupdate = function () {
+      //   if (siteNameVar === 'pd') {
+      //     const current = media.currentTime;
+      //     const seg = adSegments.find(s => current >= s.startTime && current < s.endTime);
+
+      //     if (seg && seg !== lastSkippedSegment) {
+      //       lastSkippedSegment = seg;
+      //       media.currentTime = seg.endTime;
+      //       console.log(`⏭ 跳過廣告 (${seg.startTime}s → ${seg.endTime}s)`);
+      //       return;
+      //     }
+
+      //     // 如果已經離開上次跳過的區段，就重置
+      //     if (lastSkippedSegment && current > lastSkippedSegment.endTime) {
+      //       lastSkippedSegment = null;
+      //     }
+      //   }
+
+      //   highlightCurrentRow(media.playVideo ? media.getCurrentTime() : media.currentTime);
+      // };
 
 
     } else {
       media.currentTime = startTime;
       playMedia(media);
       playBtn.innerHTML = svgPause;
+
+      // 主要 ontimeupdate
       media.ontimeupdate = function () {
-        // skipAds(media.currentTime);
-        highlightCurrentRow(media.playVideo ? media.getCurrentTime() : media.currentTime);
+        const currentTime = getCurrentTime(media);
 
-        if (media.playVideo){
-          if (media.getCurrentTime() >= endTime) {
-            if (mode === "single") {pauseMedia(media);playBtn.innerHTML = svgPlay;}
-            else if (mode === "loop") {media.seekTo(startTime,true);} // 單句循環
-          }          
+        // 更新高亮
+        highlightCurrentRow(currentTime);
 
-        } else {
-          if (media.currentTime >= endTime) {
-            if (mode === "single") {pauseMedia(media);playBtn.innerHTML = svgPlay;}
-            else if (mode === "loop") {media.currentTime = startTime;} // 單句循環
+        // 檢查是否到結束時間
+        if (currentTime >= endTime) {
+          if (mode === "single") {
+            pauseMedia(media);
+            playBtn.innerHTML = svgPlay;
+          } else if (mode === "loop") {
+            seekMedia(media, startTime); // 單句循環
           }
         }
-
       };
+
+      // media.ontimeupdate = function () {
+      //   // skipAds(media.currentTime);
+      //   highlightCurrentRow(media.playVideo ? media.getCurrentTime() : media.currentTime);
+
+      //   if (media.playVideo){
+      //     if (media.getCurrentTime() >= endTime) {
+      //       if (mode === "single") {pauseMedia(media);playBtn.innerHTML = svgPlay;}
+      //       else if (mode === "loop") {media.seekTo(startTime,true);} // 單句循環
+      //     }          
+
+      //   } else {
+      //     if (media.currentTime >= endTime) {
+      //       if (mode === "single") {pauseMedia(media);playBtn.innerHTML = svgPlay;}
+      //       else if (mode === "loop") {media.currentTime = startTime;} // 單句循環
+      //     }
+      //   }
+
+      // };
     }
+
+
 
     function playMedia(media) {
       if (media === ap) media.play();
@@ -822,6 +880,17 @@ function createYouTubePlayer(videoId) {
       else if (media === vp) media.pause();
       else if (media?.pauseVideo) media.pauseVideo();
     }
+
+    function getCurrentTime(media) {
+      // 回傳目前播放時間
+      return media.playVideo ? media.getCurrentTime() : media.currentTime;
+    }
+
+    function seekMedia(media, time) {
+      if (media.playVideo) media.seekTo(time, true);
+      else media.currentTime = time;
+    }
+
 
   });
 
