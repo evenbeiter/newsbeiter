@@ -783,7 +783,7 @@ function createYouTubePlayer(videoId) {
           }
         }
 
-        highlightCurrentRow(media == ytPlayer ? media.getCurrentTime() : media.currentTime);
+        highlightCurrentRow(media.playVideo ? media.getCurrentTime() : media.currentTime);
       };
 
 
@@ -793,11 +793,19 @@ function createYouTubePlayer(videoId) {
       playBtn.innerHTML = svgPause;
       media.ontimeupdate = function () {
         // skipAds(media.currentTime);
-        highlightCurrentRow(media == ytPlayer ? media.getCurrentTime() : media.currentTime);
+        highlightCurrentRow(media.playVideo ? media.getCurrentTime() : media.currentTime);
 
-        if (media.currentTime >= endTime) {
-          if (mode === "single") {pauseMedia(media);playBtn.innerHTML = svgPlay;}
-          else if (mode === "loop") {media.currentTime = startTime;} // 單句循環
+        if (media.playVideo){
+          if (media.getCurrentTime() >= endTime) {
+            if (mode === "single") {pauseMedia(media);playBtn.innerHTML = svgPlay;}
+            else if (mode === "loop") {media.seekTo(startTime,true);} // 單句循環
+          }          
+
+        } else {
+          if (media.currentTime >= endTime) {
+            if (mode === "single") {pauseMedia(media);playBtn.innerHTML = svgPlay;}
+            else if (mode === "loop") {media.currentTime = startTime;} // 單句循環
+          }
         }
 
       };
