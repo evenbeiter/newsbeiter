@@ -228,14 +228,24 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
         const [full, uuid, url] = last;
         transcriptionId = uuid;
         mediaSrc = url;
+      } else {
+      // id 和音頻不在一起
+      const regex3 = /"([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})","Done"/;
+      const match3 = str.match(regex3);
+      transcriptionId = match3 ? match3[1] : '';
+
+      // const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
+      // const match3 = str.match(regex3);
+      // transcriptionId = match3?.[0] || '';
+
+      mediaSrc =
+        str.match(/https:\/\/[^\s"]+?\.mp3"/)?.[0].slice(0,-1) ||
+        str.match(/https:\/\/[^\s"]+?\.mp3\?/)?.[0].slice(0,-1) ||
+        '';        
       }
     }
-    // id 和音頻不在一起, 或沒有文稿, 分別取 id 和音頻
-    else {console.log('split');
-      const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
-      const match3 = str.match(regex3);
-      transcriptionId = match3?.[0] || '';
-
+    // 沒有文稿, 取出音頻
+    else {
       mediaSrc =
         str.match(/https:\/\/[^\s"]+?\.mp3"/)?.[0].slice(0,-1) ||
         str.match(/https:\/\/[^\s"]+?\.mp3\?/)?.[0].slice(0,-1) ||
@@ -664,19 +674,6 @@ function createYouTubePlayer(videoId) {
     modeBtn.textContent = label;
   });
 
-  // --- 播放 / 暫停 ---
-  // function playPause() {console.log(media);
-  //   // if (mediaType === 'youtube') {
-  //   if (media === ytPlayer) {console.log('youtube');
-  //     const state = ytPlayer.getPlayerState();
-  //     if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
-  //     else ytPlayer.playVideo();
-  //   } else {
-  //     if (media.paused) {media.play();playBtn.innerHTML = svgPause;}
-  //     else {media.pause();playBtn.innerHTML = svgPlay;}
-  //   }
-  // }
-
   function playPause(){
     if (media === ap || media === vp){
       if (media.paused) {media.play();playBtn.innerHTML = svgPause;}
@@ -780,6 +777,7 @@ document.addEventListener("click", (e) => {
     if (media.playVideo) {
       media.seekTo(startTime, true);
       media.playVideo();
+      playBtn.innerHTML = svgPause;
 
       window.ytLoopInterval = setInterval(() => {
         const current = getCurrentTime(media);
