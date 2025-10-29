@@ -504,6 +504,7 @@ async function vtGetList(siteName,t){
 
 async function vtGetContent(clickedId,id,isTranslated,youtubeId){
   ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+  contentId = id;
   adSegments = [];
   const cEl=document.getElementById(id);
 
