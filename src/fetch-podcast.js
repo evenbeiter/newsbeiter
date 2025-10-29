@@ -723,6 +723,11 @@ function createYouTubePlayer(videoId) {
 document.addEventListener("click", (e) => {
   if (e.target.closest('button')) return;
 
+  function getCurrentTime(media) {
+    return media.playVideo ? media.getCurrentTime() : media.currentTime;
+  }
+
+
   const table = document.getElementById(`lines-${contentId}`);
   const row = e.target.closest('tr');
   if (!row || !table.contains(row)) return;
@@ -770,7 +775,7 @@ document.addEventListener("click", (e) => {
       media.playVideo();
 
       window.ytLoopInterval = setInterval(() => {
-        const current = media.getCurrentTime();
+        const current = getCurrentTime(media);
 
         // 高亮
         const currentRow = Array.from(document.querySelectorAll(`#lines-${contentId} tr`))
@@ -809,7 +814,8 @@ document.addEventListener("click", (e) => {
       media.play();
 
       media.ontimeupdate = function () {
-        const current = media.currentTime;
+        //const current = media.currentTime;
+        const current = getCurrentTime(media);
 
         // 高亮
         const currentRow = Array.from(document.querySelectorAll(`#lines-${contentId} tr`))
