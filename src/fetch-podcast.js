@@ -688,7 +688,7 @@ async function vtGetContent(clickedId,id,isTranslated,youtubeId){
 
 
 function closeContent(){
-  const el = document.getElementById(contentId);
+  const el = document.querySelector(`#${contentId}`);
   el.style.display='none';
   el.previousElementSibling.scrollIntoView();
   // document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
@@ -837,7 +837,7 @@ document.addEventListener("click", (e) => {
 
 
 
-  const table = document.getElementById(`lines-${contentId}`);
+  const table = document.querySelector(`#lines-${contentId}`);
   const row = e.target.closest('tr');
   if (!row || !table.contains(row)) return;
 
