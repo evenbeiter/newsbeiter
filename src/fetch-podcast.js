@@ -190,7 +190,7 @@ async function leGetList(siteName,t) {
 
 
 async function leGetContent(id){
-  contentId = id;
+  contentId = CSS.escape(id);
   adSegments = [];
   const cEl=document.getElementById(id);
   const lrcUrl=id.substring(0, id.lastIndexOf("/") + 1)+id.substring(id.lastIndexOf("/") + 1).replaceAll('-',' ').replace('.html','.lrc');
@@ -462,7 +462,7 @@ function getLinesTable(ss,id,toTS) {
       </tr>`;
     }
   }
-  document.querySelector(`#lines-${id}`).innerHTML=k;
+  document.getElementById(`lines-${id}`).innerHTML=k;
 }
 
 
