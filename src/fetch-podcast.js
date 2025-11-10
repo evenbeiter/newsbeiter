@@ -171,7 +171,7 @@ async function leGetList(siteName,t) {
   const contentData=doc.querySelectorAll('li a');
 
   for (let h of contentData){
-    items.push([h.href,h.title])
+    items.push([h.href.replace('evenbeiter.github.io','www.listeningexpress.com'),h.title])
   }
   for (let h of items){
     html+=`<p class="title fs12" onclick="leGetContent('${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content">
