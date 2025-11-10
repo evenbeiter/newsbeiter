@@ -317,7 +317,6 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
         const [full, uuid, url] = last;
         transcriptionId = uuid;
         mediaSrc = url;
-<<<<<<< HEAD
       } else { 
         // id 和音頻不在一起
         const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
@@ -339,13 +338,6 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
         // transcriptionId = match3?.[0] || '';
         const matches = [...str.matchAll(regex3)];
         transcriptionId = matches.at(-1)?.[1] || ''; // 取最後一個 UUID
-=======
-      } else {
-      // id 和音頻不在一起
-      const regex3 = /"([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})","Done"/;
-      const match3 = str.match(regex3);
-      transcriptionId = match3 ? match3[1] : '';
->>>>>>> f84a427f20b3828cc4d4dee37bb1981a98e8b52e
 
       // const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
       // const match3 = str.match(regex3);
