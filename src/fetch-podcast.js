@@ -171,7 +171,7 @@ async function leGetList(siteName,t) {
   const contentData=doc.querySelectorAll('li a');
 
   for (let h of contentData){
-    items.push([h.href.replace('evenbeiter.github.io','www.listeningexpress.com'),h.title])
+    items.push([h.href.replace('evenbeiter.github.io','www.listeningexpress.com').replaceAll("'","\'"),h.title])
   }
   for (let h of items){
     html+=`<p class="title fs12" onclick="leGetContent('${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content">
@@ -223,11 +223,13 @@ async function leGetContent(id){
 
     let ts=[];
     for (let s of rawLrc){
-
-      ts.push({
-        startTime: cvtMMSS2S(s[0].slice(1)),
-        sentence: s[1]
-      });     
+      if(s!==''){
+        s=s.split(']');
+        ts.push({
+          startTime: cvtMMSS2S(s[0].slice(1)),
+          sentence: s[1]
+        });     
+      }
     }
     getLinesTable(ts,id,true);
 
