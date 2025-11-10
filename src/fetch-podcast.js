@@ -332,23 +332,23 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       }
     }
     // 沒有文稿, 分別取 id 和音頻
-    else {console.log('split');
-      const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
-        // const match3 = str.match(regex3);
-        // transcriptionId = match3?.[0] || '';
-        const matches = [...str.matchAll(regex3)];
-        transcriptionId = matches.at(-1)?.[1] || ''; // 取最後一個 UUID
+    // else {console.log('split');
+    //   const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
+    //     // const match3 = str.match(regex3);
+    //     // transcriptionId = match3?.[0] || '';
+    //     const matches = [...str.matchAll(regex3)];
+    //     transcriptionId = matches.at(-1)?.[1] || ''; // 取最後一個 UUID
 
-      // const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
-      // const match3 = str.match(regex3);
-      // transcriptionId = match3?.[0] || '';
+    //   // const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
+    //   // const match3 = str.match(regex3);
+    //   // transcriptionId = match3?.[0] || '';
 
-      mediaSrc =
-        str.match(/https:\/\/[^\s"]+?\.mp3"/)?.[0].slice(0,-1) ||
-        str.match(/https:\/\/[^\s"]+?\.mp3\?/)?.[0].slice(0,-1) ||
-        '';        
-      }
-    }
+    //   mediaSrc =
+    //     str.match(/https:\/\/[^\s"]+?\.mp3"/)?.[0].slice(0,-1) ||
+    //     str.match(/https:\/\/[^\s"]+?\.mp3\?/)?.[0].slice(0,-1) ||
+    //     '';        
+    // }
+    
     // 沒有文稿, 取出音頻
     else {
       mediaSrc =
