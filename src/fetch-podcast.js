@@ -4,10 +4,12 @@
 async function keGetList(siteName,t) {
   ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
   adSegments = [];
+  const sortBy= t.endsWith('_') ? 'inputtime asc' : 'inputtime desc';
+  t=t.replace('_','');
 
   const payload = {
     Method: "web_waikan_wknewslist",
-    Params: { catid: t, PageSize:20, PageIndex:rr, Sort: "inputtime desc" },
+    Params: { catid: t, PageSize:20, PageIndex:rr, Sort: sortBy },
     Token: "",
     Terminal: 13,
     Version: "4.0",
