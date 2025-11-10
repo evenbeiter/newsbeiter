@@ -193,7 +193,7 @@ async function leGetContent(id){
   contentId = id;
   adSegments = [];
   const cEl=document.getElementById(id);
-  const lrcUrl=id.substring(0, id.lastIndexOf("/") + 1)+id.substring(id.lastIndexOf("/") + 1).replaceAll('-',' ')+'.lrc';
+  const lrcUrl=id.substring(0, id.lastIndexOf("/") + 1)+id.substring(id.lastIndexOf("/") + 1).replaceAll('-',' ').replace('.html','.lrc');
 
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
@@ -202,7 +202,7 @@ async function leGetContent(id){
     if (cEl.innerText.length>10) return; // already got transcription in cEl
 
 
-    let mediaSrc = lrcUrl.replace('lrc','.mp3');
+    let mediaSrc = lrcUrl.replace('.lrc','.mp3');
     if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
