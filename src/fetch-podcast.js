@@ -157,6 +157,95 @@ console.log(JSON.parse(new TextDecoder().decode(decryptedBuffer)));
 }
 
 
+//    LISTENING EXPRESS
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function leGetList(siteName,t) {
+  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
+
+  try {
+  const res = await fetch(`${preStr}https://www.listeningexpress.com/${t}index${rr==1 ? '' : `-${rr}`}.htm`);
+  const str = await res.text();
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  const contentData=doc.querySelectorAll('li a');
+
+  for (let h of contentData){
+    items.push([h.href,h.title])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="leGetContent('${h[0]}')">${s2t(h[1])}</p><div id="${h[0]}" class="content">
+    <div class="pt-2 sepia">
+      <table class="table table-auto fs11 p-0 sepia">
+        <tbody id="lines-${h[0]}"></tbody>
+      </table>
+    </div>
+    </div><hr>`;
+  }
+
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+
+async function leGetContent(id){
+  contentId = id;
+  adSegments = [];
+  const cEl=document.getElementById(id);
+  const lrcUrl=id.substring(0, id.lastIndexOf("/") + 1)+id.substring(id.lastIndexOf("/") + 1).replaceAll('-',' ')+'.lrc';
+
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
+
+    if (cEl.innerText.length>10) return; // already got transcription in cEl
+
+
+    let mediaSrc = lrcUrl.replace('lrc','.mp3');
+    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
+    if (mediaSrc.endsWith('.mp3')) {
+      media=ap;
+      ap.src= mediaSrc;vp.src='';
+      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+    } else {
+      media=vp;
+      vp.src= mediaSrc;ap.src='';
+      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+    }
+    media.playbackRate = 1;
+    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+  
+    try{
+    const res = await fetch(preStr+lrcUrl);
+    const str = await res.text();
+    const rawLrc = str.split('\r\n');
+
+    let ts=[];
+    for (let s of rawLrc){
+
+      ts.push({
+        startTime: cvtMMSS2S(s[0].slice(1)),
+        sentence: s[1]
+      });     
+    }
+    getLinesTable(ts,id,true);
+
+    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+    loading.style.display='none';
+
+  } else {
+    cEl.style.display='none';
+  }
+
+}
+
+function cvtMMSS2S(s){
+  const a=s.split(':');
+  return Number(a[0]*60)+Number(a[1]);
+}
+
+
 //    PODCAST
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -228,11 +317,35 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
         const [full, uuid, url] = last;
         transcriptionId = uuid;
         mediaSrc = url;
+<<<<<<< HEAD
+      } else { 
+        // id 和音頻不在一起
+        const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
+        // const match3 = str.match(regex3);
+        // transcriptionId = match3?.[0] || '';
+        const matches = [...str.matchAll(regex3)];
+        transcriptionId = matches.at(-1)?.[1] || ''; // 取最後一個 UUID
+
+        mediaSrc =
+        str.match(/https:\/\/[^\s"]+?\.mp3"/)?.[0].slice(0,-1) ||
+        str.match(/https:\/\/[^\s"]+?\.mp3\?/)?.[0].slice(0,-1) ||
+        '';
+      }
+    }
+    // 沒有文稿, 分別取 id 和音頻
+    else {console.log('split');
+      const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
+        // const match3 = str.match(regex3);
+        // transcriptionId = match3?.[0] || '';
+        const matches = [...str.matchAll(regex3)];
+        transcriptionId = matches.at(-1)?.[1] || ''; // 取最後一個 UUID
+=======
       } else {
       // id 和音頻不在一起
       const regex3 = /"([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})","Done"/;
       const match3 = str.match(regex3);
       transcriptionId = match3 ? match3[1] : '';
+>>>>>>> f84a427f20b3828cc4d4dee37bb1981a98e8b52e
 
       // const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
       // const match3 = str.match(regex3);
