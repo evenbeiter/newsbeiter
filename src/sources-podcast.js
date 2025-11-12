@@ -9,7 +9,8 @@ const ytb=[['PL9LBhAIppMmcBJiH9uD-bLmRbZ1E4TgUf','堅持聽'],['PL9LBhAIppMmf-uv
 const vt=[['business-and-finance_','商業財經'],['news-and-current-affairs_','新聞時事'],['leisure-and-travel_','休閒旅遊'],['health-and-wellness_','自我成長'],['learning_','英語學習'],['arts-and-entertainment_','影視娛樂'],['science-and-technology_','科技新知'],['kids_','兒童'],['animation_','動畫'],['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2'],['C1','C1'],['C2','C2']];
 // const ytb=[['cmAhPF4ylRw','零基礎商務英語'],['gvuWEIJdzcA','商務專題分場景'],['cHcNZP3clm8','職場37句型'],['5c3uUhuI4Yc','高頻28句型'],['lFRap4emUSc','對話3秒說到重點'],['OoxPs5iMLLE','中級1'],['MvVTk0LX6fs','中級2'],['K65pfMbA02c','中級3']['fJTsTmNDsiA','中級突破'],['rHWlFnNRdU4','中級加強'],['h4WGW21ldGc','中高級1'],['bMp55Uxi3d0','中高級2'],['hqZpfLhQu80','英式1'],['Rt4A2VLbi2M','英式2'],['_BQPbpcF0kI','英式中高']];
 
-const allSites=[['pd','Podcast',pd,'',''],['ke','KE',ke,'',''],['le','LE',le,'',''],['ytb','YT',ytb,'','']];
+const allSites=[['pd','Podcast',pd,'',''],['ke','KE',ke,'',''],['le','LE',le,'',''],['vt','VT',vt,'',''],['ytb','YT',ytb,'','']];
+
 
 
 
