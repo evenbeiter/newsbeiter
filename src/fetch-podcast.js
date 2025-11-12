@@ -5,10 +5,11 @@ async function keGetList(siteName,t) {
   ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
   adSegments = [];
   const sortBy= t.endsWith('_') ? 'inputtime asc' : 'inputtime desc';
-  t=t.replace('_','');
+  const method= t.startsWith('_') ? 'web_ting_getexcellentnewslisttwo' : 'web_waikan_wknewslist';
+  t=t.replaceAll('_','');
 
   const payload = {
-    Method: "web_waikan_wknewslist",
+    Method: method,
     Params: { catid: t, PageSize:20, PageIndex:rr, Sort: sortBy },
     Token: "",
     Terminal: 13,
@@ -28,21 +29,36 @@ async function keGetList(siteName,t) {
   });
   const data = await res.json();
 
-  if (data.Code !== 200) throw new Error(data.Msg || "API 返回錯誤");
+  // if (data.Code !== 200) throw new Error(data.Msg || "API 返回錯誤");
 
   const contentData = data.IsDecode == 1 ? await decryptAES(data.Data) : data.Data;
 
-  for (let h of contentData.list){
-    items.push([h.id,h.title,h.updatetime,h.mp3len])
-  }
-  for (let h of items){
-    html+=`<p class="title fs12" onclick="keGetContent('${h[0]}')">${s2t(h[1])}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
-    <div class="pt-2 sepia">
-      <table class="table table-auto fs11 p-0 sepia">
-        <tbody id="lines-${h[0]}"></tbody>
-      </table>
-    </div>
-    </div><hr>`;
+  if (contentData.list.length !==0 ) {
+    for (let h of contentData.list){
+      items.push([h.id,h.title,h.updatetime,h.mp3len])
+    }
+
+    for (let h of items){
+      html+=`<p class="title fs12" onclick="keGetContent('${h[0]}')">${s2t(h[1])}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${h[0]}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+    }
+
+  } else {
+    let j=0;
+    for (let hh of contentData.doubleList){
+      for (let h of hh.child_arr) {
+        j++;
+        items.push([h.id,`${hh.title} - ${h.title}`,h.updatetime,h.mp3len,`https://mp4.kekenet.com/Sound/class/english_keke/${keke[t]}${String(j).padStart(2,'0')}.mp4`])
+      }
+    }
+    for (let h of items){
+      html+=`<p class="title fs12" onclick="kekeGetContent('${h[0]}','${h[4]}')">${s2t(h[1])}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><hr>`;
+    }        
   }
 
   }catch{html='<p>尚無內容</p>'}
@@ -114,6 +130,39 @@ async function keGetContent(id){
     getLinesTable(ts,id,false);
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+    loading.style.display='none';
+
+  } else {
+    cEl.style.display='none';
+  }
+
+}
+
+
+async function kekeGetContent(id,mediaSrc){
+  contentId = id;
+  adSegments = [];
+  const cEl=document.getElementById(id);
+
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
+
+    if (cEl.innerText.length>10) return; // already got transcription in cEl
+
+    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
+    if (mediaSrc.endsWith('.mp3')) {
+      media=ap;
+      ap.src= mediaSrc;vp.src='';
+      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+    } else {
+      media=vp;
+      vp.src= mediaSrc;ap.src='';
+      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+    }
+    media.playbackRate = 1;
+    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+    
     loading.style.display='none';
 
   } else {
