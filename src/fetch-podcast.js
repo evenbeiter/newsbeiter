@@ -49,11 +49,11 @@ async function keGetList(siteName,t) {
     }
 
   } else {
-    let j=0;
+    let j= t=='3544' ? 0 : -1;
     for (let hh of contentData.doubleList){
       for (let h of hh.child_arr) {
         j++;
-        items.push([h.id,`${hh.title} - ${h.title}`,h.updatetime,h.mp3len,`https://mp4.kekenet.com/Sound/class/english_keke/${keke[t]}${String(j).padStart(2,'0')}.mp4`])
+        items.push([h.id,`${hh.title} - ${h.title}`,h.updatetime,h.mp3len,`https://mp4.kekenet.com/${keke[t]}${String(j).padStart(2,'0')}.mp4`])
       }
     }
     for (let h of items){
