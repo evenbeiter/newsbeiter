@@ -712,12 +712,12 @@ async function vtGetContent(clickedId,id,isTranslated,youtubeId){
   const res=await fetch(`https://vtapi.voicetube.com/v2.1.1/zh-TW/videos/${id}/words?platform=Web&language=zh-TW`);
   const str=await res.json();
   for (let v of str.data){
-    cEl.innerHTML+=`<p><strong>${v.text}</strong> | ${v.cefrLevel}</p>`;
+    cEl.innerHTML+=`<p class="fs12"><strong>${v.text}</strong> | ${v.cefrLevel}</p>`;
     for (let d of v.definitions){
       cEl.innerHTML+=`
       <p class="fs10"><span>/${d.pronunciationKk}<br>${d.pos}${d.wordPlural ? ` | ${d.wordPlural}` : ''}</span></p>
-      <p>${d.englishDefinition} | ${d.chineseTraditionalDefinition}</p>
-      <p>${d.englishExample}</p>
+      <p class="fs12">${d.englishDefinition} | ${d.chineseTraditionalDefinition}</p>
+      <p class="fs12">${d.englishExample}</p>
       `;
     }
     cEl.innerHTML+=`<hr>`;
@@ -1344,3 +1344,4 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
