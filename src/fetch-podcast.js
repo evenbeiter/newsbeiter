@@ -142,15 +142,15 @@ async function keGetContent(id){
 async function kekeGetContent(id,mediaSrc){
   contentId = id;
   adSegments = [];
-  const cEl=document.getElementById(id);
+  // const cEl=document.getElementById(id);
 
-  if (cEl.style.display=='none' || cEl.style.display==''){
+  // if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
-    cEl.style.display='block';
+    // cEl.style.display='block';
 
-    if (cEl.innerText.length>10) return; // already got transcription in cEl
+    // if (cEl.innerText.length>10) return; // already got transcription in cEl
 
-    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
+    // if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
@@ -165,9 +165,9 @@ async function kekeGetContent(id,mediaSrc){
     
     loading.style.display='none';
 
-  } else {
-    cEl.style.display='none';
-  }
+  // } else {
+  //   cEl.style.display='none';
+  // }
 
 }
 
