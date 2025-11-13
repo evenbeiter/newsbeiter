@@ -834,6 +834,19 @@ function createYouTubePlayer(videoId) {
 
   let mode = "continuous"; // 模式: continuous / single / loop
 
+if ('mediaSession' in navigator) {
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: '영어베이터',         // 可以是 App 名稱
+    artist: '영어베이터',           // 可留空或改為品牌名
+    // album: 'Podcast Library',         // 可選
+    artwork: [
+      { src: 'icons/icon-podcast-192.png', sizes: '192x192', type: 'image/png' },
+      { src: 'icons/icon-podcast-512.png', sizes: '512x512', type: 'image/png' }
+    ]
+  });
+}
+
+
   // 切換播放模式
   modeBtn.addEventListener("click", () => {
     if (mode === "continuous") mode = "single";
@@ -1189,5 +1202,6 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
