@@ -755,7 +755,7 @@ async function vtGetSearchResults(siteName,t){ return html = await vtGetList(sit
 
 
 function closeContent(){
-  const el = document.querySelector(`#${contentId}`);
+  const el = contentId.indexOf('\/') !== -1 ? document.querySelector(`#${contentId}`) : document.getElementById(contentId);
   el.style.display='none';
   el.previousElementSibling.scrollIntoView();
   // document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
