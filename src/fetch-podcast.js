@@ -105,7 +105,7 @@ async function keGetContent(id){
     const contentData = data.IsDecode == 1 ? await decryptAES(data.Data) : data.Data;
     const rawLrc = contentData.content;
 
-    let mediaSrc = 'https://k6.kekenet.com/'+contentData.playurl;
+    let mediaSrc = `https://k6.kekenet.com/${contentData.playurl || contentData.mp3}`;
     if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
@@ -124,7 +124,7 @@ async function keGetContent(id){
     for (let s of rawLrc){
       ts.push({
         startTime: s.millisecond/1000,
-        sentence: `${s.en}<br>${s2t(s.cn)}`
+        sentence: `${s.en ? `${s.en}<br>` : ''}${s2t(s.cn) || ''}`
       });     
     }
     getLinesTable(ts,id,false);
