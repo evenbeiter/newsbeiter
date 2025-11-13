@@ -768,7 +768,7 @@ function createYouTubePlayer(videoId) {
     height: '100%',
     width: '100%',
     videoId,
-    playerVars: { modestbranding: 1, rel: 0, controls: 1, showinfo: 0 },
+    playerVars: { modestbranding: 1, rel: 0, controls: 1, showinfo: 0, hl: 'en', cc_lang_pref: 'en' },
     events: {
       onReady: () => {
         ytReady = true;
