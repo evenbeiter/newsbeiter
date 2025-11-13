@@ -661,7 +661,7 @@ async function vtGetList(siteName,t){
       body: `{"page":${rr},"perPage":30,"sortMode":"DESC",${t.endsWith('_')?`"channel":"${t.slice(0,-1)}"`:`"levels":["${t}"]`},"sortBy":"publishedAt"}`,
       });
     str=await res.json();
-    
+
   }
 
 
@@ -745,6 +745,9 @@ async function vtGetContent(clickedId,id,isTranslated,youtubeId){
   }
 
 }
+
+
+async function vtGetSearchResults(siteName,t){ return html = await vtGetList(siteName, '#'+t) }
 
 
 //    OPERATION

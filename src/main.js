@@ -35,6 +35,7 @@ if (window.location.href.indexOf('podcast')==-1){
 } else {
   //podcast.html
   createUrlListDiv([allSites]);
+  createSearchListDiv(faq,searchSites);
   openUrlList();
   // loadScript('newsbeiter/fetch-podcast.js');
   // createChannelList(pd,'pd','Podcast');
