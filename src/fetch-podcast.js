@@ -941,11 +941,27 @@ document.addEventListener("click", (e) => {
     if (currentRow && currentRow !== lastHighlightedRow) {
       const rect = currentRow.getBoundingClientRect();
       const absoluteY = window.scrollY + rect.top;
-      const targetY = absoluteY - window.innerHeight / 2;
+      // const targetY = absoluteY - window.innerHeight / 2;
+      const targetY = absoluteY - toptiv.offsetHeight;
       window.scrollTo({ top: targetY, behavior: 'smooth' });
       lastHighlightedRow = currentRow;
     }
   }
+
+  // function autoScrollToRow(row) {
+  //   if (!autoScrollEnabled) return; // 若使用者在滾動，略過
+
+  //   const topHeight = topdiv ? toptiv.offsetHeight : 0;
+
+  //   const rect = row.getBoundingClientRect();
+  //   const absoluteY = window.scrollY + rect.top;
+  //   const targetY = absoluteY - topHeight; // 捲動到 top 區塊的正下方
+
+  //   window.scrollTo({
+  //     top: targetY,
+  //     behavior: 'smooth'
+  //   });
+  // }
 
   function playSegment() {
     if (media.playVideo) {
@@ -1062,15 +1078,31 @@ document.addEventListener("click", (e) => {
   function autoScrollToRow(row) {
     if (!autoScrollEnabled) return; // 若使用者在滾動，略過
 
+    const topHeight = topdiv ? toptiv.offsetHeight : 0;
+
     const rect = row.getBoundingClientRect();
     const absoluteY = window.scrollY + rect.top;
-    const targetY = absoluteY - (window.innerHeight * trLvl);
+    const targetY = absoluteY - topHeight; // 捲動到 top 區塊的正下方
 
     window.scrollTo({
       top: targetY,
       behavior: 'smooth'
     });
   }
+
+
+  // function autoScrollToRow(row) {
+  //   if (!autoScrollEnabled) return; // 若使用者在滾動，略過
+
+  //   const rect = row.getBoundingClientRect();
+  //   const absoluteY = window.scrollY + rect.top;
+  //   const targetY = absoluteY - (window.innerHeight * trLvl);
+
+  //   window.scrollTo({
+  //     top: targetY,
+  //     behavior: 'smooth'
+  //   });
+  // }
 
   // let lastHighlightIndex = -1;
 
