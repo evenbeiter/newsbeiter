@@ -952,7 +952,7 @@ document.addEventListener("click", (e) => {
       const absoluteY = window.scrollY + rect.top;
       // const targetY = absoluteY - window.innerHeight / 2;
       const topdiv = document.getElementById('top');
-      const targetY = absoluteY - toptiv.offsetHeight;
+      const targetY = absoluteY - topdiv.offsetHeight;
       window.scrollTo({ top: targetY, behavior: 'smooth' });
       lastHighlightedRow = currentRow;
     }
