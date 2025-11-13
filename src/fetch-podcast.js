@@ -947,7 +947,7 @@ document.addEventListener("click", (e) => {
   // 初始滾動到行
   const rect = row.getBoundingClientRect();
   const absoluteY = window.scrollY + rect.top;
-  const targetY = absoluteY - window.innerHeight / 2;
+  const targetY = absoluteY - topdiv.offsetHeight;
   window.scrollTo({ top: targetY, behavior: 'smooth' });
 
   // 停用舊的 interval / ontimeupdate
@@ -1202,6 +1202,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
