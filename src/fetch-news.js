@@ -1734,7 +1734,7 @@ async function msnVideoGetList(siteName,t){
   try{
   if (t.slice(0,3)==='vid'){  // MSN VIDEO FROM CHANNEL
     for (var i=0;i<2;i++){
-      url=encodeURIComponent('https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i));
+      url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
       let res=await fetch(url);
       let str=await res.json();
       for (let h of str.sections[0].cards){
@@ -1744,7 +1744,7 @@ async function msnVideoGetList(siteName,t){
       }
     }
   } else {  // MSN VIDEO FROM CATEGORY
-    url=encodeURIComponent('https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50);
+    url='https://assets.msn.com/service/MSN/Feed/me?apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&cm=en-us&contentType=video&query='+t+'&queryType=myfeed&$top=50&$skip='+(rr-1)*50;
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str.value[0].subCards){
@@ -1768,7 +1768,7 @@ async function msnVideoGetList(siteName,t){
 async function msnChannelVideoGetList(siteName,t){
   try{
     for (var i=0;i<2;i++){
-    url=encodeURIComponent('https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i));
+    url='https://assets.msn.com/service/news/feed/pages/providerfullpage?market=en-us&timeOut=10000&ocid=finance-data-feeds&apikey=0QfOX3Vn51YCzitbLaRkTTBadtWpgTN8NZLW0C1SEM&CommunityProfileId='+t+'&cm=en-us&User=m-00A80177A097658A10770F1FA15F64FF&newsSkip='+12*((rr-1)*2+i)+'&query=newest&$skip='+((rr-1)*2+i);
     let res=await fetch(url);
     let str=await res.json();
     for (let h of str.sections[0].cards){
@@ -1793,7 +1793,7 @@ async function msnChannelVideoGetList(siteName,t){
 async function reutersVideoGetList(siteName,t){
   try{
     url='https://www.reuters.com/pf/api/v3/content/fetch/video-playlist-by-collection-v1?query={"collection_alias":"featured-video","offset":'+(rr-1)*20+',"size":20,"website":"reuters"}&d=284&mxId=00000000&_website=reuters';
-    let res=await fetch(encodeURIComponent(url));
+    let res=await fetch(url);
     let str=await res.json();
     let raw=str.result.channels.filter(s => s.id === t);
     for (let h of raw[0].videos){
@@ -1815,7 +1815,7 @@ async function reutersVideoGetList(siteName,t){
 
 async function wsjVideoGetList(siteName,t){
   try{url='https://video-api.shdsvc.dowjones.io/api/legacy/find-all-videos?lang=en-us&count=50'+t+'&page='+(rr-1);
-  let res=await fetch(encodeURIComponent(url));
+  let res=await fetch(url);
   let str=await res.json();
   for (let h of str.items){
     var thumbnail=h.thumbnailList[0].url;
