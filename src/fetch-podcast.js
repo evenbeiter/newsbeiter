@@ -887,7 +887,16 @@ function createYouTubePlayer(videoId) {
 
 
 
-
+  function scrollToRow(currentRow) {
+    if (currentRow && currentRow !== lastHighlightedRow) {
+      const rect = currentRow.getBoundingClientRect();
+      const absoluteY = window.scrollY + rect.top;
+      // const targetY = absoluteY - window.innerHeight / 2;
+      const targetY = absoluteY - toptiv.offsetHeight;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      lastHighlightedRow = currentRow;
+    }
+  }
 
 
 
@@ -937,16 +946,16 @@ document.addEventListener("click", (e) => {
 
   let lastHighlightedRow = row; // 記錄最後高亮行，避免重複滾動
 
-  function scrollToRow(currentRow) {
-    if (currentRow && currentRow !== lastHighlightedRow) {
-      const rect = currentRow.getBoundingClientRect();
-      const absoluteY = window.scrollY + rect.top;
-      // const targetY = absoluteY - window.innerHeight / 2;
-      const targetY = absoluteY - toptiv.offsetHeight;
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
-      lastHighlightedRow = currentRow;
-    }
-  }
+  // function scrollToRow(currentRow) {
+  //   if (currentRow && currentRow !== lastHighlightedRow) {
+  //     const rect = currentRow.getBoundingClientRect();
+  //     const absoluteY = window.scrollY + rect.top;
+  //     // const targetY = absoluteY - window.innerHeight / 2;
+  //     const targetY = absoluteY - toptiv.offsetHeight;
+  //     window.scrollTo({ top: targetY, behavior: 'smooth' });
+  //     lastHighlightedRow = currentRow;
+  //   }
+  // }
 
   // function autoScrollToRow(row) {
   //   if (!autoScrollEnabled) return; // 若使用者在滾動，略過
