@@ -649,9 +649,9 @@ async function vtGetList(siteName,t){
   if (t.startsWith('#')){
 
     t=t.slice(1);
-    res = await fetch(`https://tw.voicetube.com/_next/data/CMQPIXpBzCGk392ED4LrW/zh-TW/search.json?query=${t}&sortBy=relevance&page=${rr}`);
+    res = await fetch(`${preStr}https://tw.voicetube.com/_next/data/CMQPIXpBzCGk392ED4LrW/zh-TW/search.json?query=${t}&sortBy=relevance&page=${rr}`);
     str = await res.json();
-    str = str.dehydratedState.queries[0].state;
+    str = str.pageProps.dehydratedState.queries[0].state;
 
   } else {
   
