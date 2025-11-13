@@ -947,6 +947,7 @@ document.addEventListener("click", (e) => {
   let lastHighlightedRow = row; // 記錄最後高亮行，避免重複滾動
 
   function scrollToRow(currentRow) {
+    if (!autoScrollEnabled) return; // 若使用者在滾動，略過
     if (currentRow && currentRow !== lastHighlightedRow) {
       const rect = currentRow.getBoundingClientRect();
       const absoluteY = window.scrollY + rect.top;
@@ -1188,4 +1189,5 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
