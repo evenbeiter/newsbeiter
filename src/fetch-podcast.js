@@ -964,16 +964,18 @@ document.addEventListener("click", (e) => {
             return current >= st && current < next;
           });
         if (currentRow) {
-          currentRow.children[0].style.color = 'green';
-          currentRow.children[0].style.backgroundColor = '#E5E4E2';
-          // 清除其他行樣式
-          document.querySelectorAll(`#lines-${contentId} tr`).forEach(tr => {
-            if (tr !== currentRow) {
-              tr.children[0].style.color = '';
-              tr.children[0].style.backgroundColor = '';
-            }
-          });
-          scrollToRow(currentRow);
+          if (mode==='continuous'){
+            currentRow.children[0].style.color = 'green';
+            currentRow.children[0].style.backgroundColor = '#E5E4E2';
+            // 清除其他行樣式
+            document.querySelectorAll(`#lines-${contentId} tr`).forEach(tr => {
+              if (tr !== currentRow) {
+                tr.children[0].style.color = '';
+                tr.children[0].style.backgroundColor = '';
+              }
+            });
+            scrollToRow(currentRow);
+          }
         }
 
         // 播放控制
