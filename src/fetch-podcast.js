@@ -993,6 +993,7 @@ document.addEventListener("click", (e) => {
     } else {
       media.currentTime = startTime;
       media.play();
+      playBtn.innerHTML = svgPause;
 
       media.ontimeupdate = function () {
         //const current = media.currentTime;
@@ -1026,6 +1027,7 @@ document.addEventListener("click", (e) => {
         } else if (mode === "loop" && current >= endTime) {
           media.currentTime = startTime;
           media.play();
+          playBtn.innerHTML = svgPause;
         }
       };
     }
