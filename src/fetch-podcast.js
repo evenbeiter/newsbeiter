@@ -637,6 +637,91 @@ async function ytbGetContent(id){
 }
 
 
+
+//    SOUNDCLOUD
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function scGetList(siteName,t) {
+  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
+
+  try{
+  const res = await fetch(preStr+encodeURIComponent('https://soundcloud.com/'+t));
+  const html = await res.text();
+
+  // 1. 取出所有 <script>...</script>
+  const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
+
+  // 2. 找到包含 window.__sc_hydration 的 script
+  for (const match of scripts) {
+    const content = match[1];
+    if (content.includes("window.__sc_hydration")) {
+      const raw = JSON.parse(content.trim().slice(24,-1));
+  
+      // 3. 找出 hydratable === "playlist" 的物件
+      const target = raw.find(item => item.hydratable === "playlist");
+
+      const data = target ? target.data?.tracks : null;
+      const ids = data.map(item => item.id);
+
+      for (const id of ids) {
+        const res = await fetch(`${preStr}${encodeURIComponent(`https://api-v2.soundcloud.com/tracks?ids=${id}&client_id=LMlJPYvzQSVyjYv7faMQl9W7OjTBCaq4`)}`);
+        const json = await res.json();
+        const h = json[0];
+        items.push([h.permalink_url,h.title,h.duration/1000]);
+      }
+    }
+
+    for (let h of items){
+      html+=`<p class="title fs12" onclick="scGetContent(this.id,'${h[0]}')">${h[1]}<br><span class="fs10 fw-bold">${h[2]}</span></p><div id="${h[0]}" class="content"></div><hr>`;
+    }
+    }
+
+    } catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+
+async function scGetContent(id){
+  contentId = id;
+  adSegments = [];
+  const cEl=document.getElementById(id);
+
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
+
+    try{
+    const res=await fetch(`${backendUrl}/klickaud?url=${id}`);
+    const str=await res.text();
+    data = decodeBase64(str);
+
+    let mediaSrc = data;
+    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
+    if (mediaSrc.indexOf('.mp3')!==-1) {
+      media=ap;
+      ap.src= mediaSrc;vp.src='';
+      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+    } else {
+      media=vp;
+      vp.src= mediaSrc;ap.src='';
+      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+    }
+    media.playbackRate = 1;
+    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+
+    loading.style.display='none';
+    } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; loading.style.display='none'; return;}
+
+
+  } else {
+    cEl.style.display='none';
+  }
+
+}
+
+
 //    VOICETUBE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
