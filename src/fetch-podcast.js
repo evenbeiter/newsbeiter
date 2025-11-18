@@ -967,13 +967,60 @@ if ('mediaSession' in navigator) {
   }
 
   // 控制速率變化
+  // const changeSpeed = (delta) => {
+  //   let newRate = media.playbackRate + delta;
+  //   // 限制範圍在 0.5x ~ 2.0x
+  //   newRate = Math.max(0.5, Math.min(2.0, newRate));
+  //   media.playbackRate = newRate;
+  //   speedLabel.textContent = newRate.toFixed(1) + "x";
+  // };
+
+  // 加速或減速函式
   const changeSpeed = (delta) => {
-    let newRate = media.playbackRate + delta;
-    // 限制範圍在 0.5x ~ 2.0x
-    newRate = Math.max(0.5, Math.min(2.0, newRate));
-    media.playbackRate = newRate;
-    speedLabel.textContent = newRate.toFixed(1) + "x";
+    // YouTube iframe player
+    if (media && media.playVideo) {
+      try {
+        let currentRate = media.getPlaybackRate();
+        let availableRates = media.getAvailablePlaybackRates(); // e.g. [0.25, 0.5, 1, 1.25, 1.5, 2]
+
+        // 嘗試找到最接近的支援速率
+        let newRate = currentRate + delta;
+        // 限制在支援範圍內
+        newRate = Math.max(Math.min(newRate, Math.max(...availableRates)), Math.min(...availableRates));
+
+        // 找出支援速率中最接近 newRate 的值（避免出現 1.1 這種不支援的速率）
+        let closestRate = availableRates.reduce((prev, curr) =>
+          Math.abs(curr - newRate) < Math.abs(prev - newRate) ? curr : prev
+        );
+
+        media.setPlaybackRate(closestRate);
+        updateSpeedLabel(closestRate);
+      } catch (e) {
+        console.warn("YouTube 播放速度設定失敗：", e);
+      }
+    }
+
+    // HTML5 audio 或 video
+    else if (media && (media.tagName === "AUDIO" || media.tagName === "VIDEO")) {
+      let newRate = media.playbackRate + delta;
+      // 限制範圍在 0.5x ~ 2.0x
+      newRate = Math.max(0.5, Math.min(2.0, newRate));
+      media.playbackRate = newRate;
+      updateSpeedLabel(newRate);
+    }
+
+    // 其他情況（未初始化或不支援）
+    else {
+      console.warn("無法變更播放速度，media 尚未初始化或不支援。");
+    }
   };
+
+  // 更新畫面上的顯示文字
+  const updateSpeedLabel = (rate) => {
+    if (typeof speedLabel !== "undefined" && speedLabel) {
+      speedLabel.textContent = rate.toFixed(2).replace(/\.0+$/, "") + "x";
+    }
+  };  
 
   // 按鈕事件綁定
   speedDown.addEventListener("click", () => changeSpeed(-0.1));
