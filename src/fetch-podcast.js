@@ -33,7 +33,7 @@ async function adbkGetContent(id){
   contentId = CSS.escape(id);
   adSegments = [];
 
-    let mediaSrc = `${backendUrl}/audiobook/mp3?url=${id}`;
+    let mediaSrc = `${backendUrl}/audiobook/mp3?url=${encodeURIComponent(id)}`;
       media=ap;
       ap.src= mediaSrc;vp.src='';
       ap.style.display='block';vp.style.display='none';yt.style.display='none';
