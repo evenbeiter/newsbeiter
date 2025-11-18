@@ -33,16 +33,11 @@ async function adbkGetContent(id){
   contentId = CSS.escape(id);
   adSegments = [];
 
-    let mediaSrc = id;
-    if (mediaSrc.indexOf('.mp3')!==-1) {
+    let mediaSrc = `${backendUrl}/audiobook/mp3?url=${id}`;
       media=ap;
       ap.src= mediaSrc;vp.src='';
       ap.style.display='block';vp.style.display='none';yt.style.display='none';
-    } else {
-      media=vp;
-      vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';yt.style.display='none';
-    }
+
     media.playbackRate = 1.2;
     speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
 
