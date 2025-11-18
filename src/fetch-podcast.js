@@ -1,3 +1,53 @@
+//    AUDIOBOOK
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function adbkGetList(siteName,t) {
+  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
+
+  try {
+  const res=await fetch(preStr+'https://bookaudiobook.net/blink-audio/');
+  const str=await res.text();
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  const audios = doc.querySelectorAll('audio source');
+
+  if (audios.length !==0 ) {
+    let i=0;
+    for (let h of audios){
+      items.push([h.src,String(i+1).padStart(2,'0')])
+    }
+
+    for (let h of items){
+      html+=`<p class="title fs12" onclick="adbkGetContent('${h[0]}')">${topdiv.querySelector('span').innerText}: ${h[1]}</p><hr>`;
+    }
+
+  }
+
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+
+async function adbkGetContent(id){
+  contentId = CSS.escape(id);
+  adSegments = [];
+
+    let mediaSrc = id;
+    if (mediaSrc.indexOf('.mp3')!==-1) {
+      media=ap;
+      ap.src= mediaSrc;vp.src='';
+      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+    } else {
+      media=vp;
+      vp.src= mediaSrc;ap.src='';
+      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+    }
+    media.playbackRate = 1.2;
+    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+
+}
+
 //    KEKENET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -672,7 +722,7 @@ async function scGetList(siteName,t) {
       }
 
       for (let h of items){
-        html+=`<p class="title fs12" onclick="scGetContent('${h[0]}')">${h[1]}<br><span class="fs10 fw-bold">${cvtS2HHMMSS(h[2],1)}</span></p><div id="${h[0]}" class="content"></div><hr>`;
+        html+=`<p class="title fs12" onclick="scGetContent('${h[0]}')">${h[1]}<br><span class="fs10 fw-bold">${cvtS2HHMMSS(h[2],1)}</span></p><hr>`;
       }
     }
     }
@@ -685,19 +735,11 @@ async function scGetList(siteName,t) {
 async function scGetContent(id){
   contentId = CSS.escape(id);
   adSegments = [];
-  const cEl=document.getElementById(id);
 
-  if (cEl.style.display=='none' || cEl.style.display==''){
-    loading.style.display='block';
-    cEl.style.display='block';
-
-    try{
     const res=await fetch(`${backendUrl}/klickaud?url=${id}`);
     const str=await res.text();
-    data = decodeBase64(str);
+    let mediaSrc = decodeBase64(str);
 
-    let mediaSrc = data;
-    if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.indexOf('.mp3')!==-1) {
       media=ap;
       ap.src= mediaSrc;vp.src='';
@@ -707,16 +749,8 @@ async function scGetContent(id){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    media.playbackRate = 1.5;
+    media.playbackRate = 1.2;
     speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
-
-    loading.style.display='none';
-    } catch {cEl.innerHTML+=`<p>尚未提供內容</p>`; loading.style.display='none'; return;}
-
-
-  } else {
-    cEl.style.display='none';
-  }
 
 }
 
