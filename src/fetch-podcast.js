@@ -686,28 +686,36 @@ async function ytbGetContent(id){
 //    SOUNDCLOUD
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// props.pageProps.playlistUrn >> soundcloud:playlists:2053138686
+// props.pageProps.initialStoreState.entities.playlists.soundcloud:playlists:2053138686.data.tracks
+
 async function scGetList(siteName,t) {
   ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
   adSegments = [];
 
   try{
-  const res = await fetch(preStr+encodeURIComponent('https://soundcloud.com/'+t));
+  const res = await fetch(preStr+encodeURIComponent('https://m.soundcloud.com/'+t));
   const str = await res.text();
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
 
-  // 1. 取出所有 <script>...</script>
-  const scripts = [...str.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
+  const raw = JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
+  const rawData = raw.props.pageProps.initialStoreState.entities.playlists[raw.props.pageProps.playlistUrn].data.tracks;
+  const ids = rawData.map(item=>item.replace('soundcloud:tracks:',''));
 
-  // 2. 找到包含 window.__sc_hydration 的 script
-  for (const match of scripts) {
-    const content = match[1];
-    if (content.includes("window.__sc_hydration")) {
-      const raw = JSON.parse(content.trim().slice(24,-1));
+  // // 1. 取出所有 <script>...</script>
+  // const scripts = [...str.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
+
+  // // 2. 找到包含 window.__sc_hydration 的 script
+  // for (const match of scripts) {
+  //   const content = match[1];
+  //   if (content.includes("window.__sc_hydration")) {
+      // const raw = JSON.parse(content.trim().slice(24,-1));
   
-      // 3. 找出 hydratable === "playlist" 的物件
-      const target = raw.find(item => item.hydratable === "playlist");
+      // // 3. 找出 hydratable === "playlist" 的物件
+      // const target = raw.find(item => item.hydratable === "playlist");
 
-      const data = target ? target.data?.tracks : null;
-      const ids = data.map(item => item.id);
+      // const data = target ? target.data?.tracks : null;
+      // const ids = data.map(item => item.id);
 
       for (let id of ids.slice((rr-1)*10,rr*10)) {
         const res = await fetch(`${preStr}${encodeURIComponent(`https://api-v2.soundcloud.com/tracks?ids=${id}&client_id=LMlJPYvzQSVyjYv7faMQl9W7OjTBCaq4`)}`);
@@ -719,8 +727,8 @@ async function scGetList(siteName,t) {
       for (let h of items){
         html+=`<p class="title fs12" onclick="scGetContent('${h[0]}')">${h[1]}<br><span class="fs10 fw-bold">${cvtS2HHMMSS(h[2],1)}</span></p><hr>`;
       }
-    }
-    }
+    // }
+    // }
     } catch{html='<p>尚無內容</p>'}
 
   return html;
