@@ -14,7 +14,7 @@ async function adbkGetList(siteName,t) {
   if (audios.length !==0 ) {
     let i=0;
     for (let h of audios){
-      items.push([h.src,String(i+1).padStart(2,'0')])
+      items.push([h.src,String(i++).padStart(2,'0')])
     }
 
     for (let h of items){
