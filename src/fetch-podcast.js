@@ -707,7 +707,7 @@ async function scGetContent(id){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    media.playbackRate = 1;
+    media.playbackRate = 1.5;
     speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
 
     loading.style.display='none';
