@@ -566,6 +566,61 @@ function showOverlay(el,elSrc){
 function shareLink(url){return `<p class="text-end"><a href="${url}" target="_blank">分享</a></p><br>`}
 
 
+// DECODER ///////////////////
+
+function decodeBase64(dataSrc) {
+    // 1. 去掉可能的前後雙引號
+    const trimmed = dataSrc.replace(/^["']|["']$/g, '');
+
+    // 2. 使用 atob 解碼 Base64
+    try {
+        const decoded = atob(trimmed);
+        return decoded;
+    } catch (err) {
+        console.error("Base64 解碼失敗:", err);
+        return null;
+    }
+}
+
+function parseJWT(token) {
+  const [header, payload, signature] = token.split('.');
+  const decode = str => JSON.parse(atob(str.replace(/-/g,'+').replace(/_/g,'/')));
+  return { header: decode(header), payload: decode(payload), signature };
+}
+
+
+// FILE DOWNLOADER ///////////
+
+function downloadBlobFile(urlToSend, fileName) {
+    const req = new XMLHttpRequest();
+    req.onprogress = updateDLProgress;
+    req.open("GET", urlToSend, true);
+    req.responseType = "blob";
+
+    req.onload = function() {
+        const blob = req.response;
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    }
+    ;
+
+    req.onerror = function() {
+        alert("Download failed. Try again.");
+    }
+    ;
+
+    req.send();
+}
+
+//////////////////////////////
+
+
+
+
 const svgArrowUpRight = `
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
     <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5"/>
