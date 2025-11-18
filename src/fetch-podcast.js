@@ -12,7 +12,7 @@ async function adbkGetList(siteName,t) {
   const audios = doc.querySelectorAll('audio source');
 
   if (audios.length !==0 ) {
-    let i=0;
+    let i=1;
     for (let h of audios){
       items.push([h.src,String(i++).padStart(2,'0')])
     }
