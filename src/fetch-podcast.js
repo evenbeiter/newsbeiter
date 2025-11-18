@@ -647,10 +647,10 @@ async function scGetList(siteName,t) {
 
   try{
   const res = await fetch(preStr+encodeURIComponent('https://soundcloud.com/'+t));
-  const html = await res.text();
+  const str = await res.text();
 
   // 1. 取出所有 <script>...</script>
-  const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
+  const scripts = [...str.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
 
   // 2. 找到包含 window.__sc_hydration 的 script
   for (const match of scripts) {
@@ -664,19 +664,18 @@ async function scGetList(siteName,t) {
       const data = target ? target.data?.tracks : null;
       const ids = data.map(item => item.id);
 
-      for (const id of ids) {
+      for (let id of ids.slice((rr-1)*10,rr*10)) {
         const res = await fetch(`${preStr}${encodeURIComponent(`https://api-v2.soundcloud.com/tracks?ids=${id}&client_id=LMlJPYvzQSVyjYv7faMQl9W7OjTBCaq4`)}`);
         const json = await res.json();
-        const h = json[0];
-        items.push([h.permalink_url,h.title,h.duration/1000]);
+        const j = json[0];
+        items.push([j.permalink_url,j.title,j.duration/1000]);
+      }
+
+      for (let h of items){
+        html+=`<p class="title fs12" onclick="scGetContent('${h[0]}')">${h[1]}<br><span class="fs10 fw-bold">${cvtS2HHMMSS(h[2],1)}</span></p><div id="${h[0]}" class="content"></div><hr>`;
       }
     }
-
-    for (let h of items){
-      html+=`<p class="title fs12" onclick="scGetContent(this.id,'${h[0]}')">${h[1]}<br><span class="fs10 fw-bold">${h[2]}</span></p><div id="${h[0]}" class="content"></div><hr>`;
     }
-    }
-
     } catch{html='<p>尚無內容</p>'}
 
   return html;
@@ -684,7 +683,7 @@ async function scGetList(siteName,t) {
 
 
 async function scGetContent(id){
-  contentId = id;
+  contentId = CSS.escape(id);
   adSegments = [];
   const cEl=document.getElementById(id);
 
