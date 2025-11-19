@@ -103,7 +103,6 @@ async function bkstGetContent(id){
     .then(res => res.blob())
     .then(blob => {
     ap.src = URL.createObjectURL(blob);
-    ap.play();
   });
     
     vp.src='';
