@@ -99,7 +99,14 @@ async function bkstGetContent(id){
     // <audio controls src="https://你的服務.onrender.com/audio/play?file=music/test.mp3"></audio>
     let mediaSrc = `${backendUrl}/audio/play?file=${id}.m4a`;
     media=ap;
-    ap.src= mediaSrc;vp.src='';
+    fetch(mediaSrc)
+    .then(res => res.blob())
+    .then(blob => {
+    ap.src = URL.createObjectURL(blob);
+    ap.play();
+  });
+    
+    vp.src='';
     ap.style.display='block';vp.style.display='none';yt.style.display='none';
 
     // } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
