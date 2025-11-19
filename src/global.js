@@ -588,6 +588,12 @@ function parseJWT(token) {
   return { header: decode(header), payload: decode(payload), signature };
 }
 
+function titleCase(str) {
+  return str
+    .toLowerCase()
+    .replace(/\b\w/g, ch => ch.toUpperCase());
+}
+
 
 // FILE DOWNLOADER ///////////
 

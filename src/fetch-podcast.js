@@ -51,7 +51,7 @@ async function adbkGetContent(id){
 async function bkstGetList(siteName,t){
   try{url=`${backendUrl}/bkst/list?rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
-    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content${t==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
+    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${titleCase(h.slice(0,-4).replaceAll('-',' '))}</p><div id="${h}" class="content${t==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
 
   }catch{html='<p>尚無內容</p>'}
   return html;
