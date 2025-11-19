@@ -54,7 +54,7 @@ async function bkstGetList(siteName,t){
     for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.slice(0,-4)}')">${titleCase(h.slice(0,-7).replaceAll('-',' '))}</p><div id="${h.slice(0,-4)}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
-        <tbody id="lines-${h}"></tbody>
+        <tbody id="lines-${h.slice(0,-4)}"></tbody>
       </table>
     </div>
     </div><hr>`}
