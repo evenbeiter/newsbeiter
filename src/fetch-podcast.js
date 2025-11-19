@@ -43,6 +43,54 @@ async function adbkGetContent(id){
 
 }
 
+
+
+//    BLINKIST
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function bkstGetList(siteName,t){
+  try{url=`${backendUrl}/bkst/list?rr=${rr}`;
+  const res = await fetch(url);const str = await res.json();
+    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${h.replace('.txt','')}</p><div id="${h}" class="content${t==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
+
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function bkstGetContent(id){
+  try{url=`${backendUrl}/bkst/read`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({path:id})
+  });
+  if (!res.ok) throw new Error('無法讀取書目');
+
+  const rawLrc=await res.json();
+
+  try{
+  let ts=[];
+  for (let s of rawLrc.transcript.transcriptSections){
+    ts.push({
+      startTime: s.start,
+      sentence: `${`${s[0].value.html}<br>` || ''}${`${s[2].value.html}` || ''}`
+    });     
+  }
+  getLinesTable(ts,id,true);
+
+  } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+
+  // <audio controls src="https://你的服務.onrender.com/audio/play?file=music/test.mp3"></audio>
+  let mediaSrc = `${backendUrl}/audio/play?file=${id.slice(0,-4)}.m4a`;
+  media=ap;
+  ap.src= mediaSrc;vp.src='';
+  ap.style.display='block';vp.style.display='none';yt.style.display='none';
+
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+
 //    KEKENET
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
