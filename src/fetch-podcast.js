@@ -51,7 +51,13 @@ async function adbkGetContent(id){
 async function bkstGetList(siteName,t){
   try{url=`${backendUrl}/bkst/list?rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
-    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${titleCase(h.slice(0,-7).replaceAll('-',' '))}</p><div id="${h}" class="content${t==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')"></div><hr>`}
+    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h}')">${titleCase(h.slice(0,-7).replaceAll('-',' '))}</p><div id="${h}" class="content${t==='speak'?' fs12':''}" onclick="getContent('${siteName}',this.id,'${h}')">
+    <div class="pt-2 sepia">
+      <table class="table table-auto fs11 p-0 sepia">
+        <tbody id="lines-${h}"></tbody>
+      </table>
+    </div>
+    </div><hr>`}
 
   }catch{html='<p>尚無內容</p>'}
   return html;
@@ -73,7 +79,7 @@ async function bkstGetContent(id){
   for (let s of rawLrc.transcript.transcriptSections){
     ts.push({
       startTime: s.start,
-      sentence: `${`${s[0].value.html}<br>` || ''}${`${s[2].value.html}` || ''}`
+      sentence: `${`${s.transcriptComponents[0].value.html}<br>` || ''}${`${s.transcriptComponents[2].value.html}` || ''}`
     });     
   }
   getLinesTable(ts,id,true);
