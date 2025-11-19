@@ -51,7 +51,7 @@ async function adbkGetContent(id){
 async function bkstGetList(siteName,t){
   try{url=`${backendUrl}/bkst/list?rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
-    for (let h of str){html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h.slice(0,-4)}')">${titleCase(h.slice(0,-7).replaceAll('-',' '))}</p><div id="${h.slice(0,-4)}" class="content">
+    for (let h of str){html+=`<p class="title fs12" onclick="bkstGetContent('${h.slice(0,-4)}')">${titleCase(h.slice(0,-7).replaceAll('-',' '))}</p><div id="${h.slice(0,-4)}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
         <tbody id="lines-${h.slice(0,-4)}"></tbody>
@@ -64,36 +64,52 @@ async function bkstGetList(siteName,t){
 }
 
 async function bkstGetContent(id){
-  try{url=`${backendUrl}/bkst/read`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({path:id+'.txt'})
-  });
-  if (!res.ok) throw new Error('無法讀取書目');
+  contentId = id;
+  adSegments = [];
+  const cEl=document.getElementById(id);
 
-  const rawLrc=await res.json();
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
 
-  try{
-  let ts=[];
-  for (let s of rawLrc.transcript.transcriptSections){
-    ts.push({
-      startTime: s.start,
-      sentence: `${`${s.transcriptComponents[0].value.html}<br>` || ''}${`${s.transcriptComponents[2].value.html}` || ''}`
-    });     
+    if (cEl.innerText.length>10) return; // already got transcription in cEl
+
+    try{url=`${backendUrl}/bkst/read`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({path:id+'.txt'})
+    });
+    if (!res.ok) throw new Error('無法讀取書目');
+
+    const rawLrc=await res.json();
+
+    // try{
+    let ts=[];
+    for (let s of rawLrc.transcript.transcriptSections){
+      ts.push({
+        startTime: s.start,
+        sentence: `<p>${`${s.transcriptComponents[0].value.html}</p>` || ''}${`${s.transcriptComponents[2].value.html}` || ''}`
+      });     
+    }
+    getLinesTable(ts,id,true);
+
+    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+
+    // <audio controls src="https://你的服務.onrender.com/audio/play?file=music/test.mp3"></audio>
+    let mediaSrc = `${backendUrl}/audio/play?file=${id}.m4a`;
+    media=ap;
+    ap.src= mediaSrc;vp.src='';
+    ap.style.display='block';vp.style.display='none';yt.style.display='none';
+
+    // } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+    loading.style.display='none';
+
+  } else {
+    cEl.style.display='none';
   }
-  getLinesTable(ts,id,true);
+  loading.style.display='none';
 
-  } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
-
-  // <audio controls src="https://你的服務.onrender.com/audio/play?file=music/test.mp3"></audio>
-  let mediaSrc = `${backendUrl}/audio/play?file=${id}.m4a`;
-  media=ap;
-  ap.src= mediaSrc;vp.src='';
-  ap.style.display='block';vp.style.display='none';yt.style.display='none';
-
-  }catch{html='<p>尚無內容</p>'}
-  return html;
 }
 
 
