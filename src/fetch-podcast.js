@@ -1089,44 +1089,50 @@ if ('mediaSession' in navigator) {
   // };
 
   // 加速或減速函式
-  const changeSpeed = (delta) => {
-    // YouTube iframe player
-    if (media && media.playVideo) {
-      try {
-        let currentRate = media.getPlaybackRate();
-        let availableRates = media.getAvailablePlaybackRates(); // e.g. [0.25, 0.5, 1, 1.25, 1.5, 2]
 
-        // 嘗試找到最接近的支援速率
-        let newRate = currentRate + delta;
-        // 限制在支援範圍內
-        newRate = Math.max(Math.min(newRate, Math.max(...availableRates)), Math.min(...availableRates));
+const changeSpeed = (delta) => {
+  // 👉 YouTube iframe player
+  if (media && typeof media.getPlaybackRate === "function") {
+    const available = media.getAvailablePlaybackRates(); // [0.25, 0.5, 1, 1.25, 1.5, 2]
+    const current = media.getPlaybackRate();
 
-        // 找出支援速率中最接近 newRate 的值（避免出現 1.1 這種不支援的速率）
-        let closestRate = availableRates.reduce((prev, curr) =>
-          Math.abs(curr - newRate) < Math.abs(prev - newRate) ? curr : prev
-        );
+    // 你的需求：YouTube 用 0.25 級距
+    let newRate = current + (delta > 0 ? 0.25 : -0.25);
 
-        media.setPlaybackRate(closestRate);
-        updateSpeedLabel(closestRate);
-      } catch (e) {
-        console.warn("YouTube 播放速度設定失敗：", e);
-      }
-    }
+    // 限制在合法範圍內
+    newRate = Math.max(Math.min(newRate, Math.max(...available)), Math.min(...available));
 
-    // HTML5 audio 或 video
-    else if (media && (media.tagName === "AUDIO" || media.tagName === "VIDEO")) {
-      let newRate = media.playbackRate + delta;
-      // 限制範圍在 0.5x ~ 2.0x
-      newRate = Math.max(0.5, Math.min(2.0, newRate));
-      media.playbackRate = newRate;
-      updateSpeedLabel(newRate);
-    }
+    // 找最近的合法速率
+    const closest = available.reduce((prev, curr) =>
+      Math.abs(curr - newRate) < Math.abs(prev - newRate) ? curr : prev
+    );
 
-    // 其他情況（未初始化或不支援）
-    else {
-      console.warn("無法變更播放速度，media 尚未初始化或不支援。");
-    }
-  };
+    media.setPlaybackRate(closest);
+    updateSpeedLabel(closest);
+    return;
+  }
+
+  // 👉 HTML5 audio 或 video
+  if (media && (media.tagName === "AUDIO" || media.tagName === "VIDEO")) {
+
+    // 你的需求：Audio/Video 用 0.1 級距
+    let newRate = media.playbackRate + (delta > 0 ? 0.1 : -0.1);
+
+    // 可自行調整範圍
+    newRate = Math.max(0.5, Math.min(3.0, newRate));
+
+    // 四捨五入到 0.1
+    newRate = Math.round(newRate * 10) / 10;
+
+    media.playbackRate = newRate;
+    updateSpeedLabel(newRate);
+    return;
+  }
+
+  console.warn("無法變更播放速度，media 尚未初始化或不支援。");
+};
+
+
 
   // 更新畫面上的顯示文字
   const updateSpeedLabel = (rate) => {
@@ -1136,8 +1142,8 @@ if ('mediaSession' in navigator) {
   };  
 
   // 按鈕事件綁定
-  speedDown.addEventListener("click", () => changeSpeed(-0.1));
-  speedUp.addEventListener("click", () => changeSpeed(+0.1));
+  speedDown.addEventListener("click", () => changeSpeed(-1));
+  speedUp.addEventListener("click", () => changeSpeed(+1));
   playBtn.addEventListener("click", playPause);
   rwBtn.addEventListener("click", () => skip(-5));
   fwBtn.addEventListener("click", () => skip(+5));
@@ -1446,6 +1452,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
