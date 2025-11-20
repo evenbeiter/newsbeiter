@@ -846,7 +846,7 @@ async function vtGetList(siteName,t){
   if (t.startsWith('#')){
 
     t=t.slice(1);
-    res = await fetch(`${preStr}https://tw.voicetube.com/_next/data/uyh1xop7gS8YfxXccgYaZ/zh-TW/search.json?query=${t}&sortBy=relevance&page=${rr}`);
+    res = await fetch(`${preStr}https://tw.voicetube.com/_next/data/uyh1xop7gS8YfxXccgYaZ/zh-TW/search.json?query=${t.replaceAll(' ','+')}&sortBy=relevance&page=${rr}`);
     str = await res.json();
     str = str.pageProps.dehydratedState.queries[0].state;
 
@@ -1452,6 +1452,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
