@@ -722,43 +722,6 @@ function extractAdSegments(meta) {
 }
 
 
-//    YOUTUBE
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-async function ytbGetList(siteName,t){
-  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
-  adSegments = [];
-
-  try{
-    const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list='+t));
-    //const raw=await res.text();
-    const buf=await res.arrayBuffer();
-    const raw=new TextDecoder('utf-8').decode(buf);
-    const str=raw.replace(/\\x([0-9A-Fa-f]{2})/g, (_, p1) =>String.fromCharCode(parseInt(p1, 16)));    
-
-    const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
-    for (let d of data){
-      items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
-    }
-
-    for (let h of items){
-      html+=`<p class="title fs12" onclick="ytbGetContent('${h[0]}')">${h[1]} | <span class="fs10 fw-bold">${h[2]}</span></p><hr>`;
-    }
-
-  }catch{html='<p>尚無內容</p>'}
-
-  return html;
-}
-
-async function ytbGetContent(id){
-  ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
-  adSegments = [];
-  media = ytPlayer;
-  createYouTubePlayer(id);
-}
-
-
-
 //    SOUNDCLOUD
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -952,6 +915,84 @@ async function vtGetContent(clickedId,id,isTranslated,youtubeId){
 
 
 async function vtGetSearchResults(siteName,t){ return html = await vtGetList(siteName, '#'+t) }
+
+
+
+//    YOUTUBE
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function ytGetList(siteName,t){
+  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
+
+  try{
+    const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list='+t));
+    //const raw=await res.text();
+    const buf=await res.arrayBuffer();
+    const raw=new TextDecoder('utf-8').decode(buf);
+    const str=raw.replace(/\\x([0-9A-Fa-f]{2})/g, (_, p1) =>String.fromCharCode(parseInt(p1, 16)));    
+
+    const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
+    for (let d of data){
+      items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
+    }
+
+    for (let h of items){
+      html+=`<p class="title fs12" onclick="ytGetContent('${h[0]}')">${h[1]} | <span class="fs10 fw-bold">${h[2]}</span></p><div id="${h[0]}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${h[0]}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+    }
+
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+async function ytGetContent(id){
+  ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+
+  contentId = id;
+  adSegments = [];
+  const cEl=document.getElementById(id);
+
+  media = ytPlayer;
+  createYouTubePlayer(id);
+
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
+
+    if (cEl.innerText.length>10) return; // already got transcription in cEl
+
+  try{
+  const res = await fetch(preStr+'https://tactiq-apps-prod.tactiq.io/transcript', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: `{"videoUrl":"https://www.youtube.com/watch?v=${id}","langCode":"en"}`,
+    });
+  const rawLrc=await res.json();
+
+  let ts=[];
+  for (let s of rawLrc.captions){
+    ts.push({
+      startTime: s.start,
+      sentence: s.text
+    });     
+  }
+  getLinesTable(ts,id,true);
+
+  } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+  loading.style.display='none';
+
+  } else {
+    cEl.style.display='none';
+  }
+}
+
 
 
 //    OPERATION
