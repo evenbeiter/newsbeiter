@@ -1010,7 +1010,7 @@ async function watchYT(){
   rr=1;cursor='';
   // getList(siteName,t);
   loading.style.display='block';
-  siteNameVar=siteName;rt=t;
+  siteNameVar='ytb';// rt=t;
   newNews();
   items=[];html='';
   // list.innerHTML+=await window[`${siteName}GetList`](siteName,t)
@@ -1028,6 +1028,7 @@ async function watchYT(){
   showTop(top);
 
   ytbGetContent(id);
+  document.querySelector('#watch-yt-id').value='';
 }
 
 
