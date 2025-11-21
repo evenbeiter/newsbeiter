@@ -18,4 +18,3 @@ const allSites=[['pd','Podcast',pd,'',''],['le','LE',le,'',''],['yt','YouTube',y
 
 const faq=[['vt','VT','美股'],['vt','VT','利率']];
 const searchSites=[['vt','VT']]; 
-
