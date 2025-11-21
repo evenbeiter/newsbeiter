@@ -27,7 +27,7 @@ document.addEventListener('keydown', function (e) {if (isVisible && e.key === 'E
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
 // if (window.location.pathname.endsWith('/news')){
-if (window.location.href.indexOf('podcast')==-1){
+if (window.location.href.indexOf('cast')==-1){
   createUrlListDiv([allSites,videoSites]);
   createSearchListDiv(faq,searchSites);
   openUrlList();
