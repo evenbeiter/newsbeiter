@@ -27,7 +27,7 @@ function createChannelList(site,siteName,top){
     `;
   }
   openChannelList();
-  if (window.location.href.indexOf('podcast')==-1) {get1stList(siteName, top+' | '+site[0][1],site[0][0])};
+  if (window.location.href.indexOf('cast')==-1) {get1stList(siteName, top+' | '+site[0][1],site[0][0])};
 }
 
 function createSearchListDiv(faqList,searchSiteList){
