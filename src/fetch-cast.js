@@ -923,7 +923,7 @@ async function vtGetSearchResults(siteName,t){ return html = await vtGetList(sit
 
 let lang='en';
 
-async function ytGetList(siteName,t){
+async function ytbGetList(siteName,t){
   ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
   adSegments = [];
   lang='en';
@@ -943,7 +943,7 @@ async function ytGetList(siteName,t){
     }
 
     for (let h of items){
-      html+=`<p class="title fs12" onclick="ytGetContent('${h[0]}')">${h[1]} | <span class="fs10 fw-bold">${h[2]}</span></p><div id="${h[0]}" class="content">
+      html+=`<p class="title fs12" onclick="ytbGetContent('${h[0]}')">${h[1]} | <span class="fs10 fw-bold">${h[2]}</span></p><div id="${h[0]}" class="content">
       <div class="pt-2 sepia">
         <table class="table table-auto fs11 p-0 sepia">
           <tbody id="lines-${h[0]}"></tbody>
@@ -957,7 +957,7 @@ async function ytGetList(siteName,t){
   return html;
 }
 
-async function ytGetContent(id){
+async function ytbGetContent(id){
   ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
 
   contentId = id;
@@ -1004,7 +1004,7 @@ async function watchYT(){
   const userInput = document.querySelector('#watch-yt-id').value;
   const id = getYouTubeVideoId(userInput);
   // 做content container
-  ytGetContent(id);
+  ytbGetContent(id);
 }
 
 
