@@ -921,9 +921,14 @@ async function vtGetSearchResults(siteName,t){ return html = await vtGetList(sit
 //    YOUTUBE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+let lang='en';
+
 async function ytGetList(siteName,t){
   ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
   adSegments = [];
+  lang='en';
+
+  if (t.endsWith('$')){lang='';t=t.slice(0,-1);}
 
   try{
     const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list='+t));
@@ -962,6 +967,8 @@ async function ytGetContent(id){
   media = ytPlayer;
   createYouTubePlayer(id);
 
+  if (lang=='') return;
+
   if (cEl.style.display=='none' || cEl.style.display==''){
     loading.style.display='block';
     cEl.style.display='block';
@@ -993,6 +1000,12 @@ async function ytGetContent(id){
   }
 }
 
+async function watchYT(){
+  const userInput = document.querySelector('#watch-yt-id').value;
+  const id = getYouTubeVideoId(userInput);
+  // 做content container
+  ytGetContent(id);
+}
 
 
 //    OPERATION
@@ -1044,6 +1057,65 @@ function createYouTubePlayer(videoId) {
     }
   });
 }
+
+
+/**
+ * 從 YouTube 鏈接或字串取得 videoId（若無則回傳 null）
+ * 支援範例：
+ * - https://www.youtube.com/watch?v=SpeWbCq5s_c&list=...
+ * - https://youtu.be/SpeWbCq5s_c
+ * - https://www.youtube.com/embed/SpeWbCq5s_c
+ * - https://www.youtube.com/shorts/SpeWbCq5s_c
+ * - 也接受直接傳入 videoId 字串（長度 11）
+ */
+function getYouTubeVideoId(input) {
+  if (!input) return null;
+  // 若使用者直接傳入 videoId（YouTube id 通常為 11 個字，但有少數例外）
+  const idCandidate = String(input).trim();
+  if (/^[A-Za-z0-9_-]{11}$/.test(idCandidate)) return idCandidate;
+
+  // 嘗試解析為 URL（若不是合法 URL 會丟錯）
+  let url;
+  try {
+    url = new URL(input);
+  } catch (e) {
+    // 不是完整 URL，嘗試在字串中用 regex 抓 id
+    const fallback = input.match(/[A-Za-z0-9_-]{11}/);
+    return fallback ? fallback[0] : null;
+  }
+
+  // 1) 標準 watch?v=...
+  if (url.searchParams && url.searchParams.get('v')) {
+    const v = url.searchParams.get('v');
+    if (/^[A-Za-z0-9_-]{11}$/.test(v)) return v;
+  }
+
+  // 2) youtu.be 短址，path 第一段為 id
+  if (url.hostname === 'youtu.be' || url.hostname.endsWith('.youtu.be')) {
+    const p = url.pathname.split('/').filter(Boolean)[0];
+    if (p && /^[A-Za-z0-9_-]{11}$/.test(p)) return p;
+  }
+
+  // 3) embed, v, shorts 等常見路徑： /embed/ID, /v/ID, /shorts/ID
+  const pathMatch = url.pathname.match(/(?:\/embed\/|\/v\/|\/shorts\/|\/watch\/|\/videos\/)([A-Za-z0-9_-]{11})/);
+  if (pathMatch) return pathMatch[1];
+
+  // 4) 有時在 hash fragment 裡面（例如 SPA 使用 #!v=... 或 #v=...）
+  if (url.hash) {
+    const hashParams = new URLSearchParams(url.hash.replace(/^#?!?/, ''));
+    if (hashParams.get('v') && /^[A-Za-z0-9_-]{11}$/.test(hashParams.get('v'))) {
+      return hashParams.get('v');
+    }
+    // 或直接在 hash 裡面包含 id
+    const hashMatch = url.hash.match(/[A-Za-z0-9_-]{11}/);
+    if (hashMatch) return hashMatch[0];
+  }
+
+  // 5) 最後的保底：在整個 href 中找 11 長度的 token（會挑第一個）
+  const fallback = url.href.match(/[A-Za-z0-9_-]{11}/);
+  return fallback ? fallback[0] : null;
+}
+
 
 
 // ======= ontimeupdate 跳過廣告 =======

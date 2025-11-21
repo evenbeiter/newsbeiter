@@ -19,6 +19,13 @@ var items=[],ytnCoverImg='',ytnVideo='',ecoMagContent,url='',html='',coun='',t='
 function createChannelList(site,siteName,top){
   channelList.innerHTML='';
   for (let tab of site){channelList.innerHTML+=`<button class="btn sepia me-1 mb-1" type="button" onclick="get1stList('${siteName}','${top} | ${tab[1]}','${tab[0]}')">${tab[1]}</button>`;}
+  if (siteName==='yt'){channelList.innerHTML+=`
+    <div class="input-group mb-1">
+      <input type="search" id="watch-yt-id" class="form-control">
+      <span class="btn sepia" onclick="watchYT()">GO</span>
+    </div>
+    `;
+  }
   openChannelList();
   if (window.location.href.indexOf('podcast')==-1) {get1stList(siteName, top+' | '+site[0][1],site[0][0])};
 }
