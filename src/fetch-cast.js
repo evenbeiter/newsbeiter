@@ -939,7 +939,9 @@ async function ytbGetList(siteName,t){
 
     const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
     for (let d of data){
-      items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
+      if (d.isPlayable){
+        items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
+      }
     }
 
     for (let h of items){
@@ -1004,6 +1006,27 @@ async function watchYT(){
   const userInput = document.querySelector('#watch-yt-id').value;
   const id = getYouTubeVideoId(userInput);
   // 做content container
+
+  rr=1;cursor='';
+  // getList(siteName,t);
+  loading.style.display='block';
+  siteNameVar=siteName;rt=t;
+  newNews();
+  items=[];html='';
+  // list.innerHTML+=await window[`${siteName}GetList`](siteName,t)
+
+  list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+  loading.style.display='none';
+
+  showTop(top);
+
   ytbGetContent(id);
 }
 
