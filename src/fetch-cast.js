@@ -6,7 +6,7 @@ async function adbkGetList(siteName,t) {
   adSegments = [];
 
   try {
-  const res=await fetch(preStr+'https://bookaudiobook.net/blink-audio/');
+  const res=await fetch(preStr+t);
   const str=await res.text();
   const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
   const audios = doc.querySelectorAll('audio source');
@@ -1596,6 +1596,7 @@ const loop=`
   <path d="M9 5.5a.5.5 0 0 0-.854-.354l-1.75 1.75a.5.5 0 1 0 .708.708L8 6.707V10.5a.5.5 0 0 0 1 0z"/>
 </svg>
 `;
+
 
 
 
