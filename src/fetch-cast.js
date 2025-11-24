@@ -946,6 +946,21 @@ async function vtGetList(siteName,t){
       });
     str=await res.json();
 
+  } else if (t==='hotVideos') {
+    res = await fetch(`https://vtapi.voicetube.com/v2.2/videos/hotVideos?platform=Web&page=${rr}&perPage=20&language=zh-TW`, {
+      method: 'GET',
+      headers: headers,
+      });
+    str=await res.json();
+
+  } else if (t==='videos') {
+    res = await fetch(`https://vtapi.voicetube.com/v2.2/videos?platform=Web&language=zh-TW`, {
+      method: 'POST',
+      headers: headers,
+      body: `{"page":${rr},"perPage":20,"isFeatured":true,"sortMode":"DESC","sortBy":"publishedAt"}`
+      });
+    str=await res.json();
+
   } else {
   
     res = await fetch('https://vtapi.voicetube.com/v2.2/videos?platform=Web&language=zh-TW', {
