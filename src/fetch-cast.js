@@ -947,7 +947,7 @@ async function tedGetList(siteName,t){
 
 
 async function tedGetContent(id){
-  ap.style.display='none';vp.style.display='block';yt.style.display='none';ap.src='';vp.src='';
+  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
 
   if (id==='') {
     id=document.querySelector('#user-input').value;
@@ -975,9 +975,15 @@ async function tedGetContent(id){
     loading.style.display='block';
     cEl.style.display='block';
 
+  let res, str;
+
+  res=await fetch(`${preStr}https://www.ted.com`);
+  str=await res.text();
+  const buildId = str.match(/"buildId":"(\d+)"/)?.[1];
+
   try {
-  const res=await fetch(`${preStr}https://www.ted.com/_next/data/${buildId}/talks/${id}.json`);
-  const str=await res.json();
+  res=await fetch(`${preStr}https://www.ted.com/_next/data/${buildId}/talks/${id}.json`);
+  str=await res.json();
 
   const rawLrc = str.pageProps.transcriptData.translation.paragraphs || [];
 
