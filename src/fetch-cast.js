@@ -994,7 +994,7 @@ async function tedGetContent(id){
       for (let s of r.cues){
         ts.push({
           startTime: s.time/1000,
-          sentence: `${s.text}<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>}`
+          sentence: `${s.text}<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
         });
       }  
     }
