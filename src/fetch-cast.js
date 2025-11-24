@@ -518,7 +518,7 @@ async function pdGetList(siteName,t){
     items.push([h.id,h.title,h.uploadedAt,h.duration,h.episodes[0].hasTranscription,h.episodes[0].transcriptionId])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="pdGetContent(this.id,'${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title fs12" onclick="pdGetContent('${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
         <tbody id="lines-${h[0]}"></tbody>
@@ -535,7 +535,7 @@ async function pdGetList(siteName,t){
 //    PODCAST GET CONTENT
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
+async function pdGetContent(id,hasTranscription,transcriptionId){
   if (id==='') {
     id=document.querySelector('#user-input').value;
     newNews();showTop(siteNameVar);items=[];html='';
@@ -951,7 +951,7 @@ async function vtGetList(siteName,t){
     items.push([h.id,h.title,h.cefrLevel,h.durationText,h.isTranslated,h.youtubeId])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="vtGetContent(this.id,'${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title fs12" onclick="vtGetContent('${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
         <tbody id="lines-${h[0]}"></tbody>
@@ -965,7 +965,7 @@ async function vtGetList(siteName,t){
 }
 
 
-async function vtGetContent(clickedId,id,isTranslated,youtubeId){
+async function vtGetContent(id,isTranslated,youtubeId){
   ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
 
   if (id==='') {
