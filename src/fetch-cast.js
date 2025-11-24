@@ -912,6 +912,115 @@ async function scGetContent(id){
 }
 
 
+
+//    TED
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function tedGetList(siteName,t){
+  ap.style.display='none';vp.style.display='block';yt.style.display='none';ap.src='';vp.src='';
+  adSegments = [];
+
+  try{
+    const res = await fetch('https://zenith-prod-alt.ted.com/api/search', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: `[{"indexName":"newest","params":{"attributeForDistinct":"objectID","distinct":1,"facets":["subtitle_languages","tags"],"highlightPostTag":"__/ais-highlight__","highlightPreTag":"__ais-highlight__","hitsPerPage":24,"maxValuesPerFacet":500,"page":${rr},"query":""}}]`,
+      });
+    const str=await res.json();
+
+  for (let h of str.results[0].hits){
+    items.push([h.slug,h.title,h.speakers,h.duration])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="tedGetContent('${h[0]}')">${h[1]}, ${h[2]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
+    <div class="pt-2 sepia">
+      <table class="table table-auto fs11 p-0 sepia">
+        <tbody id="lines-${h[0]}"></tbody>
+      </table>
+    </div>
+    </div><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+
+async function tedGetContent(id){
+  ap.style.display='none';vp.style.display='block';yt.style.display='none';ap.src='';vp.src='';
+
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    isTranslated=true;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<p></p><div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
+  contentId = id;
+  adSegments = [];
+  const cEl=document.getElementById(id);
+
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
+
+  try {
+  const res=await fetch(`${preStr}https://www.ted.com/_next/data/${buildId}/talks/${id}.json`);
+  const str=await res.json();
+
+  const rawLrc = str.pageProps.transcriptData.translation.paragraphs || [];
+
+  if (rawLrc!==[]){
+    try{
+    let ts=[];
+    for (let r of rawLrc){
+      for (let s of r.cues){
+        ts.push({
+          startTime: s.time/1000,
+          sentence: `${s.text}<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>}`
+        });
+      }  
+    }
+
+    cEl.previousElementSibling.innerHTML+=`${str.pageProps.videoData.recordedOn ? `<p class="fs10">${str.pageProps.videoData.recordedOn}</p>` : ''}`;
+
+    getLinesTable(ts,id,false);
+
+    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
+
+  } else {
+    cEl.innerHTML+=`<p>尚未提供文稿</p>`;
+  }
+  } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
+
+  let mediaSrc=str.pageProps.videoData.playerData.resources.h264[0].file;
+  media=vp;
+  vp.src= mediaSrc;ap.src='';
+  vp.style.display='block';ap.style.display='none';yt.style.display='none';
+  setPlaybackRate(1);
+
+
+
+  loading.style.display='none';
+
+  } else {
+    cEl.style.display='none';
+  }
+
+}
+
+
 //    VOICETUBE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
