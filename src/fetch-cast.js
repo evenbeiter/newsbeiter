@@ -1000,7 +1000,7 @@ async function vtGetContent(id,isTranslated,youtubeId){
     newNews();showTop(siteNameVar);items=[];html='';
     loading.style.display='block';
 
-    list.innerHTML+=`<div id="${id}" class="content">
+    list.innerHTML+=`<p></p><div id="${id}" class="content">
       <div class="pt-2 sepia">
         <table class="table table-auto fs11 p-0 sepia">
           <tbody id="lines-${id}"></tbody>
