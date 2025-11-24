@@ -970,6 +970,7 @@ async function vtGetContent(id,isTranslated,youtubeId){
 
   if (id==='') {
     id=document.querySelector('#user-input').value;
+    isTranslated=true;
     newNews();showTop(siteNameVar);items=[];html='';
     loading.style.display='block';
 
@@ -993,12 +994,14 @@ async function vtGetContent(id,isTranslated,youtubeId){
     loading.style.display='block';
     cEl.style.display='block';
 
-  createYouTubePlayer(youtubeId);
-  setPlaybackRate(1);
 
   try {
   const res=await fetch(`https://vtapi.voicetube.com/v2.1.1/zh-TW/videos/${id}?platform=Web&language=zh-TW`);
   const str=await res.json();
+
+  youtubeId=str.data.youtubeId;
+  createYouTubePlayer(str.data.youtubeId);
+  setPlaybackRate(1);
 
   cEl.previousElementSibling.innerHTML+=`${str.data.publishedAt ? `<p class="fs10">${cvt2Timezone(str.data.publishedAt*1000)}</p>` : ''}`;
 
