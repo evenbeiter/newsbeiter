@@ -1068,20 +1068,20 @@ async function ytbGetList(siteName,t){
   if (t.endsWith('$')){lang='';t=t.slice(0,-1);}
 
   try{
-    const res=await fetch(preStr+encodeURIComponent(t.startsWith('@')?`https://www.youtube.com/${t}/videos`:`https://www.youtube.com/playlist?list=${t}`));
+    const res=await fetch(preStr+encodeURIComponent(t.startsWith('@')?`https://www.youtube.com/${t}`:`https://www.youtube.com/playlist?list=${t}`));
     const buf=await res.arrayBuffer();
     const raw=new TextDecoder('utf-8').decode(buf);
     const str=raw.replace(/\\x([0-9A-Fa-f]{2})/g, (_, p1) =>String.fromCharCode(parseInt(p1, 16)));    
 
     const ytInitialData=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer;
     const data=t.startsWith('@')
-    ? ytInitialData.tabs[1].tabRenderer.content.richGridRenderer.contents[0].richItemRenderer.content
+    ? ytInitialData.tabs[1].tabRenderer.content.richGridRenderer.contents
     : ytInitialData.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
 
     if (t.startsWith('@')) {
       for (let d of data){
-        if (d.videoRenderer){
-          items.push([d.videoRenderer.videoId,d.videoRenderer.title.runs[0].text,d.videoRenderer.lengthText.simpleText]);
+        if (d.richItemRenderer){
+          items.push([d.richItemRenderer.content.videoRenderer.videoId,d.richItemRenderer.content.videoRenderer.title.runs[0].text,d.richItemRenderer.content.videoRenderer.lengthText.simpleText]);
         }        
       }
     } else {
