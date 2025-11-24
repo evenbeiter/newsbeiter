@@ -50,13 +50,12 @@ async function adbkGetContent(id){
   contentId = CSS.escape(id);
   adSegments = [];
 
-    let mediaSrc = `${backendUrl}/audiobook/mp3?url=${encodeURIComponent(id)}`;
-      media=ap;
-      ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+  let mediaSrc = `${backendUrl}/audiobook/mp3?url=${encodeURIComponent(id)}`;
+  media=ap;
+  ap.src= mediaSrc;vp.src='';
+  ap.style.display='block';vp.style.display='none';yt.style.display='none';
 
-    media.playbackRate = 1.2;
-    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+  setPlaybackRate(1.2);
 
 }
 
@@ -133,11 +132,13 @@ async function bkstGetContent(id){
     // <audio controls src="https://你的服務.onrender.com/audio/play?file=music/test.mp3"></audio>
     let mediaSrc = `${backendUrl}/audio/play?file=${id}.m4a`;
     media=ap;
-    fetch(mediaSrc)
-    .then(res => res.blob())
-    .then(blob => {
-    ap.src = URL.createObjectURL(blob);
-  });
+      fetch(mediaSrc)
+      .then(res => res.blob())
+      .then(blob => {
+      ap.src = URL.createObjectURL(blob);
+    });
+
+    setPlaybackRate(1);
     
     vp.src='';
     ap.style.display='block';vp.style.display='none';yt.style.display='none';
@@ -288,8 +289,7 @@ async function keGetContent(id){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    media.playbackRate = 1;
-    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+    setPlaybackRate(1);
     
     try{
     let ts=[];
@@ -349,8 +349,7 @@ async function kekeGetContent(id,mediaSrc){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    media.playbackRate = 1;
-    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+    setPlaybackRate(1);
     
     loading.style.display='none';
 
@@ -470,8 +469,7 @@ async function leGetContent(id){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    media.playbackRate = 1;
-    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+    setPlaybackRate(1);
   
     try{
     const res = await fetch(preStr+lrcUrl);
@@ -648,8 +646,7 @@ async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    media.playbackRate = 1;
-    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+    setPlaybackRate(1);
 
     // 取文稿
     // 沒文稿
@@ -910,8 +907,7 @@ async function scGetContent(id){
       vp.src= mediaSrc;ap.src='';
       vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    media.playbackRate = 1.2;
-    speedLabel.textContent = media.playbackRate.toFixed(1) + "x";
+    setPlaybackRate(1.2);
 
 }
 
@@ -998,12 +994,13 @@ async function vtGetContent(clickedId,id,isTranslated,youtubeId){
     cEl.style.display='block';
 
   createYouTubePlayer(youtubeId);
+  setPlaybackRate(1);
 
   try {
   const res=await fetch(`https://vtapi.voicetube.com/v2.1.1/zh-TW/videos/${id}?platform=Web&language=zh-TW`);
   const str=await res.json();
 
-  cEl.innerHTML+=`${str.data.publishedAt ? `<p class="fs10">${cvt2Timezone(str.data.publishedAt)}</p>` : ''}`;
+  cEl.previousElementSibling.innerHTML+=`${str.data.publishedAt ? `<p class="fs10">${cvt2Timezone(str.data.publishedAt*1000)}</p>` : ''}`;
 
   const rawLrc = str.data.captionLines ? str.data.captionLines : [];
 
@@ -1206,6 +1203,11 @@ function closeContent(){
   el.style.display='none';
   el.previousElementSibling.scrollIntoView();
   // document.body.scrollTop = 0;document.documentElement.scrollTop = 0;
+}
+
+function setPlaybackRate(speed){
+  media.playbackRate = speed;
+  speedLabel.textContent = media.playbackRate.toFixed(2) + "x";
 }
 
 function isMobile() {return window.matchMedia("(max-width: 768px)").matches;}
