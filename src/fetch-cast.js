@@ -30,6 +30,23 @@ async function adbkGetList(siteName,t) {
 
 
 async function adbkGetContent(id){
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
   contentId = CSS.escape(id);
   adSegments = [];
 
@@ -64,6 +81,23 @@ async function bkstGetList(siteName,t){
 }
 
 async function bkstGetContent(id){
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
   contentId = id;
   adSegments = [];
   const cEl=document.getElementById(id);
@@ -189,6 +223,23 @@ async function keGetList(siteName,t) {
 
 
 async function keGetContent(id){
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
   contentId = id;
   adSegments = [];
   const cEl=document.getElementById(id);
@@ -261,6 +312,23 @@ async function keGetContent(id){
 
 
 async function kekeGetContent(id,mediaSrc){
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
   contentId = id;
   adSegments = [];
   // const cEl=document.getElementById(id);
@@ -362,6 +430,23 @@ async function leGetList(siteName,t) {
 
 
 async function leGetContent(id){
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
   contentId = CSS.escape(id);
   adSegments = [];
   const cEl=document.getElementById(id);
@@ -453,6 +538,23 @@ async function pdGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function pdGetContent(clickedId,id,hasTranscription,transcriptionId){
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
   contentId = id;
   adSegments = [];
   const cEl=document.getElementById(id);
@@ -775,6 +877,23 @@ async function scGetList(siteName,t) {
 
 
 async function scGetContent(id){
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
   contentId = CSS.escape(id);
   adSegments = [];
 
@@ -852,6 +971,24 @@ async function vtGetList(siteName,t){
 
 async function vtGetContent(clickedId,id,isTranslated,youtubeId){
   ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+
+  if (id==='') {
+    id=document.querySelector('#user-input').value;
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
+
   contentId = id;
   adSegments = [];
   const cEl=document.getElementById(id);
@@ -931,16 +1068,27 @@ async function ytbGetList(siteName,t){
   if (t.endsWith('$')){lang='';t=t.slice(0,-1);}
 
   try{
-    const res=await fetch(preStr+encodeURIComponent('https://www.youtube.com/playlist?list='+t));
-    //const raw=await res.text();
+    const res=await fetch(preStr+encodeURIComponent(t.startsWith('@')?`https://www.youtube.com/${t}/videos`:`https://www.youtube.com/playlist?list=${t}`));
     const buf=await res.arrayBuffer();
     const raw=new TextDecoder('utf-8').decode(buf);
     const str=raw.replace(/\\x([0-9A-Fa-f]{2})/g, (_, p1) =>String.fromCharCode(parseInt(p1, 16)));    
 
-    const data=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
-    for (let d of data){
-      if (d.playlistVideoRenderer){
-        items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
+    const ytInitialData=JSON.parse(str.match(/var\s+ytInitialData\s*=\s*([\s\S]*?);<\/script>/)?.[1]).contents.twoColumnBrowseResultsRenderer;
+    const data=t.startsWith('@')
+    ? ytInitialData.tabs[1].tabRenderer.content.richGridRenderer.contents[0].richItemRenderer.content
+    : ytInitialData.tabs[0].tabRenderer.content.sectionListRenderer.contents[0].itemSectionRenderer.contents[0].playlistVideoListRenderer.contents;
+
+    if (t.startsWith('@')) {
+      for (let d of data){
+        if (d.videoRenderer){
+          items.push([d.videoRenderer.videoId,d.videoRenderer.title.runs[0].text,d.videoRenderer.lengthText.simpleText]);
+        }        
+      }
+    } else {
+      for (let d of data){
+        if (d.playlistVideoRenderer){
+          items.push([d.playlistVideoRenderer.videoId,d.playlistVideoRenderer.title.runs[0].text,d.playlistVideoRenderer.lengthText.simpleText]);
+        }
       }
     }
 
@@ -961,6 +1109,23 @@ async function ytbGetList(siteName,t){
 
 async function ytbGetContent(id){
   ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+
+  if (id==='') {
+    id=getYouTubeVideoId(document.querySelector('#user-input').value);
+    newNews();showTop(siteNameVar);items=[];html='';
+    loading.style.display='block';
+
+    list.innerHTML+=`<div id="${id}" class="content">
+      <div class="pt-2 sepia">
+        <table class="table table-auto fs11 p-0 sepia">
+          <tbody id="lines-${id}"></tbody>
+        </table>
+      </div>
+      </div><hr>`;
+
+    loading.style.display='none';
+    document.querySelector('#user-input').value='';
+  }
 
   contentId = id;
   adSegments = [];
