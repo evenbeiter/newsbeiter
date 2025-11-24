@@ -50,7 +50,7 @@ async function adbkGetContent(id){
   contentId = CSS.escape(id);
   adSegments = [];
 
-  let mediaSrc = `${backendUrl}/audiobook/mp3?url=${encodeURIComponent(id)}`;
+  let mediaSrc = `${backendUrl}/media?url=${encodeURIComponent(id)}`;
   media=ap;
   ap.src= mediaSrc;vp.src='';
   ap.style.display='block';vp.style.display='none';yt.style.display='none';
@@ -1010,13 +1010,12 @@ async function tedGetContent(id){
   }
   } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
 
-  let mediaSrc=str.pageProps.videoData.playerData.resources.h264[0].file;
+  
+  let mediaSrc=`${backendUrl}/media?url=${encodeURIComponent(JSON.parse(str.pageProps.videoData.playerData).resources.h264[0].file)}`;
   media=vp;
   vp.src= mediaSrc;ap.src='';
   vp.style.display='block';ap.style.display='none';yt.style.display='none';
   setPlaybackRate(1);
-
-
 
   loading.style.display='none';
 
