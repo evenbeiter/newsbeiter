@@ -973,7 +973,7 @@ async function vtGetList(siteName,t){
   }
 
 
-  for (let h of str.data.items){
+  for (let h of str.data.items? str.data.items : str.data){
     items.push([h.id,h.title,h.cefrLevel,h.durationText,h.isTranslated,h.youtubeId])
   }
   for (let h of items){
