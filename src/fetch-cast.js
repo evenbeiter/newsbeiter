@@ -982,35 +982,46 @@ async function tedGetContent(id){
   const buildId = str.match(/"buildId":"(\d+)"/)?.[1];
 
   try {
-  res=await fetch(`${preStr}https://www.ted.com/_next/data/${buildId}/talks/${id}.json`);
-  str=await res.json();
+    res=await fetch(`${preStr}https://www.ted.com/_next/data/${buildId}/talks/${id}.json`);
+    str=await res.json();
+  // const rawLrc = str.pageProps.transcriptData.translation.paragraphs || [];
+  } catch {}
 
-  const rawLrc = str.pageProps.transcriptData.translation.paragraphs || [];
+  const playerData = JSON.parse(str.pageProps.videoData.playerData) || [];
+  const mediaId = playerData.mediaIdentifier.split('-')[1].slice(2) || '';
+  const published = cvt2Timezone(playerData.published*1000);
 
-  if (rawLrc!==[]){
-    try{
-    let ts=[];
-    for (let r of rawLrc){
-      for (let s of r.cues){
-        ts.push({
-          startTime: s.time/1000,
-          sentence: `${s.text}<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
-        });
-      }  
-    }
+  cEl.previousElementSibling.innerHTML+=`<p class="fs10">${published}</p>`;
 
-    cEl.previousElementSibling.innerHTML+=`${str.pageProps.videoData.recordedOn ? `<p class="fs10">${str.pageProps.videoData.recordedOn}</p>` : ''}`;
+  try {
+    res=await fetch(`https://hls.ted.com/project_masters/${mediaId}/subtitles/en/full.vtt`);
+    str=await res.text();
+
+    const ts=parseVTT(str);
+    if (ts.length !== 0){
+
+  // if (rawLrc!==[]){
+  //   try{
+  //   let ts=[];
+  //   for (let r of rawLrc){
+  //     for (let s of r.cues){
+  //       ts.push({
+  //         startTime: s.time/1000,
+  //         sentence: `${s.text}<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
+  //       });
+  //     }  
+  //   }
 
     getLinesTable(ts,id,false);
 
-    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
+    // } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
 
   } else {
     cEl.innerHTML+=`<p>尚未提供文稿</p>`;
   }
   } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
   
-  let mediaSrc=JSON.parse(str.pageProps.videoData.playerData).resources.hls.stream;
+  let mediaSrc = `https://hls.ted.com/project_masters/${mediaId}/manifest.m3u8`;
   media=vp;
   // vp.src= mediaSrc;
   ap.src='';
@@ -1039,6 +1050,107 @@ async function tedGetContent(id){
   }
 
 }
+
+
+
+// vtt
+/**
+ * Parse WebVTT content and return array of { startTime: Number(seconds), sentence: String }
+ * @param {string} vttText - full VTT file as string
+ * @returns {Array<{startTime:number, sentence:string}>}
+ */
+function parseVTT(vttText) {
+  if (!vttText || typeof vttText !== 'string') return [];
+
+  const lines = vttText.split(/\r?\n/);
+  const results = [];
+
+  // parse a timestamp like "00:01:23.456" or "01:23.456"
+  function parseTimeToSeconds(ts) {
+    ts = ts.trim().replace(',', '.');
+    const parts = ts.split(':').map(p => p.trim());
+    let seconds = 0;
+    if (parts.length === 3) {
+      // HH:MM:SS.xxx
+      const h = parseFloat(parts[0]) || 0;
+      const m = parseFloat(parts[1]) || 0;
+      const s = parseFloat(parts[2]) || 0;
+      seconds = h * 3600 + m * 60 + s;
+    } else if (parts.length === 2) {
+      // MM:SS.xxx
+      const m = parseFloat(parts[0]) || 0;
+      const s = parseFloat(parts[1]) || 0;
+      seconds = m * 60 + s;
+    } else {
+      // fallback: try direct parse
+      seconds = parseFloat(ts) || 0;
+    }
+    return seconds;
+  }
+
+  // remove HTML tags and collapse whitespace
+  function cleanText(text) {
+    return text
+      .replace(/<\/?[^>]+(>|$)/g, '')    // strip HTML tags
+      .replace(/\s+/g, ' ')              // collapse whitespace/newlines
+      .trim();
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    // timestamp line contains "-->"
+    if (line.includes('-->')) {
+      const parts = line.split('-->');
+      const startTs = parts[0].trim();
+      const startSeconds = parseTimeToSeconds(startTs);
+
+      // collect subsequent non-empty lines as the cue text
+      let j = i + 1;
+      const cueLines = [];
+      while (j < lines.length && lines[j].trim() !== '') {
+        cueLines.push(lines[j]);
+        j++;
+      }
+      i = j; // advance outer loop
+
+      const sentence = cleanText(cueLines.join(' ')) + `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`;
+      // skip empty sentence
+      if (sentence) {
+        results.push({ startTime: startSeconds, sentence });
+      }
+    }
+  }
+
+  return results;
+}
+
+/* ---------- 範例用法 ---------- 
+const sampleVtt = `WEBVTT
+
+1
+00:00:07.300 --> 00:00:10.000
+This is a sentence.
+
+2
+00:00:12.150 --> 00:00:15.000
+Another <i>multi-line</i>
+subtitle line.
+
+00:00:20.000 --> 00:00:22.500
+短句子，中文也支援。
+`;
+
+ console.log(parseVTT(sampleVtt));
+ 預期輸出（console）:
+[
+  { startTime: 7.3, sentence: "This is a sentence." },
+  { startTime: 12.15, sentence: "Another multi-line subtitle line." },
+  { startTime: 20, sentence: "短句子，中文也支援。" }
+]
+*/
+
+
 
 
 //    VOICETUBE
