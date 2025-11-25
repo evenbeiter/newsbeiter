@@ -932,7 +932,7 @@ async function tedGetList(siteName,t){
     items.push([h.slug,h.title,h.speakers,h.duration])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="tedGetContent('${h[0]}')">${h[1]}, ${h[2]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title fs12" onclick="tedGetContent('${h[0]}')">${h[1]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1)}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
         <tbody id="lines-${h[0]}"></tbody>
@@ -1010,7 +1010,7 @@ async function tedGetContent(id){
   }
   } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
   
-  let mediaSrc=`${backendUrl}/media?url=${encodeURIComponent(JSON.parse(str.pageProps.videoData.playerData).resources.h264[0].file)}`;
+  let mediaSrc=JSON.parse(str.pageProps.videoData.playerData).resources.hls.stream;
   media=vp;
   // vp.src= mediaSrc;
   ap.src='';
