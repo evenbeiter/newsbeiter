@@ -139,17 +139,13 @@ async function bkstGetContent(id){
     // <audio controls src="https://你的服務.onrender.com/audio/play?file=music/test.mp3"></audio>
     let mediaSrc = `${backendUrl}/audio/play?file=${id}.m4a`;
 
-    let blobUrl;
-    fetch(mediaSrc)
-      .then(r => r.blob())
-      .then(b => {
-        blobUrl = URL.createObjectURL(b);
-    });
-
     media=ap;
 
     if (mediaSwitch==='ON'){
-      media.src= blobUrl;
+      fetch(mediaSrc)
+       .then(res => res.blob())
+       .then(blob => { media.src = URL.createObjectURL(blob); });
+
       media.style.display='block';ct.style.display='block';
       setPlaybackRate(1);
     }
