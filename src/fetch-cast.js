@@ -924,7 +924,7 @@ async function tedGetList(siteName,t){
     const res = await fetch('https://zenith-prod-alt.ted.com/api/search', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: `[{"indexName":"newest","params":{"attributeForDistinct":"objectID","distinct":1,"facets":["subtitle_languages","tags"],"highlightPostTag":"__/ais-highlight__","highlightPreTag":"__ais-highlight__","hitsPerPage":24,"maxValuesPerFacet":500,"page":${rr},"query":""}}]`,
+      body: `[{"indexName":"newest","params":{"attributeForDistinct":"objectID","distinct":1,"facets":["subtitle_languages","tags"],"highlightPostTag":"__/ais-highlight__","highlightPreTag":"__ais-highlight__","hitsPerPage":24,"maxValuesPerFacet":500,"page":${rr-1},"query":""}}]`,
       });
     const str=await res.json();
 
