@@ -917,7 +917,7 @@ async function scGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function tedGetList(siteName,t){
-  ap.style.display='none';vp.style.display='block';yt.style.display='none';ap.src='';vp.src='';
+  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
   adSegments = [];
 
   try{
@@ -1009,11 +1009,26 @@ async function tedGetContent(id){
     cEl.innerHTML+=`<p>尚未提供文稿</p>`;
   }
   } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
-
   
   let mediaSrc=`${backendUrl}/media?url=${encodeURIComponent(JSON.parse(str.pageProps.videoData.playerData).resources.h264[0].file)}`;
   media=vp;
-  vp.src= mediaSrc;ap.src='';
+  // vp.src= mediaSrc;
+  ap.src='';
+
+    if (vp.canPlayType('application/vnd.apple.mpegurl')) {
+        vp.src = mediaSrc;
+        // vp.play();
+    } else if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(mediaSrc);
+        hls.attachMedia(vp);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            // vp.play();
+        });
+    } else {
+        console.error("HLS is not supported in this browser.");
+    }
+
   vp.style.display='block';ap.style.display='none';yt.style.display='none';
   setPlaybackRate(1);
 
