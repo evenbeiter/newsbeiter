@@ -988,7 +988,7 @@ async function tedGetContent(id){
   } catch {}
 
   const playerData = JSON.parse(str.pageProps.videoData.playerData) || [];
-  const mediaId = playerData.mediaIdentifier.split('-')[1].slice(2) || '';
+  const mediaId = playerData.mediaIdentifier?.split('-')[1].slice(2) || '';
   const published = cvt2Timezone(playerData.published*1000);
 
   cEl.previousElementSibling.innerHTML+=`<p class="fs10">${published}</p>`;
