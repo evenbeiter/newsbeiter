@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function adbkGetList(siteName,t) {
-  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
   adSegments = [];
 
   try {
@@ -30,6 +30,8 @@ async function adbkGetList(siteName,t) {
 
 
 async function adbkGetContent(id){
+  hidePlayer();
+
   if (id==='') {
     id=document.querySelector('#user-input').value;
     newNews();showTop(siteNameVar);items=[];html='';
@@ -52,10 +54,11 @@ async function adbkGetContent(id){
 
   let mediaSrc = `${backendUrl}/media?url=${encodeURIComponent(id)}`;
   media=ap;
-  ap.src= mediaSrc;vp.src='';
-  ap.style.display='block';vp.style.display='none';yt.style.display='none';
-
-  setPlaybackRate(1.2);
+  if (mediaSwitch==='ON'){
+    media.src= mediaSrc;
+    media.style.display='block';ct.style.display='block';
+    setPlaybackRate(1.2);
+  }
 
 }
 
@@ -65,6 +68,8 @@ async function adbkGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function bkstGetList(siteName,t){
+  hidePlayer();
+
   try{url=`${backendUrl}/bkst/list?rr=${rr}`;
   const res = await fetch(url);const str = await res.json();
     for (let h of str){html+=`<p class="title fs12" onclick="bkstGetContent('${h.slice(0,-4)}')">${titleCase(h.slice(0,-7).replaceAll('-',' '))}</p><div id="${h.slice(0,-4)}" class="content">
@@ -80,6 +85,8 @@ async function bkstGetList(siteName,t){
 }
 
 async function bkstGetContent(id){
+  hidePlayer();
+
   if (id==='') {
     id=document.querySelector('#user-input').value;
     newNews();showTop(siteNameVar);items=[];html='';
@@ -131,17 +138,21 @@ async function bkstGetContent(id){
 
     // <audio controls src="https://你的服務.onrender.com/audio/play?file=music/test.mp3"></audio>
     let mediaSrc = `${backendUrl}/audio/play?file=${id}.m4a`;
-    media=ap;
-      fetch(mediaSrc)
-      .then(res => res.blob())
-      .then(blob => {
-      ap.src = URL.createObjectURL(blob);
+
+    let blobUrl;
+    fetch(mediaSrc)
+      .then(r => r.blob())
+      .then(b => {
+        blobUrl = URL.createObjectURL(b);
     });
 
-    setPlaybackRate(1);
-    
-    vp.src='';
-    ap.style.display='block';vp.style.display='none';yt.style.display='none';
+    media=ap;
+
+    if (mediaSwitch==='ON'){
+      media.src= blobUrl;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }
 
     // } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
     loading.style.display='none';
@@ -158,7 +169,7 @@ async function bkstGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function keGetList(siteName,t) {
-  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
   adSegments = [];
   const sortBy= t.endsWith('_') ? 'inputtime asc' : 'inputtime desc';
   const method= t.startsWith('_') ? 'web_ting_getexcellentnewslisttwo' : 'web_waikan_wknewslist';
@@ -224,6 +235,8 @@ async function keGetList(siteName,t) {
 
 
 async function keGetContent(id){
+  hidePlayer();
+
   if (id==='') {
     id=document.querySelector('#user-input').value;
     newNews();showTop(siteNameVar);items=[];html='';
@@ -282,15 +295,20 @@ async function keGetContent(id){
     if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
-      ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+      // ap.src= mediaSrc;vp.src='';
+      // ap.style.display='block';vp.style.display='none';yt.style.display='none';
     } else {
       media=vp;
-      vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+      // vp.src= mediaSrc;ap.src='';
+      // vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    setPlaybackRate(1);
-    
+
+    if (mediaSwitch==='ON'){
+      media.src= mediaSrc;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }    
+
     try{
     let ts=[];
     for (let s of rawLrc){
@@ -312,6 +330,8 @@ async function keGetContent(id){
 
 
 async function kekeGetContent(id,mediaSrc){
+  hidePlayer();
+
   if (id==='') {
     id=document.querySelector('#user-input').value;
     newNews();showTop(siteNameVar);items=[];html='';
@@ -342,15 +362,19 @@ async function kekeGetContent(id,mediaSrc){
     // if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
-      ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+      // ap.src= mediaSrc;vp.src='';
+      // ap.style.display='block';vp.style.display='none';yt.style.display='none';
     } else {
       media=vp;
-      vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+      // vp.src= mediaSrc;ap.src='';
+      // vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    setPlaybackRate(1);
-    
+    if (mediaSwitch==='ON'){
+      media.src= mediaSrc;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }   
+
     loading.style.display='none';
 
   // } else {
@@ -400,7 +424,7 @@ console.log(JSON.parse(new TextDecoder().decode(decryptedBuffer)));
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function leGetList(siteName,t) {
-  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
   adSegments = [];
 
   try {
@@ -462,15 +486,19 @@ async function leGetContent(id){
     if (mediaSrc == '') {cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;}
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
-      ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+      // ap.src= mediaSrc;vp.src='';
+      // ap.style.display='block';vp.style.display='none';yt.style.display='none';
     } else {
       media=vp;
-      vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+      // vp.src= mediaSrc;ap.src='';
+      // vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    setPlaybackRate(1);
-  
+    if (mediaSwitch==='ON'){
+      media.src= mediaSrc;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }   
+
     try{
     const res = await fetch(preStr+lrcUrl);
     const str = await res.text();
@@ -507,7 +535,7 @@ function cvtMMSS2S(s){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function pdGetList(siteName,t){
-  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
   adSegments = [];
 
   try{url=`${preStr}${encodeURIComponent('https://backend.podscribe.ai/api/series/v2/'+t+'/episodes?archivedIncludedFilter=false&count=50&cursor='+cursor+'&episodeTitle=&seriesId='+t)}`;console.log(url);
@@ -536,6 +564,8 @@ async function pdGetList(siteName,t){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function pdGetContent(id,hasTranscription,transcriptionId){
+  hidePlayer();
+
   if (id==='') {
     id=document.querySelector('#user-input').value;
     newNews();showTop(siteNameVar);items=[];html='';
@@ -639,14 +669,18 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
     
     if (mediaSrc.endsWith('.mp3')) {
       media=ap;
-      ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+      // ap.src= mediaSrc;vp.src='';
+      // ap.style.display='block';vp.style.display='none';yt.style.display='none';
     } else {
       media=vp;
-      vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+      // vp.src= mediaSrc;ap.src='';
+      // vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    setPlaybackRate(1);
+    if (mediaSwitch==='ON'){
+      media.src= mediaSrc;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }   
 
     // 取文稿
     // 沒文稿
@@ -828,7 +862,7 @@ function extractAdSegments(meta) {
 // props.pageProps.initialStoreState.entities.playlists.soundcloud:playlists:2053138686.data.tracks
 
 async function scGetList(siteName,t) {
-  ap.style.display='block';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
   adSegments = [];
 
   try{
@@ -874,6 +908,8 @@ async function scGetList(siteName,t) {
 
 
 async function scGetContent(id){
+  hidePlayer();
+
   if (id==='') {
     id=document.querySelector('#user-input').value;
     newNews();showTop(siteNameVar);items=[];html='';
@@ -900,15 +936,18 @@ async function scGetContent(id){
 
     if (mediaSrc.indexOf('.mp3')!==-1) {
       media=ap;
-      ap.src= mediaSrc;vp.src='';
-      ap.style.display='block';vp.style.display='none';yt.style.display='none';
+      // ap.src= mediaSrc;vp.src='';
+      // ap.style.display='block';vp.style.display='none';yt.style.display='none';
     } else {
       media=vp;
-      vp.src= mediaSrc;ap.src='';
-      vp.style.display='block';ap.style.display='none';yt.style.display='none';
+      // vp.src= mediaSrc;ap.src='';
+      // vp.style.display='block';ap.style.display='none';yt.style.display='none';
     }
-    setPlaybackRate(1.2);
-
+    if (mediaSwitch==='ON'){
+      media.src= mediaSrc;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1.2);
+    }   
 }
 
 
@@ -917,7 +956,7 @@ async function scGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function tedGetList(siteName,t){
-  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
   adSegments = [];
 
   try{
@@ -947,7 +986,7 @@ async function tedGetList(siteName,t){
 
 
 async function tedGetContent(id){
-  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
 
   if (id==='') {
     id=document.querySelector('#user-input').value;
@@ -1024,24 +1063,26 @@ async function tedGetContent(id){
   let mediaSrc = `https://hls.ted.com/project_masters/${mediaId}/manifest.m3u8`;
   media=vp;
   // vp.src= mediaSrc;
-  ap.src='';
+  // ap.src='';
 
-    if (vp.canPlayType('application/vnd.apple.mpegurl')) {
-        vp.src = mediaSrc;
-        // vp.play();
-    } else if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(mediaSrc);
-        hls.attachMedia(vp);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            // vp.play();
-        });
-    } else {
-        console.error("HLS is not supported in this browser.");
-    }
+    if (mediaSwitch==='ON'){
+      if (vp.canPlayType('application/vnd.apple.mpegurl')) {
+          vp.src = mediaSrc;
+          // vp.play();
+      } else if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(mediaSrc);
+          hls.attachMedia(vp);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              // vp.play();
+          });
+      } else {
+          console.error("HLS is not supported in this browser.");
+      }
 
-  vp.style.display='block';ap.style.display='none';yt.style.display='none';
-  setPlaybackRate(1);
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }   
 
   loading.style.display='none';
 
@@ -1157,7 +1198,7 @@ subtitle line.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 async function vtGetList(siteName,t){
-  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
   adSegments = [];
 
   let res, str;
@@ -1233,7 +1274,7 @@ async function vtGetList(siteName,t){
 
 
 async function vtGetContent(id,isTranslated,youtubeId){
-  ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+  hidePlayer();
 
   if (id==='') {
     id=document.querySelector('#user-input').value;
@@ -1267,8 +1308,13 @@ async function vtGetContent(id,isTranslated,youtubeId){
   const str=await res.json();
 
   youtubeId=str.data.youtubeId;
-  createYouTubePlayer(str.data.youtubeId);
-  setPlaybackRate(1);
+  media = ytPlayer;
+
+  if (mediaSwitch==='ON'){
+    createYouTubePlayer(str.data.youtubeId);
+    yt.style.display='block';ct.style.display='block';
+    setPlaybackRate(1);
+  }   
 
   cEl.previousElementSibling.innerHTML+=`${str.data.publishedAt ? `<p class="fs10">${cvt2Timezone(str.data.publishedAt*1000)}</p>` : ''}`;
 
@@ -1328,11 +1374,11 @@ async function vtGetSearchResults(siteName,t){ return html = await vtGetList(sit
 let lang='en';
 
 async function ytbGetList(siteName,t){
-  ap.style.display='none';vp.style.display='none';yt.style.display='none';ap.src='';vp.src='';
+  hidePlayer();
   adSegments = [];
   lang='en';
 
-  if (t.endsWith('$')){lang='';t=t.slice(0,-1);}
+  if (t.endsWith('$')){lang='';t=t.slice(0,-1);}else{lang='en';}
 
   try{
     const res=await fetch(preStr+encodeURIComponent(t.startsWith('@')?`https://www.youtube.com/${t}`:`https://www.youtube.com/playlist?list=${t}`));
@@ -1375,7 +1421,7 @@ async function ytbGetList(siteName,t){
 }
 
 async function ytbGetContent(id){
-  ap.style.display='none';vp.style.display='none';yt.style.display='block';ap.src='';vp.src='';
+  hidePlayer();
 
   if (id==='') {
     id=getYouTubeVideoId(document.querySelector('#user-input').value);
@@ -1399,7 +1445,13 @@ async function ytbGetContent(id){
   const cEl=document.getElementById(id);
 
   media = ytPlayer;
-  createYouTubePlayer(id);
+
+  if (mediaSwitch==='ON'){
+    createYouTubePlayer(id);
+    yt.style.display='block';ct.style.display='block';
+    setPlaybackRate(1);
+  }   
+
 
   if (lang=='') return;
 
@@ -1434,39 +1486,14 @@ async function ytbGetContent(id){
   }
 }
 
-async function watchYT(){
-  const userInput = document.querySelector('#watch-yt-id').value;
-  const id = getYouTubeVideoId(userInput);
-  // 做content container
-
-  rr=1;cursor='';
-  // getList(siteName,t);
-  loading.style.display='block';
-  siteNameVar='ytb';// rt=t;
-  newNews();
-  items=[];html='';
-  // list.innerHTML+=await window[`${siteName}GetList`](siteName,t)
-
-  list.innerHTML+=`<div id="${id}" class="content">
-      <div class="pt-2 sepia">
-        <table class="table table-auto fs11 p-0 sepia">
-          <tbody id="lines-${id}"></tbody>
-        </table>
-      </div>
-      </div><hr>`;
-
-  loading.style.display='none';
-
-  showTop(top);
-
-  ytbGetContent(id);
-  document.querySelector('#watch-yt-id').value='';
-}
 
 
 //    OPERATION
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function hidePlayer(){
+  ap.style.display='none';vp.style.display='none';yt.style.display='none';ct.style.display='none';ap.src='';vp.src='';
+}
 
 function closeContent(){
   const el = contentId.indexOf('\/') !== -1 ? document.querySelector(`#${contentId}`) : document.getElementById(contentId);
@@ -1479,6 +1506,12 @@ function setPlaybackRate(speed){
   media.playbackRate = speed;
   speedLabel.textContent = media.playbackRate.toFixed(2) + "x";
 }
+
+let mediaSwitch = 'ON';
+document.getElementById('mediaSwitch').addEventListener('change', function () {
+  mediaSwitch = this.checked ? 'ON' : 'OFF';
+});
+
 
 function isMobile() {return window.matchMedia("(max-width: 768px)").matches;}
 const trLvl = isMobile() ? 0.4 : 0.6;

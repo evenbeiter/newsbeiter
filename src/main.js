@@ -14,6 +14,7 @@ const loading=document.getElementById('loading');
 const ap = document.getElementById('ap');
 const vp = document.getElementById('vp');
 const yt = document.getElementById('ytContainer');
+const ct = document.getElementById('controller');
 
 const closeBtn=document.getElementById('overlayCloseBtn');
 const backdrop=document.getElementById('overlayBackdrop');
