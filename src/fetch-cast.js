@@ -1492,7 +1492,7 @@ async function ytbGetContent(id){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function hidePlayer(){
-  ap.style.display='none';vp.style.display='none';yt.style.display='none';ct.style.display='none';ap.src='';vp.src='';
+  ap.style.display='none';vp.style.display='none';yt.style.display='none';ct.style.display='none !important';ap.src='';vp.src='';
 }
 
 function closeContent(){
