@@ -112,7 +112,7 @@ async function bkstGetContent(id){
     loading.style.display='block';
     cEl.style.display='block';
 
-    if (cEl.innerText.length>10) return; // already got transcription in cEl
+    // if (cEl.innerText.length>10) return; // already got transcription in cEl
 
     try{url=`${backendUrl}/bkst/read`;
     const res = await fetch(url, {
@@ -262,7 +262,7 @@ async function keGetContent(id){
     loading.style.display='block';
     cEl.style.display='block';
 
-    if (cEl.innerText.length>10) return; // already got transcription in cEl
+    // if (cEl.innerText.length>10) return; // already got transcription in cEl
 
     let payload = {
         Method: "web_waikan_wkgetcontent",
@@ -479,7 +479,7 @@ async function leGetContent(id){
     loading.style.display='block';
     cEl.style.display='block';
 
-    if (cEl.innerText.length>10) return; // already got transcription in cEl
+    // if (cEl.innerText.length>10) return; // already got transcription in cEl
 
 
     let mediaSrc = lrcUrl.replace('.lrc','.mp3');
@@ -592,7 +592,7 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
     loading.style.display='block';
     cEl.style.display='block';
 
-    if (cEl.innerText.length>10) {loading.style.display = 'none'; return;} // already got transcription in cEl
+    // if (cEl.innerText.length>10) {loading.style.display = 'none'; return;} // already got transcription in cEl
 
     try{
     res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
@@ -1459,7 +1459,7 @@ async function ytbGetContent(id){
     loading.style.display='block';
     cEl.style.display='block';
 
-    if (cEl.innerText.length>10) return; // already got transcription in cEl
+    // if (cEl.innerText.length>10) return; // already got transcription in cEl
 
   try{
   const res = await fetch(preStr+'https://tactiq-apps-prod.tactiq.io/transcript', {
