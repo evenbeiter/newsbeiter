@@ -94,15 +94,21 @@
   </div>
 </div>
 
-  <form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
-    <div id="btn" class="p-2">
+<form id="btn-group" class="py-2 sticky-top container-fluid justify-content-start overflow-auto sepia-contrast" style="max-height:100vh">
+  <div id="btn" class="p-2">
+    <div class="d-flex align-items-center gap-2">
       <button class="btn sepia me-1 mb-1" type="button" onclick="openChannelList()">總覽</button><button class="btn sepia me-1 mb-1" type="button" onclick="openSearchList()">搜尋</button><button class="btn sepia me-1 mb-1" type="button" onclick="openUrlList()">網站列表</button>
-      <hr style="margin-right:3rem">
-      <div id="channelList"></div>
-      <div id="searchList" style="display:none"></div>
-      <div id="urlList" style="display:none"></div>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        <label class="form-check-label" for="flexSwitchCheckDefault">影音 switch</label>
+      </div>
     </div>
-  </form>
+    <hr style="margin-right:3rem">
+    <div id="channelList"></div>
+    <div id="searchList" style="display:none"></div>
+    <div id="urlList" style="display:none"></div>
+  </div>
+</form>
 <div id="list" class="mx-3 pt-3 sepia"></div>
 <div id="loading" class="position-fixed w-100 top-0 start-0" style="height:100vh;display:none"><div id="loading-gif" class="position-absolute top-50 start-50 translate-middle" style="z-index:1030;width:3rem;height:3rem">
 <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="#555">
