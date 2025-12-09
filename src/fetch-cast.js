@@ -1200,7 +1200,10 @@ async function getVtAuth(){
   return JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
 }
 
-const vtRaw = await getVtAuth();
+(async () => {
+  const vtRaw = await getVtAuth();
+})();
+
 const vtBuildId = vtRaw.buildId;
 const vtAuth = vtRaw.props.pageProps.auth.token;
 
