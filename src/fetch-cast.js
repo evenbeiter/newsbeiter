@@ -1193,20 +1193,22 @@ subtitle line.
 //    VOICETUBE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-let res, str;
-res = await fetch(preStr+encodeURIComponent('https://tw.voicetube.com'));
-str = await res.text();
-const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
-const raw = JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
-const vtBuildId = raw.buildId;
-const vtAuth = raw.props.pageProps.auth.token;
+async function getVtAuth(){
+  const res = await fetch(preStr+encodeURIComponent('https://tw.voicetube.com'));
+  const str = await res.text();
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  return JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
+}
+
+const vtRaw = await getVtAuth();
+const vtBuildId = vtRaw.buildId;
+const vtAuth = vtRaw.props.pageProps.auth.token;
 
 async function vtGetList(siteName,t){
   hidePlayer();
   adSegments = [];
 
   let res, str;
-
   const headers={'Content-Type': 'application/json','authorization':`Bearer ${vtAuth}`};
 
   try{
