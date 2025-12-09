@@ -1193,25 +1193,26 @@ subtitle line.
 //    VOICETUBE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+let res, str;
+res = await fetch(preStr+encodeURIComponent('https://tw.voicetube.com'));
+str = await res.text();
+const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+const raw = JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
+const vtBuildId = raw.buildId;
+const vtAuth = raw.props.pageProps.auth.token;
+
 async function vtGetList(siteName,t){
   hidePlayer();
   adSegments = [];
 
   let res, str;
-  const headers={'Content-Type': 'application/json','authorization':'Bearer $2y$05$KITHgROsh.5MLBeMJ9cAuO9.onftosRT4lJcc/xC8E3FTo1WowVXu'};
+
+  const headers={'Content-Type': 'application/json','authorization':`Bearer ${vtAuth}`};
 
   try{
   if (t.startsWith('#')){
-
-  res = await fetch(preStr+encodeURIComponent('https://tw.voicetube.com'));
-  str = await res.text();
-  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
-
-  const raw = JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
-  const buildId = raw.buildId;
-
     t=t.slice(1);
-    res = await fetch(`${preStr}https://tw.voicetube.com/_next/data/${buildId}/zh-TW/search.json?query=${t.replaceAll(' ','+')}&sortBy=relevance&page=${rr}`);
+    res = await fetch(`${preStr}https://tw.voicetube.com/_next/data/${vtBuildId}/zh-TW/search.json?query=${t.replaceAll(' ','+')}&sortBy=relevance&page=${rr}`);
     str = await res.json();
     str = str.pageProps.dehydratedState.queries[0].state;
 
