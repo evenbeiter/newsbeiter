@@ -1200,12 +1200,12 @@ async function getVtAuth(){
   return JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
 }
 
+let vtRaw, vtBuildId, vtAuth;
 (async () => {
-  const vtRaw = await getVtAuth();
+  vtRaw = await getVtAuth();
+  vtBuildId = vtRaw.buildId;
+  vtAuth = vtRaw.props.pageProps.auth.token;
 })();
-
-const vtBuildId = vtRaw.buildId;
-const vtAuth = vtRaw.props.pageProps.auth.token;
 
 async function vtGetList(siteName,t){
   hidePlayer();
