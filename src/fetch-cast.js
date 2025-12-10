@@ -218,7 +218,7 @@ async function cakeGetCard(id,m3u8Url){
 
   if (mediaSwitch==='ON'){
     if (vp.canPlayType('application/vnd.apple.mpegurl')) {
-        vp.src = m3u8Url;
+        vp.src = `${backendUrl}/media?url=${m3u8Url}`;
         // vp.play();
     } else if (Hls.isSupported()) {
         const hls = new Hls();
