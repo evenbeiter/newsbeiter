@@ -161,7 +161,6 @@ async function bkstGetContent(id){
 }
 
 
-
 //    CAKE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -187,7 +186,7 @@ async function cakeGetList(siteName,t){
     } else if (item.type === "snack" && item.data?.items){
       snackList.push(...item.data.items);
     }
-  });
+  }); 
 
   for (let h of snackList){
     items.push([h.snackId,h.content,'snack',h.video.uri]);
