@@ -176,7 +176,7 @@ async function cakeGetList(siteName,t){
   let res, str;
 
   try{
-  res = await fetch(`${backendUrl}/cake?cmd=/v2/main/today/pc&rr=${rr}`);
+  res = await fetch(`${backendUrl}/cake?cmd=/v2/main/today/pc&lang=${t}&rr=${rr}`);
   str = await res.json();
   str = str.data;
 
@@ -287,7 +287,7 @@ async function cakeGetContent(id){
 
   let res, str;
   try {
-  res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/19958/view/contents/video`);
+  res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/19958/view/contents/video&lang=${rt}`);
   str = await res.json();
 
   youtubeId=str.data.videoId;
