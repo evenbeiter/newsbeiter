@@ -191,7 +191,7 @@ async function cakeGetList(siteName,t){
 
   for (let h of snackList){
     items.push([h.snackId,h.content,'snack',h.video.uri]);
-    cakeCards.push(h.cards);
+    cakeCards.push({[h.snackId]: h.cards});
   }
   for (let h of playList){
     items.push([h.playlistId,h.playlistTitle,'playlist']);
@@ -199,9 +199,9 @@ async function cakeGetList(siteName,t){
   }
   for (let h of items){
     if (h[2]==='playlist'){
-      html+=`<p class="title fs12" onclick="cakeGetContentList('_${h[0]}'">${h[1]}</p><hr id="_${h[0]}">`;
+      html+=`<p class="title fs12" onclick="cakeGetContentList('_${h[0]}')">${h[1]}</p><hr id="_${h[0]}">`;
     } else {
-      html+=`<p class="title fs12" onclick="cakeGetCard('_${h[0]}','${h[3]}')">${h[1]}</p><hr id="_${h[0]}">`;
+      html+=`<p class="title fs12" onclick="cakeGetCard('${h[0]}','${h[3]}')">${h[1]}</p><hr id="_${h[0]}">`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
@@ -238,7 +238,7 @@ async function cakeGetCard(id,m3u8Url){
   items=[];html='';
 
   try{
-  for (let h of cakeCards){
+  for (let h of cakeCards[id]){
     items.push([h.cardId,h.title,h.message])
   }
   for (let h of items){
