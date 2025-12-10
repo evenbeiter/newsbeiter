@@ -177,24 +177,72 @@ async function cakeGetList(siteName,t){
   str = await res.json();
   str = str.data;
 
-  let playList=[];
+  let playList=[];let snackList=[];
   str.forEach(item => {
     if (item.type === "updatedPlaylist" && item.data?.items) {
       playList.push(...item.data.items);
+    } else if (item.type === "snack" && item.data?.items){
+      snackList.push(...item.data.items);
     }
   });
 
+  for (let h of snackList){
+    items.push([h.snackId,h.content,h.cards,'snack',h.video.uri])
+  }
   for (let h of playList){
-    items.push([h.playlistId,h.playlistTitle,h.sentences])
+    items.push([h.playlistId,h.playlistTitle,h.sentences,'playlist'])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="cakeGetContentList('_${h[0]}',${h[2]})">${h[1]}</p><hr id="_${h[0]}">`;
+    if (h[3]==='playlist'){
+      html+=`<p class="title fs12" onclick="cakeGetContentList('_${h[0]}',${h[2]})">${h[1]}</p><hr id="_${h[0]}">`;
+    } else {
+      html+=`<p class="title fs12" onclick="cakeGetCard('_${h[0]}',${h[2]},'${h[4]}')">${h[1]}</p><hr id="_${h[0]}">`;
+    }
   }
   }catch{html='<p>尚無內容</p>'}
 
   return html;
 }
 
+
+async function cakeGetCard(id,cards,m3u8Url){
+  hidePlayer();
+  adSegments = [];
+
+  media=vp;
+
+  if (mediaSwitch==='ON'){
+    if (vp.canPlayType('application/vnd.apple.mpegurl')) {
+        vp.src = m3u8Url;
+        // vp.play();
+    } else if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(m3u8Url);
+        hls.attachMedia(vp);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            // vp.play();
+        });
+    } else {
+        console.error("HLS is not supported in this browser.");
+    }
+
+    media.style.display='block';ct.style.display='block';
+    setPlaybackRate(1);
+  }  
+
+  items=[];html='';
+
+  try{
+  for (let h of cards){
+    items.push([h.cardId,h.title,h.message])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12">${h[1]}<br><span class="time">${h[2]}</span></p><hr>`;
+  }
+  document.getElementById(id).insertAdjacentHTML('afterend', html);
+
+  }catch{document.getElementById(id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
+}
 
 async function cakeGetContentList(id,sentences){
   hidePlayer();
