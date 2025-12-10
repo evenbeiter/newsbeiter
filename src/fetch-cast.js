@@ -165,10 +165,13 @@ async function bkstGetContent(id){
 //    CAKE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+let cakeCards=[];
+let cakeSentences=[];
 
 async function cakeGetList(siteName,t){
   hidePlayer();
   adSegments = [];
+  cakeCards=[]; cakeSentences=[];
 
   let res, str;
 
@@ -187,16 +190,18 @@ async function cakeGetList(siteName,t){
   });
 
   for (let h of snackList){
-    items.push([h.snackId,h.content,h.cards,'snack',h.video.uri])
+    items.push([h.snackId,h.content,'snack',h.video.uri]);
+    cakeCards.push(h.cards);
   }
   for (let h of playList){
-    items.push([h.playlistId,h.playlistTitle,h.sentences,'playlist'])
+    items.push([h.playlistId,h.playlistTitle,'playlist']);
+    cakeSentences.push(h.sentences);
   }
   for (let h of items){
-    if (h[3]==='playlist'){
-      html+=`<p class="title fs12" onclick="cakeGetContentList('_${h[0]}',${h[2]})">${h[1]}</p><hr id="_${h[0]}">`;
+    if (h[2]==='playlist'){
+      html+=`<p class="title fs12" onclick="cakeGetContentList('_${h[0]}'">${h[1]}</p><hr id="_${h[0]}">`;
     } else {
-      html+=`<p class="title fs12" onclick="cakeGetCard('_${h[0]}',${h[2]},'${h[4]}')">${h[1]}</p><hr id="_${h[0]}">`;
+      html+=`<p class="title fs12" onclick="cakeGetCard('_${h[0]}','${h[3]}')">${h[1]}</p><hr id="_${h[0]}">`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
@@ -205,7 +210,7 @@ async function cakeGetList(siteName,t){
 }
 
 
-async function cakeGetCard(id,cards,m3u8Url){
+async function cakeGetCard(id,m3u8Url){
   hidePlayer();
   adSegments = [];
 
@@ -233,7 +238,7 @@ async function cakeGetCard(id,cards,m3u8Url){
   items=[];html='';
 
   try{
-  for (let h of cards){
+  for (let h of cakeCards){
     items.push([h.cardId,h.title,h.message])
   }
   for (let h of items){
@@ -244,14 +249,14 @@ async function cakeGetCard(id,cards,m3u8Url){
   }catch{document.getElementById(id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
 }
 
-async function cakeGetContentList(id,sentences){
+async function cakeGetContentList(id){
   hidePlayer();
   adSegments = [];
 
   items=[];html='';
 
   try{
-  for (let h of sentences){
+  for (let h of cakeSentences){
     items.push([h.sentenceId,h.sentenceEngMl,h.sentence])
   }
   for (let h of items){
