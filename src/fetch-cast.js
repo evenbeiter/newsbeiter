@@ -173,27 +173,22 @@ async function cakeGetList(siteName,t){
   let res, str;
 
   try{
-  res = await fetch(`${backendUrl}/cake?rr=${rr}`);
+  res = await fetch(`${backendUrl}/cake?cmd=/v2/main/today/pc&rr=${rr}`);
   str = await res.json();
   str = str.data;
 
+  let playList=[];
   str.forEach(item => {
     if (item.type === "updatedPlaylist" && item.data?.items) {
-      items.push(...item.data.items);
+      playList.push(...item.data.items);
     }
   });
 
-  for (let h of str.data.items? str.data.items : str.data){
-    items.push([h.id,h.title,h.cefrLevel,h.durationText,h.isTranslated,h.youtubeId])
+  for (let h of playList){
+    items.push([h.playlistId,h.playlistTitle,h.sentences])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="cakeGetContent('${h[0]}',${h[4]},'${h[5]}')">${h[1]}<br><span class="time">${h[2]} | </span><span class="fs10 fw-bold">${h[3]}</span></p><div id="${h[0]}" class="content">
-    <div class="pt-2 sepia">
-      <table class="table table-auto fs11 p-0 sepia">
-        <tbody id="lines-${h[0]}"></tbody>
-      </table>
-    </div>
-    </div><hr>`;
+    html+=`<p class="title fs12" onclick="cakeGetContentList('_${h[0]}',${h[2]})">${h[1]}</p><hr id="_${h[0]}">`;
   }
   }catch{html='<p>尚無內容</p>'}
 
@@ -201,26 +196,33 @@ async function cakeGetList(siteName,t){
 }
 
 
-async function cakeGetContent(id,isTranslated,youtubeId){
+async function cakeGetContentList(id,sentences){
   hidePlayer();
+  adSegments = [];
 
-  if (id==='') {
-    id=document.querySelector('#user-input').value;
-    isTranslated=true;
-    newNews();showTop(siteNameVar);items=[];html='';
-    loading.style.display='block';
+  items=[];html='';
 
-    list.innerHTML+=`<p></p><div id="${id}" class="content">
-      <div class="pt-2 sepia">
-        <table class="table table-auto fs11 p-0 sepia">
-          <tbody id="lines-${id}"></tbody>
-        </table>
-      </div>
-      </div><hr>`;
-
-    loading.style.display='none';
-    document.querySelector('#user-input').value='';
+  try{
+  for (let h of sentences){
+    items.push([h.sentenceId,h.sentenceEngMl,h.sentence])
   }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="cakeGetContent('_${h[0]}')">${h[1]}<br><span class="time">${h[2]}</span></p><div id="_${h[0]}" class="content">
+    <div class="pt-2 sepia">
+      <table class="table table-auto fs11 p-0 sepia">
+        <tbody id="lines-${h[0]}"></tbody>
+      </table>
+    </div>
+    </div><hr>`;
+  }
+  document.getElementById(id).insertAdjacentHTML('afterend', html);
+
+  }catch{document.getElementById(id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
+}
+
+
+async function cakeGetContent(id){
+  hidePlayer();
 
   contentId = id;
   adSegments = [];
@@ -230,34 +232,34 @@ async function cakeGetContent(id,isTranslated,youtubeId){
     loading.style.display='block';
     cEl.style.display='block';
 
-
+  let res, str;
   try {
-  const res=await fetch(`https://vtapi.voicetube.com/v2.1.1/zh-TW/videos/${id}?platform=Web&language=zh-TW`);
-  const str=await res.json();
+  res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/19958/view/contents/video`);
+  str = await res.json();
 
-  youtubeId=str.data.youtubeId;
+  youtubeId=str.data.videoId;
   media = ytPlayer;
 
   if (mediaSwitch==='ON'){
-    createYouTubePlayer(str.data.youtubeId);
+    createYouTubePlayer(youtubeId);
     yt.style.display='block';ct.style.display='block';
     setPlaybackRate(1);
   }   
 
   cEl.previousElementSibling.innerHTML+=`${str.data.publishedAt ? `<p class="fs10">${cvt2Timezone(str.data.publishedAt*1000)}</p>` : ''}`;
 
-  const rawLrc = str.data.captionLines ? str.data.captionLines : [];
+  const rawLrc = str.data.captions ? str.data.captions : [];
 
   if (rawLrc!==[]){
     try{
     let ts=[];
     for (let s of rawLrc){
       ts.push({
-        startTime: s.startAt,
-        sentence: `${s.originalText.text}${isTranslated == true ? `<br>${s.translatedText.text}` : `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`}`
+        startTime: s.start,
+        sentence: `${s.text || ''}${s.translation ? `<br>${s.translation}` : ''}`
       });     
     }
-    getLinesTable(ts,id,isTranslated == true ? false : true);
+    getLinesTable(ts,id,false);
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
 
@@ -265,23 +267,6 @@ async function cakeGetContent(id,isTranslated,youtubeId){
     cEl.innerHTML+=`<p>尚未提供文稿</p>`;
   }
   } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
-
-  try{
-  const res=await fetch(`https://vtapi.voicetube.com/v2.1.1/zh-TW/videos/${id}/words?platform=Web&language=zh-TW`);
-  const str=await res.json();
-  for (let v of str.data){
-    cEl.innerHTML+=`<p class="fs12"><strong>${v.text}</strong> | ${v.cefrLevel}</p>`;
-    for (let d of v.definitions){
-      cEl.innerHTML+=`
-      <p class="fs10"><span>/${d.pronunciationKk}<br>${d.pos}${d.wordPlural ? ` | ${d.wordPlural}` : ''}</span></p>
-      <p class="fs12">${d.englishDefinition} | ${d.chineseTraditionalDefinition}</p>
-      <p class="fs12">${d.englishExample}</p>
-      `;
-    }
-    cEl.innerHTML+=`<hr>`;
-  }
-
-  } catch {cEl.innerHTML+=`<p>尚未提供單字列表</p>`;}
 
   loading.style.display='none';
 
