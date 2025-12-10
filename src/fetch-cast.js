@@ -200,7 +200,7 @@ async function cakeGetList(siteName,t){
     if (h[2]==='playlist'){
       html+=`<p class="title fs12" onclick="cakeGetContentList('${h[0]}')">${h[1]}</p><hr id="${h[0]}">`;
     } else {
-      html+=`<p class="title fs12" onclick="cakeGetCard('${h[0]}','${h[3]}')">${h[1]}</p><hr id="${h[0]}">`;
+      html+=`<p class="title" onclick="cakeGetCard('${h[0]}','${h[3]}')">${h[1]}</p><hr id="${h[0]}">`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
