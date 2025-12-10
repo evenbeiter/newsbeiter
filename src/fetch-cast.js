@@ -244,9 +244,9 @@ async function cakeGetCard(id,m3u8Url){
   for (let h of items){
     html+=`<p class="title fs12">${h[1]}<br><span class="time">${h[2]}</span></p><hr>`;
   }
-  document.getElementById(id).insertAdjacentHTML('afterend', html);
+  document.getElementById('_'+id).insertAdjacentHTML('afterend', html);
 
-  }catch{document.getElementById(id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
+  }catch{document.getElementById('_'+id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
 }
 
 async function cakeGetContentList(id){
@@ -268,9 +268,9 @@ async function cakeGetContentList(id){
     </div>
     </div><hr>`;
   }
-  document.getElementById(id).insertAdjacentHTML('afterend', html);
+  document.getElementById('_'+id).insertAdjacentHTML('afterend', html);
 
-  }catch{document.getElementById(id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
+  }catch{document.getElementById('_'+id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
 }
 
 
