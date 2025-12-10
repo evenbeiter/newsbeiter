@@ -165,13 +165,13 @@ async function bkstGetContent(id){
 //    CAKE
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-let cakeCards=[];
-let cakeSentences=[];
+let cakeCards={};
+let cakeSentences={};
 
 async function cakeGetList(siteName,t){
   hidePlayer();
   adSegments = [];
-  cakeCards=[]; cakeSentences=[];
+  cakeCards={}; cakeSentences={};
 
   let res, str;
 
@@ -191,11 +191,11 @@ async function cakeGetList(siteName,t){
 
   for (let h of snackList){
     items.push([h.snackId,h.content,'snack',h.video.uri]);
-    cakeCards.push({[h.snackId]: h.cards});
+    cakeCards[h.snackId] = h.cards;
   }
   for (let h of playList){
     items.push([h.playlistId,h.playlistTitle,'playlist']);
-    cakeSentences.push({[h.playlistId]:h.sentences});
+    cakeSentences.push[h.playlistId] = h.sentences;
   }
   for (let h of items){
     if (h[2]==='playlist'){
