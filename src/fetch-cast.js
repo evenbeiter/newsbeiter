@@ -286,7 +286,7 @@ async function cakeGetContent(id){
 
   let res, str;
   try {
-  res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/19958/view/contents/video&lang=${rt}`);
+  res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/${id}/view/contents/video&lang=${rt}`);
   str = await res.json();
 
   youtubeId=str.data.videoId;
