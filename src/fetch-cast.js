@@ -194,7 +194,7 @@ async function cakeGetList(siteName,t){
   }
   for (let h of playList){
     items.push([h.playlistId,h.playlistTitle,'playlist']);
-    cakeSentences.push[h.playlistId] = h.sentences;
+    cakeSentences[h.playlistId] = h.sentences;
   }
   for (let h of items){
     if (h[2]==='playlist'){
