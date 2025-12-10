@@ -217,11 +217,11 @@ async function cakeGetCard(id,m3u8Url){
 
   if (mediaSwitch==='ON'){
     if (vp.canPlayType('application/vnd.apple.mpegurl')) {
-        vp.src = `${backendUrl}/media?url=${m3u8Url}`;
+        vp.src = `${backendUrl}/media?url=${encodeURIComponent(m3u8Url)}`;
         // vp.play();
     } else if (Hls.isSupported()) {
         const hls = new Hls();
-        hls.loadSource(m3u8Url);
+        hls.loadSource(`${backendUrl}/media?url=${encodeURIComponent(m3u8Url)}`);
         hls.attachMedia(vp);
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
             // vp.play();
