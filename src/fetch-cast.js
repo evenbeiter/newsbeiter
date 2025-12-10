@@ -198,7 +198,7 @@ async function cakeGetList(siteName,t){
   }
   for (let h of items){
     if (h[2]==='playlist'){
-      html+=`<p class="title fs12" onclick="cakeGetContentList('${h[0]}')">${h[1]}</p><hr id="${h[0]}">`;
+      html+=`<p class="title" onclick="cakeGetContentList('${h[0]}')">${h[1]}</p><hr id="${h[0]}">`;
     } else {
       html+=`<p class="title" onclick="cakeGetCard('${h[0]}','${h[3]}')">${h[1]}</p><hr id="${h[0]}">`;
     }
@@ -259,7 +259,7 @@ async function cakeGetContentList(id){
     items.push([h.sentenceId,h.sentenceEngMl,h.sentence])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="cakeGetContent('${h[0]}')">${h[1]}<br><span class="time">${h[2]}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title" onclick="cakeGetContent('${h[0]}')">${h[1]}<br><span class="time">${h[2]}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
         <tbody id="lines-${h[0]}"></tbody>
