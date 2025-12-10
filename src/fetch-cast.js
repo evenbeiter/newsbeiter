@@ -195,11 +195,11 @@ async function cakeGetList(siteName,t){
   }
   for (let h of playList){
     items.push([h.playlistId,h.playlistTitle,'playlist']);
-    cakeSentences.push(h.sentences);
+    cakeSentences.push({[h.playlistId]:h.sentences});
   }
   for (let h of items){
     if (h[2]==='playlist'){
-      html+=`<p class="title fs12" onclick="cakeGetContentList('_${h[0]}')">${h[1]}</p><hr id="_${h[0]}">`;
+      html+=`<p class="title fs12" onclick="cakeGetContentList('${h[0]}')">${h[1]}</p><hr id="_${h[0]}">`;
     } else {
       html+=`<p class="title fs12" onclick="cakeGetCard('${h[0]}','${h[3]}')">${h[1]}</p><hr id="_${h[0]}">`;
     }
@@ -256,7 +256,7 @@ async function cakeGetContentList(id){
   items=[];html='';
 
   try{
-  for (let h of cakeSentences){
+  for (let h of cakeSentences[id]){
     items.push([h.sentenceId,h.sentenceEngMl,h.sentence])
   }
   for (let h of items){
