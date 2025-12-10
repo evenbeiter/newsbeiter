@@ -951,6 +951,19 @@ async function scGetContent(id){
 //    TED
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+async function getTedAuth(){
+  const res = await fetch(preStr+encodeURIComponent('https://www.ted.com/'));
+  const str = await res.text();
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  return JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
+}
+
+let tedRaw, tedBuildId;
+(async () => {
+  tedRaw = await getTedAuth();
+  tedBuildId = tedRaw.buildId;
+})();
+
 async function tedGetList(siteName,t){
   hidePlayer();
   adSegments = [];
@@ -1012,12 +1025,8 @@ async function tedGetContent(id){
 
   let res, str;
 
-  res=await fetch(`${preStr}https://www.ted.com`);
-  str=await res.text();
-  const buildId = str.match(/"buildId":"(\d+)"/)?.[1];
-
   try {
-    res=await fetch(`${preStr}https://www.ted.com/_next/data/${buildId}/talks/${id}.json`);
+    res=await fetch(`${preStr}https://www.ted.com/_next/data/${tedBuildId}/talks/${id}.json`);
     str=await res.json();
   // const rawLrc = str.pageProps.transcriptData.translation.paragraphs || [];
   } catch {}
