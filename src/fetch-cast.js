@@ -1704,6 +1704,7 @@ const trLvl = isMobile() ? 0.4 : 0.6;
 let contentId = '';
 
 let ytPlayer = null; let ytReady = false;
+let ytLang='en', ytCCLang='en';
 
 // --- 建立 YouTube Player ---
 function createYouTubePlayer(videoId) {
@@ -1716,13 +1717,15 @@ function createYouTubePlayer(videoId) {
     return;
   }
 
+  if (siteNameVar==='cake' && rt==='ko'){ytLang='ko';}
+
   ytPlayer = new YT.Player('ytPlayer', {
     // height: '360',
     // width: '640',
     height: '100%',
     width: '100%',
     videoId,
-    playerVars: { modestbranding: 1, rel: 0, controls: 1, showinfo: 0, hl: 'en', cc_lang_pref: 'en' },
+    playerVars: { modestbranding: 1, rel: 0, controls: 1, showinfo: 0, hl: ytLang, cc_lang_pref: ytCCLang },
     events: {
       onReady: () => {
         ytReady = true;
