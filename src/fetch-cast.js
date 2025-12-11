@@ -309,7 +309,7 @@ async function cakeGetContent(id){
 
   const rawLrc = str.data.captions ? str.data.captions : [];
 
-  if (rawLrc!==[]){
+  if (rawLrc.length>0){
     try{
     let ts=[];
     for (let s of rawLrc){
@@ -318,6 +318,13 @@ async function cakeGetContent(id){
         sentence: `${s.text || ''}${s.translation ? `<br>${s.translation}` : ''}`
       });     
     }
+
+    const last = rawLrc[rawLrc.length - 1];
+    ts.push({
+      startTime: last.end,
+      sentence: ''
+    });
+    
     getLinesTable(ts,id,false);
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
