@@ -275,19 +275,23 @@ async function cakeGetContentList(id){
     </div><hr>`;
   }
 
-  let playList=[];
+  let relatePlaylist=[];
   for (let h of items){
     res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/${h[0]}/view/relation&lang=${rt}`);
     str = await res.json();
     for (let hh of str.data.playlists){
-      playList.push([hh.playlistId,hh.playlistTitle]);
-      if (hh.playlistId in cakeSentences) continue;
-      cakeSentences[hh.playlistId] = hh.sentences;
+      if (!relatePlaylist.some(item => item[0] === hh.playlistId)) {
+        relatePlaylist.push([hh.playlistId, hh.playlistTitle]);
+      }
+
+      if (!(hh.playlistId in cakeSentences)) {
+        cakeSentences[hh.playlistId] = hh.sentences;
+      }
     }
   }
 
   let listHtml='';
-  for (let h of playList){
+  for (let h of relatePlaylist){
     listHtml+=`<p class="title" onclick="cakeGetContentList('${h[0]}')">[R] ${h[1]}</p><hr id="${h[0]}">`;
   }
 
