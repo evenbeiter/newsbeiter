@@ -201,7 +201,7 @@ async function cakeGetList(siteName,t){
     if (h[2]==='playlist'){
       html+=`<p class="title" onclick="cakeGetContentList('${h[0]}')">${h[1]}</p><hr id="${h[0]}">`;
     } else {
-      html+=`<p class="title" onclick="cakeGetCard('${h[0]}','${h[3].split('?')[0]}')">${h[1]}</p><hr id="${h[0]}">`;
+      html+=`<p class="title" onclick="cakeGetCard('${h[0]}','${h[3].split('?')[0]}')">[S] ${h[1]}</p><hr id="${h[0]}">`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
@@ -257,22 +257,14 @@ async function cakeGetContentList(id){
 
   items=[];html='';allSentences=[];
   let res, str;
+  
+  loading.style.display='block';
 
   try{
   for (let h of cakeSentences[id]){
     items.push([h.sentenceId,h.sentenceEngMl,h.sentence])
   }
 
-  for (let h of items){
-    res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/${h[0]}/view/relation&lang=${rt}`);
-    str = await res.json();
-    for (let hh of str.data.playlists){
-      for (let h of hh.sentences){
-        items.push([[h.sentenceId,h.sentenceEngMl,h.sentence]])
-      }
-    }
-  }
-  
   for (let h of items){
     html+=`<p class="title" onclick="cakeGetContent('${h[0]}')">${h[1]}<br><span class="time">${h[2]}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
@@ -282,9 +274,30 @@ async function cakeGetContentList(id){
     </div>
     </div><hr>`;
   }
-  document.getElementById(id).insertAdjacentHTML('afterend', html);
+
+  let playList=[];
+  for (let h of items){
+    res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/${h[0]}/view/relation&lang=${rt}`);
+    str = await res.json();
+    for (let hh of str.data.playlists){
+      playList.push([hh.playlistId,hh.playlistTitle]);
+      if (hh.playlistId in cakeSentences) continue;
+      cakeSentences[hh.playlistId] = hh.sentences;
+    }
+  }
+
+  let listHtml='';
+  for (let h of playList){
+    listHtml+=`<p class="title" onclick="cakeGetContentList('${h[0]}')">[R] ${h[1]}</p><hr id="${h[0]}">`;
+  }
+
+  document.getElementById(id).insertAdjacentHTML('beforebegin', html);
+  document.getElementById(id).insertAdjacentHTML('afterend', listHtml);
 
   }catch{document.getElementById(id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
+
+  loading.style.display='none';
+
 }
 
 
