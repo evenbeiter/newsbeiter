@@ -213,26 +213,33 @@ async function cakeGetCard(id,m3u8Url){
   hidePlayer();
   adSegments = [];
 
+  let mediaSrc = `${backendUrl}/media?url=${encodeURIComponent(m3u8Url)}`;
   media=vp;
 
   if (mediaSwitch==='ON'){
-    if (vp.canPlayType('application/vnd.apple.mpegurl')) {
-        vp.src = `${backendUrl}/media?url=${encodeURIComponent(m3u8Url)}`;
-        // vp.play();
-    } else if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(`${backendUrl}/media?url=${encodeURIComponent(m3u8Url)}`);
-        hls.attachMedia(vp);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            // vp.play();
-        });
-    } else {
-        console.error("HLS is not supported in this browser.");
-    }
-
+    media.src= mediaSrc;
     media.style.display='block';ct.style.display='block';
     setPlaybackRate(1);
-  }  
+  }
+
+  // if (mediaSwitch==='ON'){
+  //   if (vp.canPlayType('application/vnd.apple.mpegurl')) {
+  //       vp.src = `${backendUrl}/media?url=${encodeURIComponent(m3u8Url)}`;
+  //       // vp.play();
+  //   } else if (Hls.isSupported()) {
+  //       const hls = new Hls();
+  //       hls.loadSource(`${backendUrl}/media?url=${encodeURIComponent(m3u8Url)}`);
+  //       hls.attachMedia(vp);
+  //       hls.on(Hls.Events.MANIFEST_PARSED, () => {
+  //           // vp.play();
+  //       });
+  //   } else {
+  //       console.error("HLS is not supported in this browser.");
+  //   }
+
+  //   media.style.display='block';ct.style.display='block';
+  //   setPlaybackRate(1);
+  // }  
 
   items=[];html='';
 
