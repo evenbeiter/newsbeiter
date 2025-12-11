@@ -30,7 +30,7 @@ audio{margin-right:auto;margin-left:auto;width:100%}
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th{color:green}
 .table-auto {
   table-layout: auto !important;  /* 讓欄位寬度依內容決定 */
-  width: auto !important;
+  /* width: auto !important; 為captions調整*/
 }
 .text-nowrap {
   white-space: nowrap !important; /* 不換行 */
