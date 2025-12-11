@@ -200,7 +200,7 @@ async function cakeGetList(siteName,t){
     if (h[2]==='playlist'){
       html+=`<p class="title" onclick="cakeGetContentList('${h[0]}')">${h[1]}</p><hr id="${h[0]}">`;
     } else {
-      html+=`<p class="title" onclick="cakeGetCard('${h[0]}','${h[3]}')">${h[1]}</p><hr id="${h[0]}">`;
+      html+=`<p class="title" onclick="cakeGetCard('${h[0]}','${h[3].split('?')[0]}')">${h[1]}</p><hr id="${h[0]}">`;
     }
   }
   }catch{html='<p>尚無內容</p>'}
@@ -1837,8 +1837,8 @@ if ('mediaSession' in navigator) {
     artist: '영어베이터',           // 可留空或改為品牌名
     // album: 'Podcast Library',         // 可選
     artwork: [
-      { src: 'icons/icon-podcast-192.png', sizes: '192x192', type: 'image/png' },
-      { src: 'icons/icon-podcast-512.png', sizes: '512x512', type: 'image/png' }
+      { src: 'icons/icon-cast-192.png', sizes: '192x192', type: 'image/png' },
+      { src: 'icons/icon-cast-512.png', sizes: '512x512', type: 'image/png' }
     ]
   });
 }
