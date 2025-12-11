@@ -166,6 +166,7 @@ async function bkstGetContent(id){
 
 let cakeCards={};
 let cakeSentences={};
+let allSentences=[];
 
 async function cakeGetList(siteName,t){
   hidePlayer();
@@ -216,12 +217,6 @@ async function cakeGetCard(id,m3u8Url){
   let mediaSrc = `${backendUrl}/media?url=${encodeURIComponent(m3u8Url)}`;
   media=vp;
 
-  // if (mediaSwitch==='ON'){
-  //   media.src= mediaSrc;
-  //   media.style.display='block';ct.style.display='block';
-  //   setPlaybackRate(1);
-  // }
-
   if (mediaSwitch==='ON'){
     if (vp.canPlayType('application/vnd.apple.mpegurl')) {
         vp.src = mediaSrc;
@@ -255,16 +250,29 @@ async function cakeGetCard(id,m3u8Url){
   }catch{document.getElementById(id).insertAdjacentHTML('afterend', '<p>尚無內容</p>');}
 }
 
+
 async function cakeGetContentList(id){
   hidePlayer();
   adSegments = [];
 
-  items=[];html='';
+  items=[];html='';allSentences=[];
+  let res, str;
 
   try{
   for (let h of cakeSentences[id]){
     items.push([h.sentenceId,h.sentenceEngMl,h.sentence])
   }
+
+  for (let h of items){
+    res = await fetch(`${backendUrl}/cake?cmd=/v2/sentence/${h[0]}/view/relation&lang=${rt}`);
+    str = await res.json();
+    for (let hh of str.data.playlists){
+      for (let h of hh.sentences){
+        items.push([[h.sentenceId,h.sentenceEngMl,h.sentence]])
+      }
+    }
+  }
+  
   for (let h of items){
     html+=`<p class="title" onclick="cakeGetContent('${h[0]}')">${h[1]}<br><span class="time">${h[2]}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
