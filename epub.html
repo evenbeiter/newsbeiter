@@ -9,149 +9,106 @@
     .translation { color: #0b5ed7; font-style: italic; margin-top: .25rem; margin-bottom: .75rem; }
     .small-muted { font-size: .9rem; color: #6c757d; }
     pre { white-space: pre-wrap; word-break: break-word; }
-    .log-error { color: #dc3545; }
-    .log-info { color: #6c757d; }
   </style>
 </head>
 <body class="bg-light">
   <div class="container py-4">
-    <h1 class="mb-3">EPUB 中英對照產生器</h1>
+    <h1 class="mb-3">EPUB 中英對照</h1>
 
     <div class="card mb-3">
       <div class="card-body">
-        <p>上傳 EPUB，程式會解析各章節、擷取常見區塊元素（段落、標題、列表項等），以 batch 方式呼叫翻譯 API，並在每個原文區塊後插入中文翻譯，最後產生可以下載的雙語 EPUB。</p>
-
         <div class="mb-3">
-          <label class="form-label">選擇 EPUB 檔案</label>
+          <label class="form-label">上傳 EPUB 檔案</label>
           <input id="epubFile" type="file" accept=".epub" class="form-control" />
         </div>
 
         <div class="mb-3 row">
-          <div class="col-md-8">
-            <label class="form-label">翻譯 API endpoint（輸入 "google" 使用 Google Translate v2）</label>
-            <input id="apiEndpoint" class="form-control" placeholder='輸入 "google" 或完整 endpoint (預設 google)' value="google" />
-            <div class="form-text">Google 使用 `translate.googleapis.com/language/translate/v2` (需 API Key)。其他 endpoint 請支援 JSON POST {q:[], source, target, format} 回應包含 translatedText 或陣列。</div>
-          </div>
           <div class="col-md-4">
-            <label class="form-label">API Key（Google 必填）</label>
-            <input id="apiKey" class="form-control" placeholder="Google API Key 或其他 API Key（可選）" />
+            <label class="form-label">後端翻譯 API (例如 http://localhost:3000/translate)</label>
+            <input id="backendUrl" class="form-control" value="http://localhost:3000/translate" />
           </div>
-        </div>
-
-        <div class="mb-3 row">
-          <div class="col-md-3">
-            <label class="form-label">源語言（source）</label>
-            <input id="sourceLang" class="form-control" value="en" />
+          <div class="col-md-2">
+            <label class="form-label">source</label>
+            <input id="source" class="form-control" value="en" />
           </div>
-          <div class="col-md-3">
-            <label class="form-label">目標語言（target）</label>
-            <input id="targetLang" class="form-control" value="zh-TW" />
+          <div class="col-md-2">
+            <label class="form-label">target</label>
+            <input id="target" class="form-control" value="zh-TW" />
           </div>
-          <div class="col-md-3">
-            <label class="form-label">Batch size（每次合併段數）</label>
-            <input id="batchSize" type="number" class="form-control" value="10" />
+          <div class="col-md-2">
+            <label class="form-label">batchSize (client->backend)</label>
+            <input id="batchSize" type="number" class="form-control" value="40" />
           </div>
-          <div class="col-md-3">
-            <label class="form-label">每批延遲 ms（避免突發流量）</label>
-            <input id="delayMs" type="number" class="form-control" value="300" />
+          <div class="col-md-2">
+            <label class="form-label">delayMs (每次發 request 後等待)</label>
+            <input id="delayMs" type="number" class="form-control" value="200" />
           </div>
         </div>
 
         <div class="mb-3">
-          <button id="startBtn" class="btn btn-primary">開始處理並產生中英對照 EPUB</button>
-          <button id="previewBtn" class="btn btn-outline-secondary">解析並預覽（不翻譯）</button>
+          <button id="startBtn" class="btn btn-primary">開始處理（解析 -> 向後端請求翻譯 -> 產生 EPUB）</button>
+          <button id="previewBtn" class="btn btn-outline-secondary">解析並預覽（僅解析前 3 章）</button>
         </div>
 
         <div id="log" class="border rounded p-2 bg-white" style="max-height:260px; overflow:auto;">
-          <div class="small-muted">日誌區（處理進度會顯示於此）</div>
+          <div class="small-muted">日誌</div>
         </div>
 
-        <div class="mt-3" id="downloadArea"></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-body">
-        <h5>注意事項</h5>
-        <ul>
-          <li>Google Translate v2 需啟用 Cloud Translation API 與 API Key（v2）。</li>
-          <li>大量段落翻譯可能超出配額或產生費用，請注意 Google 帳單與限制。</li>
-          <li>若未提供有效翻譯 API，會在每個區塊插入佔位文字。</li>
-        </ul>
+        <div id="downloadArea" class="mt-3"></div>
       </div>
     </div>
   </div>
 
-  <!-- 依賴：JSZip -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 
   <script>
     const $ = id => document.getElementById(id);
     const logEl = $('log');
-    function log(msg, type='info') {
+    function log(msg) {
       const d = document.createElement('div');
       d.className = 'mb-1';
-      d.innerHTML = `<small class="${type==='error'?'log-error':'log-info'}">${escapeHtml(msg)}</small>`;
+      d.innerHTML = `<small class="text-muted">${escapeHtml(msg)}</small>`;
       logEl.appendChild(d);
       logEl.scrollTop = logEl.scrollHeight;
     }
+    function escapeHtml(s){ return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-    function escapeHtml(s) {
-      return (s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
-
-    // 找到 OPF 路徑
     async function findOpfPath(zip) {
-      const containerPath = 'META-INF/container.xml';
-      if (!zip.file(containerPath)) throw new Error('找不到 META-INF/container.xml');
-      const xml = await zip.file(containerPath).async('string');
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(xml, 'application/xml');
-      const rootfile = doc.querySelector('rootfile');
-      if (!rootfile) throw new Error('container.xml 解析異常');
-      return rootfile.getAttribute('full-path');
+      const p = 'META-INF/container.xml';
+      if (!zip.file(p)) throw new Error('找不到 META-INF/container.xml');
+      const txt = await zip.file(p).async('string');
+      const doc = new DOMParser().parseFromString(txt, 'application/xml');
+      const rf = doc.querySelector('rootfile');
+      if (!rf) throw new Error('container.xml 解析失敗');
+      return rf.getAttribute('full-path');
     }
 
-    // Resolve href using opf folder path
     function resolveHref(opfFolder, href) {
       if (!opfFolder) return href;
       if (href.startsWith('/')) return href.slice(1);
       return opfFolder + (opfFolder.endsWith('/') ? '' : '/') + href;
     }
 
-    // 判斷 node 是否為可翻譯的文字容器
     function nodeHasVisibleText(node) {
       if (!node) return false;
-      // textContent length > 0 and not only whitespace
       const txt = node.textContent || '';
       if (!txt.trim()) return false;
-      // 排除包含 code/pre/script/style/math 等
-      const forbidden = ['CODE','PRE','SCRIPT','STYLE','MATH'];
-      for (let tag of forbidden) {
-        if (node.querySelector && node.querySelector(tag.toLowerCase())) return false;
-      }
-      // too long? we accept any length here
+      // avoid code/pre/script/style/math
+      if (node.querySelector && node.querySelector('code,pre,script,style,math')) return false;
       return true;
     }
 
-    // 收集可翻譯節點（保留節點引用）
     function collectTranslatableNodes(doc) {
       const tags = ['p','div','li','blockquote','h1','h2','h3','h4','h5','h6','figcaption','td','th'];
       const nodes = [];
-      // breadth-first search to keep document order
       const walker = doc.createTreeWalker(doc.body || doc, NodeFilter.SHOW_ELEMENT, null, false);
       let n = walker.currentNode;
-      while(n) {
+      while (n) {
         const tag = n.nodeName.toLowerCase();
         if (tags.includes(tag)) {
-          // exclude empty or nodes that are basically navigation or only images
           if (nodeHasVisibleText(n)) {
-            // don't include if already has a sibling translation element
             const next = n.nextElementSibling;
-            if (!(next && next.classList && next.classList.contains('translation'))) {
-              nodes.push(n);
-            }
+            if (!(next && next.classList && next.classList.contains('translation'))) nodes.push(n);
           }
         }
         n = walker.nextNode();
@@ -159,283 +116,195 @@
       return nodes;
     }
 
-    // 根據 apiEndpoint 決定如何呼叫
-    async function translateBatchTexts(apiEndpointInput, apiKey, texts, source, target) {
-      // texts: array of strings
-      if (!texts.length) return [];
-
-      // If apiEndpointInput contains "google" (case-insensitive), use Google Translate v2
-      const ep = (apiEndpointInput || '').trim().toLowerCase();
-      if (ep === 'google' || ep.includes('google')) {
-        if (!apiKey) throw new Error('使用 Google Translate 時需提供 API Key');
-        const url = `https://translation.googleapis.com/language/translate/v2?key=${encodeURIComponent(apiKey)}`;
-        const payload = {
-          q: texts,
-          source: source || undefined,
-          target: target || 'zh',
-          format: 'text'
-        };
-        // remove undefined keys
-        Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
-        const resp = await fetch(url, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
-        });
-        if (!resp.ok) {
-          const txt = await resp.text();
-          throw new Error('Google Translate error: ' + resp.status + ' ' + txt);
-        }
-        const j = await resp.json();
-        // j.data.translations is array aligning to texts
-        if (j && j.data && Array.isArray(j.data.translations)) {
-          return j.data.translations.map(t => (t.translatedText || '').toString());
-        } else {
-          throw new Error('Google 回傳格式不可解析');
-        }
-      } else {
-        // Generic endpoint: POST { q: [...], source, target, format: 'text' } -> expect array in response or object with translatedText
-        const url = apiEndpointInput;
-        if (!url) throw new Error('請提供翻譯 API endpoint 或輸入 google');
-        const payload = { q: texts, source: source || undefined, target: target || 'zh', format: 'text' };
-        Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
-        const resp = await fetch(url, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json', ...(apiKey?{'Authorization':'Bearer '+apiKey}:{})},
-          body: JSON.stringify(payload)
-        });
-        if (!resp.ok) {
-          const txt = await resp.text();
-          throw new Error('翻譯 API error: ' + resp.status + ' ' + txt);
-        }
-        const j = await resp.json();
-        // try common formats
-        if (Array.isArray(j)) return j.map(x => typeof x === 'string' ? x : (x.translatedText||JSON.stringify(x)));
-        if (j.translations && Array.isArray(j.translations)) return j.translations.map(t => t.translatedText||t);
-        if (j.translatedText) return [j.translatedText];
-        // fallback: try to pick keys
-        return Array.isArray(j.result) ? j.result.map(x => x.translatedText || x) : [JSON.stringify(j)];
-      }
-    }
-
-    // 在單一 XHTML 字串處理：收集節點、分 batch 翻譯、插入翻譯元素
-    async function processXhtmlEnhanced(xhtmlText, options) {
-      const { apiEndpoint, apiKey, source, target, batchSize, delayMs, doTranslate } = options;
-      const parser = new DOMParser();
-      // parse as xhtml
-      const doc = parser.parseFromString(xhtmlText, 'application/xhtml+xml');
-      // Ensure a body exists for traversal — many XHTML chapter files have body
-      const nodes = collectTranslatableNodes(doc);
-      if (!nodes.length) {
-        return new XMLSerializer().serializeToString(doc);
-      }
-
-      // Build text list aligned to nodes
-      const texts = nodes.map(n => n.textContent.trim());
-
-      // If not translating, create placeholder translations immediately
-      if (!doTranslate) {
-        for (let i = 0; i < nodes.length; i++) {
-          const frag = doc.createElement('p');
-          frag.setAttribute('class','translation');
-          frag.textContent = '（未連接翻譯 API，請提供 endpoint 與 key）';
-          nodes[i].parentNode.insertBefore(frag, nodes[i].nextSibling);
-        }
-        return new XMLSerializer().serializeToString(doc);
-      }
-
-      // Batch translate
-      const results = new Array(texts.length);
-      for (let start = 0; start < texts.length; start += batchSize) {
-        const batchTexts = texts.slice(start, start + batchSize);
-        log(`送出第 ${Math.floor(start/batchSize)+1} 批（${batchTexts.length} 段）進行翻譯...`);
-        try {
-          const translated = await translateBatchTexts(apiEndpoint, apiKey, batchTexts, source, target);
-          // map back
-          for (let k = 0; k < translated.length; k++) {
-            results[start + k] = translated[k];
-          }
-        } catch (e) {
-          log(`第 ${Math.floor(start/batchSize)+1} 批翻譯失敗: ${e.message}`, 'error');
-          // fill failure placeholders
-          for (let k = 0; k < batchTexts.length; k++) {
-            results[start + k] = '（翻譯失敗，請檢查 API 或金鑰）';
-          }
-        }
-        // optional delay between batches
-        if (delayMs) await new Promise(r => setTimeout(r, delayMs));
-      }
-
-      // Insert translations into DOM in order
-      for (let i = 0; i < nodes.length; i++) {
-        const t = results[i] || '（無翻譯結果）';
-        const frag = doc.createElement('p');
-        frag.setAttribute('class','translation');
-        // set textContent (preserve safety)
-        frag.textContent = t;
-        nodes[i].parentNode.insertBefore(frag, nodes[i].nextSibling);
-      }
-
-      return new XMLSerializer().serializeToString(doc);
-    }
-
-    // 主流程
+    // 前端把所有章節的 nodes 整理成一個大陣列 items = [{chapterHref, nodeIndexInChapter, html}, ...]
+    // 再分批把 html 字串送給後端; 後端會回傳 translations aligned to items order
     $('startBtn').addEventListener('click', async () => {
       logEl.innerHTML = '<div class="small-muted">開始處理...</div>';
       const fileInp = $('epubFile');
-      if (!fileInp.files || fileInp.files.length === 0) { log('請先選擇 EPUB 檔案', 'error'); return; }
+      if (!fileInp.files || !fileInp.files.length) { log('請選擇 EPUB'); return; }
       const file = fileInp.files[0];
-      const apiEndpoint = $('apiEndpoint').value.trim();
-      const apiKey = $('apiKey').value.trim();
-      const source = $('sourceLang').value.trim() || 'en';
-      const target = $('targetLang').value.trim() || 'zh';
-      const batchSize = parseInt($('batchSize').value,10) || 10;
-      const delayMs = parseInt($('delayMs').value,10) || 300;
-      const doTranslate = !!apiEndpoint;
+      const backendUrl = $('backendUrl').value.trim();
+      if (!backendUrl) { log('請填寫後端 translate URL'); return; }
+      const batchSize = parseInt($('batchSize').value,10) || 30;
+      const delayMs = parseInt($('delayMs').value,10) || 200;
+      const source = $('source').value.trim() || 'en';
+      const target = $('target').value.trim() || 'zh-TW';
 
-      log(`讀取檔案 ${file.name} ...`);
+      log(`讀取 ${file.name}...`);
       const arrayBuffer = await file.arrayBuffer();
       const zip = await JSZip.loadAsync(arrayBuffer);
 
-      // 找 OPF
-      let opfPath;
-      try {
-        opfPath = await findOpfPath(zip);
-        log(`OPF: ${opfPath}`);
-      } catch (e) {
-        log('找不到 OPF: ' + e.message, 'error');
-        return;
-      }
-
-      const opfText = await zip.file(opfPath).async('string');
-      const parser = new DOMParser();
-      const opfDoc = parser.parseFromString(opfText, 'application/xml');
-      const opfFolder = opfPath.includes('/') ? opfPath.substring(0, opfPath.lastIndexOf('/')) : '';
-
-      const manifestItems = {};
-      for (let item of opfDoc.querySelectorAll('manifest > item')) {
-        manifestItems[item.getAttribute('id')] = {
-          href: item.getAttribute('href'),
-          'media-type': item.getAttribute('media-type')
-        };
-      }
-      const spineOrder = [...opfDoc.querySelectorAll('spine > itemref')].map(ir => ir.getAttribute('idref'));
-
-      // 找出要處理的 xhtml/html
-      const xhtmlItems = [];
-      for (let idref of spineOrder) {
-        const item = manifestItems[idref];
-        if (!item) continue;
-        const mt = item['media-type'] || '';
-        if (mt.includes('xhtml') || mt.includes('html') || item.href.endsWith('.xhtml') || item.href.endsWith('.html')) {
-          xhtmlItems.push({id: idref, href: item.href});
-        }
-      }
-      log(`找到 ${xhtmlItems.length} 個可處理章節`);
-
-      // 逐章節處理
-      for (let i = 0; i < xhtmlItems.length; i++) {
-        const xi = xhtmlItems[i];
-        const resolved = resolveHref(opfFolder, xi.href);
-        const fileEntry = zip.file(resolved) || zip.file(xi.href) || zip.file('/' + resolved);
-        if (!fileEntry) {
-          log(`找不到章節檔案：${resolved}，跳過`, 'error');
-          continue;
-        }
-        log(`處理章節 ${i+1}/${xhtmlItems.length} : ${resolved}`);
-        const text = await fileEntry.async('string');
-        let processed;
-        try {
-          processed = await processXhtmlEnhanced(text, {
-            apiEndpoint,
-            apiKey,
-            source,
-            target,
-            batchSize,
-            delayMs,
-            doTranslate
-          });
-        } catch (e) {
-          log(`章節處理失敗：${e.message}`, 'error');
-          processed = text; // fallback
-        }
-        zip.file(resolved, processed);
-      }
-
-      // 產生新 epub
-      log('壓縮並產生新的 EPUB...');
-      const newBlob = await zip.generateAsync({type:'blob', compression:'DEFLATE'});
-      const newName = file.name.replace(/\.epub$/i,'') + '_bilingual.epub';
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(newBlob);
-      a.download = newName;
-      a.textContent = '下載：' + newName;
-      a.className = 'btn btn-success';
-      const area = $('downloadArea');
-      area.innerHTML = '';
-      area.appendChild(a);
-      log('完成！請點擊下載連結取得新 EPUB。');
-    });
-
-    // 預覽：解析並顯示每章第一個可翻譯節點文本（不翻譯）
-    $('previewBtn').addEventListener('click', async () => {
-      logEl.innerHTML = '<div class="small-muted">解析（預覽）...</div>';
-      const fileInp = $('epubFile');
-      if (!fileInp.files || fileInp.files.length === 0) { log('請先選擇 EPUB 檔案', 'error'); return; }
-      const file = fileInp.files[0];
-      const arrayBuffer = await file.arrayBuffer();
-      const zip = await JSZip.loadAsync(arrayBuffer);
       let opfPath;
       try {
         opfPath = await findOpfPath(zip);
         log('OPF: ' + opfPath);
       } catch (e) {
-        log('找不到 OPF: ' + e.message, 'error');
+        log('找 OPF 失敗: ' + e.message);
         return;
       }
+
       const opfText = await zip.file(opfPath).async('string');
-      const parser = new DOMParser();
-      const opfDoc = parser.parseFromString(opfText, 'application/xml');
+      const opfDoc = new DOMParser().parseFromString(opfText, 'application/xml');
       const opfFolder = opfPath.includes('/') ? opfPath.substring(0, opfPath.lastIndexOf('/')) : '';
 
-      const manifestItems = {};
+      // manifest mapping
+      const manifest = {};
       for (let item of opfDoc.querySelectorAll('manifest > item')) {
-        manifestItems[item.getAttribute('id')] = {
-          href: item.getAttribute('href'),
-          'media-type': item.getAttribute('media-type')
-        };
+        manifest[item.getAttribute('id')] = { href: item.getAttribute('href'), type: item.getAttribute('media-type') };
       }
-      const spineOrder = [...opfDoc.querySelectorAll('spine > itemref')].map(ir => ir.getAttribute('idref'));
+      const spine = [...opfDoc.querySelectorAll('spine > itemref')].map(ir => ir.getAttribute('idref'));
 
+      // gather xhtml items
       const xhtmlItems = [];
-      for (let idref of spineOrder) {
-        const item = manifestItems[idref];
-        if (!item) continue;
-        const mt = item['media-type'] || '';
-        if (mt.includes('xhtml') || mt.includes('html') || item.href.endsWith('.xhtml') || item.href.endsWith('.html')) {
-          xhtmlItems.push({id: idref, href: item.href});
+      for (let idref of spine) {
+        const it = manifest[idref];
+        if (!it) continue;
+        const mt = it['type'] || '';
+        if (mt.includes('xhtml') || mt.includes('html') || it.href.endsWith('.xhtml') || it.href.endsWith('.html')) {
+          xhtmlItems.push({ id: idref, href: it.href });
         }
       }
-      log(`發現 ${xhtmlItems.length} 個章節，顯示前 3 章每章第一個可翻譯節點：`);
+      log(`找到 ${xhtmlItems.length} 章節可處理`);
+
+      // Collect nodes across chapters
+      const masterItems = []; // {chapterHref, nodeIndex, html, originalIndex}
+      const chaptersDocs = {}; // cache parsed docs per resolved href
+      for (let ci = 0; ci < xhtmlItems.length; ci++) {
+        const xi = xhtmlItems[ci];
+        const resolved = resolveHref(opfFolder, xi.href);
+        const fileEntry = zip.file(resolved) || zip.file(xi.href);
+        if (!fileEntry) { log(`找不到 ${resolved}, 跳過`); continue; }
+        const text = await fileEntry.async('string');
+        const doc = new DOMParser().parseFromString(text, 'application/xhtml+xml');
+        chaptersDocs[resolved] = { doc, raw: text, href: resolved };
+        const nodes = collectTranslatableNodes(doc);
+        for (let ni = 0; ni < nodes.length; ni++) {
+          const node = nodes[ni];
+          const html = node.innerHTML;
+          masterItems.push({ href: resolved, nodeIndex: ni, html });
+        }
+        log(`章節 ${xi.href} 收集到 ${nodes.length} 個節點`);
+      }
+
+      if (!masterItems.length) { log('未找到可翻譯節點'); return; }
+
+      log(`總共 ${masterItems.length} 個要翻譯的節點，分批送後端 (batchSize=${batchSize})`);
+
+      // send batches to backend; backend will internally call translate-pa in its own batchSize
+      const allTranslations = new Array(masterItems.length);
+      for (let start = 0; start < masterItems.length; start += batchSize) {
+        const batch = masterItems.slice(start, start + batchSize);
+        const htmls = batch.map(b => b.html);
+        log(`送出 client-batch ${Math.floor(start/batchSize)+1}（${htmls.length} 段）給後端`);
+        try {
+          const resp = await fetch(backendUrl, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ items: htmls, source, target, batchSize: 8 }) // 我把 translate-pa 的內部 batchSize 設短一點，後端會再拆
+          });
+          if (!resp.ok) {
+            const txt = await resp.text();
+            throw new Error(`後端回應 ${resp.status}: ${txt}`);
+          }
+          const j = await resp.json();
+          if (!j.translations || !Array.isArray(j.translations)) throw new Error('後端回傳格式錯誤');
+          for (let i = 0; i < j.translations.length; i++) {
+            allTranslations[start + i] = j.translations[i];
+          }
+        } catch (e) {
+          log('翻譯失敗: ' + e.message);
+          // fill placeholders
+          for (let i = 0; i < htmls.length; i++) allTranslations[start + i] = '（翻譯失敗）';
+        }
+        await new Promise(r => setTimeout(r, delayMs));
+      }
+
+      log('已取得所有翻譯，開始把翻譯插回章節 DOM 中');
+
+      // For each masterItems entry, insert translation p after the corresponding node in its chapter doc
+      for (let idx = 0; idx < masterItems.length; idx++) {
+        const item = masterItems[idx];
+        const ch = chaptersDocs[item.href];
+        if (!ch) continue;
+        const doc = ch.doc;
+        // re-collect nodes to ensure correct references (since DOMParser created new nodes same order)
+        const nodes = collectTranslatableNodes(doc);
+        const node = nodes[item.nodeIndex];
+        if (!node) continue;
+        const tHtml = allTranslations[idx] || '（無翻譯）';
+        const p = doc.createElement('p');
+        p.setAttribute('class','translation');
+        // we want the translated HTML (translate-pa gives HTML), so set innerHTML
+        try {
+          p.innerHTML = tHtml;
+        } catch(e) {
+          p.textContent = tHtml;
+        }
+        if (node.parentNode) node.parentNode.insertBefore(p, node.nextSibling);
+      }
+
+      // write modified chapter files back to zip
+      for (const resolved of Object.keys(chaptersDocs)) {
+        const doc = chaptersDocs[resolved].doc;
+        const serialized = new XMLSerializer().serializeToString(doc);
+        zip.file(resolved, serialized);
+      }
+
+      // generate new epub
+      log('打包新 EPUB...');
+      const newBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+      const downloadName = file.name.replace(/\.epub$/i,'') + '_bilingual.epub';
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(newBlob);
+      a.download = downloadName;
+      a.className = 'btn btn-success';
+      a.textContent = '下載 ' + downloadName;
       const area = $('downloadArea');
       area.innerHTML = '';
+      area.appendChild(a);
+      log('完成！請點下載。');
+    });
 
-      for (let i = 0; i < Math.min(3, xhtmlItems.length); i++) {
+
+    // preview button: 只解析前 3 章，顯示首個節點文字
+    $('previewBtn').addEventListener('click', async () => {
+      logEl.innerHTML = '<div class="small-muted">解析（預覽）...</div>';
+      const fileInp = $('epubFile');
+      if (!fileInp.files || !fileInp.files.length) { log('請選擇 EPUB'); return; }
+      const file = fileInp.files[0];
+      const arrayBuffer = await file.arrayBuffer();
+      const zip = await JSZip.loadAsync(arrayBuffer);
+      let opfPath;
+      try { opfPath = await findOpfPath(zip); } catch (e) { log('找 OPF 失敗: '+e.message); return; }
+      const opfText = await zip.file(opfPath).async('string');
+      const opfDoc = new DOMParser().parseFromString(opfText, 'application/xml');
+      const opfFolder = opfPath.includes('/') ? opfPath.substring(0, opfPath.lastIndexOf('/')) : '';
+      const manifest = {};
+      for (let item of opfDoc.querySelectorAll('manifest > item')) manifest[item.getAttribute('id')] = {href:item.getAttribute('href'), type:item.getAttribute('media-type')};
+      const spine = [...opfDoc.querySelectorAll('spine > itemref')].map(ir => ir.getAttribute('idref'));
+      const xhtmlItems = [];
+      for (let idref of spine) {
+        const it = manifest[idref];
+        if (!it) continue;
+        const mt = it.type || '';
+        if (mt.includes('xhtml')||mt.includes('html')||it.href.endsWith('.xhtml')||it.href.endsWith('.html')) xhtmlItems.push({id:idref, href:it.href});
+      }
+      const area = $('downloadArea'); area.innerHTML = '';
+      for (let i=0; i<Math.min(3, xhtmlItems.length); i++) {
         const xi = xhtmlItems[i];
         const resolved = resolveHref(opfFolder, xi.href);
-        const fileEntry = zip.file(resolved) || zip.file(xi.href) || zip.file('/' + resolved);
+        const fileEntry = zip.file(resolved) || zip.file(xi.href);
         if (!fileEntry) continue;
         const text = await fileEntry.async('string');
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'application/xhtml+xml');
+        const doc = new DOMParser().parseFromString(text, 'application/xhtml+xml');
         const nodes = collectTranslatableNodes(doc);
         const sample = nodes.length ? nodes[0].textContent.trim().slice(0,400) : '（本章找不到可翻譯節點）';
         const card = document.createElement('div');
         card.className = 'card mb-2';
-        card.innerHTML = `<div class="card-body"><h6 class="card-title">章節 ${i+1}: ${xi.href}</h6><p>${escapeHtml(sample)}</p></div>`;
+        card.innerHTML = `<div class="card-body"><h6 class="card-title">章 ${i+1}: ${xi.href}</h6><p>${escapeHtml(sample)}</p></div>`;
         area.appendChild(card);
       }
-      log('預覽完成。');
+      log('預覽完成');
     });
   </script>
 </body>
