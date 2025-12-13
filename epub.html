@@ -254,7 +254,7 @@
       // generate new epub
       log('打包新 EPUB...');
       const newBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
-      const downloadName = file.name.replace(/\.epub$/i,'') + '_bilingual.epub';
+      const downloadName = file.name.replace(/\.epub$/i,'') + ' (en-zh).epub';
       const a = document.createElement('a');
       a.href = URL.createObjectURL(newBlob);
       a.download = downloadName;
