@@ -23,19 +23,23 @@
         </div>
 
         <div class="mb-3 row">
-          <div class="col-md-3">
+          <div class="col-md-4">
+            <label class="form-label">後端翻譯 API (例如 http://localhost:3000/translate)</label>
+            <input id="backendUrl" class="form-control" value="http://localhost:3000/translate" />
+          </div>
+          <div class="col-md-2">
             <label class="form-label">source</label>
             <input id="source" class="form-control" value="en" />
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label class="form-label">target</label>
             <input id="target" class="form-control" value="zh-TW" />
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label class="form-label">batchSize (client->backend)</label>
             <input id="batchSize" type="number" class="form-control" value="40" />
           </div>
-          <div class="col-md-3">
+          <div class="col-md-2">
             <label class="form-label">delayMs (每次發 request 後等待)</label>
             <input id="delayMs" type="number" class="form-control" value="200" />
           </div>
@@ -43,6 +47,7 @@
 
         <div class="mb-3">
           <button id="startBtn" class="btn btn-primary">開始處理（解析 -> 向後端請求翻譯 -> 產生 EPUB）</button>
+          <button id="previewBtn" class="btn btn-outline-secondary">解析並預覽（僅解析前 3 章）</button>
         </div>
 
         <div id="log" class="border rounded p-2 bg-white" style="max-height:260px; overflow:auto;">
@@ -118,7 +123,9 @@
       const fileInp = $('epubFile');
       if (!fileInp.files || !fileInp.files.length) { log('請選擇 EPUB'); return; }
       const file = fileInp.files[0];
-      const backendUrl = 'https://newsbeiter.onrender.com/translate/epub;
+      //const backendUrl = $('backendUrl').value.trim();
+      const backendUrl = 'https://newsbeiter.onrender.com/translate/epub';
+      if (!backendUrl) { log('請填寫後端 translate URL'); return; }
       const batchSize = parseInt($('batchSize').value,10) || 30;
       const delayMs = parseInt($('delayMs').value,10) || 200;
       const source = $('source').value.trim() || 'en';
@@ -258,7 +265,48 @@
       area.appendChild(a);
       log('完成！請點下載。');
     });
-    
+
+
+    // preview button: 只解析前 3 章，顯示首個節點文字
+    $('previewBtn').addEventListener('click', async () => {
+      logEl.innerHTML = '<div class="small-muted">解析（預覽）...</div>';
+      const fileInp = $('epubFile');
+      if (!fileInp.files || !fileInp.files.length) { log('請選擇 EPUB'); return; }
+      const file = fileInp.files[0];
+      const arrayBuffer = await file.arrayBuffer();
+      const zip = await JSZip.loadAsync(arrayBuffer);
+      let opfPath;
+      try { opfPath = await findOpfPath(zip); } catch (e) { log('找 OPF 失敗: '+e.message); return; }
+      const opfText = await zip.file(opfPath).async('string');
+      const opfDoc = new DOMParser().parseFromString(opfText, 'application/xml');
+      const opfFolder = opfPath.includes('/') ? opfPath.substring(0, opfPath.lastIndexOf('/')) : '';
+      const manifest = {};
+      for (let item of opfDoc.querySelectorAll('manifest > item')) manifest[item.getAttribute('id')] = {href:item.getAttribute('href'), type:item.getAttribute('media-type')};
+      const spine = [...opfDoc.querySelectorAll('spine > itemref')].map(ir => ir.getAttribute('idref'));
+      const xhtmlItems = [];
+      for (let idref of spine) {
+        const it = manifest[idref];
+        if (!it) continue;
+        const mt = it.type || '';
+        if (mt.includes('xhtml')||mt.includes('html')||it.href.endsWith('.xhtml')||it.href.endsWith('.html')) xhtmlItems.push({id:idref, href:it.href});
+      }
+      const area = $('downloadArea'); area.innerHTML = '';
+      for (let i=0; i<Math.min(3, xhtmlItems.length); i++) {
+        const xi = xhtmlItems[i];
+        const resolved = resolveHref(opfFolder, xi.href);
+        const fileEntry = zip.file(resolved) || zip.file(xi.href);
+        if (!fileEntry) continue;
+        const text = await fileEntry.async('string');
+        const doc = new DOMParser().parseFromString(text, 'application/xhtml+xml');
+        const nodes = collectTranslatableNodes(doc);
+        const sample = nodes.length ? nodes[0].textContent.trim().slice(0,400) : '（本章找不到可翻譯節點）';
+        const card = document.createElement('div');
+        card.className = 'card mb-2';
+        card.innerHTML = `<div class="card-body"><h6 class="card-title">章 ${i+1}: ${xi.href}</h6><p>${escapeHtml(sample)}</p></div>`;
+        area.appendChild(card);
+      }
+      log('預覽完成');
+    });
   </script>
 </body>
 </html>
