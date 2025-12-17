@@ -921,7 +921,7 @@ function word2sentence(raw){
 }
 
 async function translateSentences(list) {
-  const r = await fetch(`${backendUrl}translate/sentences`, {
+  const r = await fetch(`${backendUrl}/translate/sentences`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ list })
