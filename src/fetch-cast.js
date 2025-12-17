@@ -866,7 +866,7 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
     if (transcriptionId && transcriptionId !== 'undefined'){
       res=await fetch(`https://podscribe-transcript.s3.amazonaws.com/transcripts/${transcriptionId}.json`);
       str=await res.json();
-      const ts=word2sentence(str);
+      const ts=await word2sentence(str);
 
       res=await fetch(`${preStr}${encodeURIComponent(`https://backend.podscribe.ai/api/episode?id=${id}&includeAds=true&includeOriginal=false`)}`);
       str = await res.json();
@@ -884,7 +884,7 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
 
 }
 
-function word2sentence(raw){
+async function word2sentence(raw){
   const sentences = [];
   let currentSentence = [];
   let currentStart = null;
@@ -916,7 +916,7 @@ function word2sentence(raw){
       sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
     });
   }
-  return translateSentences(sentences);
+  return await translateSentences(sentences);
 }
 
 async function translateSentences(list) {
