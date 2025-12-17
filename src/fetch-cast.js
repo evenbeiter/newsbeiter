@@ -795,8 +795,6 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
     loading.style.display='block';
     cEl.style.display='block';
 
-    // if (cEl.innerText.length>10) {loading.style.display = 'none'; return;} // already got transcription in cEl
-
     try{
     res=await fetch(`${preStr}https://backend.podscribe.ai/api/episode?id=${id}`);
     str=await res.text();
@@ -838,23 +836,6 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
         '';
       }
     }
-    // 沒有文稿, 分別取 id 和音頻
-    // else {console.log('split');
-    //   const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
-    //     // const match3 = str.match(regex3);
-    //     // transcriptionId = match3?.[0] || '';
-    //     const matches = [...str.matchAll(regex3)];
-    //     transcriptionId = matches.at(-1)?.[1] || ''; // 取最後一個 UUID
-
-    //   // const regex3 = /"([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})","Done"/g;
-    //   // const match3 = str.match(regex3);
-    //   // transcriptionId = match3?.[0] || '';
-
-    //   mediaSrc =
-    //     str.match(/https:\/\/[^\s"]+?\.mp3"/)?.[0].slice(0,-1) ||
-    //     str.match(/https:\/\/[^\s"]+?\.mp3\?/)?.[0].slice(0,-1) ||
-    //     '';        
-    // }
     
     // 沒有文稿, 取出音頻
     else {
@@ -870,15 +851,8 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
       cEl.innerHTML+=`<p>尚未提供音頻</p>`; loading.style.display='none'; return;
     }
     
-    if (mediaSrc.endsWith('.mp3')) {
-      media=ap;
-      // ap.src= mediaSrc;vp.src='';
-      // ap.style.display='block';vp.style.display='none';yt.style.display='none';
-    } else {
-      media=vp;
-      // vp.src= mediaSrc;ap.src='';
-      // vp.style.display='block';ap.style.display='none';yt.style.display='none';
-    }
+    if (mediaSrc.endsWith('.mp3')) {media=ap;} else {media=vp;}
+
     if (mediaSwitch==='ON'){
       media.src= mediaSrc;
       media.style.display='block';ct.style.display='block';
@@ -897,7 +871,8 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
       res=await fetch(`${preStr}${encodeURIComponent(`https://backend.podscribe.ai/api/episode?id=${id}&includeAds=true&includeOriginal=false`)}`);
       str = await res.json();
       adSegments = extractAdSegments(str);
-      getLinesTable(ts,id,true);
+      //getLinesTable(ts,id,true);
+      getLinesTable(ts,id,false);
     } else {
       cEl.innerHTML+=`<p>尚未提供文稿</p>`;
     }
@@ -941,6 +916,7 @@ function word2sentence(raw){
       sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
     });
   }
+  sentences = applyTranslationToSentences(sentences);
   return sentences;
 }
 
@@ -986,10 +962,6 @@ async function getPodcastTranslate(btn) {
 function isInAdSegment(currentTime) {
   return adSegments.some(seg => currentTime >= seg.startTime && currentTime <= seg.endTime);
 }
-
-// var res=await fetch(window.location.href);
-// var episodeMeta=await res.text();
-
 
 // 解析 URL 中的時間，例如 "_00.06.49-00.07.23.mp3"
 function parseAdTimeFromUrl(url) {
@@ -1250,18 +1222,6 @@ async function tedGetContent(id){
 
     const ts=parseVTT(str);
     if (ts.length !== 0){
-
-  // if (rawLrc!==[]){
-  //   try{
-  //   let ts=[];
-  //   for (let r of rawLrc){
-  //     for (let s of r.cues){
-  //       ts.push({
-  //         startTime: s.time/1000,
-  //         sentence: `${s.text}<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`
-  //       });
-  //     }  
-  //   }
 
     getLinesTable(ts,id,false);
 
