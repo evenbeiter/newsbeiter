@@ -40,7 +40,6 @@
           </div>
         </div>
       </div>
-      </div>
 
       <div class="mb-3">
         <button id="startBtn" class="btn btn-primary">開始處理（上傳 → 轉換 → 下載）</button>
@@ -84,123 +83,106 @@ function updateProgress(current,total,startTime){
   etaEl.textContent = `進度: ${current}/${total}，預估剩餘 ${Math.ceil(eta)} 秒`;
 }
 
-$('startBtn').addEventListener('click', async ()=>{
-  const fileInp = $('epubFile');
-  if(!fileInp.files || !fileInp.files.length){ log('請選 EPUB'); return; }
-  const file = fileInp.files[0];
-  const profile = $('profile').value;
-
-  const converter = profile==='s2twp'
-    ? OpenCC.Converter({ from:'cn', to:'twp' })
-    : OpenCC.Converter({ from:'cn', to:'twt' });
-
-  log(`讀取 EPUB: ${file.name} ...`);
-  const arrayBuffer = await file.arrayBuffer();
-  const zip = await JSZip.loadAsync(arrayBuffer);
-
-  // 解析 container.xml
-  const containerXml = await zip.file('META-INF/container.xml').async('string');
-  const parser = new DOMParser();
-  const containerDoc = parser.parseFromString(containerXml,'application/xml');
-  const rootfile = containerDoc.querySelector('rootfile');
-  if(!rootfile){ log('container.xml 解析失敗'); return; }
-
-  const opfPath = rootfile.getAttribute('full-path');
-  const opfFolder = opfPath.includes('/') ? opfPath.substring(0, opfPath.lastIndexOf('/')) : '';
-
-  const opfText = await zip.file(opfPath).async('string');
-  const opfDoc = parser.parseFromString(opfText,'application/xml');
-
-  const manifest = {};
-  for(const item of opfDoc.querySelectorAll('manifest > item')){
-    manifest[item.getAttribute('id')] = {
-      href: item.getAttribute('href'),
-      type: item.getAttribute('media-type')
-    };
-  }
-
-  const spine = [...opfDoc.querySelectorAll('spine > itemref')]
-    .map(ir=>ir.getAttribute('idref'));
-
-  const htmlFiles = [];
-  for(const idref of spine){
-    const it = manifest[idref];
-    if(!it) continue;
-    if(it.type?.includes('xhtml') || it.type?.includes('html') || it.href.endsWith('.xhtml') || it.href.endsWith('.html')){
-      htmlFiles.push(it.href);
-    }
-  }
-
-  log(`找到 ${htmlFiles.length} 個章節`);
-
-  const startTime = Date.now();
-  for(let i=0;i<htmlFiles.length;i++){
-    const href = htmlFiles[i];
-    const resolved = opfFolder ? `${opfFolder}/${href}` : href;
-    const fileEntry = zip.file(resolved) || zip.file(href);
-    if(!fileEntry){ log(`找不到 ${resolved}`); continue; }
-
-    log(`轉換章節 ${i+1}/${htmlFiles.length}: ${href}`);
-    const html = await fileEntry.async('string');
-    let converted = converter(html);
-
-    // 可選：轉換引號（只處理文字節點）
-    if($('convertQuotes').checked){
-      const doc = parser.parseFromString(converted, 'application/xhtml+xml');
-
-      function walk(node){
-        if(node.nodeType === Node.TEXT_NODE){
-          node.nodeValue = convertQuotes(node.nodeValue);
-        } else if(node.nodeType === Node.ELEMENT_NODE){
-          const tag = node.tagName?.toLowerCase();
-          // 不處理 script / style
-          if(tag === 'script' || tag === 'style') return;
-          for(const c of node.childNodes) walk(c);
-        }
-      }
-
-      walk(doc.documentElement);
-      converted = new XMLSerializer().serializeToString(doc);
-    }
-
-    zip.file(resolved, converted);
-
-    updateProgress(i+1, htmlFiles.length, startTime);
-    await new Promise(r=>setTimeout(r,0)); // 讓 UI 有時間刷新
-  }
-
-  log('生成新 EPUB...');
-  const newBlob = await zip.generateAsync({type:'blob', compression:'DEFLATE'});
-  const downloadName = file.name.replace(/\.epub$/i,'') + ' (繁中).epub';
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(newBlob);
-  a.download = downloadName;
-  a.className = 'btn btn-success';
-  a.textContent = '下載 ' + downloadName;
-
-  const area = $('downloadArea');
-  area.innerHTML = '';
-  area.appendChild(a);
-  log('完成！');
-}
-
-// 安全的引號轉換（僅作用於純文字）
 function convertQuotes(text){
   let openDouble = true;
   let openSingle = true;
-
   return text
-    .replace(/"/g, () => {
-      const q = openDouble ? '「' : '」';
-      openDouble = !openDouble;
-      return q;
-    })
-    .replace(/'/g, () => {
-      const q = openSingle ? '『' : '』';
-      openSingle = !openSingle;
-      return q;
-    });
+    .replace(/"/g, () => { const q = openDouble ? '「' : '」'; openDouble = !openDouble; return q; })
+    .replace(/'/g, () => { const q = openSingle ? '『' : '』'; openSingle = !openSingle; return q; });
 }
+
+$('startBtn').addEventListener('click', async ()=>{
+  try {
+    const fileInp = $('epubFile');
+    if(!fileInp.files || !fileInp.files.length){ log('請選 EPUB'); return; }
+    const file = fileInp.files[0];
+    const profile = $('profile').value;
+    const convertQuotesFlag = $('convertQuotes').checked;
+
+    const converter = profile==='s2twp'
+      ? OpenCC.Converter({ from:'cn', to:'twp' })
+      : OpenCC.Converter({ from:'cn', to:'twt' });
+
+    log(`讀取 EPUB: ${file.name} ...`);
+    const arrayBuffer = await file.arrayBuffer();
+    const zip = await JSZip.loadAsync(arrayBuffer);
+
+    const containerXml = await zip.file('META-INF/container.xml').async('string');
+    const parser = new DOMParser();
+    const containerDoc = parser.parseFromString(containerXml,'application/xml');
+    const rootfile = containerDoc.querySelector('rootfile');
+    if(!rootfile){ log('container.xml 解析失敗'); return; }
+
+    const opfPath = rootfile.getAttribute('full-path');
+    const opfFolder = opfPath.includes('/') ? opfPath.substring(0, opfPath.lastIndexOf('/')) : '';
+
+    const opfText = await zip.file(opfPath).async('string');
+    const opfDoc = parser.parseFromString(opfText,'application/xml');
+
+    const manifest = {};
+    for(const item of opfDoc.querySelectorAll('manifest > item')){
+      manifest[item.getAttribute('id')] = { href: item.getAttribute('href'), type: item.getAttribute('media-type') };
+    }
+
+    const spine = [...opfDoc.querySelectorAll('spine > itemref')].map(ir=>ir.getAttribute('idref'));
+
+    const htmlFiles = [];
+    for(const idref of spine){
+      const it = manifest[idref];
+      if(!it) continue;
+      if(it.type?.includes('xhtml') || it.type?.includes('html') || it.href.endsWith('.xhtml') || it.href.endsWith('.html')){
+        htmlFiles.push(it.href);
+      }
+    }
+
+    log(`找到 ${htmlFiles.length} 個章節`);
+    const startTime = Date.now();
+
+    for(let i=0;i<htmlFiles.length;i++){
+      const href = htmlFiles[i];
+      const resolved = opfFolder ? `${opfFolder}/${href}` : href;
+      const fileEntry = zip.file(resolved) || zip.file(href);
+      if(!fileEntry){ log(`找不到 ${resolved}`); continue; }
+
+      log(`轉換章節 ${i+1}/${htmlFiles.length}: ${href}`);
+      const html = await fileEntry.async('string');
+      let converted = converter(html);
+
+      if(convertQuotesFlag){
+        try{
+          const doc = parser.parseFromString(converted, 'text/html');
+          function walk(node){
+            if(node.nodeType === Node.TEXT_NODE){ node.nodeValue = convertQuotes(node.nodeValue); }
+            else{ for(const c of node.childNodes) walk(c); }
+          }
+          walk(doc.body);
+          converted = doc.body.innerHTML;
+        } catch(e){ log('引號轉換失敗: ' + e.message); }
+      }
+
+      zip.file(resolved, converted);
+      updateProgress(i+1, htmlFiles.length, startTime);
+      await new Promise(r=>setTimeout(r,0));
+    }
+
+    log('生成新 EPUB...');
+    const newBlob = await zip.generateAsync({type:'blob', compression:'DEFLATE'});
+    const downloadName = file.name.replace(/\.epub$/i,'') + ' (繁中).epub';
+    
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(newBlob);
+    a.download = downloadName;
+    a.className = 'btn btn-success';
+    a.textContent = '下載 ' + downloadName;
+
+    const area = $('downloadArea');
+    area.innerHTML = '';
+    area.appendChild(a);
+    log('完成！');
+  } catch(e){
+    log('發生錯誤: ' + e.message);
+    console.error(e);
+  }
 });
 </script>
 </body>
