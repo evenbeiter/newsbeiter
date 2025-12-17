@@ -100,8 +100,8 @@ $('startBtn').addEventListener('click', async ()=>{
     const convertQuotesFlag = $('convertQuotes').checked;
 
     const converter = profile==='s2twp'
-      ? OpenCC.Converter({ from:'cn', to:'twp' })
-      : OpenCC.Converter({ from:'cn', to:'twt' });
+      ? OpenCCJS.Converter({ from:'cn', to:'twp' })
+      : OpenCCJS.Converter({ from:'cn', to:'twt' });
 
     log(`讀取 EPUB: ${file.name} ...`);
     const arrayBuffer = await file.arrayBuffer();
