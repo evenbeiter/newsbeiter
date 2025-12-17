@@ -916,8 +916,7 @@ function word2sentence(raw){
       sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
     });
   }
-  sentences = translateSentences(sentences);
-  return sentences;
+  return translateSentences(sentences);
 }
 
 async function translateSentences(list) {
