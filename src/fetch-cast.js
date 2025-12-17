@@ -916,8 +916,20 @@ function word2sentence(raw){
       sentence: currentSentence.join(" ").replace(/\s([,.!?])/g, "$1")
     });
   }
-  sentences = applyTranslationToSentences(sentences);
+  sentences = translateSentences(sentences);
   return sentences;
+}
+
+async function translateSentences(list) {
+  const r = await fetch(`${backendUrl}translate/sentences`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ list })
+  });
+
+  const j = await r.json();
+  if (!j.ok) throw new Error(j.error);
+  return j.data;
 }
 
 
