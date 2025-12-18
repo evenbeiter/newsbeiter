@@ -3,8 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EPUB 中英對照</title>
+  <title>EPUB 工具集</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script src="src/opencc-cn2t.js"></script>
   <style>
     .translation { color: #0b5ed7; font-style: italic; margin-top: .25rem; margin-bottom: .75rem; }
     .small-muted { font-size: .9rem; color: #6c757d; }
@@ -13,50 +15,93 @@
 </head>
 <body class="bg-light">
 <div class="container py-4">
-  <h1 class="mb-3">EPUB 中英對照</h1>
+  <h1 class="mb-3">EPUB 工具集</h1>
 
-  <div class="card mb-3">
-    <div class="card-body">
-      <div class="mb-3">
-        <label class="form-label">上傳 EPUB 檔案</label>
-        <input id="epubFile" type="file" accept=".epub" class="form-control" />
-      </div>
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-3" id="tabMenu" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="en-zh-tab" data-bs-toggle="tab" data-bs-target="#en-zh" type="button" role="tab">中英對照</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="s2t-tab" data-bs-toggle="tab" data-bs-target="#s2t" type="button" role="tab">簡轉繁</button>
+    </li>
+  </ul>
 
-      <div class="mb-3 row">
-        <div class="col-md-6">
-          <label class="form-label">後端翻譯 API</label>
-          <input id="backendUrl" class="form-control" value="http://localhost:3000/translate-epub-html" />
+  <div class="tab-content">
+    <!-- 中英對照 Tab -->
+    <div class="tab-pane fade show active" id="en-zh" role="tabpanel">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">上傳 EPUB 檔案</label>
+            <input id="epubFileEnZh" type="file" accept=".epub" class="form-control" />
+          </div>
+          <div class="mb-3 row">
+            <div class="col-md-6">
+              <label class="form-label">後端翻譯 API</label>
+              <input id="backendUrl" class="form-control" value="https://newsbeiter.onrender.com/translate/epub" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">source</label>
+              <input id="source" class="form-control" value="en" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">target</label>
+              <input id="target" class="form-control" value="zh-TW" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <button id="startBtnEnZh" class="btn btn-primary">開始處理（上傳 → 翻譯 → 下載）</button>
+          </div>
         </div>
-        <div class="col-md-3">
-          <label class="form-label">source</label>
-          <input id="source" class="form-control" value="en" />
+      </div>
+    </div>
+
+    <!-- 簡轉繁 Tab -->
+    <div class="tab-pane fade" id="s2t" role="tabpanel">
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">上傳 EPUB 檔案</label>
+            <input id="epubFileS2T" type="file" accept=".epub" class="form-control" />
+          </div>
+          <div class="mb-3 row">
+            <div class="col-md-4">
+              <label class="form-label">轉換模式</label>
+              <select id="profile" class="form-control">
+                <option value="s2tw">簡 → 台灣繁體（s2tw）</option>
+                <option value="s2twp">簡 → 台灣繁體＋詞彙優化（s2twp）</option>
+              </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="convertQuotes">
+                <label class="form-check-label" for="convertQuotes">
+                  轉換中文引號（" → 「」、' → 『』）
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <button id="startBtnS2T" class="btn btn-primary">開始處理（上傳 → 轉換 → 下載）</button>
+          </div>
         </div>
-        <div class="col-md-3">
-          <label class="form-label">target</label>
-          <input id="target" class="form-control" value="zh-TW" />
-        </div>
       </div>
-
-      <div class="mb-3">
-        <button id="startBtn" class="btn btn-primary">開始處理（上傳 → 翻譯 → 下載）</button>
-      </div>
-
-      <div class="progress mb-2" style="height:20px;">
-        <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%">0%</div>
-      </div>
-
-      <div id="eta" class="small-muted mb-2"></div>
-
-      <div id="log" class="border rounded p-2 bg-white" style="max-height:260px; overflow:auto;">
-        <div class="small-muted">日誌</div>
-      </div>
-
-      <div id="downloadArea" class="mt-3"></div>
     </div>
   </div>
+
+  <!-- 共用進度/日誌/下載區 -->
+  <div class="progress mb-2" style="height:20px;">
+    <div id="progressBar" class="progress-bar" role="progressbar" style="width:0%">0%</div>
+  </div>
+  <div id="eta" class="small-muted mb-2"></div>
+  <div id="log" class="border rounded p-2 bg-white" style="max-height:260px; overflow:auto;">
+    <div class="small-muted">日誌</div>
+  </div>
+  <div id="downloadArea" class="mt-3"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 const logEl = $('log');
@@ -80,9 +125,8 @@ function updateProgress(current,total,startTime){
   etaEl.textContent = `進度: ${current}/${total}，預估剩餘 ${Math.ceil(eta)} 秒`;
 }
 
-// simple in-memory cache for same paragraphs
+// ---------------- 中英對照 ----------------
 const translationCache = {};
-
 async function translateHtml(html, backendUrl, source, target){
   if(translationCache[html]) return translationCache[html];
   const resp = await fetch(backendUrl,{
@@ -97,28 +141,25 @@ async function translateHtml(html, backendUrl, source, target){
   return j.html;
 }
 
-$('startBtn').addEventListener('click', async ()=>{
-  const fileInp = $('epubFile');
+$('startBtnEnZh').addEventListener('click', async ()=>{
+  const fileInp = $('epubFileEnZh');
   if(!fileInp.files || !fileInp.files.length){ log('請選 EPUB'); return; }
   const file = fileInp.files[0];
-  //const backendUrl = $('backendUrl').value.trim();
-const backendUrl = 'https://newsbeiter.onrender.com/translate/epub';
+  const backendUrl = $('backendUrl').value.trim();
   const source = $('source').value.trim();
   const target = $('target').value.trim();
 
   log(`讀取 EPUB: ${file.name} ...`);
   const arrayBuffer = await file.arrayBuffer();
   const zip = await JSZip.loadAsync(arrayBuffer);
-
-  // 找 OPF
   const containerXml = await zip.file('META-INF/container.xml').async('string');
   const parser = new DOMParser();
   const containerDoc = parser.parseFromString(containerXml,'application/xml');
   const rootfile = containerDoc.querySelector('rootfile');
   if(!rootfile) { log('container.xml解析失敗'); return; }
+
   const opfPath = rootfile.getAttribute('full-path');
   const opfFolder = opfPath.includes('/')? opfPath.substring(0,opfPath.lastIndexOf('/')) : '';
-
   const opfText = await zip.file(opfPath).async('string');
   const opfDoc = parser.parseFromString(opfText,'application/xml');
 
@@ -128,20 +169,18 @@ const backendUrl = 'https://newsbeiter.onrender.com/translate/epub';
   }
   const spine = [...opfDoc.querySelectorAll('spine > itemref')].map(ir=>ir.getAttribute('idref'));
 
-  // 收集 XHTML/HTML 檔
   const htmlFiles = [];
   for(const idref of spine){
     const it = manifest[idref];
     if(!it) continue;
-    const href = it.href;
-    if(it.type?.includes('xhtml') || it.type?.includes('html') || href.endsWith('.xhtml') || href.endsWith('.html')){
-      htmlFiles.push({idref, href});
+    if(it.type?.includes('xhtml') || it.type?.includes('html') || it.href.endsWith('.xhtml') || it.href.endsWith('.html')){
+      htmlFiles.push({idref, href: it.href});
     }
   }
 
   log(`找到 ${htmlFiles.length} 章節`);
-
   const startTime = Date.now();
+
   for(let i=0;i<htmlFiles.length;i++){
     const hf = htmlFiles[i];
     const resolved = opfFolder? opfFolder+'/'+hf.href : hf.href;
@@ -158,7 +197,6 @@ const backendUrl = 'https://newsbeiter.onrender.com/translate/epub';
     updateProgress(i+1, htmlFiles.length, startTime);
   }
 
-  // 生成新 EPUB
   log('生成新 EPUB...');
   const newBlob = await zip.generateAsync({type:'blob', compression:'DEFLATE'});
   const downloadName = file.name.replace(/\.epub$/i,'')+' (en-zh).epub';
@@ -171,6 +209,100 @@ const backendUrl = 'https://newsbeiter.onrender.com/translate/epub';
   area.innerHTML = '';
   area.appendChild(a);
   log('完成！請點下載。');
+});
+
+// ---------------- 簡轉繁 ----------------
+function convertQuotes(text){
+  let openDouble = true;
+  let openSingle = true;
+  return text
+    .replace(/"/g, () => { const q = openDouble ? '「' : '」'; openDouble = !openDouble; return q; })
+    .replace(/'/g, () => { const q = openSingle ? '『' : '』'; openSingle = !openSingle; return q; });
+}
+
+$('startBtnS2T').addEventListener('click', async ()=>{
+  try {
+    const fileInp = $('epubFileS2T');
+    if(!fileInp.files || !fileInp.files.length){ log('請選 EPUB'); return; }
+    const file = fileInp.files[0];
+    const profile = $('profile').value;
+    const convertQuotesFlag = $('convertQuotes').checked;
+
+    log(`讀取 EPUB: ${file.name} ...`);
+    const arrayBuffer = await file.arrayBuffer();
+    const zip = await JSZip.loadAsync(arrayBuffer);
+
+    const containerXml = await zip.file('META-INF/container.xml').async('string');
+    const parser = new DOMParser();
+    const containerDoc = parser.parseFromString(containerXml,'application/xml');
+    const rootfile = containerDoc.querySelector('rootfile');
+    if(!rootfile){ log('container.xml 解析失敗'); return; }
+
+    const opfPath = rootfile.getAttribute('full-path');
+    const opfFolder = opfPath.includes('/') ? opfPath.substring(0, opfPath.lastIndexOf('/')) : '';
+    const opfText = await zip.file(opfPath).async('string');
+    const opfDoc = parser.parseFromString(opfText,'application/xml');
+
+    const manifest = {};
+    for(const item of opfDoc.querySelectorAll('manifest > item')){
+      manifest[item.getAttribute('id')] = { href: item.getAttribute('href'), type: item.getAttribute('media-type') };
+    }
+    const spine = [...opfDoc.querySelectorAll('spine > itemref')].map(ir=>ir.getAttribute('idref'));
+    const htmlFiles = [];
+    for(const idref of spine){
+      const it = manifest[idref];
+      if(!it) continue;
+      if(it.type?.includes('xhtml') || it.type?.includes('html') || it.href.endsWith('.xhtml') || it.href.endsWith('.html')){
+        htmlFiles.push(it.href);
+      }
+    }
+
+    log(`找到 ${htmlFiles.length} 個章節`);
+    const startTime = Date.now();
+
+    for(let i=0;i<htmlFiles.length;i++){
+      const href = htmlFiles[i];
+      const resolved = opfFolder ? `${opfFolder}/${href}` : href;
+      const fileEntry = zip.file(resolved) || zip.file(href);
+      if(!fileEntry){ log(`找不到 ${resolved}`); continue; }
+
+      log(`轉換章節 ${i+1}/${htmlFiles.length}: ${href}`);
+      const html = await fileEntry.async('string');
+      let converted = s2t(html); // OpenCC 全域函數
+
+      if(convertQuotesFlag){
+        try{
+          const doc = parser.parseFromString(converted, 'text/html');
+          function walk(node){
+            if(node.nodeType === Node.TEXT_NODE){ node.nodeValue = convertQuotes(node.nodeValue); }
+            else{ for(const c of node.childNodes) walk(c); }
+          }
+          walk(doc.body);
+          converted = doc.body.innerHTML;
+        } catch(e){ log('引號轉換失敗: ' + e.message); }
+      }
+
+      zip.file(resolved, converted);
+      updateProgress(i+1, htmlFiles.length, startTime);
+      await new Promise(r=>setTimeout(r,0));
+    }
+
+    log('生成新 EPUB...');
+    const newBlob = await zip.generateAsync({type:'blob', compression:'DEFLATE'});
+    const downloadName = file.name.replace(/\.epub$/i,'') + ' (繁中).epub';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(newBlob);
+    a.download = downloadName;
+    a.className = 'btn btn-success';
+    a.textContent = '下載 ' + downloadName;
+    const area = $('downloadArea');
+    area.innerHTML = '';
+    area.appendChild(a);
+    log('完成！');
+  } catch(e){
+    log('發生錯誤: ' + e.message);
+    console.error(e);
+  }
 });
 </script>
 </body>
