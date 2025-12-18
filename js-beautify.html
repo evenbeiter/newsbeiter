@@ -82,7 +82,7 @@ async function loadAndBeautify(){
   if(!url){ alert('請輸入 JS URL'); return; }
 
   try {
-    const res = await fetch(url);
+    const res = await fetch('https://newsbeiter.onrender.com/api/fetch?url='+url);
     if(!res.ok) throw new Error('無法取得 JS 內容');
 
     const code = await res.text();
