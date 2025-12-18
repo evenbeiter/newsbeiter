@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>JS Beautifier + DevTools Style Viewer</title>
+
+<!-- js-beautify -->
+<script src="https://cdn.jsdelivr.net/npm/js-beautify@1.14.9/js/lib/beautify.js"></script>
+
+<!-- highlight.js -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/javascript.min.js"></script>
+
+<!-- CodeMirror 用於折疊、搜尋、跳轉 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/theme/material-darker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/fold/foldcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/fold/foldgutter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/fold/brace-fold.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/search/searchcursor.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.14/addon/search/search.min.js"></script>
+
+<style>
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont; padding: 20px; background:#1e1e1e; color:#fff;}
+input { width: 70%; padding: 6px; font-size: 16px; }
+button { padding: 6px 12px; font-size: 16px; margin-left: 8px; }
+#editor { height: 70vh; border: 1px solid #333; margin-top: 20px; }
+.hl-highlight { background: rgba(255, 255, 0, 0.3); }
+</style>
+</head>
+<body>
+
+<h2>JS Beautifier + DevTools Viewer</h2>
+
+<input id="url" placeholder="輸入 JS 檔網址，例如 https://example.com/app.js">
+<button onclick="loadAndBeautify()">Beautify</button>
+<button onclick="searchCode()">🔍 搜尋</button>
+
+<div id="editor"></div>
+
+<script>
+let editor;
+
+function initEditor() {
+  editor = CodeMirror(document.getElementById('editor'), {
+    value: '',
+    mode: 'javascript',
+    theme: 'material-darker',
+    lineNumbers: true,
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+  });
+
+  // 點擊變數高亮全局
+  editor.on('cursorActivity', () => {
+    const sel = editor.getSelection();
+    if(!sel) return;
+    clearHighlights();
+    const regex = new RegExp('\\b' + sel.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\b', 'g');
+    editor.eachLine(line => {
+      const text = editor.getLine(editor.getLineNumber(line));
+      let match;
+      while((match = regex.exec(text)) !== null){
+        editor.markText({line: editor.getLineNumber(line), ch: match.index}, 
+                        {line: editor.getLineNumber(line), ch: match.index + sel.length}, 
+                        {className: 'hl-highlight'});
+      }
+    });
+  });
+}
+
+function clearHighlights(){
+  editor.getAllMarks().forEach(m=>m.clear());
+}
+
+async function loadAndBeautify(){
+  const url = document.getElementById('url').value.trim();
+  if(!url){ alert('請輸入 JS URL'); return; }
+
+  try {
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('無法取得 JS 內容');
+
+    const code = await res.text();
+    const beautified = js_beautify(code, { indent_size: 2 });
+    editor.setValue(beautified);
+    editor.refresh();
+  } catch(err){
+    alert('錯誤: ' + err.message);
+  }
+}
+
+// 搜尋跳轉
+function searchCode(){
+  const keyword = prompt('輸入要搜尋的關鍵字:');
+  if(!keyword) return;
+  const cursor = editor.getSearchCursor(keyword);
+  if(cursor.findNext()){
+    editor.setSelection(cursor.from(), cursor.to());
+    editor.scrollIntoView({from:cursor.from(), to: cursor.to()});
+  } else {
+    alert('找不到: ' + keyword);
+  }
+}
+
+initEditor();
+</script>
+
+</body>
+</html>
