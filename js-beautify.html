@@ -30,6 +30,34 @@ input { width: 70%; padding: 6px; font-size: 16px; }
 button { padding: 6px 12px; font-size: 16px; margin-left: 8px; }
 #editor { height: 70vh; border: 1px solid #333; margin-top: 20px; }
 .hl-highlight { background: rgba(255, 255, 0, 0.3); }
+
+/* 預設：auto height（小檔案） */
+.CodeMirror {
+  height: auto !important;
+}
+
+.CodeMirror-scroll {
+  max-height: none;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+
+/* 換行 */
+.CodeMirror pre {
+  white-space: pre-wrap !important;
+  word-break: break-word;
+}
+
+/* 大檔案模式（會用 JS 動態加 class） */
+.CodeMirror.cm-large-file {
+  height: 80vh !important;
+}
+
+.CodeMirror.cm-large-file .CodeMirror-scroll {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
 </style>
 </head>
 <body>
@@ -47,13 +75,14 @@ let editor;
 
 function initEditor() {
   editor = CodeMirror(document.getElementById('editor'), {
-    value: '',
     mode: 'javascript',
     theme: 'material-darker',
     lineNumbers: true,
     foldGutter: true,
+    lineWrapping: true,
     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
   });
+
 
   // 點擊變數高亮全局
   editor.on('cursorActivity', () => {
@@ -77,6 +106,21 @@ function clearHighlights(){
   editor.getAllMarks().forEach(m=>m.clear());
 }
 
+function applySmartLayout() {
+  const lineCount = editor.lineCount();
+  const cmEl = editor.getWrapperElement();
+
+  const THRESHOLD = 2000; // 行數門檻，可自己調
+
+  if (lineCount > THRESHOLD) {
+    cmEl.classList.add('cm-large-file');
+  } else {
+    cmEl.classList.remove('cm-large-file');
+  }
+
+  editor.refresh();
+}
+
 async function loadAndBeautify(){
   const url = document.getElementById('url').value.trim();
   if(!url){ alert('請輸入 JS URL'); return; }
@@ -88,11 +132,12 @@ async function loadAndBeautify(){
     const code = await res.text();
     const beautified = js_beautify(code, { indent_size: 2 });
     editor.setValue(beautified);
-    editor.refresh();
+    applySmartLayout(); 
   } catch(err){
     alert('錯誤: ' + err.message);
   }
 }
+
 
 // 搜尋跳轉
 function searchCode(){
