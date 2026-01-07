@@ -587,18 +587,18 @@ async function ftGetList(siteName,t){
   const hh=doc.querySelectorAll('.o-teaser__content');
   const tt=doc.querySelectorAll('.stream-card__date');
   for (let i=0;i<hh.length;i++){
-  items.push([hh[i].querySelector('.o-teaser__heading a').href,hh[i].querySelector('.o-teaser__heading').innerText,tt[i].innerText]);
+  items.push([hh[i].querySelector('.o-teaser__heading a').href.replace('https://evenbeiter.github.io',''),hh[i].querySelector('.o-teaser__heading').innerText,tt[i].innerText]);
   }
   
   for (let h of items){
-    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><span class="time">${h[2]}</span><br><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><p class="time">${h[2]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
 
 async function ftGetContent(id){
-  try{const res = await fetch('https://www.ft.com'+id);const str=await res.text();
+  try{const res = await fetch(preStr+'https://www.ft.com'+id);const str=await res.text();
   const parser = new DOMParser();const doc = parser.parseFromString(str, "text/html");
   const d=doc.querySelector('#article-body');
   html = d.innerHTML+ '<p class="text-end"><a href="https://www.ft.com' + id + '" target="_blank">分享</a></p><br>';
