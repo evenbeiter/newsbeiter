@@ -1016,47 +1016,6 @@ async function msGetContent(id){
 }
 
 
-
-
-
-
-
-function convertHtmlDom(html) {
-  const container = document.createElement('div');
-  container.innerHTML = html;
-
-  let output = '';
-  let buffer = '';
-
-  container.childNodes.forEach(node => {
-    if (node.nodeName === 'A') {
-      buffer += node.textContent.trim();
-    } 
-    else if (node.nodeName === 'BR') {
-      if (buffer.trim()) {
-        output += `<p>${buffer.trim()}</p>`;
-        buffer = '';
-      }
-    } 
-    else if (
-      node.nodeType === Node.TEXT_NODE &&
-      node.textContent.trim() !== ''
-    ) {
-      buffer += node.textContent.trim();
-    }
-  });
-
-  if (buffer.trim()) {
-    output += `<p>${buffer.trim()}</p>`;
-  }
-
-  return output;
-}
-
-
-
-
-
 //    MSN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
