@@ -1069,6 +1069,40 @@ async function msnGetContent(id){
 }
 
 
+//    MSTAR
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function mstarGetList(siteName,t){
+  try{url=preStr+'https://www.morningstar.com/api/v2/'+t+'?page='+rr;console.log(url);
+  let res=await fetch(url);
+  let str=await res.json();
+  if (t.startsWith('news/')){
+    for (let h of str.page){
+      items.push([h.websiteURL,h.title,h.publishedDate])
+    }
+  } else {
+    for (let h of str.page.stories){
+      items.push([h.canonicalURL,h.headline.title,h.displayDate])
+    }
+  }
+
+  for (let h of items){
+    html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><p class="time">${cvt2Timezone(h[2])}</p><div id="${h[0]}" class="content fs12" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+  }
+  }catch{html='<p>尚無內容</p>'}
+  return html;
+}
+
+async function mstarGetContent(id){
+  try{const res = await fetch(preStr+'https://www.morningstar.com'+id);
+  const str=await res.text();
+  const parser = new DOMParser();const doc = parser.parseFromString(str, "text/html");
+  html = doc.querySelector('div.news-article__body__mdc') + shareLink('https://www.morningstar.com'+id);
+  }catch{html='<p><a href="https://www.morningstar.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
+  return html;
+}
+
+
 //    PE INSIGHTS
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
