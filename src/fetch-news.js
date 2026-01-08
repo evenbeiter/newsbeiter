@@ -1097,7 +1097,7 @@ async function mstarGetContent(id){
   try{const res = await fetch(preStr+'https://www.morningstar.com'+id);
   const str=await res.text();
   const parser = new DOMParser();const doc = parser.parseFromString(str, "text/html");
-  html = doc.querySelector('div.news-article__body__mdc') + shareLink('https://www.morningstar.com'+id);
+  html = doc.querySelector('[itemprop~="articleBody"][itemprop~="text"]').outerHTML + shareLink('https://www.morningstar.com'+id);
   }catch{html='<p><a href="https://www.morningstar.com' + id + '" target="_blank">繼續閱讀</a></p><br>'}
   return html;
 }
