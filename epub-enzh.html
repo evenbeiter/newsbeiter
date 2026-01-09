@@ -93,7 +93,7 @@ async function translateHtml(html, backendUrl, source, target){
   if(!resp.ok) throw new Error(`後端錯誤 ${resp.status}`);
   const j = await resp.json();
   if(!j.html) throw new Error('後端回傳格式錯誤');
-  translationCache[html] = j.html;
+  translationCache[html] = j.html;console.log(j.html);
   return j.html;
 }
 
