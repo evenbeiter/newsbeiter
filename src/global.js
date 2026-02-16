@@ -5,7 +5,7 @@ const openContentDirectly=['apollo','cnyeshao','ecoMag','liveABC'];
 const cvtSc2Tc=['eastMoney','jin','sina','wiki','wscn','xueqiu'];
 const sites2Translate=['ab','apollo','bbg','blk','boa','ecoMag','ft','gsam','invesco','ishares','jpm','jpmpb','ms','msnUS','mstar','nb','pd','peInsights','pimco','schroders','ssga','substack','yahooTW'];
 const kr=['ytn'];
-const noNextPage=['ecoMag'];
+const noNextPage=['ecoMag','bii'];
 const msnALL=['msnTW','msnUS'];
 const rmImgStyle='img, figure, figure.caas-figure div.caas-figure-with-pb, .bbc-17ytifv, .bbc-j1srjl, .bbc-j1srjl, .bbc-2fjy3x, .caas-img-container, .caas-img-loader, .col-xs-12 div.video-js.plyr__video-embed iframe';
 

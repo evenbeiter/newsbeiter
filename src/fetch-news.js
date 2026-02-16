@@ -63,7 +63,7 @@ async function biiGetList(siteName,t){
       for (let u of c.Urls){
         imgHtml+=`<img src="${u}"><br>`;
       }
-      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${c.Url}')">${c.Title}</p><div id="${c.Ulr}" class="content fs12" onclick="getContent('${siteName}',this.id,'${c.Url}')">${imgHtml}${shareLink(c.Url)}</div><hr>`;
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${c.Url}')">${c.Title}</p><div id="${c.Url}" class="content fs12" onclick="getContent('${siteName}',this.id,'${c.Url}')">${imgHtml}${shareLink(c.Url)}</div><hr>`;
     }
   }
   }catch{html='<p>No Content.</p>'}
