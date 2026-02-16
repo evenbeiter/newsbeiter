@@ -9,7 +9,7 @@ var bii = [];
 fetch('/newsbeiter/src/bii.json')
   .then(res => res.json())
   .then(data => {
-    bii = data.map(d => d.Title);
+    bii = data.map(d => [d.Title, d.Title]);
     console.log(bii);
   })
   .catch(err => console.error(err));
