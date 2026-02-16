@@ -50,6 +50,27 @@ async function bbcGetContent(id){
 }
 
 
+//    BII
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function biiGetList(siteName,t){
+  try{
+  const res=await fetch('/newsbeiter/src/bii.json');const str=await res.json();
+  const data = str.find(item => item.Title === t);
+  if (data.Children){
+    for (let c of data.Children){
+      let imgHtml = '';
+      for (let u of c.Urls){
+        imgHtml+=`<img src="${u}"><br>`;
+      }
+      html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${c.Url}')">${c.Title}</p><div id="${c.Ulr}" class="content fs12" onclick="getContent('${siteName}',this.id,'${c.Url}')">${imgHtml}${shareLink(c.Url)}</div><hr>`;
+    }
+  }
+  }catch{html='<p>No Content.</p>'}
+  return html;
+}
+
+
 //    BLACKROCK
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
