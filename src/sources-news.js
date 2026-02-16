@@ -3,6 +3,7 @@ const ab=[['','Latest']];
 const apollo=[['','Latest']];
 const bbc=[['','首頁'],['topics/c83plve5vmjt','國際'],['topics/cd6qem06z92t','台灣'],['topics/cpydz21p2zmt','經濟'],['topics/cq8nqywy37yt','財經'],['topics/cgqny5mmrezt','股市'],['topics/cn05jy5nv81t','川普關稅'],['topics/cgvl47l38e1t','影片']];
 const bbg=[['MARKETS','Markets'],['ECONOMICS','Economics'],['INDUSTRIES','Industries'],['TECHNOLOGY','Technology'],['BUSINESS','Business'],['VIEW','View'],['POLITICS','Politics'],['AT2bBytfUHQ/john-authers','John Authers']];
+var bii=[];var res = await fetch('/newsbeiter/src/bii.json');var data = await res.json();for (let d of data){bii.push(d.Title)};
 const blk=[['','Latest']];const ishares=[['','Latest']];
 const bnext=[['articles','新聞'],['ranking','熱門'],['topics','專題'],['tags/AI','AI'],['categories/semiconductor','半導體'],['categories/AI','AI與大數據'],['categories/5g','5G通訊'],['categories/car','電動車/交通科技'],['categories/manufacture','智慧製造'],['categories/media','影音新媒體'],['categories/fintech','金融科技'],['categories/digitalskill','職場工作術']];
 const boa=[['','Latest']];
