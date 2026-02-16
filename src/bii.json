@@ -1,7 +1,7 @@
 [
   {
     "Title": "Home",
-    "Url": "/sites/1BLK-200ChartPack/",
+    "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/",
     "Urls": []
   },
   {
@@ -10,7 +10,7 @@
     "Children": [
       {
         "Title": "Climate transition",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Climate.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Climate.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=9e21fc29-c80b-4f4c-b312-d51d917d71e0&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b758e8a5-468c-4bf1-9609-7c2e8b9d46b8&action=REFRESH",
@@ -23,14 +23,14 @@
       },
       {
         "Title": "Economic surprise indices",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Economic-surprise.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Economic-surprise.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c7a566a4-70a1-4611-b1a6-acaf0ca83011&action=REFRESH"
         ]
       },
       {
         "Title": "Global GDP overview",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Global-GDP-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Global-GDP-overview.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=427a7607-5252-460f-9de1-d123fbef357c&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=1d55eb7e-e084-45c1-a2c2-787c571ccb2b&action=REFRESH",
@@ -39,14 +39,14 @@
       },
       {
         "Title": "Market cyclical indicators",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Market-cycli.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Market-cycli.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=e036daf0-54ab-47e3-89de-04eaff2214ea&action=REFRESH"
         ]
       },
       {
         "Title": "PMIs",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Global-manufacturing-&-services-PMIs.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Global-manufacturing-&-services-PMIs.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=8be92d4d-4429-4a11-a802-e6d32abce4e9&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c4e32c50-255c-40d4-b1a1-bba312183366&action=REFRESH",
@@ -56,7 +56,7 @@
       },
       {
         "Title": "Supply chain tracker",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Supply-chain-tracker.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Supply-chain-tracker.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=3a383ffd-e4d7-4388-8af0-998bd6071acd&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=158f2bb1-4b68-430f-9f36-9d6e27b3786e&action=REFRESH"
@@ -64,7 +64,7 @@
       },
       {
         "Title": "World trade volume",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/World-trade-volume.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/World-trade-volume.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=7eba73a4-2131-4006-baae-6391abd29faf&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=e63b94d1-2b04-4dbe-8565-b66ce223938f&action=REFRESH"
@@ -78,7 +78,7 @@
     "Children": [
       {
         "Title": "Asset drawdowns",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asset-drawdowns.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asset-drawdowns.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=4952b5ac-b3d3-447b-be93-42ecdd53d5e5&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ceec622a-baf4-4722-8323-a6ce460769cb&action=REFRESH"
@@ -86,7 +86,7 @@
       },
       {
         "Title": "Asset performance",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asset-performance.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asset-performance.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=63495105-8e71-4f7f-8078-ba21e551c204&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=003ae5be-64df-4f59-ae75-7609c0981a3d&action=REFRESH",
@@ -99,7 +99,7 @@
       },
       {
         "Title": "Cross asset volatility",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Historic-volatility.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Historic-volatility.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=fed2d91f-a2c2-4649-876f-562bc8a82c27&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=4aa4d823-5f22-4b9f-a014-a9e890d61d00&action=REFRESH"
@@ -107,7 +107,7 @@
       },
       {
         "Title": "Equity bond correlation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Equity---bond-correlation.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Equity---bond-correlation.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=6fbfbf7d-c98d-4595-9430-583eee920665&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=27b8cde1-70af-4f65-85af-138a373b9932&action=REFRESH",
@@ -116,7 +116,7 @@
       },
       {
         "Title": "Equity vs. bond returns",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Equity-vs.-bond-returns.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Equity-vs.-bond-returns.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=016a027d-0f28-46c0-a988-83064a4a4a6c&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=49ca9c88-3ff5-482d-9b0b-fcfad2c86754&action=REFRESH",
@@ -126,7 +126,7 @@
       },
       {
         "Title": "Global market overview",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Global-market-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Global-market-overview.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=4ff5498d-e8f8-434c-bc57-f3f4ad77363d&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=7c589fae-f1ec-4c0f-a6bd-7e1283e8e2cb&action=REFRESH",
@@ -135,7 +135,7 @@
       },
       {
         "Title": "Market stress indicators",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Market-stress-indicators.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Market-stress-indicators.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=e07a7a51-629d-4445-8409-22df926a538a&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=7c61a8d2-e101-4ac9-9de8-4571988db430&action=REFRESH",
@@ -150,7 +150,7 @@
     "Children": [
       {
         "Title": "Bank lending conditions",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Bank-lending-conditions.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Bank-lending-conditions.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=0a8b8431-3cab-4c58-8b6f-9fd79c67f372&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=5a94a04d-ffe1-4748-b5c0-42912678d541&action=REFRESH",
@@ -159,7 +159,7 @@
       },
       {
         "Title": "Central bank balance sheets",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Central-bank-balance-sheets.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Central-bank-balance-sheets.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=2920c991-8c6a-4eb7-9172-93bcd4d999e1&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=1ae28941-fb54-47af-b467-eed6cfdfc303&action=REFRESH",
@@ -168,7 +168,7 @@
       },
       {
         "Title": "Central bank interest rates",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Central-bank-interest-rates.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Central-bank-interest-rates.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=e6b7b027-056f-49b2-9206-be94103bf9ea&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=090be755-30d4-40d8-bd23-affc910752d8&action=REFRESH"
@@ -176,7 +176,7 @@
       },
       {
         "Title": "Euro area bond yields",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Euro-area-government-bonds.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Euro-area-government-bonds.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=05709f09-1b90-4f55-bac5-fa1d61165dd4&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=a29190ac-24fc-4c01-a54a-4de070f28266&action=REFRESH",
@@ -185,7 +185,7 @@
       },
       {
         "Title": "Global inflation rates",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Global-inflation-rates.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Global-inflation-rates.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=053c708a-cb62-4842-93a5-21fd1e55c8c0&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=20fd6959-b214-49d4-8297-ac0025ece5df&action=REFRESH",
@@ -195,7 +195,7 @@
       },
       {
         "Title": "U.S. and euro area inflation expectations",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-and-euro-area-inflation-expectations.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-and-euro-area-inflation-expectations.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=374c1296-39e6-4e80-b450-3a59dfab2e4a&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d7a108fa-88a2-444a-ab45-dc4d38af9586&action=REFRESH",
@@ -205,7 +205,7 @@
       },
       {
         "Title": "Global output gaps & labor force participation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Global-output-gaps.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Global-output-gaps.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=5a3f17be-0f73-40cf-8a4e-473f4ecd8557&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=abfa16f2-e23a-4646-b536-70029b2597dd&action=REFRESH",
@@ -214,7 +214,7 @@
       },
       {
         "Title": "Government fiscal measures",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Government-fiscal-measures.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Government-fiscal-measures.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c7c964f2-62cf-4404-bdc5-b00db814ca43&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=fa122d44-5f22-4767-9334-b2904b7dd370&action=REFRESH",
@@ -227,7 +227,7 @@
       },
       {
         "Title": "Interest rate expectations",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Interest-rate-expectations.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Interest-rate-expectations.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=e1a35074-7dab-42b5-b464-790b6dd40fe7&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=f9be1cac-78f1-47ed-92e2-bbf9e3e39164&action=REFRESH",
@@ -248,7 +248,7 @@
     "Children": [
       {
         "Title": "10-year government bond yields",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/10-year.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/10-year.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d75c8bbd-f93f-4473-ac48-44201435e139&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=646a5704-ea09-4a44-a5bd-d427e58cad01&action=REFRESH",
@@ -258,7 +258,7 @@
       },
       {
         "Title": "Bond volatility",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Bond-volatility.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Bond-volatility.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=2a43b1c3-fb17-40ac-adc4-36f89c239c37&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=51daa13d-b3cc-49ae-aed5-1173982a07ba&action=REFRESH"
@@ -266,7 +266,7 @@
       },
       {
         "Title": "Credit spreads",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Credit-spreads.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Credit-spreads.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=2b4e8b32-5b68-4306-9c1e-45a0202374b4&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=900b8a99-394a-4561-9a63-740cb629162b&action=REFRESH",
@@ -284,7 +284,7 @@
       },
       {
         "Title": "Emerging market debt",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Emerging-market-debt.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Emerging-market-debt.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=29b08cb4-56f3-44ad-9472-dce9d1019049&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=f779ab29-9f6b-4145-a54c-281b402ad4cc&action=REFRESH"
@@ -292,7 +292,7 @@
       },
       {
         "Title": "Euro area bond yields",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Euro-area-government-bonds.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Euro-area-government-bonds.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=05709f09-1b90-4f55-bac5-fa1d61165dd4&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=a29190ac-24fc-4c01-a54a-4de070f28266&action=REFRESH",
@@ -301,7 +301,7 @@
       },
       {
         "Title": "Europe & Japan gov. bond yield breakdown",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Europe-japan-gov-yield-breakdown.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Europe-japan-gov-yield-breakdown.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=677567be-ce1d-4f23-8680-34511be7e014&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=89936016-4ef8-438b-b77a-eb140899cc80&action=REFRESH",
@@ -313,7 +313,7 @@
       },
       {
         "Title": "Fixed income performance",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Fixed-income-performance.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Fixed-income-performance.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d43e85d8-16bd-4461-a3a6-ba10aa1c5a03&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=6e8162a9-29ff-4cbf-a116-2e45dd399dff&action=REFRESH"
@@ -321,7 +321,7 @@
       },
       {
         "Title": "U.S. primary dealer holdings",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-primary-dealer-holdings.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-primary-dealer-holdings.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ab61ef2a-82b7-4fb7-9a7b-596b6455406a&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=14237ae5-1d1c-4c48-883a-2a93fe17a397&action=REFRESH",
@@ -345,14 +345,14 @@
       },
       {
         "Title": "Yield comparison",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Fixed-income-yield-comparison.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Fixed-income-yield-comparison.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=6cd666af-f1cc-44f4-b252-bc4fc6b1102f&action=REFRESH"
         ]
       },
       {
         "Title": "U.S. Treasury yield breakdown",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-10-year-Treasury-breakdown.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-10-year-Treasury-breakdown.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b4b68324-0119-4ecb-8a22-3ef75f577735&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=303b2282-9d13-48e4-8941-326fec805b20&action=REFRESH",
@@ -364,7 +364,7 @@
       },
       {
         "Title": "Yield curves",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Yield-curves.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Yield-curves.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=911e2355-7d6d-4b02-b175-1bc90914fb93&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=44d8665c-7c43-4e41-a32f-f1fbf5b05b2a&action=REFRESH",
@@ -401,7 +401,7 @@
     "Children": [
       {
         "Title": "Banks overview",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Banks-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Banks-overview.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ef675d54-9391-4859-87a6-f7b81cd1edf2&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=0c82d3bd-3dbf-4992-ab15-1649e19c23c7&action=REFRESH",
@@ -420,7 +420,7 @@
       },
       {
         "Title": "Country equity performance",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Country-equity-performance.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Country-equity-performance.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=319df8d8-54b2-4040-a2b7-505cfd98e638&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=baaf4939-ac69-40a2-8a8f-bbc294c3aeac&action=REFRESH",
@@ -429,7 +429,7 @@
       },
       {
         "Title": "Equity earnings estimates",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Equity-earnings-estimates.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Equity-earnings-estimates.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=12d95ccf-10cc-4b1e-b00e-9615530b0518&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=7e10be89-791a-4b4f-9372-6e988559d481&action=REFRESH",
@@ -440,7 +440,7 @@
       },
       {
         "Title": "Equity risk premium",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Global-equity-risk-premium.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Global-equity-risk-premium.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=59ab48a2-f1a4-4a04-823c-929699f1a578&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ca1b3a79-dd46-4818-93a7-ccee86e172a8&action=REFRESH",
@@ -452,7 +452,7 @@
       },
       {
         "Title": "Equity sources of return",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Equities-sources-of-total-return.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Equities-sources-of-total-return.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=873ce9fc-c2a6-4230-af5a-14dbfbd1c9a4&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=43829aaa-4f2d-4a20-9259-0a7922052eec&action=REFRESH",
@@ -467,7 +467,7 @@
       },
       {
         "Title": "Equity valuations",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Equity-valuations.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Equity-valuations.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=a407ba38-d11c-4859-ae0a-0217bb146fd3&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=e1de9de2-5f4c-4c84-9871-1380dc9d7eee&action=REFRESH",
@@ -477,14 +477,14 @@
       },
       {
         "Title": "Equity volatility",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Equity-volatility.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Equity-volatility.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=59372560-507d-46cf-a580-01d0bd2a42c8&action=REFRESH"
         ]
       },
       {
         "Title": "Sector earnings estimates & margins",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Global-sector-earnings-estimates-&-profit-margins.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Global-sector-earnings-estimates-&-profit-margins.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=12c1a394-edcc-487d-af8f-7dded42e2b82&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d06593fd-523e-45b8-8d17-fd70c762c145&action=REFRESH",
@@ -494,7 +494,7 @@
       },
       {
         "Title": "Sector performance",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Global-sector-performance.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Global-sector-performance.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=61ba2ab6-1c31-48de-a86f-3794f97c11cb&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=fcd2f103-eb1f-40ae-98db-29fe5804fc3c&action=REFRESH",
@@ -509,7 +509,7 @@
     "Children": [
       {
         "Title": "Overview",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Private-markets-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Private-markets-overview.aspx",
         "Urls": []
       },
       {
@@ -519,32 +519,32 @@
       },
       {
         "Title": "Private equity",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Private-equity.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Private-equity.aspx",
         "Urls": []
       },
       {
         "Title": "Venture capital",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Venture-capital.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Venture-capital.aspx",
         "Urls": []
       },
       {
         "Title": "Private debt",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Private-debt.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Private-debt.aspx",
         "Urls": []
       },
       {
         "Title": "Infrastructure",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Infrastructure.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Infrastructure.aspx",
         "Urls": []
       },
       {
         "Title": "Real estate",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Real-estate.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Real-estate.aspx",
         "Urls": []
       },
       {
         "Title": "Hedge funds",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Hedge-funds.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Hedge-funds.aspx",
         "Urls": []
       }
     ]
@@ -555,7 +555,7 @@
     "Children": [
       {
         "Title": "Commodities price overview",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Commodities-market-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Commodities-market-overview.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=220da00f-9055-408b-8299-2887e049ae8f&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=e1261f5a-e56e-46a2-bbe9-d65c839b2551&action=REFRESH",
@@ -565,14 +565,14 @@
       },
       {
         "Title": "Commodity / equity correlation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Commodity-and-equity-correlation.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Commodity-and-equity-correlation.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=983c6db5-f30e-4e6b-901c-3b15c91b6f64&action=REFRESH"
         ]
       },
       {
         "Title": "Crude oil",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Crude-oil.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Crude-oil.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=6c321189-6139-40d7-99fe-0710439b2a16&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=0945b46b-8886-48cc-b984-b24bc6f0e3b9&action=REFRESH",
@@ -583,7 +583,7 @@
       },
       {
         "Title": "Gold",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Gold.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Gold.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c8c5853c-a7a6-494f-8fda-dbab529d9397&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c5e8d428-ace6-4a61-b99c-3b90845912c2&action=REFRESH"
@@ -596,7 +596,7 @@
       },
       {
         "Title": "Bitcoin",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Bitcoin-and-cryptocurrency.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Bitcoin-and-cryptocurrency.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d029632f-0d02-47ea-80c9-fe3261bf2c44&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=7e69ef4b-e41a-4611-94f8-3868df7a5aac&action=REFRESH"
@@ -604,7 +604,7 @@
       },
       {
         "Title": "Currency moves",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Currency-performance.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Currency-performance.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d4d5be78-381f-4243-98bf-23ee167b27a9&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b83e8695-1045-435f-ac32-4831bbc7b095&action=REFRESH",
@@ -614,14 +614,14 @@
       },
       {
         "Title": "FX futures positioning",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Major-FX-futures-positioning.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Major-FX-futures-positioning.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=2ad74ce3-681c-4bed-8eb4-66aa7366d83d&action=REFRESH"
         ]
       },
       {
         "Title": "U.S. dollar",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-dollar.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-dollar.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=4ba2347e-35c0-44a2-a57e-e74452a12d7e&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=5e28686c-7802-46da-83a8-affe3d593633&action=REFRESH",
@@ -636,7 +636,7 @@
     "Children": [
       {
         "Title": "Consumer",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-consumer-sentiment.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-consumer-sentiment.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=846b2573-66da-4f76-8980-4ded85a7c883&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b72e558b-1822-4524-82dc-df66ea4c6596&action=REFRESH",
@@ -651,7 +651,7 @@
       },
       {
         "Title": "Employment",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-employment-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-employment-overview.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b9342370-6815-41cb-97c1-06c506af3835&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=48fc70e9-756b-40d8-b8e2-8bdd8eb74405&action=REFRESH",
@@ -663,7 +663,7 @@
       },
       {
         "Title": "GDP growth",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-GDP-growth.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-GDP-growth.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=4240cb61-e94f-4ef3-9316-3a5252da2457&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=73adb674-b6c3-4d5b-b872-63c7c8d2e253&action=REFRESH",
@@ -672,7 +672,7 @@
       },
       {
         "Title": "Housing",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-housing-activity.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-housing-activity.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=2099c27f-f036-4b23-ba27-3c82b64176f9&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=2a27653e-4a1f-4918-a482-4b62aa2f42c1&action=REFRESH",
@@ -688,7 +688,7 @@
       },
       {
         "Title": "Inflation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-inflation.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-inflation.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=48253393-709c-41c6-b5a8-d014250cba4a&chartname=US%20Inflation%20-%20Medium%20term&groupname=US&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ab2c895e-69ff-466e-aa07-5facb58069da&action=REFRESH",
@@ -708,7 +708,7 @@
       },
       {
         "Title": "Manufacturing",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-manufacturing-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-manufacturing-overview.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=0141b9da-55f5-44d3-b8b6-5698ecaf0f9f&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=841fe6d5-1d82-4895-beb3-e8d566c2bc45&action=REFRESH",
@@ -717,7 +717,7 @@
       },
       {
         "Title": "Wage growth",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-wage-growth.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-wage-growth.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=f9305d28-6f1b-4580-8d32-80ff94d35480&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=227236ee-33df-45a4-99c9-f179beb3750f&action=REFRESH",
@@ -727,7 +727,7 @@
       },
       {
         "Title": "Debt ceiling",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/U.S.-debt-ceiling.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/U.S.-debt-ceiling.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b088a9e4-48b6-42d0-9ce7-d012912ac11b&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=182e9c27-bd9c-4363-b900-4e2e6f1954b4&chartname=S%26P%20500%20during%20debt%20ceiling%20episodes&action=REFRESH",
@@ -743,7 +743,7 @@
     "Children": [
       {
         "Title": "Consumer",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Canada-consumer-sentiment.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Canada-consumer-sentiment.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=dad5469a-8dbf-4a20-9ce4-d5b18a54d7fb&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=42554d15-66d6-42e5-ad07-78228ac04720&action=REFRESH",
@@ -752,14 +752,14 @@
       },
       {
         "Title": "GDP growth",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Canada-GDP-growth.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Canada-GDP-growth.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=9579aeab-8804-4de8-8a37-3d3dbc38f1c1&action=REFRESH"
         ]
       },
       {
         "Title": "Inflation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Canada-Inflation.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Canada-Inflation.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c64d3e3d-fbe9-407b-9aef-ab103aaa7771&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d4def938-1661-49c3-b345-07fd1bb7af69&action=REFRESH"
@@ -767,7 +767,7 @@
       },
       {
         "Title": "PMIs",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Canada-PMIs.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Canada-PMIs.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ae3af051-e5f0-40ba-9855-7844071f9eeb&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d2b02e9f-4bd9-4679-81d0-f09e34329cb1&action=REFRESH"
@@ -775,7 +775,7 @@
       },
       {
         "Title": "Wage growth",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Canada-Wage-growth.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Canada-Wage-growth.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=94666538-0a9b-4164-b530-d40541799d53&action=REFRESH"
         ]
@@ -788,7 +788,7 @@
     "Children": [
       {
         "Title": "Confidence indicators",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Euro-area-confidence.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Euro-area-confidence.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=82a9cd65-57ba-4349-baba-8f27a87df4c7&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=9d3131c9-dae7-444d-b6c6-957aeabaa3c3&action=REFRESH"
@@ -796,7 +796,7 @@
       },
       {
         "Title": "Energy overview",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Europe-energy-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Europe-energy-overview.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=09b771fd-2ebd-400a-9679-bbe4cad54452&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=21bc8f56-a2e2-470c-9e4a-cdecd89594cf&action=REFRESH",
@@ -807,7 +807,7 @@
       },
       {
         "Title": "Euro area bond spreads",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Euro-area-bond.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Euro-area-bond.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=a29190ac-24fc-4c01-a54a-4de070f28266&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=aa61cdde-5277-46a5-b913-6b35b690ea1a&action=REFRESH",
@@ -817,7 +817,7 @@
       },
       {
         "Title": "GDP growth",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Europe-GDP-growth.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Europe-GDP-growth.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=5dbc15c2-34db-4b08-a335-15af5109bfed&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=cfcf6c00-0860-4a75-8ccc-990b89c97f49&action=REFRESH"
@@ -825,7 +825,7 @@
       },
       {
         "Title": "Inflation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/European-inflation.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/European-inflation.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=0fa501ae-7c38-4176-a624-2206f082aeea&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=05386a8d-b8a9-4382-ab62-daa2e6ce85a1&action=REFRESH",
@@ -837,7 +837,7 @@
       },
       {
         "Title": "Unemployment",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/European-unemployment.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/European-unemployment.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=61879f44-5a3c-44a3-95ee-bcebe7adf5b8&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c02e056d-c669-478b-aa27-9afaf930cf70&action=REFRESH"
@@ -847,7 +847,7 @@
   },
   {
     "Title": "UK",
-    "Url": "/sites/1BLK-200ChartPack/SitePages/UK.aspx",
+    "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/UK.aspx",
     "Urls": [
       "https://product.datastream.com/dscharting/gateway.aspx?guid=f558244a-cf91-44be-a904-e40d5aee73a7&action=REFRESH",
       "https://product.datastream.com/dscharting/gateway.aspx?guid=a4a852a2-b8bd-4959-8e58-2bc3338d8cf3&action=REFRESH",
@@ -886,14 +886,14 @@
     "Children": [
       {
         "Title": "Central bank rates",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-central-bank-rates.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-central-bank-rates.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ffb4bce0-a67e-4d7c-9157-1524b2366e7d&action=REFRESH"
         ]
       },
       {
         "Title": "Consumer confidence",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-consumer-confidence.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-consumer-confidence.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b37abc6b-adea-49b3-8e90-fb9d1c57d33c&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=566172a7-44a1-44b1-b36d-0c8d8f653481&action=REFRESH"
@@ -901,7 +901,7 @@
       },
       {
         "Title": "Demographics",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-population-and-demographics.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-population-and-demographics.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c60fc882-d6c4-42f4-9862-ed0b722b0f4a&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=5eb7d6d3-1c91-4014-aefb-f83e71a2d42d&action=REFRESH",
@@ -912,7 +912,7 @@
       },
       {
         "Title": "Equities",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-equities.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-equities.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=2c6b6ad3-d130-4910-bdad-52fda2ae1357&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d4d2d896-a628-4749-a3f8-8d3aadb304c4&action=REFRESH",
@@ -922,7 +922,7 @@
       },
       {
         "Title": "Exports",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-exports.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-exports.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=a2c5ad29-d97c-482d-99dc-cd2592683fbc&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=024bef8e-7efb-4006-97a6-d07ff72b5cf2&action=REFRESH",
@@ -932,14 +932,14 @@
       },
       {
         "Title": "Fixed income",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-fixed-income.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-fixed-income.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=2fa50597-01d5-4e2c-ba71-a58d7db1cdf2&action=REFRESH"
         ]
       },
       {
         "Title": "GDP growth",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-GDP-growth.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-GDP-growth.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b2d65f11-54c0-45df-adc1-a804e2b8f79a&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b8e63a75-39b2-4dc9-83e8-18d594765d6c&action=REFRESH"
@@ -947,7 +947,7 @@
       },
       {
         "Title": "Inflation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-inflation.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-inflation.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=b31c216e-691b-4b1d-8735-7702e23a4223&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=96dd49eb-7b82-4b02-96ec-749bc0565e71&action=REFRESH",
@@ -956,14 +956,14 @@
       },
       {
         "Title": "Manufacturing",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Asia-manufacturing-growth-(PMI).aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Asia-manufacturing-growth-(PMI).aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=0e87cc9e-f5f4-4564-b710-df74be0a4a37&action=REFRESH"
         ]
       },
       {
         "Title": "Australia & New Zealand",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Australia-&-New-Zealand-chart-pack.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Australia-&-New-Zealand-chart-pack.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ee4557e0-3e3f-4cb3-a833-a78ba06b77d4&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=05190ac2-2956-468a-b7e7-3a6163f9b1dd&action=REFRESH",
@@ -990,7 +990,7 @@
     "Children": [
       {
         "Title": "China - U.S. relationship",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China---U.S.-relationship.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China---U.S.-relationship.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=7d492fc4-5753-4b1d-9ff3-979906dd89fa&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=aa81e03b-8561-432c-a34f-f36b68bba9b1&action=REFRESH",
@@ -1004,14 +1004,14 @@
       },
       {
         "Title": "Commodities",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China-commodities.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China-commodities.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=98e43c69-2e7a-4a8a-88a5-cc0c3049c389&action=REFRESH"
         ]
       },
       {
         "Title": "GDP growth",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China-GDP-growth.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China-GDP-growth.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d389c2d3-e35d-4002-a504-568f52498724&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=9da2871b-97fa-4c69-b3fd-d07405fc6487&action=REFRESH",
@@ -1020,7 +1020,7 @@
       },
       {
         "Title": "Housing and real estate",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China-house-prices-and-real-estate.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China-house-prices-and-real-estate.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=a2253f94-fc0f-4602-8c08-0fefef63807d&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=827dcfd4-bd14-4068-9287-e7e418eb8bc4&action=REFRESH"
@@ -1028,14 +1028,14 @@
       },
       {
         "Title": "Inflation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China-inflation.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China-inflation.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d2454bc3-a661-4677-9001-37ea53830239&action=REFRESH"
         ]
       },
       {
         "Title": "Interest rates & policy",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China-interbank-rates.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China-interbank-rates.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=f3d1236f-26c0-4e15-91f3-df2e75ac1edb&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=251cac70-a568-4861-9fe6-221840302481&action=REFRESH",
@@ -1044,7 +1044,7 @@
       },
       {
         "Title": "Macro indicators",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China-macro-indicators.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China-macro-indicators.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=ebca6297-0c3b-40bb-8547-1ad44f3ec05b&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=3c36e5a0-a0b6-401e-851e-31e6e8a1c549&action=REFRESH",
@@ -1053,7 +1053,7 @@
       },
       {
         "Title": "Market overview",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China-market-overview.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China-market-overview.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=d677b722-58a5-447d-81c3-589cbfc392a1&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=4320744b-9714-45d9-810a-716417b280fc&action=REFRESH",
@@ -1062,7 +1062,7 @@
       },
       {
         "Title": "PMI",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/China-PMI.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/China-PMI.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=c19e8444-caae-4521-9dcb-ef2d597ced86&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=dc864894-e49f-4b53-b18c-4795072bb8ab&action=REFRESH",
@@ -1071,7 +1071,7 @@
       },
       {
         "Title": "Total social financing",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Total-social-financing.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Total-social-financing.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=511e1244-1143-4b34-a9c0-5a12793ad999&action=REFRESH"
         ]
@@ -1084,7 +1084,7 @@
     "Children": [
       {
         "Title": "Currency moves",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Emerging-market-FX-moves.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Emerging-market-FX-moves.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=67a985df-8573-4963-adaf-e4db2390af4d&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=bde12078-b849-4b76-8ef4-4c0bf14f5cd4&action=REFRESH",
@@ -1093,7 +1093,7 @@
       },
       {
         "Title": "Current accounts",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Emerging-market-current-account-balances.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Emerging-market-current-account-balances.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=534f21b7-a72f-41cb-b739-d46a37b8ebf1&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=f43f00c9-767d-451e-95aa-cef2615116f9&action=REFRESH",
@@ -1104,14 +1104,14 @@
       },
       {
         "Title": "Equity performance",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Emerging-market-equity-performance.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Emerging-market-equity-performance.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=22dbefc3-eea6-4526-8ec8-d1ad4965e12e&action=REFRESH"
         ]
       },
       {
         "Title": "EM vs. DM",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Emerging-vs.-developed-market-comparisons.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Emerging-vs.-developed-market-comparisons.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=bbce732f-bc3b-4272-a883-5eb149c41b4a&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=e7e4c521-7a2a-4ec6-afe5-4360ca3b81be&action=REFRESH",
@@ -1122,14 +1122,14 @@
       },
       {
         "Title": "FX reserves",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Emerging-market-FX-reserves.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Emerging-market-FX-reserves.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=3738195f-73f3-480f-8dd0-fce78bba6799&action=REFRESH"
         ]
       },
       {
         "Title": "Government finances",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Emerging-market-government-finances.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Emerging-market-government-finances.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=f9f70923-360c-4e60-8d09-2800073f276c&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=9b1d2f0f-3f01-45be-b5a4-84d87a6215f0&action=REFRESH"
@@ -1137,7 +1137,7 @@
       },
       {
         "Title": "Inflation",
-        "Url": "/sites/1BLK-200ChartPack/SitePages/Emerging-market-inflation.aspx",
+        "Url": "https://blackrock.sharepoint.com/sites/1BLK-200ChartPack/SitePages/Emerging-market-inflation.aspx",
         "Urls": [
           "https://product.datastream.com/dscharting/gateway.aspx?guid=435ca9cc-9d59-4c71-8428-01d01e99cacd&action=REFRESH",
           "https://product.datastream.com/dscharting/gateway.aspx?guid=48fb1dd2-dff1-4954-9aaa-056ac3d99bc6&action=REFRESH"
