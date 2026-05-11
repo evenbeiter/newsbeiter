@@ -1681,7 +1681,7 @@ async function yahooTWGetList(siteName,t){
     for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.url])};
     if(coun=='.atoms'){
       for (let h of items){
-        html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}</p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
+        html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}</p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
       }
     } else {
       for (let h of items){
@@ -1700,7 +1700,7 @@ async function yahooTWGetList(siteName,t){
 
 async function yahooTWGetContent(id){
     try{
-    if(coun=='.atoms'){url='https://tw.news.yahoo.com/share/'+id;} else {url=id;}
+    if(coun=='.atoms'){url=id;} else {url=id;}
     let res = await fetch(preStr+encodeURIComponent(url));
     let str = await res.text();
     var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
@@ -1718,11 +1718,11 @@ async function yahooTWGetSearchResults(siteName,t){
   let str=await res.json();
   var data=str.data;
   for (let h of data){
-    items.push([h.id,h.title,h.published_at,h.provider_name])
+    items.push([h.id,h.title,h.published_at,h.provider_name,h.url])
   }
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[0]}')">${h[1]}<br><span id="dateAuthor-${h[0]}" class="fs10 fw-normal">${h[2]} | ${h[3]}</span></p><div id="${h[0]}" class="content" onclick="getContent('${siteName}',this.id,'${h[0]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}<br><span id="dateAuthor-${h[4]}" class="fs10 fw-normal">${h[2]} | ${h[3]}</span></p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
