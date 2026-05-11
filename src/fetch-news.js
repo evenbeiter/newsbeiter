@@ -1704,7 +1704,8 @@ async function yahooTWGetContent(id){
     let res = await fetch(preStr+encodeURIComponent(url));
     let str = await res.text();
     var parser=new DOMParser();var doc=parser.parseFromString(str, "text/html");
-    html=doc.querySelector(coun).innerHTML.replaceAll('data-src=','src=') + '<p class="text-end"><a href="' + url + '" target="_blank">分享</a></p><br>';
+    html=doc.querySelector('article').innerHTML.replaceAll('data-src=','src=') + '<p class="text-end"><a href="' + url + '" target="_blank">分享</a></p><br>';
+    //html=doc.querySelector(coun).innerHTML.replaceAll('data-src=','src=') + '<p class="text-end"><a href="' + url + '" target="_blank">分享</a></p><br>';
   }catch{html='<p>尚無內容</p><br>'}
   return html;
 }
