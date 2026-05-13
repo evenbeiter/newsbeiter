@@ -734,6 +734,114 @@ function cvtMMSS2S(s){
 }
 
 
+
+
+
+//    POD-TRANSCRIPT
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function pdtGetList(siteName,t){
+  hidePlayer();
+  adSegments = [];
+
+  try{url=preStr+'https://www.pod-transcript.com/podcast/'+t;
+  const res=await fetch(url);const str=await res.text();
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  const scripts = [...doc.querySelectorAll("script")];
+  let data;
+  scripts.forEach(script => {
+    const content = script.textContent || "";
+    if (content.includes("episodeGuid")) {
+      const prefix = 'self.__next_f.push(';
+      const cleaned = content.slice(prefix.length, -1);
+      data=JSON.parse(JSON.parse(cleaned)[1].slice(3))[3];
+    }
+  });
+
+  for (let h of data.episodes){
+    items.push([h.episodeGuid,h.trackName,h.releaseDate,h.trackTimeMillis,h.episodeUrl])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="pdtGetContent('${h[0]}','${h[4]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1000)}</span></p><div id="${h[0]}" class="content">
+    <div class="pt-2 sepia">
+      <table class="table table-auto fs11 p-0 sepia">
+        <tbody id="lines-${h[0]}"></tbody>
+      </table>
+    </div>
+    </div><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+
+
+async function pdtGetContent(id,mediaSrc){
+  hidePlayer();
+
+  contentId = id;
+  adSegments = [];
+  const cEl=document.getElementById(id);
+
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
+
+    try{url=`${preStr}https://www.pod-transcript.com/api/podcasts/${rt}}/transcript?episodeGuid=${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('無法讀取');
+    const rawLrc=await res.json();
+
+    // try{
+    let ts=[];
+    for (let s of rawLrc.segments){
+      ts.push({
+        startTime: s.start,
+        sentence: `<p>${`${s.text}</p>` || ''}`
+      });     
+    }
+    getLinesTable(ts,id,true);
+
+    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+
+    media=ap;
+
+    if (mediaSwitch==='ON'){
+      media.src= mediaSrc;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }   
+
+    // } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+    loading.style.display='none';
+
+  } else {
+    cEl.style.display='none';
+  }
+  loading.style.display='none';
+
+}
+
+
+async function pdtSearchResults(siteName,t){
+
+  try{url=preStr+'https://www.pod-transcript.com/api/podcasts/search?term='+t;
+  const res=await fetch(url);const str=await res.json();
+
+  for (let h of str.results){
+    items.push([h.collectionId,h.collectionName,h.artistName,h.primaryGenreName,h.releaseDate])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="pdtGetList(siteName,'${h[0]}')">${h[1]}<br>${h[2]} | ${h[3]}<br><span class="time">${cvt2Timezone(h[4])} | </span></p><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+
+
 //    PODCAST
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
