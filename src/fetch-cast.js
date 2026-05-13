@@ -798,7 +798,7 @@ async function pdtGetContent(id,mediaSrc){
     for (let s of rawLrc.segments){
       ts.push({
         startTime: s.start,
-        sentence: `<p>${`${s.text}</p>` || ''}`
+        sentence: `${s.text || ''}`
       });     
     }
     ts=await word2sentence(ts);
