@@ -1027,7 +1027,8 @@ async function word2sentence(raw){
     });
   }
   return await translateSentences(sentences);
-  else if(rt=='pdt'){
+
+} else if(rt=='pdt'){
     return await translateSentences(raw);
   }
 }
