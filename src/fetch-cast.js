@@ -831,7 +831,7 @@ async function pdtGetSearchResults(siteName,t){
   const res=await fetch(url);const str=await res.json();
 
   for (let h of str.results){
-    items.push([h.collectionId,h.collectionName.replaceAll("'","\'"),h.artistName,h.primaryGenreName,h.releaseDate])
+    items.push([h.collectionId,h.collectionName.replaceAll("'","\\'"),h.artistName,h.primaryGenreName,h.releaseDate])
   }
   for (let h of items){
     html+=`<p class="title fs12" onclick="get1stList('${siteName}','${h[1]}','${h[0]}')">${h[1]}<br>${h[2]} | ${h[3]}<br><span class="time">${cvt2Timezone(h[4])} | </span></p><hr>`;
