@@ -179,7 +179,7 @@ async function getContent(siteName,clickedId,id){
         if (siteName=='yahooTW'){
           cEl.querySelectorAll('header').forEach(h => {h.remove()});
           cEl.querySelectorAll("p").forEach(p => {
-            if (p.textContent.trim() === "") {
+            if (p.textContent.trim() === "\n") {
               p.remove();
             }
           });
