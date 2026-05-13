@@ -801,7 +801,7 @@ async function pdtGetContent(id,mediaSrc){
         sentence: `<p>${`${s.text}</p>` || ''}`
       });     
     }
-    ts=word2sentence(ts);
+    ts=await word2sentence(ts);
     getLinesTable(ts,id,false);
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
