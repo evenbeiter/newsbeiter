@@ -1723,7 +1723,7 @@ async function yahooTWGetSearchResults(siteName,t){
   }
   }
   for (let h of items){
-    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}<br><span id="dateAuthor-${h[4]}" class="fs10 fw-normal">${h[2]} | ${h[3]}</span></p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"></div><hr>`
+    html+=`<p class="title" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}<br><span class="fs10 fw-normal">${h[2]} | ${h[3]}</span></p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"></div><hr>`
   }
   }catch{html='<p>尚無內容</p>'}
   return html;
