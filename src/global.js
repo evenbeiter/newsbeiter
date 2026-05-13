@@ -174,6 +174,10 @@ async function getContent(siteName,clickedId,id){
             span.innerHTML = newHTML;
           });
         };
+
+        //handle header for yahooTW
+        if (siteName=='yahooTW'){cEl.querySelectorAll('header').forEach(h => {h.remove()});}
+
         //remove image style
         cEl.querySelectorAll(rmImgStyle).forEach(img => {img.removeAttribute('style')});
         //handle image src
