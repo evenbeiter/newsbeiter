@@ -994,7 +994,7 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
 }
 
 async function word2sentence(raw){
-  if(rt=='pd'){
+  if(siteNameVar=='pd'){
   const sentences = [];
   let currentSentence = [];
   let currentStart = null;
@@ -1028,7 +1028,7 @@ async function word2sentence(raw){
   }
   return await translateSentences(sentences);
 
-} else if(rt=='pdt'){
+} else if(siteNameVar=='pdt'){
     return await translateSentences(raw);
   }
 }
