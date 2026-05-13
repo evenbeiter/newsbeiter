@@ -825,7 +825,7 @@ async function pdtGetContent(id,mediaSrc){
 }
 
 
-async function pdtSearchResults(siteName,t){
+async function pdtGetSearchResults(siteName,t){
 
   try{url=preStr+'https://www.pod-transcript.com/api/podcasts/search?term='+t;
   const res=await fetch(url);const str=await res.json();
@@ -834,7 +834,7 @@ async function pdtSearchResults(siteName,t){
     items.push([h.collectionId,h.collectionName,h.artistName,h.primaryGenreName,h.releaseDate])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="pdtGetList(siteName,'${h[0]}')">${h[1]}<br>${h[2]} | ${h[3]}<br><span class="time">${cvt2Timezone(h[4])} | </span></p><hr>`;
+    html+=`<p class="title fs12" onclick="get1stList('${siteName}','${h[1]}','${h[0]}')">${h[1]}<br>${h[2]} | ${h[3]}<br><span class="time">${cvt2Timezone(h[4])} | </span></p><hr>`;
   }
   }catch{html='<p>尚無內容</p>'}
 
