@@ -780,7 +780,7 @@ async function pdtGetList(siteName,t){
 async function pdtGetContent(id,mediaSrc){
   hidePlayer();
 
-  contentId = id;
+  contentId = CSS.escape(id);
   adSegments = [];
   const cEl=document.getElementById(id);
 
