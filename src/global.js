@@ -176,7 +176,14 @@ async function getContent(siteName,clickedId,id){
         };
 
         //handle header for yahooTW
-        if (siteName=='yahooTW'){cEl.querySelectorAll('header').forEach(h => {h.remove()});}
+        if (siteName=='yahooTW'){
+          cEl.querySelectorAll('header').forEach(h => {h.remove()});
+          cEl.querySelectorAll("p").forEach(p => {
+            if (p.textContent.trim() === "") {
+              p.remove();
+            }
+          });
+        }
 
         //remove image style
         cEl.querySelectorAll(rmImgStyle).forEach(img => {img.removeAttribute('style')});
