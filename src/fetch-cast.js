@@ -788,7 +788,7 @@ async function pdtGetContent(id,mediaSrc){
     loading.style.display='block';
     cEl.style.display='block';
 
-    try{url=`${preStr}https://www.pod-transcript.com/api/podcasts/${rt}}/transcript?episodeGuid=${id}`;
+    try{url=`${preStr}https://www.pod-transcript.com/api/podcasts/${rt}/transcript?episodeGuid=${id}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('無法讀取');
     const rawLrc=await res.json();
