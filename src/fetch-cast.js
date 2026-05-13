@@ -801,7 +801,8 @@ async function pdtGetContent(id,mediaSrc){
         sentence: `<p>${`${s.text}</p>` || ''}`
       });     
     }
-    getLinesTable(ts,id,true);
+    ts=word2sentence(ts);
+    getLinesTable(ts,id,false);
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
 
@@ -993,6 +994,7 @@ async function pdGetContent(id,hasTranscription,transcriptionId){
 }
 
 async function word2sentence(raw){
+  if(rt=='pd'){
   const sentences = [];
   let currentSentence = [];
   let currentStart = null;
@@ -1025,6 +1027,9 @@ async function word2sentence(raw){
     });
   }
   return await translateSentences(sentences);
+  else if(rt=='pdt'){
+    return await translateSentences(raw);
+  }
 }
 
 async function translateSentences(list) {
