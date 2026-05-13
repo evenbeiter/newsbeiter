@@ -720,14 +720,14 @@ async function isblGetList(siteName,t){
 
       const hh = doc.querySelector("h2");
       const dt = doc.querySelector(".date-meta")?.innerText.replaceAll("\\n", " ") || "";
-      const pg = doc.querySelector(".elementor-text-editor") || { innerHTML: "" };
-      const img = doc.querySelector(".gallery-icon") || doc.querySelector(".elementor-image") || { innerHTML: "" };
+      const pg = doc.querySelector('[data-elementor-type="wp-post"]').querySelectorAll("section")[1].querySelector("div.elementor-widget-container") || { innerHTML: "" };
+      const img = doc.querySelector('[data-elementor-type="wp-post"]').querySelectorAll("section")[2].querySelector("img").src || { innerHTML: "" };
 
       let block =
         `<p class="title">${hh?.textContent || ""}</p>` +
         `<p class="time">${dt}</p>` +
         pg.innerHTML +
-        img.innerHTML +
+        `<img src=${img}>` +
         "<br><br><hr>";
       block = block.replaceAll('<p>Image:', '<p class="fs10">Image:');
 
