@@ -817,7 +817,7 @@ async function pdtGetContent(id,mediaSrc,dur){
     let ts=[];
     for (let s of rawLrc.segments){
       ts.push({
-        startTime: s.start + adj,
+        startTime: s.start + adj - 0.25,
         sentence: `${s.text || ''}`
       });     
     }
