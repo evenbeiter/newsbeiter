@@ -806,7 +806,7 @@ async function pdtGetContent(id,mediaSrc,dur){
 
     const duration = await waitForMetadata(media);
     let adj = duration - dur;
-    if (adj>-2 && adj<2){adj=0}else{adj=adj-0.25};
+    if (adj<2){adj=0}else{adj=adj-0.25};
 
     try{url=`${preStr}https://www.pod-transcript.com/api/podcasts/${rt}/transcript?episodeGuid=${id}`;
     const res = await fetch(url);
