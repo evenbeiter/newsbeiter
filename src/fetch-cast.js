@@ -762,7 +762,7 @@ async function pdtGetList(siteName,t){
     items.push([h.episodeGuid,h.trackName,h.releaseDate,h.trackTimeMillis,h.episodeUrl])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="pdtGetContent('${h[0]}','${h[4]}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1000)}</span></p><div id="${h[0]}" class="content">
+    html+=`<p class="title fs12" onclick="pdtGetContent('${h[0]}','${h[4]}','${h[3]/1000}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1000)}</span></p><div id="${h[0]}" class="content">
     <div class="pt-2 sepia">
       <table class="table table-auto fs11 p-0 sepia">
         <tbody id="lines-${h[0]}"></tbody>
@@ -777,7 +777,7 @@ async function pdtGetList(siteName,t){
 
 
 
-async function pdtGetContent(id,mediaSrc){
+async function pdtGetContent(id,mediaSrc,dur){
   hidePlayer();
 
   contentId = CSS.escape(id);
@@ -788,6 +788,26 @@ async function pdtGetContent(id,mediaSrc){
     loading.style.display='block';
     cEl.style.display='block';
 
+    media=ap;
+
+    if (mediaSwitch==='ON'){
+      media.src= mediaSrc;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }
+
+    function waitForMetadata(audio) {
+      return new Promise((resolve) => {
+        audio.addEventListener("loadedmetadata", () => {
+          resolve(audio.duration);
+        }, { once: true });
+      });
+    }
+
+    const duration = await waitForMetadata(media);
+    const adj = duration - dur;
+
+
     try{url=`${preStr}https://www.pod-transcript.com/api/podcasts/${rt}/transcript?episodeGuid=${id}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('無法讀取');
@@ -797,7 +817,7 @@ async function pdtGetContent(id,mediaSrc){
     let ts=[];
     for (let s of rawLrc.segments){
       ts.push({
-        startTime: s.start,
+        startTime: s.start + adj,
         sentence: `${s.text || ''}`
       });     
     }
@@ -806,13 +826,7 @@ async function pdtGetContent(id,mediaSrc){
 
     } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
 
-    media=ap;
 
-    if (mediaSwitch==='ON'){
-      media.src= mediaSrc;
-      media.style.display='block';ct.style.display='block';
-      setPlaybackRate(1);
-    }   
 
     // } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
     loading.style.display='none';
