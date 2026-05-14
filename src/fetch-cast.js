@@ -805,8 +805,8 @@ async function pdtGetContent(id,mediaSrc,dur){
     }
 
     const duration = await waitForMetadata(media);
-    const adj = duration - dur;
-
+    let adj = duration - dur;
+    if (adj>-2 && adj<2){adj=0}else{adj=adj-0.25};
 
     try{url=`${preStr}https://www.pod-transcript.com/api/podcasts/${rt}/transcript?episodeGuid=${id}`;
     const res = await fetch(url);
@@ -817,7 +817,7 @@ async function pdtGetContent(id,mediaSrc,dur){
     let ts=[];
     for (let s of rawLrc.segments){
       ts.push({
-        startTime: s.start + adj - 0.25,
+        startTime: s.start + adj,
         sentence: `${s.text || ''}`
       });     
     }
