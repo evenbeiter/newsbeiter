@@ -1960,6 +1960,7 @@ function getYouTubeVideoId(input) {
   let userScrolling = false;
   let userScrollTimeout = null;
 
+/*
 document.addEventListener("DOMContentLoaded", function () {
   const switchEl = document.getElementById("scrollSwitch");
 
@@ -1971,6 +1972,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+*/
 
   // 初始設定
   // let mediaType = 'audio'; // audio, video, or youtube
