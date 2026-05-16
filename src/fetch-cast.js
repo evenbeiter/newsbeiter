@@ -1943,6 +1943,8 @@ function getYouTubeVideoId(input) {
 //   }
 // }
 
+
+
 // document.addEventListener("DOMContentLoaded", () => {
   const speedDown = document.getElementById("speedDown");
   const speedUp = document.getElementById("speedUp");
@@ -1957,6 +1959,18 @@ function getYouTubeVideoId(input) {
   let autoScrollEnabled = true;
   let userScrolling = false;
   let userScrollTimeout = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+  const switchEl = document.getElementById("scrollSwitch");
+
+  switchEl.addEventListener("change", function () {
+    if (this.checked) {
+      autoScrollEnabled = true;
+    } else {
+      autoScrollEnabled = false;
+    }
+  });
+});
 
   // 初始設定
   // let mediaType = 'audio'; // audio, video, or youtube
