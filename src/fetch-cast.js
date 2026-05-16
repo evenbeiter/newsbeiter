@@ -1999,12 +1999,14 @@ if ('mediaSession' in navigator) {
   modeBtn.addEventListener("click", () => {
     if (mode === "continuous") mode = "single";
     else if (mode === "single") mode = "loop";
+    else if (mode === "loop") mode = "noScroll";
     else mode = "continuous";
 
     let label = "";
     if (mode === "continuous") label = "連續";
     else if (mode === "single") label = "單句";
-    else label = "循環";
+    else if (mode === "loop") label = "循環";
+    else label = "文稿";
 
     modeBtn.textContent = label;
   });
