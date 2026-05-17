@@ -848,7 +848,7 @@ async function pdtGetSearchResults(siteName,t){
     items.push([h.collectionId,h.collectionName.replaceAll("'","\\'"),h.artistName,h.primaryGenreName,h.releaseDate])
   }
   for (let h of items){
-    html+=`<p class="title fs12" onclick="get1stList('${siteName}','${h[1]}','${h[0]}')">${h[1]}<br>${h[2]} | ${h[3]}<br><span class="time">${cvt2Timezone(h[4])} | </span></p><hr>`;
+    html+=`<p class="title fs12" onclick="get1stList('${siteName}','${h[1]}','${h[0]}')">${h[1]}<br>${h[2]} | ${h[3]}<br><span class="time">${cvt2Timezone(h[4])}</span></p><hr>`;
   }
   }catch{html='<p>尚無內容</p>'}
 
@@ -884,6 +884,23 @@ async function pdGetList(siteName,t){
   }catch{html='<p>尚無內容</p>'}
 
   return html;
+}
+
+async function pdGetSearchResults(siteName,t){
+
+  try{url=preStr+'https://backend.podscribe.ai/api/search/series-suggestions?exact=false&includeArtistField=true&includeItunesIdField=true&query='+t+'&size=100';
+  const res=await fetch(url);const str=await res.json();
+
+  for (let h of str.series){
+    items.push([h.id,h.title,h.itunesId])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="get1stList('${siteName}','${h[1]}','${h[0]}')">${h[1]}<br>['${h[2]}','${h[1]}']</p><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+  
 }
 
 

@@ -22,4 +22,4 @@ const vt=[['q_recommendedVideos','推薦'],['hotVideos','熱門'],['videos','最
 const allSites=[['pdt','Pod',pdt,'',''],['pd','Podcast',pd,'',''],['le','LE',le,'',''],['ted','TED',ted,'',''],['ytb','YouTube',ytb,'',''],['ke','KE',ke,'',''],['vt','VoiceTube',vt,'',''],['cake','Cake',cake,'',''],['sc','SoundCloud',sc,'',''],['adbk','Audiobook',adbk,'',''],['bkst','Blinkist',bkst,'','']];
 
 const faq=[['vt','VT','美股'],['vt','VT','利率'],['pdt','Pod','Bloomberg'],['pdt','Pod','CNBC']];
-const searchSites=[['pdt','Pod'],['vt','VT']]; 
+const searchSites=[['pdt','Pod'],['pd','Podcast'],['vt','VT']]; 
