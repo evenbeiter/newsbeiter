@@ -1530,7 +1530,7 @@ async function getVtAuth(){
   const res = await fetch(preStr+encodeURIComponent('https://tw.voicetube.com'));
   const str = await res.text();
   return str
-    .match(/"token"\s*:\s*"([^"]+)"/)?.[1]
+    .match(/\\"token\\":\\"([^"]+)\\"/)?.[1]
     ?.replace(/^\$+/, '$');
 }
 
