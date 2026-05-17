@@ -1534,7 +1534,11 @@ async function getVtAuth(){
     ?.replace(/^\$+/, '$');
 }
 
-const vtAuth = await getVtAuth();
+
+let vtAuth;
+(async () => {
+  vtAuth = await getVtAuth();
+})();
 
 async function vtGetList(siteName,t){
   hidePlayer();
@@ -1542,6 +1546,9 @@ async function vtGetList(siteName,t){
 
   let res, str;
   const headers={'Content-Type': 'application/json','authorization':`Bearer ${vtAuth}`};
+
+https://vtapi.voicetube.com/v2.2/videos/homePageChannelVideos?platform=Web&language=zh-TW
+str.data.videos
 
   try{
   if (t.startsWith('#')){
@@ -1552,7 +1559,6 @@ async function vtGetList(siteName,t){
 
   } else if (t.startsWith('q_')) {
     t=t.slice(2);
-
     res = await fetch(`https://vtapi.voicetube.com/v2.1/zh-TW/${t}?platform=Web&limit=20&offset=${rr-1}`, {
       method: 'POST',
       headers: headers,
@@ -1566,11 +1572,18 @@ async function vtGetList(siteName,t){
       });
     str=await res.json();
 
+  } else if (t==='homePageChannelVideos') {
+    res = await fetch(`https://vtapi.voicetube.com/v2.2/videos/homePageChannelVideos?platform=Web&page=${rr}&perPage=20&language=zh-TW`, {
+      method: 'POST',
+      headers: headers,
+      });
+    str=await res.json();
+
   } else if (t==='videos') {
     res = await fetch(`https://vtapi.voicetube.com/v2.2/videos?platform=Web&language=zh-TW`, {
       method: 'POST',
       headers: headers,
-      body: `{"page":${rr},"perPage":30,"isFeatured":true,"sortMode":"DESC","sortBy":"publishedAt"}`
+      body: `{"page":${rr},"perPage":20,"isFeatured":true,"sortMode":"DESC","sortBy":"publishedAt"}`
       });
     str=await res.json();
 
@@ -1585,8 +1598,7 @@ async function vtGetList(siteName,t){
 
   }
 
-
-  for (let h of str.data.items? str.data.items : str.data){
+  for (let h of str.data.items || str.data.videos || str.data){
     items.push([h.id,h.title,h.cefrLevel,h.durationText,h.isTranslated,h.youtubeId])
   }
   for (let h of items){
