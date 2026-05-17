@@ -1529,7 +1529,7 @@ subtitle line.
 async function getVtAuth(){
   const res = await fetch(preStr+encodeURIComponent('https://tw.voicetube.com'));
   const str = await res.text();
-  return text
+  return str
     .match(/"token"\s*:\s*"([^"]+)"/)?.[1]
     ?.replace(/^\$+/, '$');
 }
@@ -1546,9 +1546,6 @@ async function vtGetList(siteName,t){
 
   let res, str;
   const headers={'Content-Type': 'application/json','authorization':`Bearer ${vtAuth}`};
-
-https://vtapi.voicetube.com/v2.2/videos/homePageChannelVideos?platform=Web&language=zh-TW
-str.data.videos
 
   try{
   if (t.startsWith('#')){
