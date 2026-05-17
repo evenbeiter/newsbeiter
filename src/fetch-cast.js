@@ -1043,7 +1043,7 @@ async function word2sentence(raw){
   }
   return await translateSentences(sentences);
 
-} else if(siteNameVar=='pdt'){
+} else if(siteNameVar=='pdt' || siteNameVar=='ted'){
     return await translateSentences(raw);
   }
 }
@@ -1360,10 +1360,10 @@ async function tedGetContent(id){
     res=await fetch(`https://hls.ted.com/project_masters/${mediaId}/subtitles/en/full.vtt`);
     str=await res.text();
 
-    const ts=parseVTT(str);
+    let ts=parseVTT(str);
     if (ts.length !== 0){
-
-    getLinesTable(ts,id,false);
+    ts=await word2sentence(ts);    
+    getLinesTable(ts,id,true);
 
     // } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`;}
 
@@ -1467,7 +1467,7 @@ function parseVTT(vttText) {
       }
       i = j; // advance outer loop
 
-      const sentence = cleanText(cueLines.join(' ')) + `<button type="button" class="btn btn-light position-relative sepia opacity-25 position-absolute bottom-0 end-0 mb-1" onclick="getPodcastTranslate(this)">${svgTranslate}</button>`;
+      const sentence = cleanText(cueLines.join(' '));
       // skip empty sentence
       if (sentence) {
         results.push({ startTime: startSeconds, sentence });
