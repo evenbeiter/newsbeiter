@@ -1529,16 +1529,12 @@ subtitle line.
 async function getVtAuth(){
   const res = await fetch(preStr+encodeURIComponent('https://tw.voicetube.com'));
   const str = await res.text();
-  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
-  return JSON.parse(doc.querySelector('#__NEXT_DATA__').innerText);
+  return text
+    .match(/"token"\s*:\s*"([^"]+)"/)?.[1]
+    ?.replace(/^\$+/, '$');
 }
 
-let vtRaw, vtBuildId, vtAuth;
-(async () => {
-  vtRaw = await getVtAuth();
-  vtBuildId = vtRaw.buildId;
-  vtAuth = vtRaw.props.pageProps.auth.token;
-})();
+const vtAuth = await getVtAuth();
 
 async function vtGetList(siteName,t){
   hidePlayer();
@@ -1558,14 +1554,14 @@ async function vtGetList(siteName,t){
     t=t.slice(2);
 
     res = await fetch(`https://vtapi.voicetube.com/v2.1/zh-TW/${t}?platform=Web&limit=20&offset=${rr-1}`, {
-      method: 'GET',
+      method: 'POST',
       headers: headers,
       });
     str=await res.json();
 
   } else if (t==='hotVideos') {
     res = await fetch(`https://vtapi.voicetube.com/v2.2/videos/hotVideos?platform=Web&page=${rr}&perPage=20&language=zh-TW`, {
-      method: 'GET',
+      method: 'POST',
       headers: headers,
       });
     str=await res.json();
@@ -1574,7 +1570,7 @@ async function vtGetList(siteName,t){
     res = await fetch(`https://vtapi.voicetube.com/v2.2/videos?platform=Web&language=zh-TW`, {
       method: 'POST',
       headers: headers,
-      body: `{"page":${rr},"perPage":20,"isFeatured":true,"sortMode":"DESC","sortBy":"publishedAt"}`
+      body: `{"page":${rr},"perPage":30,"isFeatured":true,"sortMode":"DESC","sortBy":"publishedAt"}`
       });
     str=await res.json();
 
