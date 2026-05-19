@@ -700,7 +700,7 @@ async function isblGetList(siteName,t){
   let page;
   if (rr==1){page=''}else{page='page/'+rr};
   try{
-    url='https://www.isabelnet.com/blog/'+page;console.log(url);
+    url=`https://www.isabelnet.com/blog/${page}/`;console.log(url);
     var res=await fetch(preStr+url);
     var str=await res.text();
     var parser = new DOMParser();
