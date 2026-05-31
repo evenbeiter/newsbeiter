@@ -94,7 +94,7 @@ canvas {
   <div class="btn-group">
     <button class="btn btn-sm btn-outline-light" onclick="setLang(0)">EN</button>
     <button class="btn btn-sm btn-outline-light" onclick="setLang(1)">ZH</button>
-    <button class="btn btn-sm btn-outline-light" onclick="setLang(2)">KR</button>
+    <!-- <button class="btn btn-sm btn-outline-light" onclick="setLang(2)">KR</button> -->
   </div>
 </div>
 
@@ -106,7 +106,7 @@ canvas {
   <div id="wrapper">
     <div class="panel"><canvas id="canvas-en"></canvas></div>
     <div class="panel"><canvas id="canvas-zh"></canvas></div>
-    <div class="panel"><canvas id="canvas-kr"></canvas></div>
+    <!-- <div class="panel"><canvas id="canvas-kr"></canvas></div> -->
   </div>
 </div>
   
@@ -177,7 +177,7 @@ async function loadEpisode(epi) {
   await Promise.all([
     stitch("canvas-en", imageLists.en),
     stitch("canvas-zh", imageLists.zh),
-    stitch("canvas-kr", imageLists.kr),
+    // stitch("canvas-kr", imageLists.kr),
   ]);
 
   // ✅ restore EN scroll（延遲確保 canvas 已 render）
@@ -229,8 +229,8 @@ async function fetchEpisode(epi) {
 
   return {
     en: wrap(enImages),
-    zh: wrap(zhImages),
-    kr: [] // optional
+    zh: wrap(zhImages)
+    // kr: [] // optional
   };
 }
 
@@ -346,7 +346,7 @@ document.querySelectorAll(".panel").forEach(p => observer.observe(p));
 
 function updateUI() {
   wrapper.style.transform = `translateX(-${index * 100}vw)`;
-  label.innerText = ["EN","ZH","KR"][index];
+  label.innerText = ["EN","ZH"][index];
 }
 
 function setLang(i) {
