@@ -295,49 +295,69 @@ const canvasCache = new Map();
 
 const TILE_HEIGHT = 4000;
 
+let layoutEN = []; let layoutZH = [];
+
 async function stitch(canvasId, urls) {
-  const container = document.getElementById(canvasId + "-container");
-  container.innerHTML = "";
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext("2d");
+  const viewport = document.getElementById("viewport");
 
   const imgs = (await Promise.allSettled(urls.map(loadImage)))
     .filter(r => r.status === "fulfilled")
     .map(r => r.value);
 
+  if (imgs.length === 0) return;
+
   const width = Math.max(...imgs.map(i => i.width));
 
-  let tileIndex = 0;
-  let tileCanvas = createTile(tileIndex);
-  let ctx = tileCanvas.getContext("2d");
-
-  let tileY = 0;     // 每個 tile 內的 y
-  let globalY = 0;   // 全局累積 y（關鍵）
-
-  function createTile(i) {
-    const c = document.createElement("canvas");
-    c.width = width;
-    c.height = TILE_HEIGHT;
-    c.style.width = "100%";
-    c.style.display = "block";
-    container.appendChild(c);
-    return c;
-  }
+  let layout = [];
+  let totalHeight = 0;
 
   for (const img of imgs) {
-    // 如果這張圖會跨 tile → 分割 tile
-    if (tileY + img.height > TILE_HEIGHT) {
-      tileIndex++;
-      tileCanvas = createTile(tileIndex);
-      ctx = tileCanvas.getContext("2d");
-      tileY = 0;
-    }
-
-    ctx.drawImage(img, 0, tileY);
-
-    tileY += img.height;
-    globalY += img.height;
+    layout.push({
+      img,
+      y: totalHeight,
+      h: img.height
+    });
+    totalHeight += img.height;
   }
-}
 
+  if (canvasId === "canvas-en") layoutEN = layout;
+  if (canvasId === "canvas-zh") layoutZH = layout;
+
+  // ⭐ FIX 1: 讓 scroll 真的存在
+  viewport.style.height = "100vh";
+  viewport.style.overflowY = "scroll";
+
+  // ⭐ FIX 2: 建立 scroll 長度
+  viewport.style.position = "relative";
+  viewport.style.height = "100vh";
+
+  const spacer = document.getElementById(canvasId + "-spacer");
+  if (spacer) spacer.style.height = totalHeight + "px";
+
+  canvas.width = width;
+  canvas.height = window.innerHeight;
+
+  function render() {
+    const scrollY = viewport.scrollTop;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const viewTop = scrollY;
+    const viewBottom = scrollY + canvas.height;
+
+    for (const item of layout) {
+      if (item.y + item.h < viewTop || item.y > viewBottom) continue;
+
+      const drawY = item.y - scrollY;
+      ctx.drawImage(item.img, 0, drawY);
+    }
+  }
+
+  viewport.onscroll = render;
+  render();
+}
 
 // async function stitch(canvasId, urls) {
 //   console.log("EP:", currentEp);
