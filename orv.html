@@ -169,7 +169,10 @@ async function loadEpisode(epi) {
     cache.set(epi, fetchEpisode(epi));
   }
 
-  const imageLists = await cache.get(epi);
+  const imageLists = await fetchEpisode(epi);
+  cache.set(epi, imageLists);
+
+  // const imageLists = await cache.get(epi);
 
   await Promise.all([
     stitch("canvas-en", imageLists.en),
@@ -182,8 +185,10 @@ async function loadEpisode(epi) {
     requestAnimationFrame(restoreENScroll);
   });
 
-  document.getElementById("emptyState")?.style &&
-  (document.getElementById("emptyState").style.display = "none");
+  console.log("cache hit epi:", epi, cache.get(epi));
+
+  // document.getElementById("emptyState")?.style &&
+  // (document.getElementById("emptyState").style.display = "none");
 }
 
 /* ================= SCROLL EN ================= */
@@ -311,6 +316,7 @@ async function stitch(canvasId, urls) {
 
   canvas.width = width;
   canvas.height = height;
+  ctx.clearRect(0, 0, width, height);
 
   let y = 0;
   for (const img of imgs) {
