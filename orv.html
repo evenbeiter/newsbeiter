@@ -314,6 +314,16 @@ async function fetchEpisode(epi) {
 
 /* ================= API ================= */
 
+async function getEpisodeThumbnailM(titleNo){
+  const res = await fetch(`${preStr}https://m.webtoons.com/api/v1/webtoon/${titleNo}/episodes?pageSize=1000`);
+  const str = await res.json();
+
+  return str.result.episodeList.map(item => ({
+    episodeNo: item.episodeNo,
+    viewerLink: item.viewerLink
+  }));
+}
+
 async function getWebtoonEpisodeImages(titleNo, episodeNo) {
   const viewerUrl = await getEpisodeThumbnail(titleNo, episodeNo);
   if (!viewerUrl) return [];
