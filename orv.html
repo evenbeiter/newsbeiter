@@ -60,6 +60,12 @@ body {
 
 }
 
+#viewport {
+  height: 100vh;
+  overflow-y: auto;
+  position: relative;
+}
+
 #wrapper {
   display: flex;
   width: 300vw;
@@ -306,7 +312,7 @@ async function stitch(canvasId, urls) {
     .filter(r => r.status === "fulfilled")
     .map(r => r.value);
 
-  if (imgs.length === 0) return;
+  if (!imgs.length) return;
 
   const width = Math.max(...imgs.map(i => i.width));
 
@@ -314,25 +320,14 @@ async function stitch(canvasId, urls) {
   let totalHeight = 0;
 
   for (const img of imgs) {
-    layout.push({
-      img,
-      y: totalHeight,
-      h: img.height
-    });
+    layout.push({ img, y: totalHeight, h: img.height });
     totalHeight += img.height;
   }
 
   if (canvasId === "canvas-en") layoutEN = layout;
   if (canvasId === "canvas-zh") layoutZH = layout;
 
-  // ⭐ FIX 1: 讓 scroll 真的存在
-  viewport.style.height = "100vh";
-  viewport.style.overflowY = "scroll";
-
-  // ⭐ FIX 2: 建立 scroll 長度
-  viewport.style.position = "relative";
-  viewport.style.height = "100vh";
-
+  // ✔️ ONLY spacer controls scroll
   const spacer = document.getElementById(canvasId + "-spacer");
   if (spacer) spacer.style.height = totalHeight + "px";
 
@@ -350,8 +345,7 @@ async function stitch(canvasId, urls) {
     for (const item of layout) {
       if (item.y + item.h < viewTop || item.y > viewBottom) continue;
 
-      const drawY = item.y - scrollY;
-      ctx.drawImage(item.img, 0, drawY);
+      ctx.drawImage(item.img, 0, item.y - scrollY);
     }
   }
 
