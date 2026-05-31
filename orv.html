@@ -104,8 +104,11 @@ canvas {
 <!-- VIEW -->
 <div id="viewport">
   <div id="wrapper">
-    <div class="panel"><canvas id="canvas-en"></canvas></div>
-    <div class="panel"><canvas id="canvas-zh"></canvas></div>
+    <div id="canvas-en-container" class="panel"></div>
+    <div id="canvas-zh-container" class="panel"></div>
+    <div id="canvas-kr-container" class="panel"></div>
+    <!-- <div class="panel"><canvas id="canvas-en"></canvas></div>
+    <div class="panel"><canvas id="canvas-zh"></canvas></div> -->
     <!-- <div class="panel"><canvas id="canvas-kr"></canvas></div> -->
   </div>
 </div>
@@ -285,11 +288,17 @@ function loadImage(src) {
 
 const canvasCache = new Map();
 
+const TILE_HEIGHT = 4000; // 可調：3000~8000 都可以
+
 async function stitch(canvasId, urls) {
-  console.log("EP:", currentEp);
-  console.log("URL sample:", urls.slice(0, 5));
-  console.log("stitch:", canvasId, urls.length);
-  const key = canvasId + currentEp;
+  const container = document.getElementById(canvasId + "-container");
+  if (!container) {
+    console.error("Missing container:", canvasId + "-container");
+    return;
+  }
+
+  // 清空舊 tiles
+  container.innerHTML = "";
 
   const imgs = (await Promise.allSettled(urls.map(loadImage)))
     .filter(r => r.status === "fulfilled")
@@ -301,32 +310,81 @@ async function stitch(canvasId, urls) {
     return;
   }
 
-  console.log("imgs:", imgs.length);
-
-  const canvas = document.getElementById(canvasId);
-  const ctx = canvas.getContext("2d");
-
   const width = Math.max(...imgs.map(i => i.width));
-  const height = imgs.reduce((a, i) => a + i.height, 0);
-
-  if (!Number.isFinite(width) || !Number.isFinite(height)) {
-    console.error("Invalid canvas size", width, height);
-    return;
-  }
-
-  canvas.width = width;
-  canvas.height = height;
-  ctx.clearRect(0, 0, width, height);
 
   let y = 0;
-  for (const img of imgs) {
-    ctx.drawImage(img, 0, y);
-    y += img.height - 1;
+  let tileIndex = 0;
+
+  let tileCanvas = createTile(tileIndex);
+  let ctx = tileCanvas.getContext("2d");
+
+  function createTile(i) {
+    const c = document.createElement("canvas");
+    c.width = width;
+    c.height = TILE_HEIGHT;
+    c.style.width = "100%";
+    c.style.display = "block";
+    container.appendChild(c);
+    return c;
   }
 
-  const buffer = ctx.getImageData(0, 0, width, height);
-  canvasCache.set(key, { width, height, buffer });
+  for (const img of imgs) {
+    // 如果超過 tile 高度 → 開新 canvas
+    if (y + img.height > TILE_HEIGHT) {
+      tileIndex++;
+      tileCanvas = createTile(tileIndex);
+      ctx = tileCanvas.getContext("2d");
+      y = 0;
+    }
+
+    ctx.drawImage(img, 0, y);
+    y += img.height;
+  }
 }
+
+
+// async function stitch(canvasId, urls) {
+//   console.log("EP:", currentEp);
+//   console.log("URL sample:", urls.slice(0, 5));
+//   console.log("stitch:", canvasId, urls.length);
+//   const key = canvasId + currentEp;
+
+//   const imgs = (await Promise.allSettled(urls.map(loadImage)))
+//     .filter(r => r.status === "fulfilled")
+//     .map(r => r.value)
+//     .filter(img => img && img.width && img.height);
+
+//   if (imgs.length === 0) {
+//     console.warn("No valid images:", canvasId);
+//     return;
+//   }
+
+//   console.log("imgs:", imgs.length);
+
+//   const canvas = document.getElementById(canvasId);
+//   const ctx = canvas.getContext("2d");
+
+//   const width = Math.max(...imgs.map(i => i.width));
+//   const height = imgs.reduce((a, i) => a + i.height, 0);
+
+//   if (!Number.isFinite(width) || !Number.isFinite(height)) {
+//     console.error("Invalid canvas size", width, height);
+//     return;
+//   }
+
+//   canvas.width = width;
+//   canvas.height = height;
+//   ctx.clearRect(0, 0, width, height);
+
+//   let y = 0;
+//   for (const img of imgs) {
+//     ctx.drawImage(img, 0, y);
+//     y += img.height - 1;
+//   }
+
+//   const buffer = ctx.getImageData(0, 0, width, height);
+//   canvasCache.set(key, { width, height, buffer });
+// }
 
 /* ================= INTERSECTION OBSERVER ================= */
 
