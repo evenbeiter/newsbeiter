@@ -104,22 +104,7 @@ canvas {
     <div class="panel"><canvas id="canvas-kr"></canvas></div>
   </div>
 </div>
-
-<!-- <div id="emptyState" style="
-  position: fixed;
-  inset: 0;
-  background: black;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-  font-size: 18px;
-  pointer-events: none;
-">
-  Please select an episode
-</div> -->
-
+  
 <script>
 /* ================= STATE ================= */
 
@@ -289,18 +274,15 @@ const canvasCache = new Map();
 async function stitch(canvasId, urls) {
   const key = canvasId + currentEp;
 
-  if (canvasCache.has(key)) {
-    const { width, height, buffer } = canvasCache.get(key);
-    const canvas = document.getElementById(canvasId);
-    const ctx = canvas.getContext("2d");
+  const imgs = (await Promise.allSettled(urls.map(loadImage)))
+    .filter(r => r.status === "fulfilled")
+    .map(r => r.value)
+    .filter(img => img && img.width && img.height);
 
-    canvas.width = width;
-    canvas.height = height;
-    ctx.putImageData(buffer, 0, 0);
+  if (imgs.length === 0) {
+    console.warn("No valid images:", canvasId);
     return;
   }
-
-  const imgs = await Promise.all(urls.map(loadImage));
 
   const canvas = document.getElementById(canvasId);
   const ctx = canvas.getContext("2d");
@@ -308,11 +290,15 @@ async function stitch(canvasId, urls) {
   const width = Math.max(...imgs.map(i => i.width));
   const height = imgs.reduce((a, i) => a + i.height, 0);
 
+  if (!Number.isFinite(width) || !Number.isFinite(height)) {
+    console.error("Invalid canvas size", width, height);
+    return;
+  }
+
   canvas.width = width;
   canvas.height = height;
 
   let y = 0;
-
   for (const img of imgs) {
     ctx.drawImage(img, 0, y);
     y += img.height - 1;
