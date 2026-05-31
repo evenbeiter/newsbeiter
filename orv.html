@@ -105,12 +105,26 @@ canvas {
   </div>
 </div>
 
+<div id="emptyState" style="
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  font-size: 18px;
+">
+  Please select an episode
+</div>
+
 <script>
 /* ================= STATE ================= */
 
 const preStr = 'https://newsbeiter.onrender.com/api/fetch?url=';
 const TOTAL_EP = 500;
-let currentEp = 1;
+let currentEp = null;
 let index = 0;
 
 const cache = new Map(); // episode cache
@@ -157,8 +171,11 @@ async function loadEpisode(epi) {
   currentEp = epi;
   epLabel.innerText = epi;
 
+  // ✅ 記住最後 EP
+  localStorage.setItem("lastEp", epi);
+
   if (!cache.has(epi)) {
-    cache.set(epi, fetchEpisode(epi)); // lazy fetch
+    cache.set(epi, fetchEpisode(epi));
   }
 
   const imageLists = await cache.get(epi);
@@ -168,6 +185,37 @@ async function loadEpisode(epi) {
     stitch("canvas-zh", imageLists.zh),
     stitch("canvas-kr", imageLists.kr),
   ]);
+
+  // ✅ restore EN scroll（延遲確保 canvas 已 render）
+  requestAnimationFrame(() => {
+    requestAnimationFrame(restoreENScroll);
+  });
+
+  document.getElementById("emptyState")?.style &&
+  (document.getElementById("emptyState").style.display = "none");
+}
+
+/* ================= SCROLL EN ================= */
+
+const enPanel = document.querySelectorAll(".panel")[0]; // EN
+
+enPanel.addEventListener("scroll", () => {
+  if (!currentEp) return;
+
+  localStorage.setItem(
+    `scroll_en_${currentEp}`,
+    enPanel.scrollTop
+  );
+}, { passive: true });
+
+function restoreENScroll() {
+  const enPanel = document.querySelectorAll(".panel")[0];
+
+  const saved = localStorage.getItem(`scroll_en_${currentEp}`);
+
+  if (saved !== null) {
+    enPanel.scrollTop = Number(saved);
+  }
 }
 
 /* ================= FETCH ================= */
@@ -352,7 +400,14 @@ document.addEventListener("touchmove", (e) => {
 /* ================= INIT ================= */
 
 buildEpisodeMenu();
-loadEpisode(1);
+// loadEpisode(1);
+
+// ✅ 回復最後 EP
+const lastEp = localStorage.getItem("lastEp");
+
+if (lastEp) {
+  loadEpisode(Number(lastEp));
+}
 
 </script>
 </body>
