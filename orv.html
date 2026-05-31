@@ -279,7 +279,6 @@ async function stitch(canvasId, urls) {
   console.log("EP:", currentEp);
   console.log("URL sample:", urls.slice(0, 5));
   console.log("stitch:", canvasId, urls.length);
-  console.log("imgs:", imgs.length);
   const key = canvasId + currentEp;
 
   const imgs = (await Promise.allSettled(urls.map(loadImage)))
@@ -292,6 +291,8 @@ async function stitch(canvasId, urls) {
     return;
   }
 
+  console.log("imgs:", imgs.length);
+  
   const canvas = document.getElementById(canvasId);
   const ctx = canvas.getContext("2d");
 
