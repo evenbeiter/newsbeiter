@@ -323,7 +323,7 @@ async function getWebtoonEpisodeImages(titleNo, episodeNo) {
 }
 
 async function getEpisodeThumbnail(titleNo, episodeNo) {
-  const url = preStr+"https://www.webtoons.com/api/v1/recent/episode-thumbnail";
+  const url = preStr+"https://m.webtoons.com/api/v1/recent/episode-thumbnail";
 
   const res = await fetch(url, {
     method: "POST",
