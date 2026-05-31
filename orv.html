@@ -276,6 +276,8 @@ function loadImage(src) {
 const canvasCache = new Map();
 
 async function stitch(canvasId, urls) {
+  console.log("EP:", currentEp);
+  console.log("URL sample:", urls.slice(0, 5));
   console.log("stitch:", canvasId, urls.length);
   console.log("imgs:", imgs.length);
   const key = canvasId + currentEp;
