@@ -51,6 +51,8 @@ body {
   overflow: hidden;
   height: 100vh;
   width: 100vw;
+  touch-action: pan-y; /* ✅ 只允許上下滑，禁止水平瀏覽器手勢 */
+
 }
 
 #wrapper {
@@ -297,20 +299,55 @@ function setLang(i) {
   updateUI();
 }
 
+// let startX = 0;
+
+// document.addEventListener("touchstart", e => {
+//   startX = e.touches[0].clientX;
+// });
+
+// document.addEventListener("touchend", e => {
+//   const dx = e.changedTouches[0].clientX - startX;
+
+//   if (dx < -50) index = Math.min(2, index + 1);
+//   if (dx > 50) index = Math.max(0, index - 1);
+
+//   updateUI();
+// });
+
+const viewport = document.getElementById("viewport");
+
 let startX = 0;
+let startY = 0;
 
-document.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-});
+viewport.addEventListener("touchstart", (e) => {
+  const t = e.touches[0];
 
-document.addEventListener("touchend", e => {
-  const dx = e.changedTouches[0].clientX - startX;
+  startX = t.clientX;
+  startY = t.clientY;
+}, { passive: true });
 
-  if (dx < -50) index = Math.min(2, index + 1);
-  if (dx > 50) index = Math.max(0, index - 1);
+viewport.addEventListener("touchend", (e) => {
+  const t = e.changedTouches[0];
+
+  const dx = t.clientX - startX;
+  const dy = t.clientY - startY;
+
+  // 🔥 只在「水平明顯大於垂直」時才觸發 swipe
+  if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
+
+  if (dx < -60) index = Math.min(2, index + 1);
+  if (dx > 60) index = Math.max(0, index - 1);
 
   updateUI();
-});
+}, { passive: true });
+
+
+document.addEventListener("touchmove", (e) => {
+  if (e.touches[0].clientX < 10) {
+    e.preventDefault(); // 🔥 block iOS back gesture zone
+  }
+}, { passive: false });
+
 
 /* ================= INIT ================= */
 
