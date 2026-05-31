@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Webtoon Multilingual Reader</title>
+
+<!-- Bootstrap 5 最新版 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+  body {
+    margin: 0;
+    background: #000;
+    overflow: hidden;
+  }
+
+  #viewport {
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  #wrapper {
+    display: flex;
+    width: 300vw;
+    height: 100vh;
+    transition: transform 0.35s ease;
+  }
+
+  .panel {
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    background: #000;
+    position: relative;
+  }
+
+  canvas {
+    width: 100%;
+    display: block;
+  }
+
+  /* overlay UI */
+  .ui-bar {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .glass {
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 6px 12px;
+    color: white;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- 🔥 UI BAR (Bootstrap) -->
+<div class="ui-bar">
+  <div class="glass fw-bold" id="langLabel">EN</div>
+
+  <div class="btn-group">
+    <button class="btn btn-sm btn-outline-light" onclick="setLang(0)">EN</button>
+    <button class="btn btn-sm btn-outline-light" onclick="setLang(1)">ZH</button>
+    <button class="btn btn-sm btn-outline-light" onclick="setLang(2)">KR</button>
+  </div>
+</div>
+
+<!-- VIEWPORT -->
+<div id="viewport">
+  <div id="wrapper">
+
+    <div class="panel">
+      <canvas id="canvas-en"></canvas>
+    </div>
+
+    <div class="panel">
+      <canvas id="canvas-zh"></canvas>
+    </div>
+
+    <div class="panel">
+      <canvas id="canvas-kr"></canvas>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =========================
+   🔥 image sources
+========================= */
+
+
+const imageLists = await loadBothLanguages(epi);
+
+console.log(imageLists.en);
+console.log(imageLists.zh);
+
+
+async function loadBothLanguages(epi) {
+  const [enImages, zhImages] = await Promise.all([
+    getWebtoonEpisodeImages(2154, epi),
+    getWebtoonEpisodeImages(2089, epi)
+  ]);
+
+  const proxyPrefix = "https://newsbeiter.onrender.com/img?url=";
+
+  const wrap = (arr) =>
+    arr.map(url => proxyPrefix + encodeURIComponent(url));
+
+  return {
+    en: wrap(enImages),
+    zh: wrap(zhImages)
+  };
+}
+
+async function getWebtoonEpisodeImages(titleNo, episodeNo) {
+  const viewerUrl = await getEpisodeThumbnail(titleNo, episodeNo);
+
+  if (!viewerUrl) {
+    console.log("No viewerUrl found");
+    return [];
+  }
+
+  const images = await fetchQ90Images(preStr+encodeURIComponent(viewerUrl));
+
+  return images;
+}
+
+
+async function getEpisodeThumbnail(titleNo, episodeNo) {
+  const url = preStr + "https://www.webtoons.com/api/v1/recent/episode-thumbnail";
+
+  const payload = {
+    episodeIds: [
+      { webtoonType: "WEBTOON", titleNo, episodeNo }
+    ]
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+
+  return data?.[0]?.viewerUrl;
+}
+
+async function fetchQ90Images(viewerUrl) {
+  const res = await fetch(viewerUrl);
+  const html = await res.text();
+
+  const matches = [...html.matchAll(/https?:\/\/[^"']+type=q90[^"']*/g)];
+
+  // 直接去重 + clean
+  const images = [...new Set(matches.map(m => m[0]))];
+
+  return images;
+}
+
+
+
+/* =========================
+   🔥 load image
+========================= */
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+/* =========================
+   🔥 stitch canvas
+========================= */
+
+async function stitch(canvasId, urls) {
+  const imgs = await Promise.all(urls.map(loadImage));
+
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext("2d");
+
+  const width = Math.max(...imgs.map(i => i.width));
+  const height = imgs.reduce((a, i) => a + i.height, 0);
+
+  canvas.width = width;
+  canvas.height = height;
+
+  ctx.imageSmoothingEnabled = false;
+
+  let y = 0;
+
+  for (const img of imgs) {
+    ctx.drawImage(img, 0, y);
+    y += img.height - 1; // 🔥 remove seam
+  }
+}
+
+/* =========================
+   🔥 init
+========================= */
+
+async function init() {
+  await Promise.all([
+    stitch("canvas-en", imageLists.en),
+    stitch("canvas-zh", imageLists.zh),
+    stitch("canvas-kr", imageLists.kr),
+  ]);
+}
+
+init();
+
+/* =========================
+   🔥 swipe logic
+========================= */
+
+let index = 0;
+
+const wrapper = document.getElementById("wrapper");
+const label = document.getElementById("langLabel");
+
+const langs = ["EN", "ZH", "KR"];
+
+function update() {
+  wrapper.style.transform = `translateX(-${index * 100}vw)`;
+  label.innerText = langs[index];
+}
+
+function setLang(i) {
+  index = i;
+  update();
+}
+
+/* touch swipe */
+let startX = 0;
+
+document.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+});
+
+document.addEventListener("touchend", e => {
+  const dx = e.changedTouches[0].clientX - startX;
+
+  if (dx < -50) index = Math.min(2, index + 1);
+  if (dx > 50) index = Math.max(0, index - 1);
+
+  update();
+});
+
+/* keyboard */
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowLeft") index = Math.max(0, index - 1);
+  if (e.key === "ArrowRight") index = Math.min(2, index + 1);
+  update();
+});
+
+</script>
+
+</body>
+</html>
