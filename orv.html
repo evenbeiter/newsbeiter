@@ -265,6 +265,10 @@ function loadImage(src) {
     img.crossOrigin = "anonymous";
     img.onload = () => res(img);
     img.onerror = rej;
+    img.onerror = (e) => {
+      console.log("IMG FAIL:", src);
+      rej(e);
+    };
     img.src = src;
   });
 }
@@ -272,6 +276,8 @@ function loadImage(src) {
 const canvasCache = new Map();
 
 async function stitch(canvasId, urls) {
+  console.log("stitch:", canvasId, urls.length);
+  console.log("imgs:", imgs.length);
   const key = canvasId + currentEp;
 
   const imgs = (await Promise.allSettled(urls.map(loadImage)))
