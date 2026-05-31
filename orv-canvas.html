@@ -73,14 +73,10 @@ body {
   overflow-y: auto;
 }
 
-.panel img{
-  width:100%;
-  display:block;
-  margin:0;
-  padding:0;
-  border:0;
+canvas {
+  width: 100%;
+  display: block;
 }
-
 </style>
 </head>
 
@@ -108,60 +104,16 @@ body {
 <!-- VIEW -->
 <div id="viewport">
   <div id="wrapper">
-    <div id="panel-en" class="panel"></div>
-    <div id="panel-zh" class="panel"></div>
+    <div id="canvas-en-container" class="panel"></div>
+    <div id="canvas-zh-container" class="panel"></div>
+    <div id="canvas-kr-container" class="panel"></div>
+    <!-- <div class="panel"><canvas id="canvas-en"></canvas></div>
+    <div class="panel"><canvas id="canvas-zh"></canvas></div> -->
+    <!-- <div class="panel"><canvas id="canvas-kr"></canvas></div> -->
   </div>
 </div>
   
 <script>
-
-/* ===== 3. 新增 Lazy Load Renderer ===== */
-
-function renderImages(containerId, urls) {
-
-  const container = document.getElementById(containerId);
-
-  container.innerHTML = "";
-
-  urls.forEach(url => {
-
-    const img = document.createElement("img");
-
-    img.loading = "lazy";
-
-    img.dataset.src = url;
-
-    img.alt = "";
-
-    container.appendChild(img);
-
-    imageObserver.observe(img);
-  });
-}
-
-
-const imageObserver = new IntersectionObserver(entries => {
-
-  entries.forEach(entry => {
-
-    if (!entry.isIntersecting) return;
-
-    const img = entry.target;
-
-    if (!img.src) {
-      img.src = img.dataset.src;
-    }
-
-    imageObserver.unobserve(img);
-
-  });
-
-},{
-  root:null,
-  rootMargin:"1200px"
-});
-
-
 /* ================= STATE ================= */
 
 const preStr = 'https://newsbeiter.onrender.com/api/fetch?url=';
@@ -225,15 +177,11 @@ async function loadEpisode(epi) {
 
   // const imageLists = await cache.get(epi);
 
-  renderImages("panel-en", imageLists.en);
-
-  renderImages("panel-zh", imageLists.zh);
-
-  // await Promise.all([
-  //   stitch("canvas-en", imageLists.en),
-  //   stitch("canvas-zh", imageLists.zh),
-  //   // stitch("canvas-kr", imageLists.kr),
-  // ]);
+  await Promise.all([
+    stitch("canvas-en", imageLists.en),
+    stitch("canvas-zh", imageLists.zh),
+    // stitch("canvas-kr", imageLists.kr),
+  ]);
 
   // ✅ restore EN scroll（延遲確保 canvas 已 render）
   requestAnimationFrame(() => {
@@ -248,39 +196,16 @@ async function loadEpisode(epi) {
 
 /* ================= SCROLL EN ================= */
 
-// const enPanel = document.querySelectorAll(".panel")[0]; // EN
-
-const enPanel = document.getElementById("panel-en");
-const zhPanel = document.getElementById("panel-zh");
-
-let syncing = false;
+const enPanel = document.querySelectorAll(".panel")[0]; // EN
 
 enPanel.addEventListener("scroll", () => {
+  if (!currentEp) return;
 
-  if (syncing) return;
-
-  syncing = true;
-
-  const ratio =
-    enPanel.scrollTop /
-    (enPanel.scrollHeight - enPanel.clientHeight);
-
-  zhPanel.scrollTop =
-    ratio *
-    (zhPanel.scrollHeight - zhPanel.clientHeight);
-
-  syncing = false;
-
-},{passive:true});
-
-// enPanel.addEventListener("scroll", () => {
-//   if (!currentEp) return;
-
-//   localStorage.setItem(
-//     `scroll_en_${currentEp}`,
-//     enPanel.scrollTop
-//   );
-// }, { passive: true });
+  localStorage.setItem(
+    `scroll_en_${currentEp}`,
+    enPanel.scrollTop
+  );
+}, { passive: true });
 
 function restoreENScroll() {
   const enPanel = document.querySelectorAll(".panel")[0];
