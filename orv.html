@@ -104,9 +104,13 @@ canvas {
 <!-- VIEW -->
 <div id="viewport">
   <div id="wrapper">
-    <div id="canvas-en-container" class="panel"></div>
-    <div id="canvas-zh-container" class="panel"></div>
-    <div id="canvas-kr-container" class="panel"></div>
+    <div class="panel">
+      <canvas id="canvas-en"></canvas>
+    </div>
+
+    <div class="panel">
+      <canvas id="canvas-zh"></canvas>
+    </div>
     <!-- <div class="panel"><canvas id="canvas-en"></canvas></div>
     <div class="panel"><canvas id="canvas-zh"></canvas></div> -->
     <!-- <div class="panel"><canvas id="canvas-kr"></canvas></div> -->
@@ -189,6 +193,7 @@ async function loadEpisode(epi) {
   });
 
   console.log("cache hit epi:", epi, cache.get(epi));
+  document.getElementById("episodeMenu").style.display = "none";
 
   // document.getElementById("emptyState")?.style &&
   // (document.getElementById("emptyState").style.display = "none");
