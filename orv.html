@@ -288,35 +288,24 @@ function loadImage(src) {
 
 const canvasCache = new Map();
 
-const TILE_HEIGHT = 4000; // 可調：3000~8000 都可以
+const TILE_HEIGHT = 4000;
 
 async function stitch(canvasId, urls) {
   const container = document.getElementById(canvasId + "-container");
-  if (!container) {
-    console.error("Missing container:", canvasId + "-container");
-    return;
-  }
-
-  // 清空舊 tiles
   container.innerHTML = "";
 
   const imgs = (await Promise.allSettled(urls.map(loadImage)))
     .filter(r => r.status === "fulfilled")
-    .map(r => r.value)
-    .filter(img => img && img.width && img.height);
-
-  if (imgs.length === 0) {
-    console.warn("No valid images:", canvasId);
-    return;
-  }
+    .map(r => r.value);
 
   const width = Math.max(...imgs.map(i => i.width));
 
-  let y = 0;
   let tileIndex = 0;
-
   let tileCanvas = createTile(tileIndex);
   let ctx = tileCanvas.getContext("2d");
+
+  let tileY = 0;     // 每個 tile 內的 y
+  let globalY = 0;   // 全局累積 y（關鍵）
 
   function createTile(i) {
     const c = document.createElement("canvas");
@@ -329,16 +318,18 @@ async function stitch(canvasId, urls) {
   }
 
   for (const img of imgs) {
-    // 如果超過 tile 高度 → 開新 canvas
-    if (y + img.height > TILE_HEIGHT) {
+    // 如果這張圖會跨 tile → 分割 tile
+    if (tileY + img.height > TILE_HEIGHT) {
       tileIndex++;
       tileCanvas = createTile(tileIndex);
       ctx = tileCanvas.getContext("2d");
-      y = 0;
+      tileY = 0;
     }
 
-    ctx.drawImage(img, 0, y);
-    y += img.height;
+    ctx.drawImage(img, 0, tileY);
+
+    tileY += img.height;
+    globalY += img.height;
   }
 }
 
