@@ -60,12 +60,6 @@ body {
 
 }
 
-#viewport {
-  height: 100vh;
-  overflow-y: auto;
-  position: relative;
-}
-
 #wrapper {
   display: flex;
   width: 300vw;
@@ -110,13 +104,9 @@ canvas {
 <!-- VIEW -->
 <div id="viewport">
   <div id="wrapper">
-    <div class="panel">
-      <canvas id="canvas-en"></canvas>
-    </div>
-
-    <div class="panel">
-      <canvas id="canvas-zh"></canvas>
-    </div>
+    <div id="canvas-en-container" class="panel"></div>
+    <div id="canvas-zh-container" class="panel"></div>
+    <div id="canvas-kr-container" class="panel"></div>
     <!-- <div class="panel"><canvas id="canvas-en"></canvas></div>
     <div class="panel"><canvas id="canvas-zh"></canvas></div> -->
     <!-- <div class="panel"><canvas id="canvas-kr"></canvas></div> -->
@@ -200,7 +190,6 @@ async function loadEpisode(epi) {
 
   console.log("cache hit epi:", epi, cache.get(epi));
   document.getElementById("episodeMenu").style.display = "none";
-
   // document.getElementById("emptyState")?.style &&
   // (document.getElementById("emptyState").style.display = "none");
 }
@@ -301,57 +290,49 @@ const canvasCache = new Map();
 
 const TILE_HEIGHT = 4000;
 
-let layoutEN = []; let layoutZH = [];
-
 async function stitch(canvasId, urls) {
-  const canvas = document.getElementById(canvasId);
-  const ctx = canvas.getContext("2d");
-  const viewport = document.getElementById("viewport");
+  const container = document.getElementById(canvasId + "-container");
+  container.innerHTML = "";
 
   const imgs = (await Promise.allSettled(urls.map(loadImage)))
     .filter(r => r.status === "fulfilled")
     .map(r => r.value);
 
-  if (!imgs.length) return;
-
   const width = Math.max(...imgs.map(i => i.width));
 
-  let layout = [];
-  let totalHeight = 0;
+  let tileIndex = 0;
+  let tileCanvas = createTile(tileIndex);
+  let ctx = tileCanvas.getContext("2d");
+
+  let tileY = 0;     // 每個 tile 內的 y
+  let globalY = 0;   // 全局累積 y（關鍵）
+
+  function createTile(i) {
+    const c = document.createElement("canvas");
+    c.width = width;
+    c.height = TILE_HEIGHT;
+    c.style.width = "100%";
+    c.style.display = "block";
+    container.appendChild(c);
+    return c;
+  }
 
   for (const img of imgs) {
-    layout.push({ img, y: totalHeight, h: img.height });
-    totalHeight += img.height;
-  }
-
-  if (canvasId === "canvas-en") layoutEN = layout;
-  if (canvasId === "canvas-zh") layoutZH = layout;
-
-  // ✔️ ONLY spacer controls scroll
-  const spacer = document.getElementById(canvasId + "-spacer");
-  if (spacer) spacer.style.height = totalHeight + "px";
-
-  canvas.width = width;
-  canvas.height = window.innerHeight;
-
-  function render() {
-    const scrollY = viewport.scrollTop;
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const viewTop = scrollY;
-    const viewBottom = scrollY + canvas.height;
-
-    for (const item of layout) {
-      if (item.y + item.h < viewTop || item.y > viewBottom) continue;
-
-      ctx.drawImage(item.img, 0, item.y - scrollY);
+    // 如果這張圖會跨 tile → 分割 tile
+    if (tileY + img.height > TILE_HEIGHT) {
+      tileIndex++;
+      tileCanvas = createTile(tileIndex);
+      ctx = tileCanvas.getContext("2d");
+      tileY = 0;
     }
-  }
 
-  viewport.onscroll = render;
-  render();
+    ctx.drawImage(img, 0, tileY);
+
+    tileY += img.height;
+    globalY += img.height;
+  }
 }
+
 
 // async function stitch(canvasId, urls) {
 //   console.log("EP:", currentEp);
