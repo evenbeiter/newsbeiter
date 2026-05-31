@@ -193,7 +193,7 @@ async function getWebtoonEpisodeImages(titleNo, episodeNo) {
   const viewerUrl = await getEpisodeThumbnail(titleNo, episodeNo);
   if (!viewerUrl) return [];
 
-  const images = await fetchQ90Images(viewerUrl);
+  const images = await fetchQ90Images(preStr+encodeURIComponent(viewerUrl));
   return images;
 }
 
