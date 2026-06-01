@@ -324,10 +324,33 @@ async function getEpisodeThumbnailM(titleNo){
   }));
 }
 
-async function getWebtoonEpisodeImages(titleNo, episodeNo) {
-  const viewerUrl = await getEpisodeThumbnail(titleNo, episodeNo);
-  if (!viewerUrl) return [];
+async function getEpisodeThumbnailM(titleNo){
+  const res = await fetch(`${preStr}https://m.webtoons.com/api/v1/webtoon/${titleNo}/episodes?pageSize=1000`);
+  const str = await res.json();
 
+  return Object.fromEntries(
+    str.result.episodeList.map(item => [
+      item.episodeNo,
+      item.viewerLink
+    ])
+  );
+}
+
+let toc;
+(async () => {
+  const en = await getEpisodeThumbnailM(2154);
+  const zh = await getEpisodeThumbnailM(2089);
+
+  toc = {
+    2154: en,
+    2089: zh
+  };
+
+  console.log(toc);
+})();
+
+async function getWebtoonEpisodeImages(titleNo, episodeNo) {
+  const viewerUrl = `https://m.webtoons.com${toc[titleNo][episodeNo]}`;
   const images = await fetchQ90Images(preStr+encodeURIComponent(viewerUrl));
   return images;
 }
