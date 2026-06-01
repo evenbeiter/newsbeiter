@@ -318,16 +318,6 @@ async function getEpisodeThumbnailM(titleNo){
   const res = await fetch(`${preStr}https://m.webtoons.com/api/v1/webtoon/${titleNo}/episodes?pageSize=1000`);
   const str = await res.json();
 
-  return str.result.episodeList.map(item => ({
-    episodeNo: item.episodeNo,
-    viewerLink: item.viewerLink
-  }));
-}
-
-async function getEpisodeThumbnailM(titleNo){
-  const res = await fetch(`${preStr}https://m.webtoons.com/api/v1/webtoon/${titleNo}/episodes?pageSize=1000`);
-  const str = await res.json();
-
   return Object.fromEntries(
     str.result.episodeList.map(item => [
       item.episodeNo,
@@ -564,7 +554,6 @@ document.addEventListener("touchmove", (e) => {
 /* ================= INIT ================= */
 
 buildEpisodeMenu();
-// loadEpisode(1);
 
 // ✅ 回復最後 EP
 const lastEp = localStorage.getItem("lastEp");
