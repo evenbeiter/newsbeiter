@@ -98,11 +98,12 @@
 </div>
 
 <script>
-const API_URL = "https://abc.com";
+const preStr = "https://newsbeiter.onrender.com/api/fetch?url=";
+const API_URL = "https://labs.google/lll/api/insights/conversation";
 
 // ===== Fetch new dialogue =====
 async function loadNewDialogue() {
-  const res = await fetch(API_URL, {
+  const res = await fetch(preStr + API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -114,7 +115,7 @@ async function loadNewDialogue() {
   const data = await res.json();
 
   // save to backend DB
-  await saveDialogue(data);
+//   await saveDialogue(data);
 
   renderDialogue(data);
 }
