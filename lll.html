@@ -168,7 +168,7 @@ async function loadNewDialogue() {
   try {
     showLoading();
 
-    const res = await fetch(API_URL, {
+    const res = await fetch(preStr + API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
