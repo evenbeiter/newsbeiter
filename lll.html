@@ -115,7 +115,7 @@ async function loadNewDialogue() {
   const data = await res.json();
 
   // save to backend DB
-//   await saveDialogue(data);
+  await saveDialogue(data);
 
   renderDialogue(data);
 }
@@ -156,25 +156,92 @@ function renderDialogue(data) {
   data.dialogue.forEach((d, index) => {
     const div = document.createElement("div");
     div.className = "dialogue-item";
-    div.dataset.index = index;
 
     const processed = renderMessageWithNotes(d.message, d.notes);
 
     div.innerHTML = `
       <div class="speaker">${d.speaker}</div>
+
       <div class="message">${processed.html}</div>
+
+      <!-- 翻譯先放 placeholder -->
+      <div class="translation text-muted mt-1" id="t-${index}">
+        loading translation...
+      </div>
+
       ${processed.notesHtml}
     `;
 
     div.onclick = () => {
-      document.querySelectorAll(".dialogue-item").forEach(x => x.classList.remove("active"));
+      document.querySelectorAll(".dialogue-item")
+        .forEach(x => x.classList.remove("active"));
       div.classList.add("active");
       speak(d.message);
     };
 
     container.appendChild(div);
+
+    // 🔥 這裡：render 時才翻譯
+    translateSentence(d.message).then(tr => {
+      document.getElementById(`t-${index}`).innerText = tr;
+    });
   });
 }
+
+async function translateSentence(text) {
+  try {
+    const res = await fetch("https://newsbeiter.onrender.com/translate/sentences", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        list: [
+          { sentence: text }
+        ],
+        source: "en",
+        target: "zh-TW"
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.ok) return "";
+
+    // API 回傳 sentence = "原文<br>翻譯"
+    return data.data[0].sentence.split("<br>")[1] || "";
+  } catch (e) {
+    console.error(e);
+    return "";
+  }
+}
+
+// function renderDialogue(data) {
+//   document.getElementById("contextText").innerText = data.context;
+
+//   const container = document.getElementById("dialogueContainer");
+//   container.innerHTML = "";
+
+//   data.dialogue.forEach((d, index) => {
+//     const div = document.createElement("div");
+//     div.className = "dialogue-item";
+//     div.dataset.index = index;
+
+//     const processed = renderMessageWithNotes(d.message, d.notes);
+
+//     div.innerHTML = `
+//       <div class="speaker">${d.speaker}</div>
+//       <div class="message">${processed.html}</div>
+//       ${processed.notesHtml}
+//     `;
+
+//     div.onclick = () => {
+//       document.querySelectorAll(".dialogue-item").forEach(x => x.classList.remove("active"));
+//       div.classList.add("active");
+//       speak(d.message);
+//     };
+
+//     container.appendChild(div);
+//   });
+// }
 
 // ===== highlight notes inside text =====
 function renderMessageWithNotes(message, notes) {
