@@ -122,7 +122,7 @@ async function loadNewDialogue() {
 
 // ===== Save to backend =====
 async function saveDialogue(data) {
-  await fetch("https://your-backend.com/save", {
+  await fetch("https://newsbeiter.onrender.com/language-db-save", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
@@ -131,9 +131,9 @@ async function saveDialogue(data) {
 
 // ===== Load history =====
 async function loadHistory() {
-  const res = await fetch("https://your-backend.com/history");
+  const res = await fetch("https://newsbeiter.onrender.com/language-db-history");
   const list = await res.json();
-
+  if (!Array.isArray(list)) return;
   const el = document.getElementById("historyList");
   el.innerHTML = "";
 
