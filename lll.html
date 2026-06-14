@@ -103,27 +103,92 @@
   </div>
 </div>
 
+<div id="loadingOverlay" style="
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+">
+  <div>
+    <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" stroke="#555">
+      <g fill="none" fill-rule="evenodd">
+        <circle cx="30" cy="30" r="26" stroke-opacity="0.2" stroke-width="6"/>
+        <path d="M56 30c0-14.36-11.64-26-26-26" stroke="#555" stroke-width="6">
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0 30 30"
+            to="360 30 30"
+            dur="1s"
+            repeatCount="indefinite"/>
+        </path>
+      </g>
+    </svg>
+  </div>
+</div>
+
 <script>
 const preStr = "https://newsbeiter.onrender.com/api/fetch?url=";
 const API_URL = "https://labs.google/lll/api/insights/conversation";
 
+function showLoading() {
+  document.getElementById("loadingOverlay").style.display = "flex";
+}
+
+function hideLoading() {
+  document.getElementById("loadingOverlay").style.display = "none";
+}
+
 // ===== Fetch new dialogue =====
+// async function loadNewDialogue() {
+//   const res = await fetch(preStr + API_URL, {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({
+//       sourceLanguage: "English",
+//       targetLanguage: "American English"
+//     })
+//   });
+
+//   const data = await res.json();
+
+//   // save to backend DB
+//   await saveDialogue(data);
+
+//   renderDialogue(data);
+// }
+
 async function loadNewDialogue() {
-  const res = await fetch(preStr + API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      sourceLanguage: "English",
-      targetLanguage: "American English"
-    })
-  });
+  try {
+    showLoading();
 
-  const data = await res.json();
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceLanguage: "English",
+        targetLanguage: "American English"
+      })
+    });
 
-  // save to backend DB
-  await saveDialogue(data);
+    const data = await res.json();
 
-  renderDialogue(data);
+    await saveDialogue(data);
+
+    renderDialogue(data);
+
+  } catch (e) {
+    console.error(e);
+    alert("Failed to load dialogue");
+  } finally {
+    hideLoading();
+  }
 }
 
 // ===== Save to backend =====
@@ -136,20 +201,43 @@ async function saveDialogue(data) {
 }
 
 // ===== Load history =====
-async function loadHistory() {
-  const res = await fetch("https://newsbeiter.onrender.com/language-db-history");
-  const list = await res.json();
-  if (!Array.isArray(list)) return;
-  const el = document.getElementById("historyList");
-  el.innerHTML = "";
+// async function loadHistory() {
+//   const res = await fetch("https://newsbeiter.onrender.com/language-db-history");
+//   const list = await res.json();
+//   if (!Array.isArray(list)) return;
+//   const el = document.getElementById("historyList");
+//   el.innerHTML = "";
 
-  list.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "dialogue-item";
-    div.innerText = item.context.slice(0, 40) + "...";
-    div.onclick = () => renderDialogue(item);
-    el.appendChild(div);
-  });
+//   list.forEach(item => {
+//     const div = document.createElement("div");
+//     div.className = "dialogue-item";
+//     div.innerText = item.context.slice(0, 40) + "...";
+//     div.onclick = () => renderDialogue(item);
+//     el.appendChild(div);
+//   });
+// }
+
+async function loadHistory() {
+  showLoading();
+
+  try {
+    const res = await fetch("https://newsbeiter.onrender.com/language-db-history");
+    const list = await res.json();
+
+    const el = document.getElementById("historyList");
+    el.innerHTML = "";
+
+    list.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "dialogue-item";
+      div.innerText = item.context.slice(0, 40) + "...";
+      div.onclick = () => renderDialogue(item);
+      el.appendChild(div);
+    });
+
+  } finally {
+    hideLoading();
+  }
 }
 
 // ===== Render dialogue =====
