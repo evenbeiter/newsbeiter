@@ -737,6 +737,108 @@ function cvtMMSS2S(s){
 
 
 
+//    LLL
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+async function lllGetList(siteName,t){
+  hidePlayer();
+  adSegments = [];
+
+  try{url=preStr+'https://labs.google/lll/api/insights/conversation';
+  const res=await fetch(url,{
+    method: 'POST',
+    headers: {'Content-Type': 'application/json',},
+    body: '{"sourceLanguage":"English","targetLanguage":"American English"}'
+  });
+  const str=await res.json();
+
+
+
+  for (let h of data.episodes){
+    items.push([h.episodeGuid,h.trackName,h.releaseDate,h.trackTimeMillis,h.episodeUrl])
+  }
+  for (let h of items){
+    html+=`<p class="title fs12" onclick="pdtGetContent('${h[0]}','${h[4]}','${h[3]/1000}')">${h[1]}<br><span class="time">${cvt2Timezone(h[2])} | </span><span class="fs10 fw-bold">${cvtS2HHMMSS(h[3],1000)}</span></p><div id="${h[0]}" class="content">
+    <div class="pt-2 sepia">
+      <table class="table table-auto fs11 p-0 sepia">
+        <tbody id="lines-${h[0]}"></tbody>
+      </table>
+    </div>
+    </div><hr>`;
+  }
+  }catch{html='<p>尚無內容</p>'}
+
+  return html;
+}
+
+
+
+async function lllGetContent(id,mediaSrc,dur){
+  hidePlayer();
+
+  contentId = CSS.escape(id);
+  adSegments = [];
+  const cEl=document.getElementById(id);
+
+  if (cEl.style.display=='none' || cEl.style.display==''){
+    loading.style.display='block';
+    cEl.style.display='block';
+
+    media=ap;
+
+    if (mediaSwitch==='ON'){
+      media.src= mediaSrc;
+      media.style.display='block';ct.style.display='block';
+      setPlaybackRate(1);
+    }
+
+    function waitForMetadata(audio) {
+      return new Promise((resolve) => {
+        audio.addEventListener("loadedmetadata", () => {
+          resolve(audio.duration);
+        }, { once: true });
+      });
+    }
+
+    const duration = await waitForMetadata(media);
+    let adj = duration - dur;
+    if (adj<2){adj=0}else{adj=adj-0.25};
+
+    try{url=`${preStr}https://www.pod-transcript.com/api/podcasts/${rt}/transcript?episodeGuid=${id}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('無法讀取');
+    const rawLrc=await res.json();
+
+    // try{
+    let ts=[];
+    for (let s of rawLrc.segments){
+      ts.push({
+        startTime: s.start + adj,
+        sentence: `${s.text || ''}`
+      });     
+    }
+    ts=await word2sentence(ts);
+    getLinesTable(ts,id,false);
+
+    } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+
+
+
+    // } catch {cEl.innerHTML+=`<p>尚未提供文稿</p>`}
+    loading.style.display='none';
+
+  } else {
+    cEl.style.display='none';
+  }
+  loading.style.display='none';
+
+}
+
+
+
+
+
+
 //    POD-TRANSCRIPT
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

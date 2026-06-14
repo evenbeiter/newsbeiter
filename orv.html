@@ -340,7 +340,7 @@ let toc;
 })();
 
 async function getWebtoonEpisodeImages(titleNo, episodeNo) {
-  const viewerUrl = `https://m.webtoons.com${toc[titleNo][episodeNo]}`;
+  const viewerUrl = `https://www.webtoons.com${toc[titleNo][episodeNo]}`;
   const images = await fetchQ90Images(preStr+encodeURIComponent(viewerUrl));
   return images;
 }

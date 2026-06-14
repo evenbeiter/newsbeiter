@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LLL</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+<style>
+  body {
+    background: #f5f6f8;
+  }
+
+  .dialogue-item {
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: white;
+    transition: 0.2s;
+  }
+
+  .dialogue-item:hover {
+    background: #f1f3f5;
+  }
+
+  .dialogue-item.active {
+    background: #dbeafe;
+    border-left: 5px solid #2563eb;
+  }
+
+  .speaker {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .note-word {
+    font-weight: 700;
+    text-decoration: underline;
+    color: #dc2626;
+    cursor: help;
+  }
+
+  .note-box {
+    font-size: 13px;
+    color: #555;
+    margin-top: 6px;
+    padding-left: 10px;
+    border-left: 3px solid #ddd;
+  }
+
+  #contextBox {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- Top bar -->
+<nav class="navbar navbar-dark bg-dark px-3">
+  <button class="btn btn-outline-light" data-bs-toggle="offcanvas" data-bs-target="#historyPanel">
+    ☰ History
+  </button>
+
+  <button class="btn btn-success" onclick="loadNewDialogue()">
+    Load New Dialogue
+  </button>
+</nav>
+
+<div class="container mt-3">
+
+  <!-- context -->
+  <div id="contextBox">
+    <strong>Context</strong>
+    <div id="contextText">Click "Load New Dialogue"</div>
+  </div>
+
+  <!-- dialogue -->
+  <div id="dialogueContainer"></div>
+
+</div>
+
+<!-- Offcanvas History -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="historyPanel">
+  <div class="offcanvas-header">
+    <h5>Saved Dialogues</h5>
+    <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<script>
+const API_URL = "https://abc.com";
+
+// ===== Fetch new dialogue =====
+async function loadNewDialogue() {
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sourceLanguage: "English",
+      targetLanguage: "American English"
+    })
+  });
+
+  const data = await res.json();
+
+  // save to backend DB
+  await saveDialogue(data);
+
+  renderDialogue(data);
+}
+
+// ===== Save to backend =====
+async function saveDialogue(data) {
+  await fetch("https://your-backend.com/save", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+}
+
+// ===== Load history =====
+async function loadHistory() {
+  const res = await fetch("https://your-backend.com/history");
+  const list = await res.json();
+
+  const el = document.getElementById("historyList");
+  el.innerHTML = "";
+
+  list.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "dialogue-item";
+    div.innerText = item.context.slice(0, 40) + "...";
+    div.onclick = () => renderDialogue(item);
+    el.appendChild(div);
+  });
+}
+
+// ===== Render dialogue =====
+function renderDialogue(data) {
+  document.getElementById("contextText").innerText = data.context;
+
+  const container = document.getElementById("dialogueContainer");
+  container.innerHTML = "";
+
+  data.dialogue.forEach((d, index) => {
+    const div = document.createElement("div");
+    div.className = "dialogue-item";
+    div.dataset.index = index;
+
+    const processed = renderMessageWithNotes(d.message, d.notes);
+
+    div.innerHTML = `
+      <div class="speaker">${d.speaker}</div>
+      <div class="message">${processed.html}</div>
+      ${processed.notesHtml}
+    `;
+
+    div.onclick = () => {
+      document.querySelectorAll(".dialogue-item").forEach(x => x.classList.remove("active"));
+      div.classList.add("active");
+      speak(d.message);
+    };
+
+    container.appendChild(div);
+  });
+}
+
+// ===== highlight notes inside text =====
+function renderMessageWithNotes(message, notes) {
+  let html = message;
+  let notesHtml = "";
+
+  if (notes && Object.keys(notes).length > 0) {
+    Object.entries(notes).forEach(([word, def]) => {
+      const regex = new RegExp(word, "g");
+      html = html.replace(
+        regex,
+        `<span class="note-word" title="${def}">${word}</span>`
+      );
+
+      notesHtml += `
+        <div class="note-box">
+          <b>${word}</b>: ${def}
+        </div>
+      `;
+    });
+  }
+
+  return { html, notesHtml };
+}
+
+// ===== TTS =====
+function speak(text) {
+  window.speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "en-US";
+
+  const voices = speechSynthesis.getVoices();
+  const preferred =
+    voices.find(v => v.name.includes("Samantha")) || // iOS natural
+    voices.find(v => v.lang === "en-US");
+
+  if (preferred) utter.voice = preferred;
+
+  utter.rate = 1;
+  utter.pitch = 1;
+
+  speechSynthesis.speak(utter);
+}
+
+// preload voices (important for Chrome)
+speechSynthesis.onvoiceschanged = () => {
+  speechSynthesis.getVoices();
+};
+
+// load history on start
+loadHistory();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
