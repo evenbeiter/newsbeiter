@@ -234,13 +234,6 @@
 <!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- App -->
-<!-- <script src="./utils.js"></script>
-<script src="./storage.js"></script>
-<script src="./api.js"></script>
-<script src="./app.js"></script> -->
-
-
 <script>
 
 //utils
@@ -428,7 +421,7 @@ function clearAll() {
 // ===============================
 //
 // return: number (例如 1187)
-async function apiGetLatestChapter(mangaUrl) {
+async function apiGetChapters(mangaUrl) {
   const url = `${preStr}https://mangakatana.com/manga/${mangaUrl}`;
   const html = await fetch(url).then(r => r.text());
 
@@ -436,6 +429,28 @@ async function apiGetLatestChapter(mangaUrl) {
   const chapter = match ? match[1] : null;
   console.log(chapter); // 1187
   return chapter;
+
+  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  const tbody = doc.querySelector('.chapters table tbody');
+
+  const list = Array.from(tbody.querySelectorAll('tr'))
+    .map(tr => {
+      const a = tr.querySelector('a');
+      if (!a) return null;
+
+      const href = a.href;
+
+      // 取最後一個 'c' 之後的字串
+      const idx = href.lastIndexOf('c');
+      if (idx === -1) return null;
+
+      return href.slice(idx + 1);
+    })
+    .filter(Boolean)
+    .reverse();
+
+  return list
+
 }
 
 
@@ -477,7 +492,9 @@ async function apiGetChapterImages(mangaUrl, chapter) {
 
 //app
 const mangas = [
-  { name: "One Piece", url: "one-piece.49" }
+  { name: "One Piece", url: "one-piece.49" },
+  { name: "Haikyu!!", url: "haikyu.19856" },
+  { name: "Daughter of the Nile", url: "ouke-no-monshou.3507"}
 ];
 
 // ===== State =====
@@ -557,7 +574,7 @@ async function selectManga(manga) {
   showChapterView();
 
   // fetch latest chapter (API layer placeholder)
-  latestChapter = await apiGetLatestChapter(manga.url);
+  latestChapter = await apiGetChapters(manga.url);
 
   renderChapterGroups(latestChapter);
 
@@ -566,25 +583,29 @@ async function selectManga(manga) {
 
 // ===== Chapter Groups =====
 
-function renderChapterGroups(maxChapter, isAsc = false) {
+function renderChapterGroups(list, isAsc = false) {
   chapterGroupsEl.innerHTML = "";
   modalChapterGroupsEl.innerHTML = "";
 
-  const groups = Math.ceil(maxChapter / 100);
+  // 先確保順序
+  const orderedList = isAsc ? [...list] : [...list].reverse();
 
-  const groupIndexes = [...Array(groups).keys()];
-  const orderedGroups = isAsc ? groupIndexes : groupIndexes.reverse();
+  // chunk 成 100 一組
+  const groups = [];
+  for (let i = 0; i < orderedList.length; i += 100) {
+    groups.push(orderedList.slice(i, i + 100));
+  }
 
-  orderedGroups.forEach(g => {
-    const start = g * 100;
-    const end = Math.min(start + 99, maxChapter);
+  groups.forEach((group, gIndex) => {
+    const startLabel = group[0];
+    const endLabel = group[group.length - 1];
 
     const groupDiv = document.createElement("div");
     groupDiv.className = "chapter-group";
 
     const header = document.createElement("div");
     header.className = "chapter-group-title";
-    header.innerText = `${start} - ${end}`;
+    header.innerText = `${startLabel} - ${endLabel}`;
 
     const grid = document.createElement("div");
     grid.className = "chapter-grid";
@@ -594,23 +615,68 @@ function renderChapterGroups(maxChapter, isAsc = false) {
       grid.style.display = grid.style.display === "none" ? "grid" : "none";
     };
 
-    for (let i = end; i >= start + 1; i--) {
-      grid.appendChild(createChapterBtn(i));
-    }
+    // ⚠️ 用 list value 當 chapter id（不是數字）
+    group.forEach(id => {
+      grid.appendChild(createChapterBtn(id));
+    });
 
     groupDiv.appendChild(header);
     groupDiv.appendChild(grid);
 
     chapterGroupsEl.appendChild(groupDiv);
 
-    // modal version（不用 collapse）
+    // modal version（直接展開）
     const modalGroup = groupDiv.cloneNode(true);
-
     modalGroup.querySelector(".chapter-grid").style.display = "grid";
-
     modalChapterGroupsEl.appendChild(modalGroup);
   });
 }
+
+// function renderChapterGroups(maxChapter, isAsc = false) {
+//   chapterGroupsEl.innerHTML = "";
+//   modalChapterGroupsEl.innerHTML = "";
+
+//   const groups = Math.ceil(maxChapter / 100);
+
+//   const groupIndexes = [...Array(groups).keys()];
+//   const orderedGroups = isAsc ? groupIndexes : groupIndexes.reverse();
+
+//   orderedGroups.forEach(g => {
+//     const start = g * 100;
+//     const end = Math.min(start + 99, maxChapter);
+
+//     const groupDiv = document.createElement("div");
+//     groupDiv.className = "chapter-group";
+
+//     const header = document.createElement("div");
+//     header.className = "chapter-group-title";
+//     header.innerText = `${start} - ${end}`;
+
+//     const grid = document.createElement("div");
+//     grid.className = "chapter-grid";
+//     grid.style.display = "none";
+
+//     header.onclick = () => {
+//       grid.style.display = grid.style.display === "none" ? "grid" : "none";
+//     };
+
+//     for (let i = end; i >= start + 1; i--) {
+//       grid.appendChild(createChapterBtn(i));
+//     }
+
+//     groupDiv.appendChild(header);
+//     groupDiv.appendChild(grid);
+
+//     chapterGroupsEl.appendChild(groupDiv);
+
+//     // modal version（不用 collapse）
+//     const modalGroup = groupDiv.cloneNode(true);
+
+//     modalGroup.querySelector(".chapter-grid").style.display = "grid";
+
+//     modalChapterGroupsEl.appendChild(modalGroup);
+//   });
+// }
 
 // function renderChapterGroups(maxChapter) {
 //   chapterGroupsEl.innerHTML = "";
