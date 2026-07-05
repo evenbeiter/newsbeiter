@@ -477,15 +477,6 @@ async function apiGetChapterImages(mangaUrl, chapter, site) {
     console.log(thzq);
     return thzq;
   }
-
-  // console.warn("apiGetChapterImages 未接後端，目前回傳 mock");
-
-  // mock data（方便你測 UI）
-  // return [
-  //   "https://via.placeholder.com/800x1200?text=Chapter+" + chapter + "+Page+1",
-  //   "https://via.placeholder.com/800x1200?text=Chapter+" + chapter + "+Page+2",
-  //   "https://via.placeholder.com/800x1200?text=Chapter+" + chapter + "+Page+3"
-  // ];
 }
 
 
@@ -559,24 +550,6 @@ function bindEvents() {
 }
 
 
-// function bindEvents() {
-
-//   document.getElementById("toggleSidebar").onclick = () => {
-//     sidebar.classList.toggle("collapsed");
-//   };
-
-//   document.getElementById("backToChapters").onclick = () => {
-//     showChapterView();
-//   };
-
-//   document.getElementById("prevChapter").onclick = () => {
-//     if (currentChapter > 1) loadChapter(currentChapter - 1);
-//   };
-
-//   document.getElementById("nextChapter").onclick = () => {
-//     if (currentChapter < latestChapter) loadChapter(currentChapter + 1);
-//   };
-// }
 
 // ===== Manga List =====
 function renderMangaList() {
@@ -662,85 +635,6 @@ function renderChapterGroups(list, isAsc = true) {
   });
 }
 
-// function renderChapterGroups(maxChapter, isAsc = false) {
-//   chapterGroupsEl.innerHTML = "";
-//   modalChapterGroupsEl.innerHTML = "";
-
-//   const groups = Math.ceil(maxChapter / 100);
-
-//   const groupIndexes = [...Array(groups).keys()];
-//   const orderedGroups = isAsc ? groupIndexes : groupIndexes.reverse();
-
-//   orderedGroups.forEach(g => {
-//     const start = g * 100;
-//     const end = Math.min(start + 99, maxChapter);
-
-//     const groupDiv = document.createElement("div");
-//     groupDiv.className = "chapter-group";
-
-//     const header = document.createElement("div");
-//     header.className = "chapter-group-title";
-//     header.innerText = `${start} - ${end}`;
-
-//     const grid = document.createElement("div");
-//     grid.className = "chapter-grid";
-//     grid.style.display = "none";
-
-//     header.onclick = () => {
-//       grid.style.display = grid.style.display === "none" ? "grid" : "none";
-//     };
-
-//     for (let i = end; i >= start + 1; i--) {
-//       grid.appendChild(createChapterBtn(i));
-//     }
-
-//     groupDiv.appendChild(header);
-//     groupDiv.appendChild(grid);
-
-//     chapterGroupsEl.appendChild(groupDiv);
-
-//     // modal version（不用 collapse）
-//     const modalGroup = groupDiv.cloneNode(true);
-
-//     modalGroup.querySelector(".chapter-grid").style.display = "grid";
-
-//     modalChapterGroupsEl.appendChild(modalGroup);
-//   });
-// }
-
-// function renderChapterGroups(maxChapter) {
-//   chapterGroupsEl.innerHTML = "";
-//   modalChapterGroupsEl.innerHTML = "";
-
-//   const groups = Math.ceil(maxChapter / 100);
-
-//   for (let g = groups - 1; g >= 0; g--) {
-//     const start = g * 100;
-//     const end = Math.min(start + 99, maxChapter);
-
-//     const groupDiv = document.createElement("div");
-//     groupDiv.className = "chapter-group";
-
-//     groupDiv.innerHTML = `
-//       <div class="chapter-group-title">${start} - ${end}</div>
-//       <div class="chapter-grid" id="group-${g}"></div>
-//     `;
-
-//     const grid = groupDiv.querySelector(`#group-${g}`);
-
-//     for (let i = end; i >= start + 1; i--) {
-//       const btn = createChapterBtn(i);
-//       grid.appendChild(btn);
-//     }
-
-//     // chapterGroupsEl.appendChild(groupDiv.cloneNode(true));
-
-//     chapterGroupsEl.appendChild(groupDiv);
-//     modalChapterGroupsEl.appendChild(groupDiv.cloneNode(true));
-
-//     // modalChapterGroupsEl.appendChild(groupDiv);
-//   }
-// }
 
 // ===== Chapter Button =====
 function createChapterBtn(i) {
