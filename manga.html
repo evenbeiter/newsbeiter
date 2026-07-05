@@ -441,9 +441,10 @@ async function apiGetChapters(mangaUrl, site) {
   const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
   const tbody = doc.querySelector('.chapters table tbody');
 
+  let list;
   if (site=="en"){
 
-    const list = Array.from(tbody.querySelectorAll("tr"))
+    list = Array.from(tbody.querySelectorAll("tr"))
       .map(tr => {
         const a = tr.querySelector("a");
         if (!a) return null;
@@ -463,7 +464,7 @@ async function apiGetChapters(mangaUrl, site) {
 
   } else {
   
-    const list = [...document.querySelectorAll("#comic_chapter li a")]
+    list = [...document.querySelectorAll("#comic_chapter li a")]
       .map(a => ({
         url: a.href,
         text: a.textContent.trim()
@@ -740,15 +741,26 @@ function renderChapterGroups(list, site, isAsc = true) {
 
 
 // ===== Chapter Button =====
-function createChapterBtn(i) {
+
+function createChapterBtn(chapter) {
   const btn = document.createElement("button");
   btn.className = "btn btn-outline-secondary chapter-btn";
-  btn.innerText = i;
+  btn.innerText = chapter.text;
 
-  btn.onclick = () => loadChapter(i);
+  btn.onclick = () => loadChapter(chapter);
 
   return btn;
 }
+
+// function createChapterBtn(i) {
+//   const btn = document.createElement("button");
+//   btn.className = "btn btn-outline-secondary chapter-btn";
+//   btn.innerText = i;
+
+//   btn.onclick = () => loadChapter(i);
+
+//   return btn;
+// }
 
 // ===== Load Chapter =====
 
