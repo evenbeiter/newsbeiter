@@ -1,0 +1,19 @@
+{
+  "name": "만화",
+  "short_name": "만화",
+  "start_url": "./manga.html",
+  "scope": "./",
+  "display": "standalone",
+  "icons": [
+    {
+      "src":"icons/icon-manga-192.png",
+      "sizes":"192x192",
+      "type":"image/png"
+    },
+    {
+      "src":"icons/icon-manga-512.png",
+      "sizes":"512x512",
+      "type":"image/png"
+    }
+  ]
+}
