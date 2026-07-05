@@ -135,6 +135,14 @@
     background: #1e1e1e;
     color: #eaeaea;
     }
+
+    .floating-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;   /* 確保永遠在最上層 */
+    opacity: 0.6;    /* 半透明 */
+    }
   </style>
 </head>
 
@@ -142,7 +150,7 @@
 
 <!-- Top Navbar -->
 <nav class="navbar navbar-dark bg-dark px-3">
-  <button class="btn btn-outline-light" id="toggleSidebar">☰</button>
+  <button class="btn btn-outline-light floating-btn" id="toggleSidebar">☰</button>
   <span class="navbar-brand ms-2">Manga Reader</span>
 </nav>
 
@@ -183,6 +191,12 @@
     <div id="readerView" class="view d-none">
 
       <!-- Controls -->
+
+      <h5 id="readingTitle"></h5>
+
+      <!-- Images container -->
+      <div id="imageContainer" class="d-flex flex-column"></div>
+
       <div class="d-flex justify-content-between align-items-center mb-3">
 
         <button class="btn btn-secondary btn-sm" id="backToChapters">← 返回章節</button>
@@ -193,11 +207,6 @@
         </div>
 
       </div>
-
-      <h5 id="readingTitle"></h5>
-
-      <!-- Images container -->
-      <div id="imageContainer" class="d-flex flex-column"></div>
 
       <div class="text-center my-3">
         <div id="loading" class="spinner-border text-primary d-none"></div>
