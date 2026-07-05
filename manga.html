@@ -421,8 +421,10 @@ function clearAll() {
 // ===============================
 //
 // return: number (例如 1187)
-async function apiGetChapters(mangaUrl) {
-  const url = `${preStr}https://mangakatana.com/manga/${mangaUrl}`;
+async function apiGetChapters(mangaUrl, site) {
+  let siteUrl = 'https://mangakatana.com/manga/';
+  if (site == "zh"){ siteUrl = 'https://comic.acgn.cc/'};
+  const url = `${preStr}${siteUrl}${mangaUrl}`;
   const html = await fetch(url).then(r => r.text());
 
   // const match = html.match(/class="d-cell-small value new_chap"[^>]*>Chapter\s*(\d+)<\/div>/);
@@ -492,10 +494,11 @@ async function apiGetChapterImages(mangaUrl, chapter) {
 
 //app
 const mangas = [
-  { name: "ORV", url: "omniscient-readers-viewpoint.24674" },
-  { name: "One Piece", url: "one-piece.49" },
-  { name: "Haikyu!!", url: "haikyu.19856" },
-  { name: "Daughter of the Nile", url: "ouke-no-monshou.3507"}
+  { name: "ORV", url: "omniscient-readers-viewpoint.24674", site: "en" },
+  { name: "One Piece", url: "one-piece.49", site: "en" },
+  { name: "Haikyu!!", url: "haikyu.19856", site: "en" },
+  { name: "Daughter of the Nile", url: "ouke-no-monshou.3507", site: "en" },
+  { name: "尼羅河女兒", url: "view-14438.htm", site: "zh" }
 ];
 
 // ===== State =====
@@ -604,7 +607,7 @@ async function selectManga(manga) {
   showChapterView();
 
   // fetch latest chapter (API layer placeholder)
-  chapterList = await apiGetChapters(manga.url);
+  chapterList = await apiGetChapters(manga.url, manga.site);
 
   renderChapterGroups(chapterList);
 
