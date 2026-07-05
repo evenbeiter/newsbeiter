@@ -425,12 +425,12 @@ async function apiGetChapters(mangaUrl) {
   const url = `${preStr}https://mangakatana.com/manga/${mangaUrl}`;
   const html = await fetch(url).then(r => r.text());
 
-  const match = html.match(/class="d-cell-small value new_chap"[^>]*>Chapter\s*(\d+)<\/div>/);
-  const chapter = match ? match[1] : null;
-  console.log(chapter); // 1187
-  return chapter;
+  // const match = html.match(/class="d-cell-small value new_chap"[^>]*>Chapter\s*(\d+)<\/div>/);
+  // const chapter = match ? match[1] : null;
+  // console.log(chapter); // 1187
+  // return chapter;
 
-  const parser=new DOMParser();const doc=parser.parseFromString(str, "text/html");
+  const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
   const tbody = doc.querySelector('.chapters table tbody');
 
   const list = Array.from(tbody.querySelectorAll('tr'))
@@ -492,6 +492,7 @@ async function apiGetChapterImages(mangaUrl, chapter) {
 
 //app
 const mangas = [
+  { name: "ORV", url: "omniscient-readers-viewpoint.24674" },
   { name: "One Piece", url: "one-piece.49" },
   { name: "Haikyu!!", url: "haikyu.19856" },
   { name: "Daughter of the Nile", url: "ouke-no-monshou.3507"}
@@ -612,7 +613,7 @@ async function selectManga(manga) {
 
 // ===== Chapter Groups =====
 
-function renderChapterGroups(list, isAsc = false) {
+function renderChapterGroups(list, isAsc = true) {
   chapterGroupsEl.innerHTML = "";
   modalChapterGroupsEl.innerHTML = "";
 
