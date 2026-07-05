@@ -462,15 +462,12 @@ async function apiGetChapters(mangaUrl, site) {
 //
 // return: string[]
 // e.g. ["img1.jpg", "img2.jpg"]
-async function apiGetChapterImages(mangaUrl, chapter) {
-  // 🔧 TODO: 改成你的後端 API
-  //
-  // 例如：
-  // const res = await fetch(`/api/chapter?manga=${mangaUrl}&chapter=${chapter}`);
-  // const data = await res.json();
-  // return data.images;
+async function apiGetChapterImages(mangaUrl, chapter, site) {
 
-  const url = `${preStr}https://mangakatana.com/manga/${mangaUrl}/c${chapter}`;
+  let siteUrl = 'https://mangakatana.com/manga/';
+  if (site == "zh"){ siteUrl = 'https://comic.acgn.cc/'};
+
+  const url = `${preStr}${siteUrl}${mangaUrl}/c${chapter}`;
   const html = await fetch(url).then(r => r.text());
 
   const match = html.match(/thzq\s*=\s*(.+?);/s);
@@ -773,7 +770,7 @@ async function loadChapter(chapter) {
   imageContainer.innerHTML = "";
 
   // API call (placeholder)
-  const images = await apiGetChapterImages(currentManga.url, chapter);
+  const images = await apiGetChapterImages(currentManga.url, chapter, currentManga.site);
 
   showLoading(false);
 
