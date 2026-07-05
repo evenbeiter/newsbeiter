@@ -499,8 +499,11 @@ const mangas = [
 
 // ===== State =====
 let currentManga = null;
-let currentChapter = null;
-let latestChapter = 0;
+// let currentChapter = null;
+// let latestChapter = 0;
+
+let chapterList = [];   // 你的 list
+let currentIndex = 0;   // 目前位置
 
 // ===== DOM =====
 const sidebar = document.getElementById("sidebar");
@@ -540,13 +543,39 @@ function bindEvents() {
   };
 
   document.getElementById("prevChapter").onclick = () => {
-    if (currentChapter > 1) loadChapter(currentChapter - 1);
+    if (currentIndex > 0) {
+      currentIndex--;
+      loadChapter(chapterList[currentIndex]);
+    }
   };
 
   document.getElementById("nextChapter").onclick = () => {
-    if (currentChapter < latestChapter) loadChapter(currentChapter + 1);
+    if (currentIndex < chapterList.length - 1) {
+      currentIndex++;
+      loadChapter(chapterList[currentIndex]);
+    }
   };
 }
+
+
+// function bindEvents() {
+
+//   document.getElementById("toggleSidebar").onclick = () => {
+//     sidebar.classList.toggle("collapsed");
+//   };
+
+//   document.getElementById("backToChapters").onclick = () => {
+//     showChapterView();
+//   };
+
+//   document.getElementById("prevChapter").onclick = () => {
+//     if (currentChapter > 1) loadChapter(currentChapter - 1);
+//   };
+
+//   document.getElementById("nextChapter").onclick = () => {
+//     if (currentChapter < latestChapter) loadChapter(currentChapter + 1);
+//   };
+// }
 
 // ===== Manga List =====
 function renderMangaList() {
@@ -574,9 +603,9 @@ async function selectManga(manga) {
   showChapterView();
 
   // fetch latest chapter (API layer placeholder)
-  latestChapter = await apiGetChapters(manga.url);
+  chapterList = await apiGetChapters(manga.url);
 
-  renderChapterGroups(latestChapter);
+  renderChapterGroups(chapterList);
 
   updateLastRead();
 }
@@ -727,7 +756,7 @@ function createChapterBtn(i) {
 async function loadChapter(chapter) {
   if (!currentManga) return;
 
-  currentChapter = chapter;
+  currentIndex = chapter;
 
   showReaderView();
 
