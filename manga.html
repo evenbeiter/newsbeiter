@@ -427,29 +427,36 @@ async function apiGetChapters(mangaUrl, site) {
   const url = `${preStr}${siteUrl}${mangaUrl}`;
   const html = await fetch(url).then(r => r.text());
 
-  // const match = html.match(/class="d-cell-small value new_chap"[^>]*>Chapter\s*(\d+)<\/div>/);
-  // const chapter = match ? match[1] : null;
-  // console.log(chapter); // 1187
-  // return chapter;
-
   const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
   const tbody = doc.querySelector('.chapters table tbody');
 
-  const list = Array.from(tbody.querySelectorAll('tr'))
-    .map(tr => {
-      const a = tr.querySelector('a');
-      if (!a) return null;
+  if (site=="en"){
+    const list = Array.from(tbody.querySelectorAll('tr'))
+      .map(tr => {
+        const a = tr.querySelector('a');
+        if (!a) return null;
 
-      const href = a.href;
+        const href = a.href;
 
-      // 取最後一個 'c' 之後的字串
-      const idx = href.lastIndexOf('c');
-      if (idx === -1) return null;
+        // 取最後一個 'c' 之後的字串
+        const idx = href.lastIndexOf('c');
+        if (idx === -1) return null;
 
-      return href.slice(idx + 1);
-    })
-    .filter(Boolean)
-    .reverse();
+        return href.slice(idx + 1);
+      })
+      .filter(Boolean)
+      .reverse();
+
+  } else {
+  
+    const list = [...document.querySelectorAll("#comic_chapter li a")]
+      .map(a => ({
+        url: a.href,
+        text: a.textContent.trim()
+      }))
+      .reverse();
+  
+  }
 
   return list
 
@@ -579,14 +586,14 @@ async function selectManga(manga) {
   // fetch latest chapter (API layer placeholder)
   chapterList = await apiGetChapters(manga.url, manga.site);
 
-  renderChapterGroups(chapterList);
+  renderChapterGroups(chapterList, manga.site);
 
   updateLastRead();
 }
 
 // ===== Chapter Groups =====
 
-function renderChapterGroups(list, isAsc = true) {
+function renderChapterGroups(list, site, isAsc = true) {
   chapterGroupsEl.innerHTML = "";
   modalChapterGroupsEl.innerHTML = "";
 
