@@ -153,6 +153,12 @@
 
       <h4 id="mangaTitle">請選擇漫畫</h4>
 
+      <div class="d-flex justify-content-end my-2">
+        <button class="btn btn-sm btn-outline-primary" id="toggleOrder">
+          切換正序 / 倒序
+        </button>
+      </div>
+
       <div class="mt-3">
         <h6>上次閱讀</h6>
         <div id="lastRead" class="text-muted">無紀錄</div>
@@ -277,6 +283,12 @@ function rangeDesc(start, end) {
 // ===============================
 // GROUPING HELPERS
 // ===============================
+
+let isAsc = false;
+document.getElementById("toggleOrder").onclick = () => {
+  isAsc = !isAsc;
+  renderChapterGroups(latestChapter, isAsc);
+};
 
 // 百位分組：0-99 / 100-199
 function groupByHundreds(max) {
@@ -546,35 +558,86 @@ async function selectManga(manga) {
 }
 
 // ===== Chapter Groups =====
-function renderChapterGroups(maxChapter) {
+
+function renderChapterGroups(maxChapter, isAsc = false) {
   chapterGroupsEl.innerHTML = "";
   modalChapterGroupsEl.innerHTML = "";
 
   const groups = Math.ceil(maxChapter / 100);
 
-  for (let g = groups - 1; g >= 0; g--) {
+  const groupIndexes = [...Array(groups).keys()];
+  const orderedGroups = isAsc ? groupIndexes : groupIndexes.reverse();
+
+  orderedGroups.forEach(g => {
     const start = g * 100;
     const end = Math.min(start + 99, maxChapter);
 
     const groupDiv = document.createElement("div");
     groupDiv.className = "chapter-group";
 
-    groupDiv.innerHTML = `
-      <div class="chapter-group-title">${start} - ${end}</div>
-      <div class="chapter-grid" id="group-${g}"></div>
-    `;
+    const header = document.createElement("div");
+    header.className = "chapter-group-title";
+    header.innerText = `${start} - ${end}`;
 
-    const grid = groupDiv.querySelector(`#group-${g}`);
+    const grid = document.createElement("div");
+    grid.className = "chapter-grid";
+    grid.style.display = "none";
+
+    header.onclick = () => {
+      grid.style.display = grid.style.display === "none" ? "grid" : "none";
+    };
 
     for (let i = end; i >= start + 1; i--) {
-      const btn = createChapterBtn(i);
-      grid.appendChild(btn);
+      grid.appendChild(createChapterBtn(i));
     }
 
-    chapterGroupsEl.appendChild(groupDiv.cloneNode(true));
-    modalChapterGroupsEl.appendChild(groupDiv);
-  }
+    groupDiv.appendChild(header);
+    groupDiv.appendChild(grid);
+
+    chapterGroupsEl.appendChild(groupDiv);
+
+    // modal version（不用 collapse）
+    const modalGroup = groupDiv.cloneNode(true);
+
+    modalGroup.querySelector(".chapter-grid").style.display = "grid";
+
+    modalChapterGroupsEl.appendChild(modalGroup);
+  });
 }
+
+// function renderChapterGroups(maxChapter) {
+//   chapterGroupsEl.innerHTML = "";
+//   modalChapterGroupsEl.innerHTML = "";
+
+//   const groups = Math.ceil(maxChapter / 100);
+
+//   for (let g = groups - 1; g >= 0; g--) {
+//     const start = g * 100;
+//     const end = Math.min(start + 99, maxChapter);
+
+//     const groupDiv = document.createElement("div");
+//     groupDiv.className = "chapter-group";
+
+//     groupDiv.innerHTML = `
+//       <div class="chapter-group-title">${start} - ${end}</div>
+//       <div class="chapter-grid" id="group-${g}"></div>
+//     `;
+
+//     const grid = groupDiv.querySelector(`#group-${g}`);
+
+//     for (let i = end; i >= start + 1; i--) {
+//       const btn = createChapterBtn(i);
+//       grid.appendChild(btn);
+//     }
+
+//     // chapterGroupsEl.appendChild(groupDiv.cloneNode(true));
+
+//     chapterGroupsEl.appendChild(groupDiv);
+//     modalChapterGroupsEl.appendChild(groupDiv.cloneNode(true));
+
+//     // modalChapterGroupsEl.appendChild(groupDiv);
+//   }
+// }
 
 // ===== Chapter Button =====
 function createChapterBtn(i) {
