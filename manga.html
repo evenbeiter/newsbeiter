@@ -431,18 +431,21 @@ async function apiGetChapters(mangaUrl, site) {
   const tbody = doc.querySelector('.chapters table tbody');
 
   if (site=="en"){
-    const list = Array.from(tbody.querySelectorAll('tr'))
+
+    const list = Array.from(tbody.querySelectorAll("tr"))
       .map(tr => {
-        const a = tr.querySelector('a');
+        const a = tr.querySelector("a");
         if (!a) return null;
 
         const href = a.href;
 
-        // 取最後一個 'c' 之後的字串
-        const idx = href.lastIndexOf('c');
+        const idx = href.lastIndexOf("c");
         if (idx === -1) return null;
 
-        return href.slice(idx + 1);
+        return {
+          url: href,
+          text: href.slice(idx + 1)
+        };
       })
       .filter(Boolean)
       .reverse();
@@ -477,12 +480,18 @@ async function apiGetChapterImages(mangaUrl, chapter, site) {
   const url = `${preStr}${siteUrl}${mangaUrl}/c${chapter}`;
   const html = await fetch(url).then(r => r.text());
 
-  const match = html.match(/thzq\s*=\s*(.+?);/s);
-
-  if (match) {
-    const thzq = Function(`return ${match[1]}`)();
-    console.log(thzq);
-    return thzq;
+  if (site=="en"){
+    const match = html.match(/thzq\s*=\s*(.+?);/s);
+    if (match) {
+      const thzq = Function(`return ${match[1]}`)();
+      console.log(thzq);
+      return thzq;
+    }
+  } else {
+    const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
+    const images = [...doc.querySelectorAll('#pic_list img')]
+      .map(img => img.src);
+    return images;
   }
 }
 
@@ -531,6 +540,7 @@ function init() {
 }
 
 // ===== Events =====
+
 function bindEvents() {
 
   document.getElementById("toggleSidebar").onclick = () => {
@@ -544,17 +554,42 @@ function bindEvents() {
   document.getElementById("prevChapter").onclick = () => {
     if (currentIndex > 0) {
       currentIndex--;
-      loadChapter(chapterList[currentIndex]);
+      loadChapter(chapterList[currentIndex].url);
     }
   };
 
   document.getElementById("nextChapter").onclick = () => {
     if (currentIndex < chapterList.length - 1) {
       currentIndex++;
-      loadChapter(chapterList[currentIndex]);
+      loadChapter(chapterList[currentIndex].url);
     }
   };
 }
+
+// function bindEvents() {
+
+//   document.getElementById("toggleSidebar").onclick = () => {
+//     sidebar.classList.toggle("collapsed");
+//   };
+
+//   document.getElementById("backToChapters").onclick = () => {
+//     showChapterView();
+//   };
+
+//   document.getElementById("prevChapter").onclick = () => {
+//     if (currentIndex > 0) {
+//       currentIndex--;
+//       loadChapter(chapterList[currentIndex]);
+//     }
+//   };
+
+//   document.getElementById("nextChapter").onclick = () => {
+//     if (currentIndex < chapterList.length - 1) {
+//       currentIndex++;
+//       loadChapter(chapterList[currentIndex]);
+//     }
+//   };
+// }
 
 
 
@@ -606,9 +641,9 @@ function renderChapterGroups(list, site, isAsc = true) {
     groups.push(orderedList.slice(i, i + 100));
   }
 
-  groups.forEach((group, gIndex) => {
-    const startLabel = group[0];
-    const endLabel = group[group.length - 1];
+  groups.forEach(group => {
+    const startLabel = group[0].text;
+    const endLabel = group[group.length - 1].text;
 
     const groupDiv = document.createElement("div");
     groupDiv.className = "chapter-group";
@@ -625,9 +660,9 @@ function renderChapterGroups(list, site, isAsc = true) {
       grid.style.display = grid.style.display === "none" ? "grid" : "none";
     };
 
-    // ⚠️ 用 list value 當 chapter id（不是數字）
-    group.forEach(id => {
-      grid.appendChild(createChapterBtn(id));
+    // item = { url, text }
+    group.forEach(item => {
+      grid.appendChild(createChapterBtn(item));
     });
 
     groupDiv.appendChild(header);
@@ -643,6 +678,56 @@ function renderChapterGroups(list, site, isAsc = true) {
 }
 
 
+// function renderChapterGroups(list, site, isAsc = true) {
+//   chapterGroupsEl.innerHTML = "";
+//   modalChapterGroupsEl.innerHTML = "";
+
+//   // 先確保順序
+//   const orderedList = isAsc ? [...list] : [...list].reverse();
+
+//   // chunk 成 100 一組
+//   const groups = [];
+//   for (let i = 0; i < orderedList.length; i += 100) {
+//     groups.push(orderedList.slice(i, i + 100));
+//   }
+
+//   groups.forEach((group, gIndex) => {
+//     const startLabel = group[0];
+//     const endLabel = group[group.length - 1];
+
+//     const groupDiv = document.createElement("div");
+//     groupDiv.className = "chapter-group";
+
+//     const header = document.createElement("div");
+//     header.className = "chapter-group-title";
+//     header.innerText = `${startLabel} - ${endLabel}`;
+
+//     const grid = document.createElement("div");
+//     grid.className = "chapter-grid";
+//     grid.style.display = "none";
+
+//     header.onclick = () => {
+//       grid.style.display = grid.style.display === "none" ? "grid" : "none";
+//     };
+
+//     // ⚠️ 用 list value 當 chapter id（不是數字）
+//     group.forEach(id => {
+//       grid.appendChild(createChapterBtn(id));
+//     });
+
+//     groupDiv.appendChild(header);
+//     groupDiv.appendChild(grid);
+
+//     chapterGroupsEl.appendChild(groupDiv);
+
+//     // modal version（直接展開）
+//     const modalGroup = groupDiv.cloneNode(true);
+//     modalGroup.querySelector(".chapter-grid").style.display = "grid";
+//     modalChapterGroupsEl.appendChild(modalGroup);
+//   });
+// }
+
+
 // ===== Chapter Button =====
 function createChapterBtn(i) {
   const btn = document.createElement("button");
@@ -655,28 +740,57 @@ function createChapterBtn(i) {
 }
 
 // ===== Load Chapter =====
+
 async function loadChapter(chapter) {
   if (!currentManga) return;
 
-  currentIndex = chapter;
+  // chapter 現在是 object
+  currentIndex = chapterList.findIndex(c => c.url === chapter.url);
 
   showReaderView();
 
-  readingTitle.innerText = `${currentManga.name} - Chapter ${chapter}`;
+  readingTitle.innerText = `${currentManga.name} - Chapter ${chapter.text}`;
 
-  saveLastRead(currentManga.url, chapter);
+  saveLastRead(currentManga.url, chapter.text);
 
   showLoading(true);
 
   imageContainer.innerHTML = "";
 
-  // API call (placeholder)
-  const images = await apiGetChapterImages(currentManga.url, chapter, currentManga.site);
+  // API call
+  const images = await apiGetChapterImages(
+    currentManga.url,
+    chapter.text,
+    currentManga.site
+  );
 
   showLoading(false);
 
   renderImages(images);
 }
+
+// async function loadChapter(chapter) {
+//   if (!currentManga) return;
+
+//   currentIndex = chapter;
+
+//   showReaderView();
+
+//   readingTitle.innerText = `${currentManga.name} - Chapter ${chapter}`;
+
+//   saveLastRead(currentManga.url, chapter);
+
+//   showLoading(true);
+
+//   imageContainer.innerHTML = "";
+
+//   // API call (placeholder)
+//   const images = await apiGetChapterImages(currentManga.url, chapter, currentManga.site);
+
+//   showLoading(false);
+
+//   renderImages(images);
+// }
 
 // ===== Render Images =====
 function renderImages(images) {
