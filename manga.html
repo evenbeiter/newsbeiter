@@ -688,19 +688,14 @@ async function loadChapter(chapter) {
 
   // chapter 現在是 object
   currentIndex = chapterList.findIndex(c => c.url === chapter.url);
-
   showReaderView();
-
   readingTitle.innerText = `${currentManga.name} - Chapter ${chapter.text}`;
-
   saveLastRead(currentManga.url, chapter.text);
-
   showLoading(true);
-
   imageContainer.innerHTML = "";
 
   let c=chapter.text;
-  if (currentManga.site=="zh"){c=chapter.url;}
+  if (currentManga.site==="zh"){c=chapter.url;}
   
   // API call
   const images = await apiGetChapterImages(
@@ -710,7 +705,6 @@ async function loadChapter(chapter) {
   );
 
   showLoading(false);
-
   renderImages(images);
 }
 
