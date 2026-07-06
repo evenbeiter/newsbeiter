@@ -699,10 +699,13 @@ async function loadChapter(chapter) {
 
   imageContainer.innerHTML = "";
 
+  let c=chapter.text;
+  if (currentManga.site=="zh"){c=chapter.url;}
+  
   // API call
   const images = await apiGetChapterImages(
     currentManga.url,
-    chapter.url,
+    c,
     currentManga.site
   );
 
