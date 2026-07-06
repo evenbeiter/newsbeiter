@@ -503,8 +503,8 @@ async function apiGetChapterImages(mangaUrl, chapter, site) {
     }
   } else {
     const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
-    const images = [...doc.querySelectorAll('#pic_list img')]
-      .map(img => img.src);
+    const images = [...doc.querySelectorAll('#pic_list div.pic.loading')]
+     .map(el => el.getAttribute("_src"));
     return images;
   }
 }
