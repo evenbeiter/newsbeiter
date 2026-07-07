@@ -592,6 +592,8 @@ function renderMangaList() {
 // ===== Select Manga =====
 async function selectManga(manga) {
   sidebar.classList.toggle("collapsed");
+  chapterGroupsEl.innerHTML = "";
+  modalChapterGroupsEl.innerHTML = "";
   currentManga = manga;
   mangaTitle.innerText = manga.name;
   showChapterView();
