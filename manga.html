@@ -434,27 +434,20 @@ function clearAll() {
 //
 // return: number (例如 1187)
 async function apiGetChapters(mangaUrl, site) {
-
   const url = `${preStr}${mangaUrl}`;
   const html = await fetch(url).then(r => r.text());
-
   const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
 
   let list;
-  if (site=="en"){
-
+  if (site==="en"){
     const tbody = doc.querySelector('.chapters table tbody');
-
     list = Array.from(tbody.querySelectorAll("tr"))
       .map(tr => {
         const a = tr.querySelector("a");
         if (!a) return null;
-
         const href = a.href;
-
         const idx = href.lastIndexOf("c");
         if (idx === -1) return null;
-
         return {
           url: href,
           text: href.slice(idx + 1)
@@ -473,9 +466,7 @@ async function apiGetChapters(mangaUrl, site) {
       .reverse();
   
   }
-
   return list
-
 }
 
 
@@ -485,7 +476,7 @@ async function apiGetChapters(mangaUrl, site) {
 //
 // return: string[]
 // e.g. ["img1.jpg", "img2.jpg"]
-async function apiGetChapterImages(mangaUrl, chapter, site) {
+async function apiGetChapterImages(chapter, site) {
 
   // let url = `${preStr}https://mangakatana.com/manga/${mangaUrl}/c${chapter}`;
   // if (site == "zh"){ url = `${preStr}${chapter}`};
@@ -691,13 +682,12 @@ async function loadChapter(chapter) {
   showLoading(true);
   imageContainer.innerHTML = "";
 
-  let c=chapter.text;
-  if (currentManga.site==="zh"){c=chapter.url;}
+  // let c=chapter.text;
+  // if (currentManga.site==="zh"){c=chapter.url;}
   
   // API call
   const images = await apiGetChapterImages(
-    currentManga.url,
-    `${currentManga.url}${c}`,
+    chapter.url,
     currentManga.site
   );
 
