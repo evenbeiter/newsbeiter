@@ -434,9 +434,8 @@ function clearAll() {
 //
 // return: number (例如 1187)
 async function apiGetChapters(mangaUrl, site) {
-  let siteUrl = 'https://mangakatana.com/manga/';
-  if (site == "zh"){ siteUrl = 'https://comic.acgn.cc/'};
-  const url = `${preStr}${siteUrl}${mangaUrl}`;
+
+  const url = `${preStr}${mangaUrl}`;
   const html = await fetch(url).then(r => r.text());
 
   const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
@@ -513,11 +512,11 @@ async function apiGetChapterImages(mangaUrl, chapter, site) {
 
 //app
 const mangas = [
-  { name: "ORV", url: "omniscient-readers-viewpoint.24674", site: "en" },
-  { name: "One Piece", url: "one-piece.49", site: "en" },
-  { name: "Haikyu!!", url: "haikyu.19856", site: "en" },
-  { name: "Daughter of the Nile", url: "ouke-no-monshou.3507", site: "en" },
-  { name: "尼羅河女兒", url: "manhua-nlhne.htm", site: "zh" }
+  { name: "ORV", url: "https://mangakatana.com/manga/omniscient-readers-viewpoint.24674", site: "en" },
+  { name: "One Piece", url: "https://mangakatana.com/manga/one-piece.49", site: "en" },
+  { name: "Haikyu!!", url: "https://mangakatana.com/manga/haikyu.19856", site: "en" },
+  { name: "Daughter of the Nile", url: "https://mangakatana.com/manga/ouke-no-monshou.3507", site: "en" },
+  { name: "尼羅河女兒", url: "https://comic.acgn.cc/manhua-nlhne.htm", site: "zh" }
 ];
 
 // ===== State =====
@@ -698,7 +697,7 @@ async function loadChapter(chapter) {
   // API call
   const images = await apiGetChapterImages(
     currentManga.url,
-    c,
+    `${currentManga.url}${c}`,
     currentManga.site
   );
 
