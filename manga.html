@@ -488,10 +488,11 @@ async function apiGetChapters(mangaUrl, site) {
 // e.g. ["img1.jpg", "img2.jpg"]
 async function apiGetChapterImages(mangaUrl, chapter, site) {
 
-  let url = `${preStr}https://mangakatana.com/manga/${mangaUrl}/c${chapter}`;
-  if (site == "zh"){ url = `${preStr}${chapter}`};
+  // let url = `${preStr}https://mangakatana.com/manga/${mangaUrl}/c${chapter}`;
+  // if (site == "zh"){ url = `${preStr}${chapter}`};
 
   // const url = `${preStr}${siteUrl}${mangaUrl}/c${chapter}`;
+  const url = `${preStr}${chapter}`;
   const html = await fetch(url).then(r => r.text());
 
   if (site=="en"){
@@ -600,17 +601,14 @@ function renderMangaList() {
 
 // ===== Select Manga =====
 async function selectManga(manga) {
+  sidebar.classList.toggle("collapsed");
   currentManga = manga;
-
   mangaTitle.innerText = manga.name;
-
   showChapterView();
 
   // fetch latest chapter (API layer placeholder)
   chapterList = await apiGetChapters(manga.url, manga.site);
-
   renderChapterGroups(chapterList, manga.site);
-
   updateLastRead();
 }
 
