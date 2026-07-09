@@ -255,7 +255,7 @@
 // ===============================
 
 // 切換 view（如果未來擴充頁面會用到）
-const preStr = "https://newsbeiter.onrender.com/api/fetch?url=";
+const preStr = "https://evenbeiter.onrender.com/api/fetch?url=";
 
 function showView(viewName) {
   const chapterView = document.getElementById("chapterView");
@@ -375,15 +375,25 @@ function saveAllData(data) {
 }
 
 // ===== Save Last Read =====
-function saveLastRead(mangaId, chapter) {
-  const data = getAllData();
-
-  data[mangaId] = {
+// ===== Save Last Read =====
+function saveLastRead(
+    mangaId,
     chapter,
-    timestamp: Date.now()
-  };
+    imageIndex = 0,
+    scrollY = 0,
+    mode = "page"
+) {
+    const data = getAllData();
 
-  saveAllData(data);
+    data[mangaId] = {
+        chapter,
+        imageIndex,
+        scrollY,
+        mode,
+        timestamp: Date.now()
+    };
+
+    saveAllData(data);
 }
 
 // ===== Get Last Read =====
@@ -503,20 +513,33 @@ async function apiGetChapterImages(chapter, site) {
 
 //app
 const mangas = [
-  { name: "ORV", url: "https://mangakatana.com/manga/omniscient-readers-viewpoint.24674", site: "en" },
-  { name: "One Piece", url: "https://mangakatana.com/manga/one-piece.49", site: "en" },
-  { name: "Haikyu!!", url: "https://mangakatana.com/manga/haikyu.19856", site: "en" },
-  { name: "Daughter of the Nile", url: "https://mangakatana.com/manga/ouke-no-monshou.3507", site: "en" },
-  { name: "尼羅河女兒", url: "https://comic.acgn.cc/manhua-nlhne.htm", site: "zh" }
+  { name: "ORV", url: "https://mangakatana.com/manga/omniscient-readers-viewpoint.24674", site: "en", defaultMode: READER_MODE.SCROLL },
+  { name: "One Piece", url: "https://mangakatana.com/manga/one-piece.49", site: "en", defaultMode: READER_MODE.PAGE },
+  { name: "Haikyu!!", url: "https://mangakatana.com/manga/haikyu.19856", site: "en", defaultMode: READER_MODE.PAGE },
+  { name: "Daughter of the Nile", url: "https://mangakatana.com/manga/ouke-no-monshou.3507", site: "en", defaultMode: READER_MODE.PAGE },
+  { name: "尼羅河女兒", url: "https://comic.acgn.cc/manhua-nlhne.htm", site: "zh", defaultMode: READER_MODE.PAGE }
 ];
 
 // ===== State =====
+
+const READER_MODE = {
+    PAGE: "page",
+    SCROLL: "scroll"
+};
+let readerMode = READER_MODE.PAGE;
+
 let currentManga = null;
-// let currentChapter = null;
+let currentChapter = null;
 // let latestChapter = 0;
 
 let chapterList = [];   // 你的 list
 let currentIndex = 0;   // 目前位置
+
+let currentImageIndex = 0;
+let currentImages = [];
+
+
+
 
 // ===== DOM =====
 const sidebar = document.getElementById("sidebar");
@@ -559,14 +582,16 @@ function bindEvents() {
   document.getElementById("prevChapter").onclick = () => {
     if (currentIndex > 0) {
       currentIndex--;
-      loadChapter(chapterList[currentIndex].url);
+      loadChapter(chapterList[currentIndex]);
+      // loadChapter(chapterList[currentIndex].url);
     }
   };
 
   document.getElementById("nextChapter").onclick = () => {
     if (currentIndex < chapterList.length - 1) {
       currentIndex++;
-      loadChapter(chapterList[currentIndex].url);
+      loadChapter(chapterList[currentIndex]);
+      // loadChapter(chapterList[currentIndex].url);
     }
   };
 }
@@ -674,13 +699,14 @@ function createChapterBtn(chapter) {
 // ===== Load Chapter =====
 
 async function loadChapter(chapter) {
+  currentChapter = chapter;
   if (!currentManga) return;
 
   // chapter 現在是 object
   currentIndex = chapterList.findIndex(c => c.url === chapter.url);
   showReaderView();
   readingTitle.innerText = `${currentManga.name} - Chapter ${chapter.text}`;
-  saveLastRead(currentManga.url, chapter.text);
+  saveLastRead(currentManga.url, chapter);
   showLoading(true);
   imageContainer.innerHTML = "";
 
@@ -694,13 +720,34 @@ async function loadChapter(chapter) {
   );
 
   showLoading(false);
+
+  const last=getLastRead(currentManga.url);
+  if(last){
+    readerMode=last.mode;
+    currentImageIndex=last.imageIndex;
+  } else {
+    currentImageIndex=0;
+  }
+
   renderImages(images);
+
 }
 
 
 
 // ===== Render Images =====
+
 function renderImages(images) {
+  currentImages=images;
+  if (readerMode === "page") {
+    renderPageMode();
+  } else {
+    renderScrollMode(images);
+  }
+}
+
+function renderScrollMode(images) {
+  imageContainer.className="";
   imageContainer.innerHTML = "";
 
   images.forEach(src => {
@@ -709,6 +756,53 @@ function renderImages(images) {
     img.loading = "lazy";
     imageContainer.appendChild(img);
   });
+
+  saveLastRead(
+    currentManga.url,
+    currentChapter,
+    currentImageIndex,
+    window.scrollY,
+    "scroll"
+  );
+}
+
+function renderPageMode(){
+  imageContainer.className="page-mode";
+  imageContainer.innerHTML="";
+  const img=document.createElement("img");
+  img.src=currentImages[currentImageIndex];
+  imageContainer.appendChild(img);
+
+  img.onclick=e=>{
+    const x=e.offsetX;
+    if(x<img.clientWidth*0.3){
+      prevImage();
+    }else if(x>img.clientWidth*0.7){
+      nextImage();
+    }
+  };
+
+  if(currentImageIndex+1<currentImages.length){
+    const preload=new Image();
+    preload.src=currentImages[currentImageIndex+1];
+  };
+
+  saveLastRead(
+    currentManga.url,
+    currentChapter,
+    currentImageIndex,
+    0,
+    "page"
+  );
+}
+
+function nextImage(){
+  if(currentImageIndex<currentImages.length-1){
+    currentImageIndex++;
+    renderPageMode();
+  }else{
+    nextChapter.click();
+  }
 }
 
 // ===== Views =====
