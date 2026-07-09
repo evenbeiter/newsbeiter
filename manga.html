@@ -381,7 +381,7 @@ function saveLastRead(
     chapter,
     imageIndex = 0,
     scrollY = 0,
-    mode = "page"
+    mode
 ) {
     const data = getAllData();
 
@@ -705,7 +705,11 @@ async function loadChapter(chapter) {
   currentIndex = chapterList.findIndex(c => c.url === chapter.url);
   showReaderView();
   readingTitle.innerText = `${currentManga.name} - Chapter ${chapter.text}`;
-  saveLastRead(currentManga.url, chapter);
+  if (currentManga.defaultMode==='scroll') {
+    saveLastRead(currentManga.url, chapter, currentImageIndex, window.scrollY, currentManga.defaultMode);
+  } else {
+    saveLastRead(currentManga.url, chapter, currentImageIndex, 0, currentManga.defaultMode);
+  }
   showLoading(true);
   imageContainer.innerHTML = "";
 
@@ -781,10 +785,11 @@ function renderPageMode(){
     }
   };
 
-  if(currentImageIndex+1<currentImages.length){
-    const preload=new Image();
-    preload.src=currentImages[currentImageIndex+1];
-  };
+  preloadAroundCurrent(3);
+  // if(currentImageIndex+1<currentImages.length){
+  //   const preload=new Image();
+  //   preload.src=currentImages[currentImageIndex+1];
+  // };
 
   saveLastRead(
     currentManga.url,
@@ -795,11 +800,41 @@ function renderPageMode(){
   );
 }
 
+const imageCache = new Set();
+
+function preloadAroundCurrent(count = 3) {
+  for (let i = -count; i <= count; i++) {
+    if (i === 0) continue;
+    const index = currentImageIndex + i;
+    if(index >= 0 && index < currentImages.length){
+      const src = currentImages[index];
+      if(!imageCache.has(src)){
+        const img = new Image();
+        img.src = src;
+        imageCache.add(src);
+      }
+    }
+  }
+}
+
+
+// function preloadNextImages(count = 3) {
+//   for (let i = 1; i <= count; i++) {
+//     const index = currentImageIndex + i;
+
+//     if (index < currentImages.length) {
+//       const img = new Image();
+//       img.src = currentImages[index];
+//     }
+//   }
+// }
+
 function prevImage() {
     // 還有上一張圖片
     if (currentImageIndex > 0) {
         currentImageIndex--;
         renderPageMode();
+        preloadAroundCurrent(3);
         saveLastRead(
             currentManga.url,
             currentChapter,
@@ -824,6 +859,7 @@ function nextImage() {
     if (currentImageIndex < currentImages.length - 1) {
         currentImageIndex++;
         renderPageMode();
+        preloadAroundCurrent(3);
         saveLastRead(
             currentManga.url,
             currentChapter,
@@ -873,7 +909,7 @@ function updateLastRead() {
   const data = getLastRead(currentManga.url);
 
   if (data) {
-    lastReadEl.innerText = `Chapter ${data.chapter}`;
+    lastReadEl.innerText = `Chapter ${data.chapter.text}`;
   } else {
     lastReadEl.innerText = "無紀錄";
   }
