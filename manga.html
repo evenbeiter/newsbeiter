@@ -512,6 +512,12 @@ async function apiGetChapterImages(chapter, site) {
 
 
 //app
+const READER_MODE = {
+    PAGE: "page",
+    SCROLL: "scroll"
+};
+let readerMode = READER_MODE.PAGE;
+
 const mangas = [
   { name: "ORV", url: "https://mangakatana.com/manga/omniscient-readers-viewpoint.24674", site: "en", defaultMode: READER_MODE.SCROLL },
   { name: "One Piece", url: "https://mangakatana.com/manga/one-piece.49", site: "en", defaultMode: READER_MODE.PAGE },
@@ -521,13 +527,6 @@ const mangas = [
 ];
 
 // ===== State =====
-
-const READER_MODE = {
-    PAGE: "page",
-    SCROLL: "scroll"
-};
-let readerMode = READER_MODE.PAGE;
-
 let currentManga = null;
 let currentChapter = null;
 // let latestChapter = 0;
