@@ -795,14 +795,62 @@ function renderPageMode(){
   );
 }
 
-function nextImage(){
-  if(currentImageIndex<currentImages.length-1){
-    currentImageIndex++;
-    renderPageMode();
-  }else{
-    nextChapter.click();
-  }
+function prevImage() {
+    // 還有上一張圖片
+    if (currentImageIndex > 0) {
+        currentImageIndex--;
+        renderPageMode();
+        saveLastRead(
+            currentManga.url,
+            currentChapter,
+            currentImageIndex,
+            0,
+            "page"
+        );
+
+        return;
+    }
+
+    // 已經是第一張，切到上一話
+    if (currentIndex > 0) {
+        currentIndex--;
+        loadChapter(chapterList[currentIndex]);
+    }
+
 }
+
+function nextImage() {
+    // 還有下一張圖片
+    if (currentImageIndex < currentImages.length - 1) {
+        currentImageIndex++;
+        renderPageMode();
+        saveLastRead(
+            currentManga.url,
+            currentChapter,
+            currentImageIndex,
+            0,
+            "page"
+        );
+
+        return;
+    }
+
+    // 最後一張，自動下一話
+    if (currentIndex < chapterList.length - 1) {
+        currentIndex++;
+        loadChapter(chapterList[currentIndex]);
+    }
+
+}
+
+// function nextImage(){
+//   if(currentImageIndex<currentImages.length-1){
+//     currentImageIndex++;
+//     renderPageMode();
+//   }else{
+//     nextChapter.click();
+//   }
+// }
 
 // ===== Views =====
 function showReaderView() {
