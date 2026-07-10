@@ -20,8 +20,43 @@
     background: #f5f5f5;
     }
 
+    /* ===== Floating Btn ===== */
+    .floating-btn{
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 3000;
+
+        opacity: .45;
+        transition: .2s;
+
+        width: 45px;
+        height: 45px;
+    }
+
+    .floating-btn:hover{
+        opacity: 1;
+    }
+
     /* ===== Sidebar ===== */
-    .sidebar {
+
+    .sidebar{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      overflow-y: auto;
+      background: white;
+      z-index: 2000;
+      transition: transform .3s;
+    }
+
+    .sidebar.collapsed{
+      transform: translateX(-100%);
+    }
+
+    /* .sidebar {
     width: 260px;
     min-height: calc(100vh - 56px);
     transition: all 0.25s ease;
@@ -31,7 +66,7 @@
     .sidebar.collapsed {
     width: 0;
     overflow: hidden;
-    }
+    } */
 
     /* ===== Main Layout ===== */
     .view {
@@ -135,28 +170,25 @@
     background: #1e1e1e;
     color: #eaeaea;
     }
-
-    /* .floating-btn {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 9999;   /* 確保永遠在最上層 */
-    /* opacity: 0.6;    半透明  */
-    /* } */
     
   </style>
 </head>
 
 <body>
 
+<!-- 永遠浮在左上 -->
+<button class="btn btn-dark floating-btn" id="toggleSidebar">☰</button>
+
 <!-- Top Navbar -->
 <nav class="navbar navbar-dark bg-dark px-3">
-  <button class="btn btn-outline-light floating-btn" id="toggleSidebar">☰</button>
-  <div class="btn-group" role="group">
-    <input type="radio" class="btn-check" name="viewMode" id="pageMode" checked>
+  <div class="mx-auto">
+    <div class="btn-group" role="group">
+      <input type="radio" class="btn-check" name="viewMode" id="pageMode" checked>
       <label class="btn btn-outline-primary" for="pageMode">📖 Page</label>
-    <input type="radio" class="btn-check" name="viewMode" id="scrollMode">
+
+      <input type="radio" class="btn-check" name="viewMode" id="scrollMode">
       <label class="btn btn-outline-primary" for="scrollMode">📜 Scroll</label>
+    </div>
   </div>
 </nav>
 
