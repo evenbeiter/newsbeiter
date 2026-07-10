@@ -448,37 +448,46 @@ async function apiGetChapters(mangaUrl, site) {
   const html = await fetch(url).then(r => r.text());
   const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
 
-  let list;
-  if (site==="en"){
-    const tbody = doc.querySelector('.chapters table tbody');
-    list = Array.from(tbody.querySelectorAll("tr"))
-      .map(tr => {
-        const a = tr.querySelector("a");
-        if (!a) return null;
-        const href = a.href;
-        const idx = href.lastIndexOf("c");
-        if (idx === -1) return null;
-        return {
-          url: href,
-          text: href.slice(idx + 1)
-        };
-      })
-      .filter(Boolean)
-      .reverse();
-
-  } else {
-  
-    list = [...doc.querySelectorAll("#comic_chapter li a")]
-      .map(a => ({
-        url: a.href.replace('https://evenbeiter.github.io/newsbeiter/','https://comic.acgn.cc/'),
-        text: a.textContent.trim()
-      }))
-      .reverse();
-  
-  }
+  const list = window[`${site}GetList`](doc);
   return list
 }
 
+
+
+// manga get chapter list (window functions)
+
+function acgnGetList(doc){
+  const list = [...doc.querySelectorAll("#comic_chapter li a")]
+    .map(a => ({
+      url: a.href.replace('https://evenbeiter.github.io/newsbeiter/','https://comic.acgn.cc/'),
+      text: a.textContent.trim()
+    }))
+    .reverse();
+  return list
+}
+
+function katanaGetList(doc){
+  const tbody = doc.querySelector('.chapters table tbody');
+  list = Array.from(tbody.querySelectorAll("tr"))
+    .map(tr => {
+      const a = tr.querySelector("a");
+      if (!a) return null;
+      const href = a.href;
+      const idx = href.lastIndexOf("c");
+      if (idx === -1) return null;
+      return {
+        url: href,
+        text: href.slice(idx + 1)
+      };
+    })
+    .filter(Boolean)
+    .reverse();
+  return list
+}
+
+function spyxGetList(){
+
+}
 
 // ===============================
 // 2. 取得某一話圖片列表
