@@ -152,7 +152,12 @@
 <!-- Top Navbar -->
 <nav class="navbar navbar-dark bg-dark px-3">
   <button class="btn btn-outline-light floating-btn" id="toggleSidebar">☰</button>
-  <span class="navbar-brand ms-2">Manga Reader</span>
+  <div class="btn-group" role="group">
+    <input type="radio" class="btn-check" name="viewMode" id="pageMode" checked>
+      <label class="btn btn-outline-primary" for="pageMode">📖 Page</label>
+    <input type="radio" class="btn-check" name="viewMode" id="scrollMode">
+      <label class="btn btn-outline-primary" for="scrollMode">📜 Scroll</label>
+  </div>
 </nav>
 
 <div class="d-flex">
@@ -442,7 +447,7 @@ function clearAll() {
 // 1. 取得最新章節
 // ===============================
 //
-// return: number (例如 1187)
+// return: object
 async function apiGetChapters(mangaUrl, site) {
   const url = `${preStr}${mangaUrl}`;
   const html = await fetch(url).then(r => r.text());
@@ -504,11 +509,6 @@ function katanaGetList(doc){
 // return: string[]
 // e.g. ["img1.jpg", "img2.jpg"]
 async function apiGetChapterImages(chapter, site) {
-
-  // let url = `${preStr}https://mangakatana.com/manga/${mangaUrl}/c${chapter}`;
-  // if (site == "zh"){ url = `${preStr}${chapter}`};
-
-  // const url = `${preStr}${siteUrl}${mangaUrl}/c${chapter}`;
   const url = `${preStr}${chapter}`;
   const html = await fetch(url).then(r => r.text());
 
@@ -544,10 +544,30 @@ function katanaGetContent(html){
 //app
 const READER_MODE = {
     PAGE: "scroll",
-    SCROLL: "scroll"
+    SCROLL: "scroll",
+    KINDLE: "page"
 };
-let readerMode = READER_MODE.PAGE;
-  
+
+let readerMode = isKindle() ? READER_MODE.KINDLE : READER_MODE.SCROLL;
+
+function isKindle() {
+  const ua = navigator.userAgent.toLowerCase();
+
+  return (
+    ua.includes("kindle") ||
+    ua.includes("silk") ||          // Kindle Browser
+    ua.includes("kfap") ||
+    ua.includes("kfau") ||
+    ua.includes("kfat") ||
+    ua.includes("kfjw") ||
+    ua.includes("kfsowi") ||
+    ua.includes("kfthwa") ||
+    ua.includes("kfthwi") ||
+    ua.includes("kftt") ||
+    ua.includes("kfot")
+  );
+}
+
 const mangas = [
   { name: "ORV", url: "https://mangakatana.com/manga/omniscient-readers-viewpoint.24674", site: "katana", defaultMode: READER_MODE.SCROLL },
   { name: "Spy x Family", url: "https://xspy.spyxmanga.com/", site: "spyx", defaultMode: READER_MODE.PAGE },
@@ -564,15 +584,12 @@ const mangas = [
 // ===== State =====
 let currentManga = null;
 let currentChapter = null;
-// let latestChapter = 0;
 
 let chapterList = [];   // 你的 list
 let currentIndex = 0;   // 目前位置
 
 let currentImageIndex = 0;
 let currentImages = [];
-
-
 
 
 // ===== DOM =====
@@ -628,6 +645,20 @@ function bindEvents() {
       // loadChapter(chapterList[currentIndex].url);
     }
   };
+
+  document.getElementById("pageMode").addEventListener("change", () => {
+    if (pageMode.checked) {
+      viewMode = "page";
+      renderPageMode();
+    }
+  });
+
+  document.getElementById("scrollMode").addEventListener("change", () => {
+    if (scrollMode.checked) {
+      viewMode = "scroll";
+      renderScrollMode();
+    }
+  });
 }
 
 
@@ -747,9 +778,6 @@ async function loadChapter(chapter) {
   }
   showLoading(true);
   imageContainer.innerHTML = "";
-
-  // let c=chapter.text;
-  // if (currentManga.site==="zh"){c=chapter.url;}
   
   // API call
   const images = await apiGetChapterImages(
@@ -767,7 +795,8 @@ async function loadChapter(chapter) {
     currentImageIndex=0;
   }
 
-  renderImages(images);
+  currentImages = images;
+  renderImages();
 
 }
 
@@ -775,20 +804,20 @@ async function loadChapter(chapter) {
 
 // ===== Render Images =====
 
-function renderImages(images) {
-  currentImages=images;
+function renderImages() {
+  // currentImages=images;
   if (readerMode === "page") {
     renderPageMode();
   } else {
-    renderScrollMode(images);
+    renderScrollMode();
   }
 }
 
-function renderScrollMode(images) {
+function renderScrollMode() {
   imageContainer.className="";
   imageContainer.innerHTML = "";
 
-  images.forEach(src => {
+  currentImages.forEach(src => {
     const img = document.createElement("img");
     img.src = src;
     img.loading = "lazy";
@@ -821,10 +850,6 @@ function renderPageMode(){
   };
 
   preloadAroundCurrent(3);
-  // if(currentImageIndex+1<currentImages.length){
-  //   const preload=new Image();
-  //   preload.src=currentImages[currentImageIndex+1];
-  // };
 
   saveLastRead(
     currentManga.url,
@@ -852,17 +877,6 @@ function preloadAroundCurrent(count = 3) {
   }
 }
 
-
-// function preloadNextImages(count = 3) {
-//   for (let i = 1; i <= count; i++) {
-//     const index = currentImageIndex + i;
-
-//     if (index < currentImages.length) {
-//       const img = new Image();
-//       img.src = currentImages[index];
-//     }
-//   }
-// }
 
 function prevImage() {
     // 還有上一張圖片
@@ -914,14 +928,6 @@ function nextImage() {
 
 }
 
-// function nextImage(){
-//   if(currentImageIndex<currentImages.length-1){
-//     currentImageIndex++;
-//     renderPageMode();
-//   }else{
-//     nextChapter.click();
-//   }
-// }
 
 // ===== Views =====
 function showReaderView() {
@@ -958,7 +964,6 @@ function toast(msg) {
   const t = new bootstrap.Toast(el);
   t.show();
 }
-
 
 </script>
 
