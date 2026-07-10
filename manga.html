@@ -463,7 +463,17 @@ function acgnGetList(doc){
       text: a.textContent.trim()
     }))
     .reverse();
-  return list
+  return list;
+}
+
+function spyxGetList(doc){
+  const list = [...doc.querySelectorAll('#Chapters_List li a')]
+    .map(a => ({
+      url: a.href,
+      text: a.textContent.trim()
+    }))
+    .reverse();
+  return list;
 }
 
 function katanaGetList(doc){
@@ -482,12 +492,10 @@ function katanaGetList(doc){
     })
     .filter(Boolean)
     .reverse();
-  return list
+  return list;
 }
 
-function spyxGetList(){
 
-}
 
 // ===============================
 // 2. 取得某一話圖片列表
@@ -504,20 +512,33 @@ async function apiGetChapterImages(chapter, site) {
   const url = `${preStr}${chapter}`;
   const html = await fetch(url).then(r => r.text());
 
-  if (site=="en"){
-    const match = html.match(/thzq\s*=\s*(.+?);/s);
-    if (match) {
-      const thzq = Function(`return ${match[1]}`)();
-      console.log(thzq);
-      return thzq;
-    }
-  } else {
-    const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
-    const images = [...doc.querySelectorAll('#pic_list div.pic.loading')]
-     .map(el => el.getAttribute("_src"));
-    return images;
+  const content = window[`${site}GetContent`](html);
+  return content;
+}
+
+function agcnGetContent(html){
+  const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
+  const images = [...doc.querySelectorAll('#pic_list div.pic.loading')]
+    .map(el => el.getAttribute("_src"));
+  return images;
+}
+
+function spyxGetContent(html){
+  const parser=new DOMParser();const doc=parser.parseFromString(html, "text/html");
+  const images = [...doc.querySelectorAll('.entry-content img')]
+    .map(img => img.src);
+  return images;
+}
+
+function takanaGetContent(html){
+  const match = html.match(/thzq\s*=\s*(.+?);/s);
+  if (match) {
+    const thzq = Function(`return ${match[1]}`)();
+    console.log(thzq);
+    return thzq;
   }
 }
+
 
 
 //app
