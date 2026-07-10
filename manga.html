@@ -530,7 +530,7 @@ function spyxGetContent(html){
   return images;
 }
 
-function takanaGetContent(html){
+function katanaGetContent(html){
   const match = html.match(/thzq\s*=\s*(.+?);/s);
   if (match) {
     const thzq = Function(`return ${match[1]}`)();
