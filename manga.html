@@ -470,12 +470,12 @@ function spyxGetList(doc){
   const list = [...doc.querySelectorAll('#Chapters_List li a')]
     .map(a => ({
       url: a.href,
-      text: a.textContent.trim()
+      text: a.textContent.substring(a.textContent.indexOf("Chapter")).trim()
     }))
     .reverse();
   return list;
 }
-
+  
 function katanaGetList(doc){
   const tbody = doc.querySelector('.chapters table tbody');
   list = Array.from(tbody.querySelectorAll("tr"))
