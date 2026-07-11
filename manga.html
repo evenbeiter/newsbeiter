@@ -56,6 +56,9 @@
       transform: translateX(-100%);
     }
 
+    .sidebar-top-space{
+      height:60px;
+    }
     /* .sidebar {
     width: 260px;
     min-height: calc(100vh - 56px);
@@ -103,6 +106,13 @@
     .chapter-btn {
     font-size: 12px;
     padding: 6px 0;
+    }
+
+    #readingTitle{
+      position: absolute;
+      left:50%;
+      transform:translateX(-50%);
+      color:#333;
     }
 
     /* ===== Reader ===== */
@@ -176,28 +186,39 @@
 
 <body>
 
-<!-- 永遠浮在左上 -->
+<!-- 永遠浮動按鈕 -->
 <button class="btn btn-dark floating-btn" id="toggleSidebar">☰</button>
 
-<!-- Top Navbar -->
-<nav class="navbar navbar-dark bg-dark px-3">
-  <div class="mx-auto">
-    <div class="btn-group" role="group">
-      <input type="radio" class="btn-check" name="viewMode" id="pageMode" checked>
-      <label class="btn btn-outline-primary" for="pageMode">📖 Page</label>
 
-      <input type="radio" class="btn-check" name="viewMode" id="scrollMode">
-      <label class="btn btn-outline-primary" for="scrollMode">📜 Scroll</label>
-    </div>
-  </div>
+<!-- Top Navbar -->
+<nav class="navbar px-3">
+  <h5 id="readingTitle" class="mx-auto mb-0"></h5>
 </nav>
+
 
 <div class="d-flex">
 
   <!-- Sidebar -->
   <div id="sidebar" class="sidebar bg-light border-end">
+
+    <!-- 預留給左上角按鈕 -->
+    <div class="sidebar-top-space"></div>
+
+    <!-- Page / Scroll -->
+    <div class="view-switch p-2 border-bottom">
+      <div class="btn-group w-100" role="group">
+        <input type="radio" class="btn-check" name="viewMode" id="pageMode" checked>
+        <label class="btn btn-outline-primary" for="pageMode">Page</label>
+
+        <input type="radio" class="btn-check" name="viewMode" id="scrollMode">
+        <label class="btn btn-outline-primary" for="scrollMode">Scroll</label>
+      </div>
+    </div>
+
     <h5 class="p-3 border-bottom">漫畫列表</h5>
+
     <div id="mangaList" class="list-group list-group-flush"></div>
+
   </div>
 
   <!-- Main -->
