@@ -603,29 +603,10 @@ function katanaGetContent(html){
 //app
 const READER_MODE = {
     PAGE: "scroll",
-    SCROLL: "scroll",
-    KINDLE: "page"
+    SCROLL: "scroll"
 };
 
-let readerMode = isKindle() ? READER_MODE.KINDLE : READER_MODE.SCROLL;
-
-function isKindle() {
-  const ua = navigator.userAgent.toLowerCase();
-
-  return (
-    ua.includes("kindle") ||
-    ua.includes("silk") ||          // Kindle Browser
-    ua.includes("kfap") ||
-    ua.includes("kfau") ||
-    ua.includes("kfat") ||
-    ua.includes("kfjw") ||
-    ua.includes("kfsowi") ||
-    ua.includes("kfthwa") ||
-    ua.includes("kfthwi") ||
-    ua.includes("kftt") ||
-    ua.includes("kfot")
-  );
-}
+let readerMode = READER_MODE.SCROLL;
 
 const mangas = [
   { name: "ORV", url: "https://mangakatana.com/manga/omniscient-readers-viewpoint.24674", site: "katana", defaultMode: READER_MODE.SCROLL },
