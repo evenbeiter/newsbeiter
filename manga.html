@@ -354,11 +354,11 @@ function rangeDesc(start, end) {
 // GROUPING HELPERS
 // ===============================
 
-let isAsc = false;
-document.getElementById("toggleOrder").onclick = () => {
-  isAsc = !isAsc;
-  renderChapterGroups(latestChapter, isAsc);
-};
+let isAsc = true;
+// document.getElementById("toggleOrder").onclick = () => {
+//   isAsc = !isAsc;
+//   renderChapterGroups(latestChapter, isAsc);
+// };
 
 // 百位分組：0-99 / 100-199
 function groupByHundreds(max) {
