@@ -744,6 +744,7 @@ async function selectManga(manga) {
 function renderChapterGroups(list, site, isAsc = true) {
   chapterGroupsEl.innerHTML = "";
   modalChapterGroupsEl.innerHTML = "";
+  readingTitle.innerText = "";
 
   // 先確保順序
   const orderedList = isAsc ? [...list] : [...list].reverse();
