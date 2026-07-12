@@ -818,7 +818,7 @@ async function loadChapter(chapter) {
   // chapter 現在是 object
   currentIndex = chapterList.findIndex(c => c.url === chapter.url);
   showReaderView();
-  readingTitle.innerText = `${currentManga.name} - Chapter ${chapter.text}`;
+  readingTitle.innerText = `${currentManga.name} - ${chapter.text}`;
   if (currentManga.defaultMode==='scroll') {
     saveLastRead(currentManga.url, chapter, currentImageIndex, window.scrollY, currentManga.defaultMode);
   } else {
