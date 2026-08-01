@@ -142,21 +142,112 @@ $('startBtn').addEventListener('click', async ()=>{
   log(`找到 ${htmlFiles.length} 章節`);
 
   const startTime = Date.now();
-  for(let i=0;i<htmlFiles.length;i++){
-    const hf = htmlFiles[i];
-    const resolved = opfFolder? opfFolder+'/'+hf.href : hf.href;
-    const fileEntry = zip.file(resolved) || zip.file(hf.href);
-    if(!fileEntry){ log(`找不到 ${resolved}`); continue; }
-    const html = await fileEntry.async('string');
-    log(`翻譯章節 ${i+1}/${htmlFiles.length}: ${hf.href}`);
-    try{
-      const translated = await translateHtml(html, backendUrl, source, target);
-      zip.file(resolved, translated);
-    }catch(e){
-      log(`翻譯失敗: ${e.message}`);
-    }
-    updateProgress(i+1, htmlFiles.length, startTime);
+  // for(let i=0;i<htmlFiles.length;i++){
+  //   const hf = htmlFiles[i];
+  //   const resolved = opfFolder? opfFolder+'/'+hf.href : hf.href;
+  //   const fileEntry = zip.file(resolved) || zip.file(hf.href);
+  //   if(!fileEntry){ log(`找不到 ${resolved}`); continue; }
+  //   const html = await fileEntry.async('string');
+  //   log(`翻譯章節 ${i+1}/${htmlFiles.length}: ${hf.href}`);
+  //   try{
+  //     const translated = await translateHtml(html, backendUrl, source, target);
+  //     zip.file(resolved, translated);
+  //   }catch(e){
+  //     log(`翻譯失敗: ${e.message}`);
+  //   }
+  //   updateProgress(i+1, htmlFiles.length, startTime);
+  // }
+
+  
+  // 同時執行數量
+const CONCURRENT_LIMIT = 5;
+
+let completed = 0;
+
+// 建立翻譯任務
+const tasks = htmlFiles.map((hf, i) => async () => {
+
+  const resolved = opfFolder 
+    ? opfFolder + '/' + hf.href 
+    : hf.href;
+
+  const fileEntry = zip.file(resolved) || zip.file(hf.href);
+
+  if (!fileEntry) {
+    log(`找不到 ${resolved}`);
+    completed++;
+    updateProgress(completed, htmlFiles.length, startTime);
+    return;
   }
+
+  try {
+    const html = await fileEntry.async('string');
+
+    log(`開始翻譯章節 ${i + 1}/${htmlFiles.length}: ${hf.href}`);
+
+    const translated = await translateHtml(
+      html,
+      backendUrl,
+      source,
+      target
+    );
+
+    zip.file(resolved, translated);
+
+    log(`完成翻譯: ${hf.href}`);
+
+  } catch(e) {
+
+    log(`翻譯失敗 ${hf.href}: ${e.message}`);
+
+  } finally {
+
+    // 真正完成數量
+    completed++;
+
+    updateProgress(
+      completed,
+      htmlFiles.length,
+      startTime
+    );
+  }
+});
+
+
+// 控制同時執行數量
+async function runConcurrent(tasks, limit){
+
+  let index = 0;
+
+  async function worker(){
+
+    while(index < tasks.length){
+
+      const current = index++;
+
+      await tasks[current]();
+
+    }
+  }
+
+
+  const workers = Array.from(
+    {length: Math.min(limit, tasks.length)},
+    () => worker()
+  );
+
+
+  await Promise.all(workers);
+}
+
+
+// 開始翻譯
+await runConcurrent(
+  tasks,
+  CONCURRENT_LIMIT
+);
+
+
 
   // 生成新 EPUB
   log('生成新 EPUB...');
