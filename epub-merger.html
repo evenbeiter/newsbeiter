@@ -1229,6 +1229,74 @@ async function parseEPUB(file, bookIndex){
   }
 
 
+
+  /*
+   * 做封面
+   */
+
+	let coverItem = null;
+
+	/* EPUB 3：properties="cover-image" */
+	for(const item of manifest.values()){
+
+	const properties =
+			item.properties
+			.split(/\s+/)
+			.filter(Boolean);
+
+	if(properties.includes("cover-image")){
+
+			coverItem = item;
+			break;
+
+	}
+
+	}
+
+
+	/* EPUB 2：metadata 裡的 <meta name="cover" content="xxx"> */
+	if(!coverItem){
+
+	const coverMeta =
+			opfDoc.querySelector(
+			'metadata meta[name="cover"]'
+			);
+
+	const coverId =
+			coverMeta?.getAttribute("content");
+
+	if(coverId){
+
+			coverItem =
+			manifest.get(coverId) || null;
+
+	}
+
+	}
+
+
+	/* 最後再用檔名猜測 */
+	if(!coverItem){
+
+	for(const item of manifest.values()){
+
+			const path =
+			item.path.toLowerCase();
+
+			if(
+			/cover\.(jpg|jpeg|png|webp)$/i.test(path) ||
+			/(^|\/)cover[^/]*\.(jpg|jpeg|png|webp)$/i.test(path)
+			){
+
+			coverItem = item;
+			break;
+
+			}
+
+	}
+
+	}
+
   /*
    * 尋找 nav
    */
@@ -1285,29 +1353,31 @@ async function parseEPUB(file, bookIndex){
   }
 
 
-  return {
+	return {
 
-    file,
+		file,
 
-    zip,
+		zip,
 
-    bookIndex,
+		bookIndex,
 
-    title,
+		title,
 
-    opfPath,
+		opfPath,
 
-    opfDir,
+		opfDir,
 
-    manifest,
+		manifest,
 
-    spine,
+		spine,
 
-    navItem,
+		navItem,
 
-    entries
+		coverItem,
 
-  };
+		entries
+
+	};
 
 }
 
@@ -1461,22 +1531,52 @@ async function mergeEPUBs(){
           `${prefix}/${item.path}`;
 
 
-        const newItem = {
+				let properties =
+					item.properties || "";
 
-          id: newId,
 
-          href: target,
+				/*
+				* 第一個 EPUB 的封面
+				* 設定為合併後 EPUB 的 cover-image
+				*/
+				if(
+					bi === 0 &&
+					book.coverItem &&
+					item.id === book.coverItem.id
+				){
 
-          mediaType:
-            item.mediaType,
+					const props =
+						new Set(
+							properties
+								.split(/\s+/)
+								.filter(Boolean)
+						);
 
-          properties:
-            item.properties,
+					props.add(
+						"cover-image"
+					);
 
-          mediaOverlay:
-            item.mediaOverlay
+					properties =
+						[...props].join(" ");
 
-        };
+				}
+
+
+				const newItem = {
+
+					id: newId,
+
+					href: target,
+
+					mediaType:
+						item.mediaType,
+
+					properties,
+
+					mediaOverlay:
+						item.mediaOverlay
+
+				};
 
 
         newManifest.push(
@@ -1552,19 +1652,42 @@ async function mergeEPUBs(){
       [];
 
 
-    metadata.push(
-      `<dc:identifier id="bookid">merged-${Date.now()}</dc:identifier>`
-    );
+		metadata.push(
+			`<dc:identifier id="bookid">merged-${Date.now()}</dc:identifier>`
+		);
+
+		metadata.push(
+			`<dc:title>合併 EPUB</dc:title>`
+		);
+
+		metadata.push(
+			`<dc:language>zh-TW</dc:language>`
+		);
 
 
-    metadata.push(
-      `<dc:title>合併 EPUB</dc:title>`
-    );
+		/*
+		* 第一個 EPUB 的封面
+		*/
+		if(
+			books[0]?.coverItem
+		){
 
+			const coverNewItem =
+				manifestMap.get(
+					`0:${books[0].coverItem.id}`
+				);
 
-    metadata.push(
-      `<dc:language>zh-TW</dc:language>`
-    );
+			if(coverNewItem){
+
+				metadata.push(
+					`<meta name="cover" content="${escapeXML(
+						coverNewItem.id
+					)}"/>`
+				);
+
+			}
+
+		}
 
 
     /*
