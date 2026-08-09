@@ -1,0 +1,2131 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>EPUB 合併工具</title>
+
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+  crossorigin="anonymous"
+>
+
+<style>
+body{
+  background:#f5f6f8;
+}
+
+.drop-zone{
+  border:2px dashed var(--bs-border-color);
+  border-radius:1rem;
+  padding:3rem 1rem;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+  background:#fff;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover{
+  border-color:var(--bs-primary);
+  background:var(--bs-primary-bg-subtle);
+}
+
+.file-row{
+  cursor:grab;
+}
+
+.file-row.dragging{
+  opacity:.5;
+}
+
+.handle{
+  cursor:grab;
+  font-size:1.2rem;
+}
+
+.progress{
+  height:24px;
+}
+
+.log{
+  max-height:240px;
+  overflow:auto;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.85rem;
+}
+
+.stat-card{
+  min-height:100px;
+}
+
+#fileInput{
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container py-4 py-lg-5">
+
+  <div class="row justify-content-center">
+
+    <div class="col-xl-9">
+
+      <div class="text-center mb-4">
+        <h1 class="fw-bold">EPUB 合併工具</h1>
+        <p class="text-body-secondary mb-0">
+          在瀏覽器本機將多個 EPUB 合併成一個 EPUB
+        </p>
+      </div>
+
+
+      <!-- 選擇檔案 -->
+
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+
+          <div id="dropZone" class="drop-zone">
+
+            <div class="display-5 mb-3">📚</div>
+
+            <h5>選擇 EPUB 檔案</h5>
+
+            <p class="text-body-secondary mb-3">
+              可以一次選擇多個 EPUB，也可以直接拖曳到這裡
+            </p>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="selectBtn"
+            >
+              選擇 EPUB
+            </button>
+
+            <input
+              type="file"
+              id="fileInput"
+              accept=".epub,application/epub+zip"
+              multiple
+            >
+
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- 檔案列表 -->
+
+      <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-body d-flex justify-content-between align-items-center">
+
+          <strong>待合併 EPUB</strong>
+
+          <button
+            class="btn btn-sm btn-outline-danger"
+            id="clearBtn"
+            disabled
+          >
+            清除全部
+          </button>
+
+        </div>
+
+        <div class="card-body p-0">
+
+          <div id="emptyMessage" class="p-4 text-center text-body-secondary">
+            尚未加入 EPUB
+          </div>
+
+          <div class="table-responsive d-none" id="fileTableWrapper">
+
+            <table class="table table-hover align-middle mb-0">
+
+              <thead>
+                <tr>
+                  <th style="width:50px"></th>
+                  <th style="width:70px">順序</th>
+                  <th>檔案</th>
+                  <th style="width:130px">大小</th>
+                  <th style="width:100px"></th>
+                </tr>
+              </thead>
+
+              <tbody id="fileList"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- 統計 -->
+
+      <div class="row g-3 mb-4">
+
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm stat-card">
+            <div class="card-body">
+              <div class="text-body-secondary small">
+                EPUB 數量
+              </div>
+              <div class="fs-3 fw-bold" id="bookCount">
+                0
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm stat-card">
+            <div class="card-body">
+              <div class="text-body-secondary small">
+                原始總大小
+              </div>
+              <div class="fs-3 fw-bold" id="totalSize">
+                0 MB
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm stat-card">
+            <div class="card-body">
+              <div class="text-body-secondary small">
+                輸出檔名
+              </div>
+              <div class="fs-5 fw-bold text-truncate">
+                merged.epub
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- 開始合併 -->
+
+      <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body p-4">
+
+          <div class="row g-3 align-items-end">
+
+            <div class="col-md-8">
+
+              <label class="form-label fw-semibold">
+                輸出檔名
+              </label>
+
+              <input
+                type="text"
+                class="form-control"
+                id="outputName"
+                value="merged.epub"
+              >
+
+            </div>
+
+            <div class="col-md-4">
+
+              <button
+                id="mergeBtn"
+                class="btn btn-primary btn-lg w-100"
+                disabled
+              >
+                合併 EPUB
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- 進度 -->
+
+      <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body p-4">
+
+          <div class="d-flex justify-content-between mb-2">
+
+            <strong id="statusText">
+              等待開始
+            </strong>
+
+            <span id="progressText">
+              0%
+            </span>
+
+          </div>
+
+          <div class="progress mb-3">
+
+            <div
+              id="progressBar"
+              class="progress-bar progress-bar-striped"
+              style="width:0%"
+            >
+              0%
+            </div>
+
+          </div>
+
+          <div
+            id="log"
+            class="log border rounded p-3 bg-body-tertiary"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <!-- 說明 -->
+
+      <div class="alert alert-info border-0 shadow-sm">
+
+        <h6 class="fw-bold">注意事項</h6>
+
+        <ul class="mb-0">
+
+          <li>
+            EPUB 會在你的瀏覽器本機處理，不會上傳到伺服器。
+          </li>
+
+          <li>
+            請按照你希望的順序加入 EPUB。
+          </li>
+
+          <li>
+            可以拖曳列表中的 EPUB 改變順序。
+          </li>
+
+          <li>
+            每一本 EPUB 都會放在獨立目錄中，以避免圖片、CSS、字型等檔名衝突。
+          </li>
+
+          <li>
+            輸出的 EPUB 會重新建立 OPF、spine 與 EPUB 3 nav。
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+  crossorigin="anonymous">
+</script>
+
+
+<script type="module">
+
+/*
+ * ============================================================
+ * EPUB Merger
+ * ============================================================
+ */
+
+import JSZip from
+  "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm";
+
+
+const $ = selector =>
+  document.querySelector(selector);
+
+
+const fileInput = $("#fileInput");
+const selectBtn = $("#selectBtn");
+const dropZone = $("#dropZone");
+
+const fileList = $("#fileList");
+const emptyMessage = $("#emptyMessage");
+const fileTableWrapper = $("#fileTableWrapper");
+
+const mergeBtn = $("#mergeBtn");
+const clearBtn = $("#clearBtn");
+
+const bookCount = $("#bookCount");
+const totalSize = $("#totalSize");
+
+const progressBar = $("#progressBar");
+const progressText = $("#progressText");
+const statusText = $("#statusText");
+const logBox = $("#log");
+
+const outputName = $("#outputName");
+
+
+let files = [];
+
+
+
+/* ============================================================
+ * 基本工具
+ * ============================================================
+ */
+
+function log(message){
+
+  const line = document.createElement("div");
+
+  line.textContent =
+    `[${new Date().toLocaleTimeString()}] ${message}`;
+
+  logBox.appendChild(line);
+
+  logBox.scrollTop =
+    logBox.scrollHeight;
+
+}
+
+
+function setProgress(value, text){
+
+  value = Math.max(0, Math.min(100, value));
+
+  progressBar.style.width =
+    `${value}%`;
+
+  progressBar.textContent =
+    `${Math.round(value)}%`;
+
+  progressText.textContent =
+    `${Math.round(value)}%`;
+
+  if(text){
+    statusText.textContent = text;
+  }
+
+}
+
+
+function formatSize(bytes){
+
+  if(bytes < 1024)
+    return `${bytes} B`;
+
+  if(bytes < 1024 * 1024)
+    return `${(bytes / 1024).toFixed(1)} KB`;
+
+  return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+
+}
+
+
+function escapeXML(value){
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+
+}
+
+
+function normalizePath(path){
+
+  path =
+    decodeURIComponent(
+      String(path || "")
+    )
+    .replace(/\\/g, "/");
+
+  const result = [];
+
+  for(const part of path.split("/")){
+
+    if(!part || part === ".")
+      continue;
+
+    if(part === ".."){
+      result.pop();
+      continue;
+    }
+
+    result.push(part);
+  }
+
+  return result.join("/");
+}
+
+
+function dirname(path){
+
+  const index =
+    path.lastIndexOf("/");
+
+  return index >= 0
+    ? path.slice(0, index)
+    : "";
+
+}
+
+
+function resolvePath(base, href){
+
+  href =
+    String(href || "")
+      .split("#")[0]
+      .split("?")[0];
+
+  return normalizePath(
+    base
+      ? `${base}/${href}`
+      : href
+  );
+
+}
+
+
+function getExtension(path){
+
+  const match =
+    String(path)
+      .toLowerCase()
+      .match(/(\.[^./]+)$/);
+
+  return match
+    ? match[1]
+    : "";
+}
+
+
+function guessMediaType(path){
+
+  const types = {
+
+    ".xhtml":
+      "application/xhtml+xml",
+
+    ".html":
+      "application/xhtml+xml",
+
+    ".htm":
+      "application/xhtml+xml",
+
+    ".css":
+      "text/css",
+
+    ".js":
+      "application/javascript",
+
+    ".json":
+      "application/json",
+
+    ".jpg":
+      "image/jpeg",
+
+    ".jpeg":
+      "image/jpeg",
+
+    ".png":
+      "image/png",
+
+    ".gif":
+      "image/gif",
+
+    ".webp":
+      "image/webp",
+
+    ".svg":
+      "image/svg+xml",
+
+    ".avif":
+      "image/avif",
+
+    ".mp3":
+      "audio/mpeg",
+
+    ".m4a":
+      "audio/mp4",
+
+    ".aac":
+      "audio/aac",
+
+    ".ogg":
+      "audio/ogg",
+
+    ".oga":
+      "audio/ogg",
+
+    ".wav":
+      "audio/wav",
+
+    ".mp4":
+      "video/mp4",
+
+    ".webm":
+      "video/webm",
+
+    ".smil":
+      "application/smil+xml",
+
+    ".ncx":
+      "application/x-dtbncx+xml",
+
+    ".woff":
+      "font/woff",
+
+    ".woff2":
+      "font/woff2",
+
+    ".ttf":
+      "font/ttf",
+
+    ".otf":
+      "font/otf"
+
+  };
+
+  return types[getExtension(path)]
+    || "application/octet-stream";
+
+}
+
+
+
+/* ============================================================
+ * 檔案選擇
+ * ============================================================
+ */
+
+selectBtn.addEventListener(
+  "click",
+  () => fileInput.click()
+);
+
+
+dropZone.addEventListener(
+  "click",
+  event => {
+
+    if(event.target === selectBtn)
+      return;
+
+    fileInput.click();
+
+  }
+);
+
+
+fileInput.addEventListener(
+  "change",
+  event => {
+
+    addFiles(
+      [...event.target.files]
+    );
+
+    fileInput.value = "";
+
+  }
+);
+
+
+[
+  "dragenter",
+  "dragover"
+].forEach(type => {
+
+  dropZone.addEventListener(
+    type,
+    event => {
+
+      event.preventDefault();
+
+      dropZone.classList.add(
+        "dragover"
+      );
+
+    }
+  );
+
+});
+
+
+[
+  "dragleave",
+  "drop"
+].forEach(type => {
+
+  dropZone.addEventListener(
+    type,
+    event => {
+
+      event.preventDefault();
+
+      dropZone.classList.remove(
+        "dragover"
+      );
+
+    }
+  );
+
+});
+
+
+dropZone.addEventListener(
+  "drop",
+  event => {
+
+    addFiles(
+      [...event.dataTransfer.files]
+        .filter(file =>
+          /\.epub$/i.test(file.name)
+        )
+    );
+
+  }
+);
+
+
+
+function addFiles(newFiles){
+
+  for(const file of newFiles){
+
+    if(!/\.epub$/i.test(file.name))
+      continue;
+
+    const exists =
+      files.some(
+        f =>
+          f.name === file.name &&
+          f.size === file.size &&
+          f.lastModified === file.lastModified
+      );
+
+    if(exists)
+      continue;
+
+    files.push(file);
+
+  }
+
+  renderFiles();
+
+}
+
+
+
+/* ============================================================
+ * 檔案列表
+ * ============================================================
+ */
+
+function renderFiles(){
+
+  fileList.innerHTML = "";
+
+  bookCount.textContent =
+    files.length;
+
+  const size =
+    files.reduce(
+      (sum, file) =>
+        sum + file.size,
+      0
+    );
+
+  totalSize.textContent =
+    formatSize(size);
+
+
+  if(!files.length){
+
+    emptyMessage.classList.remove(
+      "d-none"
+    );
+
+    fileTableWrapper.classList.add(
+      "d-none"
+    );
+
+    mergeBtn.disabled = true;
+    clearBtn.disabled = true;
+
+    return;
+  }
+
+
+  emptyMessage.classList.add(
+    "d-none"
+  );
+
+  fileTableWrapper.classList.remove(
+    "d-none"
+  );
+
+  mergeBtn.disabled = false;
+  clearBtn.disabled = false;
+
+
+  files.forEach(
+    (file, index) => {
+
+      const tr =
+        document.createElement("tr");
+
+      tr.className =
+        "file-row";
+
+      tr.draggable = true;
+
+      tr.dataset.index =
+        index;
+
+
+      tr.innerHTML = `
+
+        <td class="text-center">
+
+          <span class="handle">
+            ☰
+          </span>
+
+        </td>
+
+        <td>
+          <span class="badge text-bg-primary">
+            ${index + 1}
+          </span>
+        </td>
+
+        <td>
+
+          <div class="fw-semibold text-break">
+            ${escapeXML(file.name)}
+          </div>
+
+        </td>
+
+        <td class="text-body-secondary">
+          ${formatSize(file.size)}
+        </td>
+
+        <td class="text-end">
+
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-danger remove-btn"
+            data-index="${index}"
+          >
+            移除
+          </button>
+
+        </td>
+      `;
+
+
+      tr.querySelector(".remove-btn")
+        .addEventListener(
+          "click",
+          event => {
+
+            event.stopPropagation();
+
+            files.splice(
+              Number(event.currentTarget.dataset.index),
+              1
+            );
+
+            renderFiles();
+
+          }
+        );
+
+
+      tr.addEventListener(
+        "dragstart",
+        () => {
+
+          tr.classList.add(
+            "dragging"
+          );
+
+        }
+      );
+
+
+      tr.addEventListener(
+        "dragend",
+        () => {
+
+          tr.classList.remove(
+            "dragging"
+          );
+
+        }
+      );
+
+
+      tr.addEventListener(
+        "dragover",
+        event => {
+
+          event.preventDefault();
+
+          const dragging =
+            document.querySelector(
+              ".file-row.dragging"
+            );
+
+          if(!dragging || dragging === tr)
+            return;
+
+          const rect =
+            tr.getBoundingClientRect();
+
+          const after =
+            event.clientY >
+            rect.top + rect.height / 2;
+
+          if(after)
+            tr.after(dragging);
+          else
+            tr.before(dragging);
+
+        }
+      );
+
+
+      fileList.appendChild(tr);
+
+    }
+  );
+
+
+  /*
+   * 拖曳結束後重新讀取順序
+   */
+
+  fileList.addEventListener(
+    "drop",
+    () => {
+
+      const newFiles = [];
+
+      fileList
+        .querySelectorAll(".file-row")
+        .forEach(row => {
+
+          const index =
+            Number(row.dataset.index);
+
+          newFiles.push(
+            files[index]
+          );
+
+        });
+
+      files = newFiles;
+
+      renderFiles();
+
+    },
+    {once:true}
+  );
+
+}
+
+
+
+clearBtn.addEventListener(
+  "click",
+  () => {
+
+    files = [];
+
+    renderFiles();
+
+    logBox.innerHTML = "";
+
+    setProgress(
+      0,
+      "等待開始"
+    );
+
+  }
+);
+
+
+
+/* ============================================================
+ * 解析 EPUB
+ * ============================================================
+ */
+
+async function parseEPUB(file, bookIndex){
+
+  log(
+    `解析：${file.name}`
+  );
+
+
+  const zip =
+    await JSZip.loadAsync(file);
+
+
+  const container =
+    zip.file(
+      "META-INF/container.xml"
+    );
+
+
+  if(!container){
+
+    throw new Error(
+      `${file.name}：找不到 META-INF/container.xml`
+    );
+
+  }
+
+
+  const containerText =
+    await container.async("text");
+
+
+  const parser =
+    new DOMParser();
+
+
+  const containerDoc =
+    parser.parseFromString(
+      containerText,
+      "application/xml"
+    );
+
+
+  if(
+    containerDoc.querySelector(
+      "parsererror"
+    )
+  ){
+
+    throw new Error(
+      `${file.name}：container.xml 無法解析`
+    );
+
+  }
+
+
+  const rootfile =
+    containerDoc.querySelector(
+      "rootfile"
+    );
+
+
+  const opfPath =
+    rootfile?.getAttribute(
+      "full-path"
+    );
+
+
+  if(!opfPath){
+
+    throw new Error(
+      `${file.name}：找不到 OPF 路徑`
+    );
+
+  }
+
+
+  const opfEntry =
+    zip.file(opfPath);
+
+
+  if(!opfEntry){
+
+    throw new Error(
+      `${file.name}：找不到 ${opfPath}`
+    );
+
+  }
+
+
+  const opfText =
+    await opfEntry.async("text");
+
+
+  const opfDoc =
+    parser.parseFromString(
+      opfText,
+      "application/xml"
+    );
+
+
+  if(
+    opfDoc.querySelector(
+      "parsererror"
+    )
+  ){
+
+    throw new Error(
+      `${file.name}：OPF 無法解析`
+    );
+
+  }
+
+
+  const opfDir =
+    dirname(opfPath);
+
+
+  /*
+   * Manifest
+   */
+
+  const manifest = new Map();
+
+  opfDoc
+    .querySelectorAll("manifest > item")
+    .forEach(item => {
+
+      const id =
+        item.getAttribute("id");
+
+      const href =
+        item.getAttribute("href");
+
+      if(!id || !href)
+        return;
+
+      const path =
+        resolvePath(
+          opfDir,
+          href
+        );
+
+      manifest.set(
+        id,
+        {
+          id,
+          href,
+          path,
+          mediaType:
+            item.getAttribute(
+              "media-type"
+            ) || guessMediaType(path),
+
+          properties:
+            item.getAttribute(
+              "properties"
+            ) || "",
+
+          mediaOverlay:
+            item.getAttribute(
+              "media-overlay"
+            ) || null
+        }
+      );
+
+    });
+
+
+  /*
+   * Spine
+   */
+
+  const spine =
+    [];
+
+  const spineEl =
+    opfDoc.querySelector(
+      "spine"
+    );
+
+
+  spineEl
+    ?.querySelectorAll(
+      ":scope > itemref"
+    )
+    .forEach(ref => {
+
+      const idref =
+        ref.getAttribute(
+          "idref"
+        );
+
+      const item =
+        manifest.get(idref);
+
+      if(!item)
+        return;
+
+      spine.push({
+
+        idref,
+
+        item,
+
+        linear:
+          ref.getAttribute(
+            "linear"
+          ) || "yes",
+
+        properties:
+          ref.getAttribute(
+            "properties"
+          ) || ""
+
+      });
+
+    });
+
+
+  /*
+   * Metadata
+   */
+
+  let title =
+    file.name.replace(
+      /\.epub$/i,
+      ""
+    );
+
+
+  const titleEl =
+    opfDoc.querySelector(
+      "metadata title"
+    ) ||
+    opfDoc.querySelector(
+      "metadata dc\\:title"
+    );
+
+
+  if(titleEl?.textContent?.trim()){
+
+    title =
+      titleEl.textContent.trim();
+
+  }
+
+
+  /*
+   * 尋找 nav
+   */
+
+  let navItem =
+    null;
+
+
+  for(const item of manifest.values()){
+
+    const properties =
+      item.properties
+        .split(/\s+/)
+        .filter(Boolean);
+
+    if(
+      properties.includes("nav")
+    ){
+
+      navItem = item;
+
+      break;
+
+    }
+
+  }
+
+
+  /*
+   * 找出所有檔案
+   */
+
+  const entries = [];
+
+  for(const entry of Object.values(zip.files)){
+
+    if(entry.dir)
+      continue;
+
+    const path =
+      normalizePath(entry.name);
+
+    if(path === "mimetype")
+      continue;
+
+    if(path.startsWith("META-INF/"))
+      continue;
+
+    entries.push({
+      entry,
+      path
+    });
+
+  }
+
+
+  return {
+
+    file,
+
+    zip,
+
+    bookIndex,
+
+    title,
+
+    opfPath,
+
+    opfDir,
+
+    manifest,
+
+    spine,
+
+    navItem,
+
+    entries
+
+  };
+
+}
+
+
+
+/* ============================================================
+ * 合併
+ * ============================================================
+ */
+
+async function mergeEPUBs(){
+
+  if(!files.length)
+    return;
+
+
+  mergeBtn.disabled = true;
+  clearBtn.disabled = true;
+
+  logBox.innerHTML = "";
+
+  setProgress(
+    0,
+    "開始處理"
+  );
+
+
+  try{
+
+    /*
+     * 1. 解析所有 EPUB
+     */
+
+    const books = [];
+
+    for(
+      let i = 0;
+      i < files.length;
+      i++
+    ){
+
+      const progress =
+        (i / files.length) * 25;
+
+      setProgress(
+        progress,
+        `解析 EPUB ${i + 1}/${files.length}`
+      );
+
+
+      const book =
+        await parseEPUB(
+          files[i],
+          i + 1
+        );
+
+
+      books.push(book);
+
+    }
+
+
+    log(
+      `共解析 ${books.length} 個 EPUB`
+    );
+
+
+    /*
+     * 2. 建立中間 ZIP
+     */
+
+    const workingZip =
+      new JSZip();
+
+
+    /*
+     * 新 Manifest
+     */
+
+    const newManifest = [];
+
+    const newSpine = [];
+
+    const manifestMap =
+      new Map();
+
+
+    /*
+     * 對每一本書建立唯一前綴
+     */
+
+    for(
+      let bi = 0;
+      bi < books.length;
+      bi++
+    ){
+
+      const book =
+        books[bi];
+
+
+      const prefix =
+        `books/${String(
+          bi + 1
+        ).padStart(3, "0")}`;
+
+
+      book.prefix =
+        prefix;
+
+
+      /*
+       * 複製實際檔案
+       */
+
+      for(
+        const item of book.entries
+      ){
+
+        const target =
+          `${prefix}/${item.path}`;
+
+
+        const data =
+          await item.entry.async(
+            "uint8array"
+          );
+
+
+        workingZip.file(
+          target,
+          data
+        );
+
+      }
+
+
+      /*
+       * 建立 Manifest
+       */
+
+      for(
+        const item of book.manifest.values()
+      ){
+
+        const newId =
+          `b${bi + 1}_${item.id}`;
+
+
+        const target =
+          `${prefix}/${item.path}`;
+
+
+        const newItem = {
+
+          id: newId,
+
+          href: target,
+
+          mediaType:
+            item.mediaType,
+
+          properties:
+            item.properties,
+
+          mediaOverlay:
+            item.mediaOverlay
+
+        };
+
+
+        newManifest.push(
+          newItem
+        );
+
+
+        manifestMap.set(
+          `${bi}:${item.id}`,
+          newItem
+        );
+
+
+        /*
+         * 將舊 ID 與新 ID 建立對應
+         */
+
+        item.newId =
+          newId;
+
+      }
+
+
+      /*
+       * 建立 Spine
+       */
+
+      for(
+        const ref of book.spine
+      ){
+
+        const newItem =
+          manifestMap.get(
+            `${bi}:${ref.idref}`
+          );
+
+
+        if(!newItem)
+          continue;
+
+
+        newSpine.push({
+
+          idref:
+            newItem.id,
+
+          linear:
+            ref.linear,
+
+          properties:
+            ref.properties
+
+        });
+
+      }
+
+
+      setProgress(
+        25 +
+        ((bi + 1) / books.length) * 45,
+        `複製檔案 ${bi + 1}/${books.length}`
+      );
+
+    }
+
+
+
+    /*
+     * 3. 建立 OPF
+     */
+
+    const metadata =
+      [];
+
+
+    metadata.push(
+      `<dc:identifier id="bookid">merged-${Date.now()}</dc:identifier>`
+    );
+
+
+    metadata.push(
+      `<dc:title>合併 EPUB</dc:title>`
+    );
+
+
+    metadata.push(
+      `<dc:language>zh-TW</dc:language>`
+    );
+
+
+    /*
+     * Manifest XML
+     */
+
+    let manifestXML = `
+
+<item
+  id="nav"
+  href="nav.xhtml"
+  media-type="application/xhtml+xml"
+  properties="nav"
+/>
+
+`;
+
+
+    for(
+      const item of newManifest
+    ){
+
+      let properties = "";
+
+      if(item.properties){
+
+        properties =
+          ` properties="${
+            escapeXML(
+              item.properties
+            )
+          }"`;
+
+      }
+
+
+      /*
+       * Media Overlay
+       *
+       * 目前先保留 audio / SMIL 檔案本身。
+       * 對於普通 EPUB 可完整使用。
+       */
+
+      manifestXML += `
+
+<item
+  id="${escapeXML(item.id)}"
+  href="${escapeXML(item.href)}"
+  media-type="${escapeXML(item.mediaType)}"${properties}
+/>
+
+`;
+
+    }
+
+
+    /*
+     * Spine XML
+     */
+
+    let spineXML = "";
+
+
+    for(
+      const item of newSpine
+    ){
+
+      spineXML += `
+
+<itemref
+  idref="${escapeXML(item.idref)}"
+  linear="${escapeXML(item.linear)}"
+/>
+
+`;
+
+    }
+
+
+    const opf = `<?xml version="1.0" encoding="UTF-8"?>
+
+<package
+  xmlns="http://www.idpf.org/2007/opf"
+  version="3.0"
+  unique-identifier="bookid"
+>
+
+<metadata
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+>
+
+${metadata.join("\n")}
+
+</metadata>
+
+<manifest>
+
+${manifestXML}
+
+</manifest>
+
+<spine>
+
+${spineXML}
+
+</spine>
+
+</package>
+`;
+
+
+    workingZip.file(
+      "EPUB/content.opf",
+      opf
+    );
+
+
+
+    /*
+     * 4. 建立新的 nav.xhtml
+     */
+
+    let navHTML = "";
+
+
+    for(
+      let bi = 0;
+      bi < books.length;
+      bi++
+    ){
+
+      const book =
+        books[bi];
+
+
+      navHTML += `
+
+<li>
+
+  <span>
+    ${escapeXML(book.title)}
+  </span>
+
+  <ol>
+`;
+
+
+      for(
+        let ci = 0;
+        ci < book.spine.length;
+        ci++
+      ){
+
+        const ref =
+          book.spine[ci];
+
+
+        const target =
+          `${book.prefix}/${ref.item.path}`;
+
+
+        /*
+         * 嘗試從 XHTML 讀取 title / h1 / h2 / h3
+         */
+
+        let label =
+          `第 ${ci + 1} 章`;
+
+
+        const entry =
+          workingZip.file(
+            target
+          );
+
+
+        if(entry){
+
+          try{
+
+            const text =
+              await entry.async(
+                "text"
+              );
+
+
+            const parser =
+              new DOMParser();
+
+
+            const doc =
+              parser.parseFromString(
+                text,
+                "application/xhtml+xml"
+              );
+
+
+            const titleNode =
+              doc.querySelector(
+                "title"
+              ) ||
+              doc.querySelector(
+                "h1,h2,h3"
+              );
+
+
+            if(
+              titleNode?.textContent?.trim()
+            ){
+
+              label =
+                titleNode.textContent
+                  .trim();
+
+            }
+
+          }catch(error){
+
+            console.warn(
+              "無法讀取章節標題",
+              target,
+              error
+            );
+
+          }
+
+        }
+
+
+        navHTML += `
+
+<li>
+
+<a href="${escapeXML(target)}">
+  ${escapeXML(label)}
+</a>
+
+</li>
+
+`;
+
+      }
+
+
+      navHTML += `
+
+  </ol>
+
+</li>
+
+`;
+
+    }
+
+
+    const nav = `<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:epub="http://www.idpf.org/2007/ops"
+>
+
+<head>
+
+<meta charset="utf-8"/>
+
+<title>目錄</title>
+
+</head>
+
+<body>
+
+<nav
+  epub:type="toc"
+  id="toc"
+>
+
+<h1>目錄</h1>
+
+<ol>
+
+${navHTML}
+
+</ol>
+
+</nav>
+
+</body>
+
+</html>
+`;
+
+
+    workingZip.file(
+      "EPUB/nav.xhtml",
+      nav
+    );
+
+
+    setProgress(
+      75,
+      "建立 EPUB 結構"
+    );
+
+
+    /*
+     * 5. 建立最後 ZIP
+     */
+
+    const finalZip =
+      new JSZip();
+
+
+    /*
+     * mimetype 必須是第一個，
+     * 且不可壓縮。
+     */
+
+    finalZip.file(
+      "mimetype",
+      "application/epub+zip",
+      {
+        compression:
+          "STORE"
+      }
+    );
+
+
+    /*
+     * container.xml
+     */
+
+    finalZip.file(
+      "META-INF/container.xml",
+
+`<?xml version="1.0" encoding="UTF-8"?>
+
+<container
+  version="1.0"
+  xmlns="urn:oasis:names:tc:opendocument:xmlns:container"
+>
+
+<rootfiles>
+
+<rootfile
+  full-path="EPUB/content.opf"
+  media-type="application/oebps-package+xml"
+/>
+
+</rootfiles>
+
+</container>
+`
+    );
+
+
+    /*
+     * 複製所有內容
+     */
+
+    const outputEntries =
+      Object.values(
+        workingZip.files
+      );
+
+
+    for(
+      let i = 0;
+      i < outputEntries.length;
+      i++
+    ){
+
+      const entry =
+        outputEntries[i];
+
+
+      if(entry.dir)
+        continue;
+
+
+      const data =
+        await entry.async(
+          "uint8array"
+        );
+
+
+      finalZip.file(
+        entry.name,
+        data
+      );
+
+
+      const progress =
+        75 +
+        ((i + 1) /
+          outputEntries.length) *
+        20;
+
+
+      setProgress(
+        progress,
+        `重新打包 ${i + 1}/${outputEntries.length}`
+      );
+
+    }
+
+
+
+    /*
+     * 6. 產生 EPUB
+     */
+
+    setProgress(
+      96,
+      "產生 EPUB..."
+    );
+
+
+    const blob =
+      await finalZip.generateAsync({
+
+        type:
+          "blob",
+
+        mimeType:
+          "application/epub+zip",
+
+        compression:
+          "DEFLATE",
+
+        compressionOptions:{
+          level:6
+        }
+
+      });
+
+
+    /*
+     * 7. 下載
+     */
+
+    let filename =
+      outputName.value.trim();
+
+
+    if(!filename)
+      filename =
+        "merged.epub";
+
+
+    if(!/\.epub$/i.test(filename))
+      filename += ".epub";
+
+
+    const url =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    const a =
+      document.createElement(
+        "a"
+      );
+
+
+    a.href =
+      url;
+
+    a.download =
+      filename;
+
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+
+    setTimeout(
+      () =>
+        URL.revokeObjectURL(url),
+      10000
+    );
+
+
+    setProgress(
+      100,
+      "合併完成"
+    );
+
+
+    log(
+      `完成：${filename}`
+    );
+
+
+    log(
+      `輸出大小：${formatSize(blob.size)}`
+    );
+
+
+    alert(
+      `EPUB 合併完成！\n\n` +
+      `書籍數量：${books.length}\n` +
+      `輸出大小：${formatSize(blob.size)}\n` +
+      `檔案名稱：${filename}`
+    );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+
+    setProgress(
+      0,
+      "處理失敗"
+    );
+
+
+    log(
+      `錯誤：${error.message || error}`
+    );
+
+
+    alert(
+      "EPUB 合併失敗：\n\n" +
+      (error.stack ||
+       error.message ||
+       error)
+    );
+
+
+  }finally{
+
+    mergeBtn.disabled =
+      files.length === 0;
+
+    clearBtn.disabled =
+      files.length === 0;
+
+  }
+
+}
+
+
+
+mergeBtn.addEventListener(
+  "click",
+  mergeEPUBs
+);
+
+
+renderFiles();
+
+</script>
+
+</body>
+</html>
