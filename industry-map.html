@@ -18,25 +18,29 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css"
         rel="stylesheet">
 
+
     <style>
 
         :root {
             --map-sidebar-width: 310px;
             --map-right-width: 390px;
+
             --node-border: #dee2e6;
             --node-bg: #ffffff;
             --node-hover: #f1f5f9;
             --node-active: #e8f3ff;
         }
 
+
         body {
             background: var(--bs-body-bg);
             overflow: hidden;
         }
 
-        /* =========================================
-           App Layout
-        ========================================= */
+
+        /* =====================================================
+           APP
+        ===================================================== */
 
         #app {
             height: 100vh;
@@ -44,10 +48,12 @@
             flex-direction: column;
         }
 
+
         .app-navbar {
             flex: 0 0 auto;
             z-index: 1000;
         }
+
 
         .app-body {
             min-height: 0;
@@ -55,25 +61,37 @@
             display: flex;
         }
 
-        /* =========================================
-           Left Sidebar
-        ========================================= */
+
+        /* =====================================================
+           LEFT SIDEBAR
+        ===================================================== */
 
         #sidebar {
             width: var(--map-sidebar-width);
             min-width: var(--map-sidebar-width);
-            border-right: 1px solid var(--bs-border-color);
-            background: var(--bs-body-bg);
+
+            border-right:
+                1px solid var(--bs-border-color);
+
+            background:
+                var(--bs-body-bg);
+
             display: flex;
             flex-direction: column;
+
             overflow: hidden;
+
             z-index: 100;
         }
 
+
         .sidebar-header {
             padding: 1rem;
-            border-bottom: 1px solid var(--bs-border-color);
+
+            border-bottom:
+                1px solid var(--bs-border-color);
         }
+
 
         .industry-groups {
             flex: 1;
@@ -81,328 +99,538 @@
             padding: .5rem;
         }
 
+
         .group-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             padding: .65rem .75rem;
             margin-top: .25rem;
+
             font-weight: 600;
+
             cursor: pointer;
+
             border-radius: .5rem;
         }
 
+
         .group-header:hover {
-            background: var(--bs-tertiary-bg);
+            background:
+                var(--bs-tertiary-bg);
         }
+
 
         .industry-list {
             padding-left: .5rem;
         }
 
+
         .industry-item {
             width: 100%;
+
             text-align: left;
+
             border: 0;
+
             background: transparent;
+
             padding: .55rem .75rem;
+
             border-radius: .45rem;
-            color: var(--bs-body-color);
+
+            color:
+                var(--bs-body-color);
+
             display: flex;
             align-items: center;
+
             gap: .5rem;
+
             cursor: pointer;
         }
 
+
         .industry-item:hover {
-            background: var(--bs-tertiary-bg);
+            background:
+                var(--bs-tertiary-bg);
         }
 
+
         .industry-item.active {
-            background: var(--node-active);
-            color: var(--bs-primary);
+            background:
+                var(--node-active);
+
+            color:
+                var(--bs-primary);
+
             font-weight: 600;
         }
+
 
         .industry-count {
             margin-left: auto;
             font-size: .72rem;
         }
 
-        /* =========================================
-           Main Map
-        ========================================= */
+
+        /* =====================================================
+           MAIN MAP
+        ===================================================== */
 
         #map-area {
             min-width: 0;
+
             flex: 1;
+
             display: flex;
             flex-direction: column;
+
             overflow: hidden;
         }
 
+
         .map-toolbar {
             flex: 0 0 auto;
-            border-bottom: 1px solid var(--bs-border-color);
+
+            border-bottom:
+                1px solid var(--bs-border-color);
+
             padding: .65rem 1rem;
         }
 
+
         #map-scroll {
             flex: 1;
+
             overflow: auto;
+
             padding: 2rem;
         }
 
-        /* =========================================
-           Industry Header
-        ========================================= */
+
+        /* =====================================================
+           INDUSTRY HERO
+        ===================================================== */
 
         .industry-title {
             font-weight: 700;
+
             letter-spacing: -.02em;
         }
 
+
         .industry-description {
-            max-width: 900px;
+            max-width: 1000px;
+
             line-height: 1.8;
         }
 
+
         .tag {
             display: inline-block;
+
             padding: .3rem .6rem;
+
             border-radius: 999px;
-            background: var(--bs-tertiary-bg);
+
+            background:
+                var(--bs-tertiary-bg);
+
             font-size: .8rem;
+
             margin-right: .25rem;
             margin-bottom: .25rem;
         }
 
-        /* =========================================
-           Supply Chain
-        ========================================= */
+
+        /* =====================================================
+           RELATION
+        ===================================================== */
 
         .relation-section {
             margin-top: 2rem;
         }
 
+
         .relation-title {
             display: flex;
             align-items: center;
+
             gap: .5rem;
+
             margin-bottom: 1rem;
+
             font-weight: 700;
         }
 
+
         .relation-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(220px, 1fr));
+
+            grid-template-columns:
+                repeat(3, minmax(220px, 1fr));
+
             gap: 1.5rem;
+
             align-items: start;
         }
+
 
         .relation-column {
             min-width: 0;
         }
 
+
         .relation-column-title {
             font-size: .9rem;
+
             font-weight: 700;
+
             margin-bottom: .75rem;
+
             display: flex;
             align-items: center;
+
             gap: .4rem;
         }
+
 
         .relation-cards {
             display: flex;
             flex-direction: column;
+
             gap: .65rem;
         }
 
+
         .relation-card {
-            border: 1px solid var(--node-border);
-            background: var(--node-bg);
+            border:
+                1px solid var(--node-border);
+
+            background:
+                var(--node-bg);
+
             border-radius: .75rem;
+
             padding: .8rem;
+
             cursor: pointer;
+
             transition:
                 transform .12s ease,
                 box-shadow .12s ease,
                 background .12s ease;
         }
 
+
         .relation-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 .3rem 1rem rgba(0,0,0,.08);
-            background: var(--node-hover);
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 .3rem 1rem
+                rgba(0,0,0,.08);
+
+            background:
+                var(--node-hover);
         }
+
 
         .relation-card-name {
             font-weight: 600;
+
             line-height: 1.4;
         }
 
+
         .relation-card-id {
             font-size: .7rem;
+
             opacity: .6;
+
             margin-top: .2rem;
         }
 
+
         .relation-empty {
-            border: 1px dashed var(--bs-border-color);
+            border:
+                1px dashed
+                var(--bs-border-color);
+
             border-radius: .75rem;
+
             padding: 1rem;
+
             text-align: center;
+
             opacity: .6;
+
             font-size: .85rem;
         }
 
-        /* =========================================
-           Supply Chain Hierarchy
-        ========================================= */
+
+        /* =====================================================
+           DETAIL SECTION
+        ===================================================== */
+
+        #industry-detail-below-map {
+            margin-top: 1rem;
+        }
+
+
+        .detail-block {
+            margin-top: 2rem;
+        }
+
+
+        .detail-block-title {
+            font-weight: 700;
+
+            margin-bottom: 1rem;
+        }
+
+
+        /* =====================================================
+           SUPPLY CHAIN
+        ===================================================== */
 
         .supply-chain-wrapper {
             overflow-x: auto;
+
             padding-bottom: .75rem;
         }
 
+
         .supply-chain {
             display: flex;
+
             gap: 1.5rem;
+
             align-items: stretch;
+
             min-width: max-content;
         }
 
+
         .supply-segment {
             width: 250px;
-            border: 1px solid var(--bs-border-color);
+
+            border:
+                1px solid
+                var(--bs-border-color);
+
             border-radius: .75rem;
+
             padding: .9rem;
-            background: var(--bs-tertiary-bg);
+
+            background:
+                var(--bs-tertiary-bg);
         }
+
 
         .supply-segment-title {
             font-weight: 700;
+
             margin-bottom: .25rem;
         }
 
+
         .supply-segment-subtitle {
             font-size: .78rem;
+
             opacity: .7;
+
             margin-bottom: .75rem;
         }
 
+
         .supply-child {
-            background: var(--bs-body-bg);
-            border: 1px solid var(--bs-border-color);
+            background:
+                var(--bs-body-bg);
+
+            border:
+                1px solid
+                var(--bs-border-color);
+
             border-radius: .6rem;
+
             padding: .65rem;
+
             margin-top: .5rem;
+
             cursor: pointer;
         }
 
+
         .supply-child:hover {
-            border-color: var(--bs-primary);
+            border-color:
+                var(--bs-primary);
         }
+
 
         .supply-child-name {
             font-weight: 600;
+
             font-size: .85rem;
         }
 
+
         .supply-child-subtitle {
             font-size: .72rem;
+
             opacity: .7;
+
             margin-top: .2rem;
         }
 
-        /* =========================================
-           Metrics
-        ========================================= */
+
+        /* =====================================================
+           METRICS
+        ===================================================== */
 
         .metric-card {
             height: 100%;
-            border: 1px solid var(--bs-border-color);
+
+            border:
+                1px solid
+                var(--bs-border-color);
+
             border-radius: .75rem;
+
             padding: 1rem;
-            background: var(--bs-tertiary-bg);
+
+            background:
+                var(--bs-tertiary-bg);
         }
+
 
         .metric-value {
             font-size: 1.15rem;
+
             font-weight: 700;
         }
 
+
         .metric-label {
             font-size: .78rem;
+
             opacity: .65;
+
+            margin-bottom: .2rem;
         }
 
-        /* =========================================
-           Right Panel
-        ========================================= */
 
-        #detail-panel {
-            width: var(--map-right-width);
-            min-width: var(--map-right-width);
-            border-left: 1px solid var(--bs-border-color);
-            background: var(--bs-body-bg);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .detail-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--bs-border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        #detail-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
+        /* =====================================================
+           STOCK
+        ===================================================== */
 
         .stock-card {
-            border: 1px solid var(--bs-border-color);
+            border:
+                1px solid
+                var(--bs-border-color);
+
             border-radius: .65rem;
+
             padding: .75rem;
+
             margin-bottom: .6rem;
+
             cursor: pointer;
+
+            height: 100%;
         }
 
+
         .stock-card:hover {
-            background: var(--bs-tertiary-bg);
+            background:
+                var(--bs-tertiary-bg);
         }
+
 
         .stock-code {
             font-weight: 700;
         }
 
-        /* =========================================
-           Empty State
-        ========================================= */
+
+        /* =====================================================
+           RIGHT PANEL
+        ===================================================== */
+
+        #detail-panel {
+            width:
+                var(--map-right-width);
+
+            min-width:
+                var(--map-right-width);
+
+            border-left:
+                1px solid
+                var(--bs-border-color);
+
+            background:
+                var(--bs-body-bg);
+
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
+        }
+
+
+        .detail-header {
+            padding: 1rem;
+
+            border-bottom:
+                1px solid
+                var(--bs-border-color);
+
+            display: flex;
+            align-items: center;
+
+            justify-content: space-between;
+        }
+
+
+        #detail-content {
+            flex: 1;
+
+            overflow-y: auto;
+
+            padding: 1rem;
+        }
+
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
 
         .empty-state {
             min-height: 60vh;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             text-align: center;
+
             opacity: .65;
         }
 
+
         .empty-state-icon {
             font-size: 4rem;
+
             margin-bottom: 1rem;
         }
 
-        /* =========================================
-           Mobile
-        ========================================= */
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
 
         @media (max-width: 991.98px) {
 
@@ -410,43 +638,65 @@
                 overflow: auto;
             }
 
+
             #app {
                 min-height: 100vh;
+
                 height: auto;
             }
+
 
             .app-body {
                 display: block;
             }
 
+
             #sidebar {
                 width: 100%;
+
                 min-width: 0;
+
                 max-height: 38vh;
+
                 border-right: 0;
-                border-bottom: 1px solid var(--bs-border-color);
+
+                border-bottom:
+                    1px solid
+                    var(--bs-border-color);
             }
+
 
             #map-area {
                 min-height: 60vh;
             }
 
+
             #detail-panel {
                 width: 100%;
+
                 min-width: 0;
+
                 border-left: 0;
-                border-top: 1px solid var(--bs-border-color);
+
+                border-top:
+                    1px solid
+                    var(--bs-border-color);
+
                 max-height: 55vh;
             }
+
 
             .relation-grid {
                 grid-template-columns: 1fr;
             }
 
+
             #map-scroll {
                 padding: 1rem;
             }
+
         }
+
 
         @media (max-width: 575.98px) {
 
@@ -454,31 +704,43 @@
                 gap: .75rem;
             }
 
+
             .supply-segment {
                 width: 220px;
             }
+
         }
 
     </style>
+
 </head>
 
 
 <body>
 
+
 <div id="app">
 
-    <!-- =========================================
-         NAVBAR
-    ========================================== -->
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom app-navbar">
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
+
+    <nav class="navbar navbar-expand-lg
+                bg-body-tertiary
+                border-bottom
+                app-navbar">
 
         <div class="container-fluid">
 
             <span class="navbar-brand fw-bold">
+
                 <i class="bi bi-diagram-3 me-2"></i>
+
                 產業地圖
+
             </span>
+
 
             <div class="d-flex align-items-center gap-2">
 
@@ -486,14 +748,19 @@
                     class="btn btn-outline-secondary btn-sm"
                     id="reloadBtn"
                     title="重新載入 JSON">
+
                     <i class="bi bi-arrow-clockwise"></i>
+
                 </button>
+
 
                 <button
                     class="btn btn-outline-secondary btn-sm"
                     id="themeBtn"
                     title="切換深色模式">
+
                     <i class="bi bi-moon"></i>
+
                 </button>
 
             </div>
@@ -503,26 +770,31 @@
     </nav>
 
 
-    <!-- =========================================
+
+    <!-- =====================================================
          BODY
-    ========================================== -->
+    ====================================================== -->
 
     <div class="app-body">
 
 
-        <!-- =====================================
-             LEFT SIDEBAR
-        ====================================== -->
+        <!-- =================================================
+             LEFT
+        ================================================== -->
 
         <aside id="sidebar">
+
 
             <div class="sidebar-header">
 
                 <div class="input-group input-group-sm">
 
                     <span class="input-group-text">
+
                         <i class="bi bi-search"></i>
+
                     </span>
+
 
                     <input
                         id="industrySearch"
@@ -539,8 +811,12 @@
                 id="industryGroups"
                 class="industry-groups">
 
-                <div class="text-center text-body-secondary p-4">
+                <div class="text-center
+                            text-body-secondary
+                            p-4">
+
                     尚未載入資料
+
                 </div>
 
             </div>
@@ -548,40 +824,68 @@
         </aside>
 
 
-        <!-- =====================================
-             MAIN MAP
-        ====================================== -->
+
+        <!-- =================================================
+             MAIN
+        ================================================== -->
 
         <main id="map-area">
+
 
             <div
                 id="map-toolbar"
                 class="map-toolbar d-none">
 
+
                 <div
-                    class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    class="d-flex
+                           flex-wrap
+                           align-items-center
+                           justify-content-between
+                           gap-2">
+
 
                     <div id="breadcrumb"></div>
 
+
                     <div class="btn-group btn-group-sm">
+
+
+                        <button
+                            class="btn btn-outline-secondary"
+                            id="showAllBtn">
+
+                            全部
+
+                        </button>
+
 
                         <button
                             class="btn btn-outline-secondary"
                             id="showUpstreamBtn">
+
                             上游
+
                         </button>
+
 
                         <button
                             class="btn btn-outline-secondary"
                             id="showDownstreamBtn">
+
                             下游
+
                         </button>
+
 
                         <button
                             class="btn btn-outline-secondary"
                             id="showPeersBtn">
+
                             同業
+
                         </button>
+
 
                     </div>
 
@@ -590,65 +894,98 @@
             </div>
 
 
+
             <div id="map-scroll">
+
 
                 <div
                     id="map-content"
                     class="empty-state">
 
+
                     <div>
 
+
                         <div class="empty-state-icon">
+
                             <i class="bi bi-diagram-3"></i>
+
                         </div>
 
-                        <h4>產業地圖</h4>
 
-                        <p class="text-body-secondary mb-0">
+                        <h4>
+
+                            產業地圖
+
+                        </h4>
+
+
+                        <p
+                            class="text-body-secondary mb-0">
+
                             從左側選擇一個產業開始
+
                         </p>
+
 
                     </div>
 
+
                 </div>
 
+
             </div>
+
 
         </main>
 
 
-        <!-- =====================================
-             RIGHT DETAIL
-        ====================================== -->
+
+        <!-- =================================================
+             RIGHT
+        ================================================== -->
 
         <aside id="detail-panel">
 
+
             <div class="detail-header">
 
+
                 <strong>
+
                     詳細資訊
+
                 </strong>
 
+
                 <button
-                    class="btn btn-sm btn-outline-secondary"
+                    class="btn btn-sm
+                           btn-outline-secondary"
                     id="closeDetailBtn">
 
                     <i class="bi bi-x-lg"></i>
 
                 </button>
 
+
             </div>
 
 
             <div id="detail-content">
 
-                <div class="text-center text-body-secondary p-4">
+
+                <div
+                    class="text-center
+                           text-body-secondary
+                           p-4">
 
                     選擇產業或個股查看詳細資訊
 
                 </div>
 
+
             </div>
+
 
         </aside>
 
@@ -658,10 +995,15 @@
 </div>
 
 
-<!-- Bootstrap -->
+
+<!-- =========================================================
+     BOOTSTRAP
+========================================================= -->
+
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
 </script>
+
 
 
 <script>
@@ -669,6 +1011,8 @@
 /* =========================================================
    CONFIG
 ========================================================= */
+
+const preStr = "https://newsbeiter.onrender.com/api/fetch?url=";
 
 const CONFIG = {
 
@@ -680,15 +1024,25 @@ const CONFIG = {
         stockIndustries:
             "imsrc/stock-industries.json",
 
-        industryDetails:
-            "imsrc/industry-details.json",
-
         industries:
             "imsrc/industries.json"
 
-    }
+    },
+
+    /*
+     * 單一產業詳細資料
+     *
+     * 例如：
+     *
+     * data/ess-storage.json
+     *
+     */
+
+    detailPath:
+        "https://newsbeiter.onrender.com/api/fetch?url=https://aistockmap.com/live/topics/"
 
 };
+
 
 
 /* =========================================================
@@ -701,11 +1055,14 @@ const state = {
 
     stockIndustries: {},
 
-    industryDetails: {},
-
     industries: {},
 
     industriesArray: [],
+
+    /*
+     * 目前點選產業的詳細 JSON
+     */
+    currentIndustryDetail: null,
 
     selectedIndustry: null,
 
@@ -718,15 +1075,20 @@ const state = {
 };
 
 
+
 /* =========================================================
-   DOM
+   DOM HELPERS
 ========================================================= */
 
-const $ = selector =>
-    document.querySelector(selector);
+const $ =
+    selector =>
+        document.querySelector(selector);
 
-const $$ = selector =>
-    [...document.querySelectorAll(selector)];
+
+const $$ =
+    selector =>
+        [...document.querySelectorAll(selector)];
+
 
 
 /* =========================================================
@@ -748,11 +1110,13 @@ async function init() {
 }
 
 
+
 /* =========================================================
    EVENTS
 ========================================================= */
 
 function bindEvents() {
+
 
     $("#industrySearch")
         .addEventListener(
@@ -781,10 +1145,31 @@ function bindEvents() {
             () => {
 
                 $("#detail-content").innerHTML = `
-                    <div class="text-center text-body-secondary p-4">
+
+                    <div
+                        class="text-center
+                               text-body-secondary
+                               p-4">
+
                         選擇產業或個股查看詳細資訊
+
                     </div>
+
                 `;
+
+            }
+        );
+
+
+    $("#showAllBtn")
+        .addEventListener(
+            "click",
+            () => {
+
+                state.relationFilter =
+                    "all";
+
+                renderMap();
 
             }
         );
@@ -795,7 +1180,8 @@ function bindEvents() {
             "click",
             () => {
 
-                state.relationFilter = "upstream";
+                state.relationFilter =
+                    "upstream";
 
                 renderMap();
 
@@ -808,7 +1194,8 @@ function bindEvents() {
             "click",
             () => {
 
-                state.relationFilter = "downstream";
+                state.relationFilter =
+                    "downstream";
 
                 renderMap();
 
@@ -821,7 +1208,8 @@ function bindEvents() {
             "click",
             () => {
 
-                state.relationFilter = "peers";
+                state.relationFilter =
+                    "peers";
 
                 renderMap();
 
@@ -831,8 +1219,9 @@ function bindEvents() {
 }
 
 
+
 /* =========================================================
-   LOAD JSON
+   LOAD BASIC JSON
 ========================================================= */
 
 async function loadData() {
@@ -841,35 +1230,41 @@ async function loadData() {
 
         showLoading();
 
+
         const [
+
             relations,
+
             stockIndustries,
-            industryDetails,
+
             industries
+
         ] = await Promise.all([
 
-            fetchJSON(CONFIG.files.relations),
+            fetchJSON(
+                CONFIG.files.relations
+            ),
 
-            fetchJSON(CONFIG.files.stockIndustries),
+            fetchJSON(
+                CONFIG.files.stockIndustries
+            ),
 
-            fetchJSON(CONFIG.files.industryDetails),
-
-            fetchJSON(CONFIG.files.industries)
+            fetchJSON(
+                CONFIG.files.industries
+            )
 
         ]);
 
 
         state.relations =
-            normalizeObject(relations);
+            normalizeObject(
+                relations
+            );
 
 
         state.stockIndustries =
-            normalizeObject(stockIndustries);
-
-
-        state.industryDetails =
-            normalizeIndustryDetails(
-                industryDetails
+            normalizeObject(
+                stockIndustries
             );
 
 
@@ -881,66 +1276,48 @@ async function loadData() {
 
         state.industries = {};
 
-        state.industriesArray.forEach(
-            industry => {
 
-                state.industries[industry.id] =
-                    industry;
+        state.industriesArray
+            .forEach(industry => {
 
-            }
-        );
+                state.industries[
+                    industry.id
+                ] = industry;
 
-
-        /*
-         * 如果所有產業 JSON 沒有包含
-         * details 中的產業，補進去。
-         */
-
-        Object.values(
-            state.industryDetails
-        ).forEach(detail => {
-
-            if (!state.industries[detail.id]) {
-
-                state.industries[detail.id] = {
-
-                    id: detail.id,
-
-                    name:
-                        detail.name || detail.id,
-
-                    shortname:
-                        detail.shortname ||
-                        detail.name ||
-                        detail.id,
-
-                    description:
-                        detail.description || "",
-
-                    group:
-                        inferGroup(detail),
-
-                    active: true,
-
-                    companyCount:
-                        countStocks(detail.id)
-
-                };
-
-            }
-
-        });
+            });
 
 
         state.loaded = true;
 
+
+        /*
+         * 重新產生左側產業清單
+         */
+
         renderIndustryGroups();
 
-        showEmptyState();
 
-    }
+        /*
+         * 如果目前有選取產業，
+         * 重新顯示
+         */
 
-    catch (error) {
+        if (
+            state.selectedIndustry
+        ) {
+
+            await selectIndustry(
+                state.selectedIndustry
+            );
+
+        } else {
+
+            showEmptyState();
+
+        }
+
+
+    } catch (error) {
 
         console.error(error);
 
@@ -951,16 +1328,20 @@ async function loadData() {
 }
 
 
+
 /* =========================================================
-   FETCH
+   FETCH JSON
 ========================================================= */
 
 async function fetchJSON(url) {
 
     const response =
         await fetch(
-            url + "?_=" + Date.now()
+            url +
+            "?_=" +
+            Date.now()
         );
+
 
     if (!response.ok) {
 
@@ -970,16 +1351,44 @@ async function fetchJSON(url) {
 
     }
 
+
     return await response.json();
 
 }
+
+
+
+/* =========================================================
+   FETCH SINGLE INDUSTRY DETAIL
+========================================================= */
+
+async function fetchIndustryDetail(
+    industryId
+) {
+
+    const url =
+        CONFIG.detailPath +
+        encodeURIComponent(
+            industryId
+        ) +
+        ".json";
+
+
+    return await fetchJSON(
+        url
+    );
+
+}
+
 
 
 /* =========================================================
    NORMALIZE
 ========================================================= */
 
-function normalizeObject(value) {
+function normalizeObject(
+    value
+) {
 
     if (
         value &&
@@ -991,50 +1400,41 @@ function normalizeObject(value) {
 
     }
 
+
     return {};
 
 }
 
 
-function normalizeIndustryDetails(data) {
+
+function normalizeIndustries(
+    data
+) {
 
     /*
      * 支援：
      *
-     * 1.
+     * [
+     *   {...},
+     *   {...}
+     * ]
+     *
+     * 或：
+     *
      * {
      *   "ess-storage": {...}
      * }
-     *
-     * 2.
-     * [
-     *   {...}
-     * ]
      */
 
-    if (Array.isArray(data)) {
 
-        return Object.fromEntries(
-
-            data
-                .filter(x => x && x.id)
-                .map(x => [x.id, x])
-
-        );
-
-    }
-
-    return normalizeObject(data);
-
-}
-
-
-function normalizeIndustries(data) {
-
-    if (Array.isArray(data)) {
+    if (
+        Array.isArray(data)
+    ) {
 
         return data.filter(
-            x => x && x.id
+            x =>
+                x &&
+                x.id
         );
 
     }
@@ -1045,88 +1445,101 @@ function normalizeIndustries(data) {
         typeof data === "object"
     ) {
 
-        return Object.entries(data)
-            .map(([id, value]) => {
+        return Object.entries(
+            data
+        )
+        .map(
+            ([id, value]) => {
 
                 if (
-                    typeof value === "string"
+                    typeof value ===
+                    "string"
                 ) {
 
                     return {
+
                         id,
-                        name: value,
-                        shortname: value,
-                        group: "其他"
+
+                        name:
+                            value,
+
+                        shortname:
+                            value,
+
+                        group:
+                            "其他"
+
                     };
 
                 }
 
+
                 return {
+
                     id,
+
                     ...value
+
                 };
 
-            });
+            }
+        );
 
     }
+
 
     return [];
 
 }
 
 
+
 /* =========================================================
    GROUP
 ========================================================= */
 
-function getGroup(industry) {
+function getGroup(
+    industry
+) {
 
     return (
-        industry.group ||
-        industry.category ||
-        industry.parent ||
+
+        industry?.group ||
+
+        industry?.category ||
+
+        industry?.parent ||
+
         "其他"
+
     );
 
 }
 
-
-/* =========================================================
-   INFER GROUP
-========================================================= */
-
-function inferGroup(detail) {
-
-    if (
-        detail.name &&
-        detail.name.includes("｜")
-    ) {
-
-        return detail.name.split("｜")[0];
-
-    }
-
-    return "其他";
-
-}
 
 
 /* =========================================================
    COUNT STOCKS
 ========================================================= */
 
-function countStocks(industryId) {
+function countStocks(
+    industryId
+) {
 
     return Object.values(
         state.stockIndustries
     )
-    .filter(ids =>
-        Array.isArray(ids) &&
-        ids.includes(industryId)
+    .filter(
+        ids =>
+            Array.isArray(ids) &&
+            ids.includes(
+                industryId
+            )
     )
     .length;
 
 }
+
 
 
 /* =========================================================
@@ -1140,16 +1553,21 @@ function renderIndustryGroups(
     const container =
         $("#industryGroups");
 
+
     const keyword =
-        filter.trim().toLowerCase();
+        filter
+            .trim()
+            .toLowerCase();
 
 
     const filtered =
-        state.industriesArray.filter(
+        state.industriesArray
+        .filter(
             industry => {
 
                 if (!keyword)
                     return true;
+
 
                 return [
 
@@ -1167,7 +1585,9 @@ function renderIndustryGroups(
                 .filter(Boolean)
                 .join(" ")
                 .toLowerCase()
-                .includes(keyword);
+                .includes(
+                    keyword
+                );
 
             }
         );
@@ -1180,27 +1600,49 @@ function renderIndustryGroups(
         industry => {
 
             const group =
-                getGroup(industry);
+                getGroup(
+                    industry
+                );
 
-            if (!groups[group])
+
+            if (
+                !groups[group]
+            ) {
+
                 groups[group] = [];
 
-            groups[group].push(industry);
+            }
+
+
+            groups[group].push(
+                industry
+            );
 
         }
     );
 
 
     const groupNames =
-        Object.keys(groups).sort();
+        Object.keys(
+            groups
+        ).sort();
 
 
-    if (!groupNames.length) {
+    if (
+        !groupNames.length
+    ) {
 
         container.innerHTML = `
-            <div class="text-center text-body-secondary p-4">
+
+            <div
+                class="text-center
+                       text-body-secondary
+                       p-4">
+
                 找不到符合條件的產業
+
             </div>
+
         `;
 
         return;
@@ -1209,11 +1651,13 @@ function renderIndustryGroups(
 
 
     container.innerHTML =
-        groupNames.map(
+        groupNames
+        .map(
             (group, index) => {
 
                 const industries =
                     groups[group];
+
 
                 const collapseId =
                     "group-" +
@@ -1224,20 +1668,39 @@ function renderIndustryGroups(
 
                     <div class="group">
 
+
                         <div
                             class="group-header"
                             data-bs-toggle="collapse"
                             data-bs-target="#${collapseId}">
 
+
                             <span>
-                                <i class="bi bi-folder2 me-2"></i>
-                                ${escapeHTML(group)}
+
+                                <i
+                                    class="bi bi-folder2 me-2">
+                                </i>
+
+                                ${escapeHTML(
+                                    group
+                                )}
+
                             </span>
 
-                            <span class="text-body-secondary">
+
+                            <span
+                                class="text-body-secondary">
+
                                 ${industries.length}
-                                <i class="bi bi-chevron-down ms-1"></i>
+
+                                <i
+                                    class="bi
+                                           bi-chevron-down
+                                           ms-1">
+                                </i>
+
                             </span>
+
 
                         </div>
 
@@ -1246,15 +1709,21 @@ function renderIndustryGroups(
                             id="${collapseId}"
                             class="collapse show">
 
-                            <div class="industry-list">
+
+                            <div
+                                class="industry-list">
 
                                 ${industries
-                                    .map(renderIndustryItem)
+                                    .map(
+                                        renderIndustryItem
+                                    )
                                     .join("")}
 
                             </div>
 
+
                         </div>
+
 
                     </div>
 
@@ -1266,20 +1735,22 @@ function renderIndustryGroups(
 
 
     $$(".industry-item")
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    selectIndustry(
-                        button.dataset.id
-                    );
+                        selectIndustry(
+                            button.dataset.id
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 
     updateSidebarActive();
@@ -1287,8 +1758,9 @@ function renderIndustryGroups(
 }
 
 
+
 /* =========================================================
-   INDUSTRY ITEM
+   SIDEBAR ITEM
 ========================================================= */
 
 function renderIndustryItem(
@@ -1304,35 +1776,52 @@ function renderIndustryItem(
 
     const count =
         industry.companyCount ??
-        countStocks(industry.id);
+        countStocks(
+            industry.id
+        );
 
 
     return `
 
         <button
             class="industry-item ${active}"
-            data-id="${escapeAttr(industry.id)}">
+            data-id="${escapeAttr(
+                industry.id
+            )}">
+
 
             <i class="bi bi-chevron-right"></i>
 
-            <span class="text-truncate">
+
+            <span
+                class="text-truncate">
+
                 ${escapeHTML(
                     industry.shortname ||
                     industry.name ||
                     industry.id
                 )}
+
             </span>
+
 
             ${
                 count
                     ? `
+
                         <span
-                            class="badge text-bg-secondary industry-count">
+                            class="badge
+                                   text-bg-secondary
+                                   industry-count">
+
                             ${count}
+
                         </span>
+
                       `
                     : ""
             }
+
 
         </button>
 
@@ -1341,11 +1830,12 @@ function renderIndustryItem(
 }
 
 
+
 /* =========================================================
    SELECT INDUSTRY
 ========================================================= */
 
-function selectIndustry(
+async function selectIndustry(
     industryId
 ) {
 
@@ -1356,40 +1846,119 @@ function selectIndustry(
     state.selectedIndustry =
         industryId;
 
-    state.selectedStock = null;
 
-    state.relationFilter = "all";
+    state.selectedStock =
+        null;
+
+
+    state.relationFilter =
+        "all";
+
+
+    state.currentIndustryDetail =
+        null;
 
 
     updateSidebarActive();
 
+
+    /*
+     * 先立即顯示產業關聯圖
+     */
+
     renderMap();
 
-    renderIndustryDetail(
-        industryId
-    );
 
-}
+    /*
+     * 關聯圖下方顯示 loading
+     */
+
+    renderIndustryDetailLoading();
 
 
-/* =========================================================
-   SIDEBAR ACTIVE
-========================================================= */
+    /*
+     * 動態載入：
+     *
+     * data/{industryId}.json
+     */
 
-function updateSidebarActive() {
+    try {
 
-    $$(".industry-item")
-        .forEach(button => {
-
-            button.classList.toggle(
-                "active",
-                button.dataset.id ===
-                state.selectedIndustry
+        const detail =
+            await fetchIndustryDetail(
+                industryId
             );
 
-        });
+
+        /*
+         * 防止使用者快速點擊其他產業
+         *
+         * 例如：
+         *
+         * 點 A
+         * ↓
+         * A 尚未載完
+         * ↓
+         * 點 B
+         * ↓
+         * B 載完
+         * ↓
+         * A 才載完
+         *
+         * 此時不能讓 A 蓋掉 B。
+         */
+
+        if (
+            state.selectedIndustry !==
+            industryId
+        ) {
+
+            return;
+
+        }
+
+
+        state.currentIndustryDetail =
+            detail;
+
+
+        /*
+         * 顯示在中央關聯圖下面
+         */
+
+        renderIndustryDetailBelowMap(
+            detail,
+            industryId
+        );
+
+
+        /*
+         * 同步更新右側資訊
+         */
+
+        renderIndustrySidePanel(
+            detail,
+            industryId
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "產業詳細資料載入失敗：",
+            error
+        );
+
+
+        renderIndustryDetailError(
+            industryId,
+            error
+        );
+
+    }
 
 }
+
 
 
 /* =========================================================
@@ -1409,7 +1978,9 @@ function renderMap() {
 
 
     $("#map-toolbar")
-        .classList.remove("d-none");
+        .classList.remove(
+            "d-none"
+        );
 
 
     renderBreadcrumb(
@@ -1442,8 +2013,9 @@ function renderMap() {
 
 
     /*
-     * 若 relation JSON 沒有反向關係，
-     * 這裡自動建立反向關係。
+     * 如果資料沒有直接關係，
+     * 嘗試從其他產業的 relation
+     * 建立反向關係。
      */
 
     if (
@@ -1457,17 +2029,24 @@ function renderMap() {
                 state.selectedIndustry
             );
 
+
         upstream =
             reverse.upstream;
 
+
         downstream =
             reverse.downstream;
+
 
         peers =
             reverse.peers;
 
     }
 
+
+    /*
+     * Filter
+     */
 
     if (
         state.relationFilter ===
@@ -1502,11 +2081,24 @@ function renderMap() {
     }
 
 
+    /*
+     * 中央畫面
+     */
+
+    $("#map-content").className =
+        "";
+
+
     $("#map-content").innerHTML = `
 
-        <div class="container-fluid px-0">
+        <div
+            class="container-fluid px-0">
 
-            ${renderIndustryHero(industry)}
+
+            ${renderIndustryHero(
+                industry
+            )}
+
 
             ${renderRelationMap(
                 upstream,
@@ -1514,11 +2106,17 @@ function renderMap() {
                 peers
             )}
 
-            ${renderSupplyChain(
-                state.industryDetails[
-                    state.selectedIndustry
-                ]
-            )}
+
+            <!--
+                動態載入的
+                data/{industryId}.json
+                會插入這裡
+            -->
+
+            <div
+                id="industry-detail-below-map">
+            </div>
+
 
         </div>
 
@@ -1530,6 +2128,7 @@ function renderMap() {
 }
 
 
+
 /* =========================================================
    INDUSTRY HERO
 ========================================================= */
@@ -1538,50 +2137,56 @@ function renderIndustryHero(
     industry
 ) {
 
-    const detail =
-        state.industryDetails[
-            industry.id
-        ];
-
-
-    const description =
-        detail?.description ||
-        industry.description ||
-        "";
-
-
-    const tags =
-        detail?.tags || [];
-
-
     return `
 
         <div class="mb-4">
 
-            <div class="d-flex flex-wrap
-                        align-items-center
-                        gap-2 mb-2">
 
-                <span class="badge text-bg-success">
+            <div
+                class="d-flex
+                       flex-wrap
+                       align-items-center
+                       gap-2
+                       mb-2">
+
+
+                <span
+                    class="badge
+                           text-bg-success">
+
                     ${escapeHTML(
-                        getGroup(industry)
+                        getGroup(
+                            industry
+                        )
                     )}
+
                 </span>
+
 
                 ${
                     industry.active === false
                         ? `
-                            <span class="badge text-bg-secondary">
+
+                            <span
+                                class="badge
+                                       text-bg-secondary">
+
                                 非啟用
+
                             </span>
+
                           `
                         : ""
                 }
 
+
             </div>
 
 
-            <h1 class="h3 industry-title">
+            <h1
+                class="h3
+                       industry-title">
+
 
                 ${escapeHTML(
                     industry.name ||
@@ -1589,39 +2194,36 @@ function renderIndustryHero(
                     industry.id
                 )}
 
+
             </h1>
 
 
             ${
-                description
+                industry.description
                     ? `
-                        <p class="industry-description
-                                  text-body-secondary
-                                  mb-3">
-                            ${escapeHTML(description)}
+
+                        <p
+                            class="industry-description
+                                   text-body-secondary
+                                   mb-3">
+
+                            ${escapeHTML(
+                                industry.description
+                            )}
+
                         </p>
+
                       `
                     : ""
             }
 
-
-            <div>
-
-                ${tags
-                    .map(tag =>
-                        `<span class="tag">
-                            ${escapeHTML(tag)}
-                         </span>`
-                    )
-                    .join("")}
-
-            </div>
 
         </div>
 
     `;
 
 }
+
 
 
 /* =========================================================
@@ -1636,76 +2238,118 @@ function renderRelationMap(
 
     return `
 
-        <section class="relation-section">
+        <section
+            class="relation-section">
 
-            <div class="relation-title">
 
-                <i class="bi bi-diagram-3"></i>
+            <div
+                class="relation-title">
+
+                <i
+                    class="bi bi-diagram-3">
+                </i>
 
                 產業關係
 
             </div>
 
 
-            <div class="relation-grid">
+            <div
+                class="relation-grid">
 
-                <div class="relation-column">
 
-                    <div class="relation-column-title
-                                text-primary">
+                <!-- UPSTREAM -->
 
-                        <i class="bi bi-arrow-up-circle"></i>
+                <div
+                    class="relation-column">
+
+
+                    <div
+                        class="relation-column-title
+                               text-primary">
+
+
+                        <i
+                            class="bi
+                                   bi-arrow-up-circle">
+                        </i>
+
 
                         上游
 
-                        <span class="badge text-bg-primary">
+
+                        <span
+                            class="badge
+                                   text-bg-primary">
+
                             ${upstream.length}
+
                         </span>
 
-                    </div>
-
-                    <div class="relation-cards">
-
-                        ${
-                            renderRelationCards(
-                                upstream
-                            )
-                        }
 
                     </div>
+
+
+                    <div
+                        class="relation-cards">
+
+                        ${renderRelationCards(
+                            upstream
+                        )}
+
+                    </div>
+
 
                 </div>
 
 
-                <div class="relation-column">
 
-                    <div class="relation-column-title
-                                text-success">
+                <!-- CURRENT -->
 
-                        <i class="bi bi-bullseye"></i>
+                <div
+                    class="relation-column">
+
+
+                    <div
+                        class="relation-column-title
+                               text-success">
+
+
+                        <i
+                            class="bi
+                                   bi-bullseye">
+                        </i>
+
 
                         目前產業
 
+
                     </div>
 
-                    <div class="relation-cards">
 
-                        <div class="relation-card
-                                    border-success">
+                    <div
+                        class="relation-cards">
 
-                            <div class="relation-card-name">
 
-                                ${
-                                    escapeHTML(
-                                        getIndustryName(
-                                            state.selectedIndustry
-                                        )
+                        <div
+                            class="relation-card
+                                   border-success">
+
+
+                            <div
+                                class="relation-card-name">
+
+                                ${escapeHTML(
+                                    getIndustryName(
+                                        state.selectedIndustry
                                     )
-                                }
+                                )}
 
                             </div>
 
-                            <div class="relation-card-id">
+
+                            <div
+                                class="relation-card-id">
 
                                 ${escapeHTML(
                                     state.selectedIndustry
@@ -1713,74 +2357,128 @@ function renderRelationMap(
 
                             </div>
 
+
                         </div>
 
+
                     </div>
+
 
                 </div>
 
 
-                <div class="relation-column">
 
-                    <div class="relation-column-title
-                                text-danger">
+                <!-- DOWNSTREAM -->
 
-                        <i class="bi bi-arrow-down-circle"></i>
+                <div
+                    class="relation-column">
+
+
+                    <div
+                        class="relation-column-title
+                               text-danger">
+
+
+                        <i
+                            class="bi
+                                   bi-arrow-down-circle">
+                        </i>
+
 
                         下游
 
-                        <span class="badge text-bg-danger">
+
+                        <span
+                            class="badge
+                                   text-bg-danger">
+
                             ${downstream.length}
+
                         </span>
 
-                    </div>
-
-                    <div class="relation-cards">
-
-                        ${
-                            renderRelationCards(
-                                downstream
-                            )
-                        }
 
                     </div>
+
+
+                    <div
+                        class="relation-cards">
+
+                        ${renderRelationCards(
+                            downstream
+                        )}
+
+                    </div>
+
 
                 </div>
 
+
             </div>
 
+
+
+            <!-- PEERS -->
 
             ${
                 peers.length
                     ? `
 
-                        <div class="mt-4">
+                        <div
+                            class="mt-4">
 
-                            <div class="relation-column-title
-                                        text-warning-emphasis">
 
-                                <i class="bi bi-people"></i>
+                            <div
+                                class="relation-column-title
+                                       text-warning-emphasis">
+
+
+                                <i
+                                    class="bi bi-people">
+                                </i>
+
 
                                 同業
 
-                                <span class="badge text-bg-warning">
+
+                                <span
+                                    class="badge
+                                           text-bg-warning">
+
                                     ${peers.length}
+
                                 </span>
 
-                            </div>
-
-
-                            <div class="relation-grid">
-
-                                <div class="relation-cards">
-
-                                    ${renderRelationCards(
-                                        peers
-                                    )}
-
-                                </div>
 
                             </div>
+
+
+                            <div
+                                class="row
+                                       row-cols-1
+                                       row-cols-md-3
+                                       g-3">
+
+
+                                ${peers
+                                    .map(
+                                        id => `
+
+                                            <div
+                                                class="col">
+
+                                                ${renderRelationCard(
+                                                    id
+                                                )}
+
+                                            </div>
+
+                                        `
+                                    )
+                                    .join("")}
+
+
+                            </div>
+
 
                         </div>
 
@@ -1788,11 +2486,13 @@ function renderRelationMap(
                     : ""
             }
 
+
         </section>
 
     `;
 
 }
+
 
 
 /* =========================================================
@@ -1803,12 +2503,18 @@ function renderRelationCards(
     ids
 ) {
 
-    if (!ids || !ids.length) {
+    if (
+        !ids ||
+        !ids.length
+    ) {
 
         return `
 
-            <div class="relation-empty">
+            <div
+                class="relation-empty">
+
                 無資料
+
             </div>
 
         `;
@@ -1817,80 +2523,534 @@ function renderRelationCards(
 
 
     return ids
-        .map(id => {
-
-            const name =
-                getIndustryName(id);
-
-
-            return `
-
-                <div
-                    class="relation-card"
-                    data-industry-id="${escapeAttr(id)}">
-
-                    <div class="relation-card-name">
-
-                        ${escapeHTML(name)}
-
-                    </div>
-
-                    <div class="relation-card-id">
-
-                        ${escapeHTML(id)}
-
-                    </div>
-
-                </div>
-
-            `;
-
-        })
+        .map(
+            id =>
+                renderRelationCard(
+                    id
+                )
+        )
         .join("");
 
 }
 
 
+
+function renderRelationCard(
+    id
+) {
+
+    return `
+
+        <div
+            class="relation-card"
+            data-industry-id="${escapeAttr(
+                id
+            )}">
+
+
+            <div
+                class="relation-card-name">
+
+                ${escapeHTML(
+                    getIndustryName(
+                        id
+                    )
+                )}
+
+            </div>
+
+
+            <div
+                class="relation-card-id">
+
+                ${escapeHTML(
+                    id
+                )}
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+
 /* =========================================================
-   BIND MAP CARDS
+   MAP CARD EVENTS
 ========================================================= */
 
 function bindMapCards() {
 
+
     $$("[data-industry-id]")
-        .forEach(card => {
+        .forEach(
+            card => {
 
-            card.addEventListener(
-                "click",
-                () => {
+                card.addEventListener(
+                    "click",
+                    () => {
 
-                    selectIndustry(
-                        card.dataset.industryId
-                    );
+                        selectIndustry(
+                            card.dataset.industryId
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 
     $$("[data-stock-code]")
-        .forEach(card => {
+        .forEach(
+            card => {
 
-            card.addEventListener(
-                "click",
-                () => {
+                card.addEventListener(
+                    "click",
+                    () => {
 
-                    selectStock(
-                        card.dataset.stockCode
-                    );
+                        selectStock(
+                            card.dataset.stockCode
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 }
+
+
+
+/* =========================================================
+   DETAIL LOADING
+========================================================= */
+
+function renderIndustryDetailLoading() {
+
+    const container =
+        $("#industry-detail-below-map");
+
+
+    if (!container)
+        return;
+
+
+    container.innerHTML = `
+
+        <section
+            class="relation-section">
+
+
+            <div
+                class="d-flex
+                       align-items-center
+                       gap-2
+                       text-body-secondary">
+
+
+                <div
+                    class="spinner-border
+                           spinner-border-sm">
+                </div>
+
+
+                <span>
+
+                    正在載入產業詳細資料...
+
+                </span>
+
+
+            </div>
+
+
+        </section>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   DETAIL BELOW MAP
+========================================================= */
+
+function renderIndustryDetailBelowMap(
+    detail,
+    industryId
+) {
+
+    const container =
+        $("#industry-detail-below-map");
+
+
+    if (!container)
+        return;
+
+
+    const stocks =
+        getStocksByIndustry(
+            industryId
+        );
+
+
+    container.innerHTML = `
+
+        <!-- ===============================================
+             INDUSTRY DETAIL
+        ================================================ -->
+
+        <section
+            class="relation-section">
+
+
+            <div
+                class="relation-title">
+
+
+                <i
+                    class="bi
+                           bi-info-circle">
+                </i>
+
+
+                產業介紹
+
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            ${
+                detail.description
+                    ? `
+
+                        <div
+                            class="mb-4">
+
+
+                            <p
+                                class="industry-description
+                                       text-body-secondary">
+
+                                ${escapeHTML(
+                                    detail.description
+                                )}
+
+                            </p>
+
+
+                        </div>
+
+                      `
+                    : ""
+            }
+
+
+
+            <!-- TAGS -->
+
+            ${
+                detail.tags?.length
+                    ? `
+
+                        <div
+                            class="mb-4">
+
+                            ${detail.tags
+                                .map(
+                                    tag =>
+                                        `
+
+                                            <span
+                                                class="tag">
+
+                                                ${escapeHTML(
+                                                    tag
+                                                )}
+
+                                            </span>
+
+                                        `
+                                )
+                                .join("")}
+
+                        </div>
+
+                      `
+                    : ""
+            }
+
+
+
+            <!-- KEY METRICS -->
+
+            ${
+                detail.keyMetrics?.length
+                    ? renderDetailMetrics(
+                        detail.keyMetrics
+                    )
+                    : ""
+            }
+
+
+
+            <!-- DRIVERS -->
+
+            ${
+                detail.metrics?.drivers?.length
+                    ? renderDrivers(
+                        detail.metrics.drivers
+                    )
+                    : ""
+            }
+
+
+
+            <!-- TRENDS -->
+
+            ${
+                detail.keyTrends?.length
+                    ? renderKeyTrends(
+                        detail.keyTrends
+                    )
+                    : ""
+            }
+
+
+
+            <!-- SUPPLY CHAIN -->
+
+            ${
+                detail.supplyChain
+                    ? renderSupplyChain(
+                        detail
+                    )
+                    : ""
+            }
+
+
+
+            <!-- STOCKS -->
+
+            ${renderDetailStocks(
+                stocks
+            )}
+
+
+        </section>
+
+    `;
+
+
+    bindMapCards();
+
+}
+
+
+
+/* =========================================================
+   DETAIL METRICS
+========================================================= */
+
+function renderDetailMetrics(
+    metrics
+) {
+
+    return `
+
+        <div
+            class="detail-block">
+
+
+            <h5
+                class="detail-block-title">
+
+                核心指標
+
+            </h5>
+
+
+            <div
+                class="row
+                       g-3">
+
+
+                ${metrics
+                    .map(
+                        metric =>
+                            `
+
+                                <div
+                                    class="col-12
+                                           col-md-6">
+
+
+                                    <div
+                                        class="metric-card">
+
+
+                                        <div
+                                            class="metric-label">
+
+                                            ${escapeHTML(
+                                                metric.label ||
+                                                ""
+                                            )}
+
+                                        </div>
+
+
+                                        <div
+                                            class="metric-value">
+
+                                            ${escapeHTML(
+                                                metric.value ||
+                                                ""
+                                            )}
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+
+                            `
+                    )
+                    .join("")}
+
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   DRIVERS
+========================================================= */
+
+function renderDrivers(
+    drivers
+) {
+
+    return `
+
+        <div
+            class="detail-block">
+
+
+            <h5
+                class="detail-block-title">
+
+                主要驅動因素
+
+            </h5>
+
+
+            <ul
+                class="mb-0">
+
+
+                ${drivers
+                    .map(
+                        driver =>
+                            `
+
+                                <li
+                                    class="mb-2">
+
+                                    ${escapeHTML(
+                                        driver
+                                    )}
+
+                                </li>
+
+                            `
+                    )
+                    .join("")}
+
+
+            </ul>
+
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   TRENDS
+========================================================= */
+
+function renderKeyTrends(
+    trends
+) {
+
+    return `
+
+        <div
+            class="detail-block">
+
+
+            <h5
+                class="detail-block-title">
+
+                關鍵趨勢
+
+            </h5>
+
+
+            <ul
+                class="mb-0">
+
+
+                ${trends
+                    .map(
+                        trend =>
+                            `
+
+                                <li
+                                    class="mb-2">
+
+                                    ${escapeHTML(
+                                        trend
+                                    )}
+
+                                </li>
+
+                            `
+                    )
+                    .join("")}
+
+
+            </ul>
+
+
+        </div>
+
+    `;
+
+}
+
 
 
 /* =========================================================
@@ -1920,20 +3080,25 @@ function renderSupplyChain(
 
     return `
 
-        <section class="relation-section">
+        <div
+            class="detail-block">
 
-            <div class="relation-title">
 
-                <i class="bi bi-layers"></i>
+            <h5
+                class="detail-block-title">
 
                 產業分層
 
-            </div>
+            </h5>
 
 
-            <div class="supply-chain-wrapper">
+            <div
+                class="supply-chain-wrapper">
 
-                <div class="supply-chain">
+
+                <div
+                    class="supply-chain">
+
 
                     ${nodes
                         .map(
@@ -1941,15 +3106,19 @@ function renderSupplyChain(
                         )
                         .join("")}
 
+
                 </div>
+
 
             </div>
 
-        </section>
+
+        </div>
 
     `;
 
 }
+
 
 
 /* =========================================================
@@ -1961,16 +3130,21 @@ function renderSupplySegment(
 ) {
 
     const children =
-        Array.isArray(node.children)
+        Array.isArray(
+            node.children
+        )
             ? node.children
             : [];
 
 
     return `
 
-        <div class="supply-segment">
+        <div
+            class="supply-segment">
 
-            <div class="supply-segment-title">
+
+            <div
+                class="supply-segment-title">
 
                 ${escapeHTML(
                     node.name ||
@@ -1983,53 +3157,68 @@ function renderSupplySegment(
             ${
                 node.subtitle
                     ? `
-                        <div class="supply-segment-subtitle">
+
+                        <div
+                            class="supply-segment-subtitle">
+
                             ${escapeHTML(
                                 node.subtitle
                             )}
+
                         </div>
+
                       `
                     : ""
             }
 
 
             ${children
-                .map(child => `
+                .map(
+                    child =>
+                        `
 
-                    <div
-                        class="supply-child"
-                        data-industry-id="${escapeAttr(
-                            child.id
-                        )}">
+                            <div
+                                class="supply-child"
+                                data-industry-id="${escapeAttr(
+                                    child.id
+                                )}">
 
-                        <div class="supply-child-name">
 
-                            ${escapeHTML(
-                                child.name ||
-                                child.id
-                            )}
+                                <div
+                                    class="supply-child-name">
 
-                        </div>
+                                    ${escapeHTML(
+                                        child.name ||
+                                        child.id
+                                    )}
 
-                        ${
-                            child.subtitle
-                                ? `
-                                    <div
-                                        class="supply-child-subtitle">
+                                </div>
 
-                                        ${escapeHTML(
-                                            child.subtitle
-                                        )}
 
-                                    </div>
-                                  `
-                                : ""
-                        }
+                                ${
+                                    child.subtitle
+                                        ? `
 
-                    </div>
+                                            <div
+                                                class="supply-child-subtitle">
 
-                `)
+                                                ${escapeHTML(
+                                                    child.subtitle
+                                                )}
+
+                                            </div>
+
+                                          `
+                                        : ""
+                                }
+
+
+                            </div>
+
+                        `
+                )
                 .join("")}
+
 
         </div>
 
@@ -2038,242 +3227,101 @@ function renderSupplySegment(
 }
 
 
+
 /* =========================================================
-   INDUSTRY DETAIL
+   DETAIL STOCKS
 ========================================================= */
 
-function renderIndustryDetail(
-    industryId
+function renderDetailStocks(
+    stocks
 ) {
 
-    const industry =
-        getIndustry(
-            industryId
-        );
+    return `
+
+        <div
+            class="detail-block">
 
 
-    const detail =
-        state.industryDetails[
-            industryId
-        ];
+            <div
+                class="d-flex
+                       justify-content-between
+                       align-items-center
+                       mb-3">
 
 
-    if (!industry)
-        return;
-
-
-    const stocks =
-        getStocksByIndustry(
-            industryId
-        );
-
-
-    $("#detail-content").innerHTML = `
-
-        <div class="mb-4">
-
-            <div class="small text-body-secondary mb-1">
-                ${escapeHTML(
-                    getGroup(industry)
-                )}
-            </div>
-
-            <h5 class="fw-bold">
-
-                ${escapeHTML(
-                    industry.name ||
-                    industry.shortname ||
-                    industry.id
-                )}
-
-            </h5>
-
-
-            <div class="small text-body-secondary">
-
-                ${escapeHTML(
-                    industry.id
-                )}
-
-            </div>
-
-        </div>
-
-
-        ${
-            detail?.keyMetrics?.length
-                ? `
-
-                    <div class="mb-4">
-
-                        <h6 class="fw-bold">
-                            核心指標
-                        </h6>
-
-                        <div class="row g-2">
-
-                            ${detail.keyMetrics
-                                .map(metric => `
-
-                                    <div class="col-6">
-
-                                        <div class="metric-card">
-
-                                            <div class="metric-label">
-
-                                                ${escapeHTML(
-                                                    metric.label ||
-                                                    ""
-                                                )}
-
-                                            </div>
-
-                                            <div class="metric-value">
-
-                                                ${escapeHTML(
-                                                    metric.value ||
-                                                    ""
-                                                )}
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                `)
-                                .join("")}
-
-                        </div>
-
-                    </div>
-
-                  `
-                : ""
-        }
-
-
-        ${
-            detail?.metrics?.drivers?.length
-                ? `
-
-                    <div class="mb-4">
-
-                        <h6 class="fw-bold">
-                            主要驅動因素
-                        </h6>
-
-                        <ul class="small">
-
-                            ${detail.metrics.drivers
-                                .map(driver =>
-                                    `<li class="mb-2">
-                                        ${escapeHTML(driver)}
-                                     </li>`
-                                )
-                                .join("")}
-
-                        </ul>
-
-                    </div>
-
-                  `
-                : ""
-        }
-
-
-        ${
-            detail?.keyTrends?.length
-                ? `
-
-                    <div class="mb-4">
-
-                        <h6 class="fw-bold">
-                            關鍵趨勢
-                        </h6>
-
-                        <ul class="small">
-
-                            ${detail.keyTrends
-                                .map(trend =>
-                                    `<li class="mb-2">
-                                        ${escapeHTML(trend)}
-                                     </li>`
-                                )
-                                .join("")}
-
-                        </ul>
-
-                    </div>
-
-                  `
-                : ""
-        }
-
-
-        <div>
-
-            <div class="d-flex
-                        justify-content-between
-                        align-items-center
-                        mb-2">
-
-                <h6 class="fw-bold mb-0">
+                <h5
+                    class="detail-block-title
+                           mb-0">
 
                     相關個股
 
-                </h6>
+                </h5>
 
-                <span class="badge text-bg-secondary">
+
+                <span
+                    class="badge
+                           text-bg-secondary">
 
                     ${stocks.length}
 
                 </span>
 
-            </div>
-
-
-            <div>
-
-                ${
-                    stocks.length
-                        ? stocks
-                            .map(
-                                renderStockCard
-                            )
-                            .join("")
-                        : `
-                            <div class="text-body-secondary
-                                        small">
-                                尚無個股資料
-                            </div>
-                          `
-                }
 
             </div>
+
+
+            ${
+                stocks.length
+                    ? `
+
+                        <div
+                            class="row
+                                   row-cols-1
+                                   row-cols-md-3
+                                   g-2">
+
+
+                            ${stocks
+                                .map(
+                                    stock =>
+                                        `
+
+                                            <div
+                                                class="col">
+
+                                                ${renderStockCard(
+                                                    stock
+                                                )}
+
+                                            </div>
+
+                                        `
+                                )
+                                .join("")}
+
+
+                        </div>
+
+                      `
+                    : `
+
+                        <div
+                            class="text-body-secondary">
+
+                            尚無個股資料
+
+                        </div>
+
+                      `
+            }
+
 
         </div>
 
     `;
 
-
-    $$("#detail-content [data-stock-code]")
-        .forEach(card => {
-
-            card.addEventListener(
-                "click",
-                () => {
-
-                    selectStock(
-                        card.dataset.stockCode
-                    );
-
-                }
-            );
-
-        });
-
 }
+
 
 
 /* =========================================================
@@ -2298,10 +3346,14 @@ function renderStockCard(
                 stockCode
             )}">
 
-            <div class="d-flex
-                        justify-content-between">
 
-                <span class="stock-code">
+            <div
+                class="d-flex
+                       justify-content-between">
+
+
+                <span
+                    class="stock-code">
 
                     ${escapeHTML(
                         stockCode
@@ -2309,35 +3361,258 @@ function renderStockCard(
 
                 </span>
 
-                <i class="bi bi-chevron-right"></i>
+
+                <i
+                    class="bi
+                           bi-chevron-right">
+                </i>
+
 
             </div>
 
 
-            <div class="mt-2">
+            <div
+                class="mt-2">
+
 
                 ${industries
-                    .map(id =>
-                        `<span
-                            class="badge rounded-pill
-                                   text-bg-light
-                                   border me-1">
+                    .map(
+                        id =>
+                            `
 
-                            ${escapeHTML(
-                                getIndustryName(id)
-                            )}
+                                <span
+                                    class="badge
+                                           rounded-pill
+                                           text-bg-light
+                                           border
+                                           me-1
+                                           mb-1">
 
-                         </span>`
+                                    ${escapeHTML(
+                                        getIndustryName(
+                                            id
+                                        )
+                                    )}
+
+                                </span>
+
+                            `
                     )
                     .join("")}
 
+
             </div>
+
 
         </div>
 
     `;
 
 }
+
+
+
+/* =========================================================
+   SIDE PANEL
+========================================================= */
+
+function renderIndustrySidePanel(
+    detail,
+    industryId
+) {
+
+    const industry =
+        getIndustry(
+            industryId
+        );
+
+
+    const stocks =
+        getStocksByIndustry(
+            industryId
+        );
+
+
+    $("#detail-content").innerHTML = `
+
+        <div
+            class="mb-4">
+
+
+            <div
+                class="small
+                       text-body-secondary
+                       mb-1">
+
+                ${escapeHTML(
+                    getGroup(
+                        industry
+                    )
+                )}
+
+            </div>
+
+
+            <h5
+                class="fw-bold">
+
+                ${escapeHTML(
+                    industry.name ||
+                    industry.shortname ||
+                    industry.id
+                )}
+
+            </h5>
+
+
+            <div
+                class="small
+                       text-body-secondary">
+
+                ${escapeHTML(
+                    industry.id
+                )}
+
+            </div>
+
+
+        </div>
+
+
+
+        ${
+            detail.description
+                ? `
+
+                    <p
+                        class="small
+                               text-body-secondary
+                               mb-4">
+
+                        ${escapeHTML(
+                            detail.description
+                        )}
+
+                    </p>
+
+                  `
+                : ""
+        }
+
+
+
+        ${
+            detail.tags?.length
+                ? `
+
+                    <div
+                        class="mb-4">
+
+
+                        ${detail.tags
+                            .map(
+                                tag =>
+                                    `
+
+                                        <span
+                                            class="tag">
+
+                                            ${escapeHTML(
+                                                tag
+                                            )}
+
+                                        </span>
+
+                                    `
+                            )
+                            .join("")}
+
+
+                    </div>
+
+                  `
+                : ""
+        }
+
+
+
+        <div>
+
+
+            <div
+                class="d-flex
+                       justify-content-between
+                       align-items-center
+                       mb-3">
+
+
+                <h6
+                    class="fw-bold
+                           mb-0">
+
+                    相關個股
+
+                </h6>
+
+
+                <span
+                    class="badge
+                           text-bg-secondary">
+
+                    ${stocks.length}
+
+                </span>
+
+
+            </div>
+
+
+            ${
+                stocks.length
+                    ? stocks
+                        .map(
+                            renderStockCard
+                        )
+                        .join("")
+                    : `
+
+                        <div
+                            class="small
+                                   text-body-secondary">
+
+                            尚無個股資料
+
+                        </div>
+
+                      `
+            }
+
+
+        </div>
+
+    `;
+
+
+    $$("#detail-content [data-stock-code]")
+        .forEach(
+            card => {
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        selectStock(
+                            card.dataset.stockCode
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
 
 
 /* =========================================================
@@ -2360,13 +3635,21 @@ function selectStock(
 
     $("#detail-content").innerHTML = `
 
-        <div class="mb-4">
+        <div
+            class="mb-4">
 
-            <div class="small text-body-secondary">
+
+            <div
+                class="small
+                       text-body-secondary">
+
                 股票代號
+
             </div>
 
-            <h4 class="fw-bold">
+
+            <h4
+                class="fw-bold">
 
                 ${escapeHTML(
                     stockCode
@@ -2374,12 +3657,16 @@ function selectStock(
 
             </h4>
 
+
         </div>
+
 
 
         <div>
 
-            <h6 class="fw-bold mb-3">
+
+            <h6
+                class="fw-bold mb-3">
 
                 所屬產業
 
@@ -2389,40 +3676,57 @@ function selectStock(
             ${
                 industries.length
                     ? industries
-                        .map(id => `
+                        .map(
+                            id =>
+                                `
 
-                            <div
-                                class="stock-card"
-                                data-industry-id="${escapeAttr(
-                                    id
-                                )}">
+                                    <div
+                                        class="stock-card"
+                                        data-industry-id="${escapeAttr(
+                                            id
+                                        )}">
 
-                                <div class="fw-semibold">
 
-                                    ${escapeHTML(
-                                        getIndustryName(id)
-                                    )}
+                                        <div
+                                            class="fw-semibold">
 
-                                </div>
+                                            ${escapeHTML(
+                                                getIndustryName(
+                                                    id
+                                                )
+                                            )}
 
-                                <div
-                                    class="small
-                                           text-body-secondary">
+                                        </div>
 
-                                    ${escapeHTML(id)}
 
-                                </div>
+                                        <div
+                                            class="small
+                                                   text-body-secondary">
 
-                            </div>
+                                            ${escapeHTML(
+                                                id
+                                            )}
 
-                          `)
+                                        </div>
+
+
+                                    </div>
+
+                                `
+                        )
                         .join("")
                     : `
-                        <div class="text-body-secondary">
+
+                        <div
+                            class="text-body-secondary">
+
                             尚無產業分類
+
                         </div>
+
                       `
             }
+
 
         </div>
 
@@ -2430,22 +3734,25 @@ function selectStock(
 
 
     $$("#detail-content [data-industry-id]")
-        .forEach(card => {
+        .forEach(
+            card => {
 
-            card.addEventListener(
-                "click",
-                () => {
+                card.addEventListener(
+                    "click",
+                    () => {
 
-                    selectIndustry(
-                        card.dataset.industryId
-                    );
+                        selectIndustry(
+                            card.dataset.industryId
+                        );
 
-                }
-            );
+                    }
+                );
 
-        });
+            }
+        );
 
 }
+
 
 
 /* =========================================================
@@ -2461,7 +3768,9 @@ function getStocksByIndustry(
     )
     .filter(
         ([, industries]) =>
-            Array.isArray(industries) &&
+            Array.isArray(
+                industries
+            ) &&
             industries.includes(
                 industryId
             )
@@ -2473,6 +3782,7 @@ function getStocksByIndustry(
     .sort();
 
 }
+
 
 
 /* =========================================================
@@ -2499,6 +3809,7 @@ function buildReverseRelations(
     )
     .forEach(
         ([source, relation]) => {
+
 
             if (
                 relation.upstream?.includes(
@@ -2564,6 +3875,7 @@ function buildReverseRelations(
 }
 
 
+
 /* =========================================================
    BREADCRUMB
 ========================================================= */
@@ -2574,19 +3886,31 @@ function renderBreadcrumb(
 
     $("#breadcrumb").innerHTML = `
 
-        <nav aria-label="breadcrumb">
+        <nav
+            aria-label="breadcrumb">
 
-            <ol class="breadcrumb mb-0 small">
 
-                <li class="breadcrumb-item">
+            <ol
+                class="breadcrumb
+                       mb-0
+                       small">
+
+
+                <li
+                    class="breadcrumb-item">
 
                     ${escapeHTML(
-                        getGroup(industry)
+                        getGroup(
+                            industry
+                        )
                     )}
 
                 </li>
 
-                <li class="breadcrumb-item active">
+
+                <li
+                    class="breadcrumb-item
+                           active">
 
                     ${escapeHTML(
                         industry.shortname ||
@@ -2596,13 +3920,16 @@ function renderBreadcrumb(
 
                 </li>
 
+
             </ol>
+
 
         </nav>
 
     `;
 
 }
+
 
 
 /* =========================================================
@@ -2623,24 +3950,26 @@ function getIndustry(
             industryId
         ] ||
 
-        state.industryDetails[
-            industryId
-        ] ||
-
         {
-            id: industryId,
 
-            name: industryId,
+            id:
+                industryId,
 
-            shortname: industryId,
+            name:
+                industryId,
 
-            group: "其他"
+            shortname:
+                industryId,
+
+            group:
+                "其他"
 
         }
 
     );
 
 }
+
 
 
 /* =========================================================
@@ -2670,17 +3999,21 @@ function getIndustryName(
 }
 
 
+
 /* =========================================================
    SEARCH
 ========================================================= */
 
-function handleSearch(event) {
+function handleSearch(
+    event
+) {
 
     renderIndustryGroups(
         event.target.value
     );
 
 }
+
 
 
 /* =========================================================
@@ -2712,11 +4045,15 @@ function toggleTheme() {
 
 
     $("#themeBtn").innerHTML =
+
         next === "dark"
+
             ? `<i class="bi bi-sun"></i>`
+
             : `<i class="bi bi-moon"></i>`;
 
 }
+
 
 
 /* =========================================================
@@ -2733,27 +4070,44 @@ function showEmptyState() {
 
         <div>
 
-            <div class="empty-state-icon">
 
-                <i class="bi bi-diagram-3"></i>
+            <div
+                class="empty-state-icon">
+
+                <i
+                    class="bi bi-diagram-3">
+                </i>
 
             </div>
 
+
             <h4>
+
                 產業地圖
+
             </h4>
 
-            <p class="text-body-secondary mb-0">
+
+            <p
+                class="text-body-secondary mb-0">
 
                 從左側選擇一個產業開始
 
             </p>
 
+
         </div>
 
     `;
 
+
+    $("#map-toolbar")
+        .classList.add(
+            "d-none"
+        );
+
 }
+
 
 
 /* =========================================================
@@ -2764,25 +4118,106 @@ function showLoading() {
 
     $("#industryGroups").innerHTML = `
 
-        <div class="text-center p-4">
+        <div
+            class="text-center
+                   p-4">
+
 
             <div
-                class="spinner-border spinner-border-sm
-                       text-primary mb-2">
-
+                class="spinner-border
+                       spinner-border-sm
+                       text-primary
+                       mb-2">
             </div>
 
-            <div class="small text-body-secondary">
+
+            <div
+                class="small
+                       text-body-secondary">
 
                 載入產業資料...
 
             </div>
+
 
         </div>
 
     `;
 
 }
+
+
+
+/* =========================================================
+   DETAIL ERROR
+========================================================= */
+
+function renderIndustryDetailError(
+    industryId,
+    error
+) {
+
+    const container =
+        $("#industry-detail-below-map");
+
+
+    if (!container)
+        return;
+
+
+    container.innerHTML = `
+
+        <section
+            class="relation-section">
+
+
+            <div
+                class="alert alert-danger">
+
+
+                <div
+                    class="fw-bold">
+
+                    無法載入產業詳細資料
+
+                </div>
+
+
+                <div
+                    class="small
+                           mt-2">
+
+                    檔案：
+
+                    ${escapeHTML(
+                        CONFIG.detailPath +
+                        industryId +
+                        ".json"
+                    )}
+
+                </div>
+
+
+                <div
+                    class="small
+                           mt-1">
+
+                    ${escapeHTML(
+                        error.message
+                    )}
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+    `;
+
+}
+
 
 
 /* =========================================================
@@ -2795,15 +4230,23 @@ function showLoadError(
 
     $("#industryGroups").innerHTML = `
 
-        <div class="alert alert-danger m-2">
+        <div
+            class="alert
+                   alert-danger
+                   m-2">
 
-            <div class="fw-bold mb-2">
+
+            <div
+                class="fw-bold
+                       mb-2">
 
                 JSON 載入失敗
 
             </div>
 
-            <div class="small">
+
+            <div
+                class="small">
 
                 ${escapeHTML(
                     error.message
@@ -2811,40 +4254,53 @@ function showLoadError(
 
             </div>
 
+
             <hr>
 
-            <div class="small">
 
-                請確認以下檔案與 index.html
-                位於同一個資料夾：
+            <div
+                class="small">
 
-                <ul class="mt-2 mb-0">
+                請確認以下檔案與
+                index.html 的位置：
 
-                    <li>
-                        industry-relations.json
-                    </li>
 
-                    <li>
-                        stock-industries.json
-                    </li>
+                <ul
+                    class="mt-2 mb-0">
+
 
                     <li>
-                        industry-details.json
+                        imsrc/industry-relations.json
                     </li>
 
+
                     <li>
-                        industries.json
+                        imsrc/stock-industries.json
                     </li>
+
+
+                    <li>
+                        imsrc/industries.json
+                    </li>
+
+
+                    <li>
+                        data/{industry-id}.json
+                    </li>
+
 
                 </ul>
 
+
             </div>
+
 
         </div>
 
     `;
 
 }
+
 
 
 /* =========================================================
@@ -2855,16 +4311,27 @@ function uniqueArray(
     array
 ) {
 
-    if (!Array.isArray(array))
+    if (
+        !Array.isArray(
+            array
+        )
+    ) {
+
         return [];
+
+    }
+
 
     return [
         ...new Set(
-            array.filter(Boolean)
+            array.filter(
+                Boolean
+            )
         )
     ];
 
 }
+
 
 
 function escapeHTML(
@@ -2878,20 +4345,26 @@ function escapeHTML(
         /[&<>"']/g,
         char => ({
 
-            "&": "&amp;",
+            "&":
+                "&amp;",
 
-            "<": "&lt;",
+            "<":
+                "&lt;",
 
-            ">": "&gt;",
+            ">":
+                "&gt;",
 
-            '"': "&quot;",
+            '"':
+                "&quot;",
 
-            "'": "&#039;"
+            "'":
+                "&#039;"
 
         })[char]
     );
 
 }
+
 
 
 function escapeAttr(
@@ -2904,12 +4377,8 @@ function escapeAttr(
 
 }
 
-
-/* =========================================================
-   END
-========================================================= */
-
 </script>
+
 
 </body>
 </html>
