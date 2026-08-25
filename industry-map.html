@@ -1830,6 +1830,32 @@ function renderIndustryItem(
 }
 
 
+/* =========================================================
+   UPDATE SIDEBAR ACTIVE
+========================================================= */
+
+function updateSidebarActive() {
+
+    $$(".industry-item").forEach(button => {
+
+        if (
+            button.dataset.id ===
+            state.selectedIndustry
+        ) {
+
+            button.classList.add("active");
+
+        } else {
+
+            button.classList.remove("active");
+
+        }
+
+    });
+
+}
+
+
 
 /* =========================================================
    SELECT INDUSTRY
