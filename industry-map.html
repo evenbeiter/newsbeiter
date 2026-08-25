@@ -7,510 +7,112 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
 <style>
-:root{
-    --sidebar-width:310px;
-    --sidebar-collapsed-width:0px;
-    --right-width:360px;
-    --node-border:#dee2e6;
-    --node-bg:#fff;
-    --node-hover:#f1f5f9;
-}
-body{
-    margin:0;
-    overflow:hidden;
-}
-#app{
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-}
-.app-navbar{
-    flex:0 0 auto;
-    z-index:1000;
-}
-.app-body{
-    min-height:0;
-    flex:1;
-    display:flex;
-    overflow:hidden;
-}
-#sidebar{
-    width:var(--sidebar-width);
-    min-width:var(--sidebar-width);
-    border-right:1px solid var(--bs-border-color);
-    background:var(--bs-body-bg);
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-    transition:width .2s ease,min-width .2s ease;
-    z-index:100;
-}
-#sidebar.collapsed{
-    width:0;
-    min-width:0;
-    border-right:0;
-}
-.sidebar-header{
-    padding:1rem;
-    border-bottom:1px solid var(--bs-border-color);
-    flex:0 0 auto;
-}
-.industry-groups{
-    flex:1;
-    overflow-y:auto;
-    padding:.5rem;
-}
-.group-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:.65rem .75rem;
-    margin-top:.25rem;
-    font-weight:600;
-    cursor:pointer;
-    border-radius:.5rem;
-}
-.group-header:hover{
-    background:var(--bs-tertiary-bg);
-}
-.industry-list{
-    padding-left:.5rem;
-}
-.industry-item{
-    width:100%;
-    text-align:left;
-    border:0;
-    background:transparent;
-    padding:.55rem .75rem;
-    border-radius:.45rem;
-    color:var(--bs-body-color);
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-    cursor:pointer;
-}
-.industry-item:hover{
-    background:var(--bs-tertiary-bg);
-}
-.industry-item.active{
-    background:var(--bs-primary-bg-subtle);
-    color:var(--bs-primary);
-    font-weight:600;
-}
-.industry-count{
-    margin-left:auto;
-    font-size:.7rem;
-}
-#main-area{
-    min-width:0;
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-}
-#tab-content-wrapper{
-    min-height:0;
-    flex:1;
-    overflow:hidden;
-}
-.tab-pane-custom{
-    height:100%;
-    overflow:auto;
-}
-#map-toolbar{
-    padding:.65rem 1rem;
-    border-bottom:1px solid var(--bs-border-color);
-    position:sticky;
-    top:0;
-    background:var(--bs-body-bg);
-    z-index:20;
-}
-#map-scroll{
-    padding:2rem;
-}
-.industry-title{
-    font-weight:700;
-    letter-spacing:-.02em;
-}
-.industry-description{
-    max-width:1100px;
-    line-height:1.8;
-}
-.tag{
-    display:inline-block;
-    padding:.3rem .6rem;
-    border-radius:999px;
-    background:var(--bs-tertiary-bg);
-    font-size:.8rem;
-    margin-right:.25rem;
-    margin-bottom:.25rem;
-}
-.relation-section{
-    margin-top:2rem;
-}
-.relation-title{
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-    margin-bottom:1rem;
-    font-weight:700;
-}
-.relation-grid{
-    display:grid;
-    grid-template-columns:repeat(3,minmax(220px,1fr));
-    gap:1.5rem;
-    align-items:start;
-}
-.relation-column-title{
-    font-size:.9rem;
-    font-weight:700;
-    margin-bottom:.75rem;
-    display:flex;
-    align-items:center;
-    gap:.4rem;
-}
-.relation-cards{
-    display:flex;
-    flex-direction:column;
-    gap:.65rem;
-}
-.relation-card{
-    border:1px solid var(--node-border);
-    background:var(--node-bg);
-    border-radius:.75rem;
-    padding:.8rem;
-    cursor:pointer;
-    transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
-}
-.relation-card:hover{
-    transform:translateY(-2px);
-    box-shadow:0 .3rem 1rem rgba(0,0,0,.08);
-    background:var(--node-hover);
-}
-.relation-card-name{
-    font-weight:600;
-    line-height:1.4;
-}
-.relation-card-id{
-    font-size:.7rem;
-    opacity:.6;
-    margin-top:.2rem;
-}
-.relation-empty{
-    border:1px dashed var(--bs-border-color);
-    border-radius:.75rem;
-    padding:1rem;
-    text-align:center;
-    opacity:.6;
-    font-size:.85rem;
-}
-.detail-block{
-    margin-top:2rem;
-}
-.detail-block-title{
-    font-weight:700;
-    margin-bottom:1rem;
-}
-.supply-chain-wrapper{
-    overflow-x:auto;
-    padding-bottom:.75rem;
-}
-.supply-chain{
-    display:flex;
-    gap:1.5rem;
-    align-items:stretch;
-    min-width:max-content;
-}
-.supply-segment{
-    width:250px;
-    border:1px solid var(--bs-border-color);
-    border-radius:.75rem;
-    padding:.9rem;
-    background:var(--bs-tertiary-bg);
-}
-.supply-segment-title{
-    font-weight:700;
-    margin-bottom:.25rem;
-}
-.supply-segment-subtitle{
-    font-size:.78rem;
-    opacity:.7;
-    margin-bottom:.75rem;
-}
-.supply-child{
-    background:var(--bs-body-bg);
-    border:1px solid var(--bs-border-color);
-    border-radius:.6rem;
-    padding:.65rem;
-    margin-top:.5rem;
-    cursor:pointer;
-}
-.supply-child:hover{
-    border-color:var(--bs-primary);
-}
-.supply-child-name{
-    font-weight:600;
-    font-size:.85rem;
-}
-.supply-child-subtitle{
-    font-size:.72rem;
-    opacity:.7;
-    margin-top:.2rem;
-}
-.metric-card{
-    height:100%;
-    border:1px solid var(--bs-border-color);
-    border-radius:.75rem;
-    padding:1rem;
-    background:var(--bs-tertiary-bg);
-}
-.metric-value{
-    font-size:1.15rem;
-    font-weight:700;
-}
-.metric-label{
-    font-size:.78rem;
-    opacity:.65;
-    margin-bottom:.2rem;
-}
-.company-card{
-    border:1px solid var(--bs-border-color);
-    border-radius:.65rem;
-    padding:.75rem;
-    height:100%;
-    cursor:pointer;
-    transition:.15s;
-}
-.company-card:hover{
-    background:var(--bs-tertiary-bg);
-    border-color:var(--bs-primary);
-    transform:translateY(-1px);
-}
-.company-code{
-    font-weight:700;
-    font-size:.9rem;
-}
-.company-name{
-    font-size:.85rem;
-    margin-top:.25rem;
-}
-.company-price{
-    font-size:.75rem;
-    margin-top:.45rem;
-}
-.text-up{
-    color:#dc3545!important;
-}
-.text-down{
-    color:#198754!important;
-}
-#detail-panel{
-    width:var(--right-width);
-    min-width:var(--right-width);
-    border-left:1px solid var(--bs-border-color);
-    background:var(--bs-body-bg);
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-}
-.detail-header{
-    padding:1rem;
-    border-bottom:1px solid var(--bs-border-color);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-#detail-content{
-    flex:1;
-    overflow-y:auto;
-    padding:1rem;
-}
-.empty-state{
-    min-height:60vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    opacity:.65;
-}
-.empty-state-icon{
-    font-size:4rem;
-    margin-bottom:1rem;
-}
-#heatmap-page{
-    padding:1.5rem;
-}
-.heatmap-ranking-section{
-    margin-bottom:2rem;
-}
-.ranking-title{
-    font-size:1.05rem;
-    font-weight:700;
-    margin-bottom:.8rem;
-}
-.ranking-list{
-    display:flex;
-    flex-wrap:wrap;
-    gap:.6rem;
-}
-.ranking-item{
-    display:flex;
-    align-items:center;
-    gap:.6rem;
-    border:1px solid var(--bs-border-color);
-    border-radius:.6rem;
-    padding:.55rem .75rem;
-    background:var(--bs-body-bg);
-    cursor:pointer;
-}
-.ranking-item:hover{
-    background:var(--bs-tertiary-bg);
-}
-.ranking-number{
-    font-weight:700;
-    opacity:.6;
-    min-width:24px;
-}
-.ranking-name{
-    font-weight:600;
-}
-.ranking-change{
-    font-weight:700;
-}
-.heatmap-section{
-    margin-top:1.5rem;
-}
-.heatmap-group{
-    margin-bottom:1.5rem;
-}
-.heatmap-group-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:1rem;
-    margin-bottom:.65rem;
-}
-.heatmap-group-name{
-    font-size:1rem;
-    font-weight:700;
-}
-.heatmap-group-change{
-    font-weight:700;
-}
-.heatmap-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-    gap:6px;
-}
-.heatmap-cell{
-    position:relative;
-    min-height:105px;
-    border-radius:.55rem;
-    padding:.7rem;
-    color:#fff;
-    cursor:pointer;
-    overflow:hidden;
-    transition:transform .12s ease,filter .12s ease;
-}
-.heatmap-cell:hover{
-    transform:scale(1.02);
-    filter:brightness(1.08);
-}
-.heatmap-cell-name{
-    font-weight:700;
-    line-height:1.3;
-    text-shadow:0 1px 2px rgba(0,0,0,.35);
-}
-.heatmap-cell-change{
-    font-size:1.1rem;
-    font-weight:800;
-    margin-top:.35rem;
-    text-shadow:0 1px 2px rgba(0,0,0,.35);
-}
-.heatmap-cell-meta{
-    font-size:.7rem;
-    opacity:.9;
-    position:absolute;
-    left:.7rem;
-    bottom:.55rem;
-}
-.heatmap-cell.company-cell{
-    min-height:85px;
-}
-.heatmap-legend{
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-    font-size:.75rem;
-    color:var(--bs-secondary-color);
-}
-.heatmap-legend-bar{
-    width:180px;
-    height:10px;
-    border-radius:99px;
-    background:linear-gradient(90deg,#198754,#adb5bd,#dc3545);
-}
-.heatmap-empty{
-    border:1px dashed var(--bs-border-color);
-    padding:2rem;
-    text-align:center;
-    color:var(--bs-secondary-color);
-    border-radius:.75rem;
-}
-.nav-tabs .nav-link{
-    cursor:pointer;
-}
-@media(max-width:1199.98px){
-    #detail-panel{
-        display:none;
-    }
-}
-@media(max-width:991.98px){
-    body{
-        overflow:auto;
-    }
-    #app{
-        height:auto;
-        min-height:100vh;
-    }
-    .app-body{
-        display:block;
-        overflow:visible;
-    }
-    #sidebar{
-        width:100%;
-        min-width:0;
-        max-height:38vh;
-        border-right:0;
-        border-bottom:1px solid var(--bs-border-color);
-    }
-    #sidebar.collapsed{
-        width:100%;
-        min-width:0;
-        max-height:0;
-        border-bottom:0;
-    }
-    #main-area{
-        min-height:70vh;
-        overflow:visible;
-    }
-    #tab-content-wrapper{
-        overflow:visible;
-    }
-    .tab-pane-custom{
-        height:auto;
-        overflow:visible;
-    }
-    .relation-grid{
-        grid-template-columns:1fr;
-    }
-    #map-scroll{
-        padding:1rem;
-    }
-    .heatmap-grid{
-        grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-    }
-}
+:root{--sidebar-width:310px;--right-width:380px}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:var(--bs-body-bg);color:var(--bs-body-color)}
+#app{height:100vh;display:flex;flex-direction:column}
+.app-navbar{flex:0 0 auto;z-index:1000}
+.app-body{min-height:0;flex:1;display:flex;overflow:hidden}
+#sidebar{width:var(--sidebar-width);min-width:var(--sidebar-width);height:100%;border-right:1px solid var(--bs-border-color);background:var(--bs-body-bg);display:flex;flex-direction:column;overflow:hidden;transition:width .2s ease,min-width .2s ease}
+#sidebar.collapsed{width:0;min-width:0;border-right:0}
+.sidebar-header{padding:.75rem;border-bottom:1px solid var(--bs-border-color);flex:0 0 auto}
+.industry-groups{flex:1;overflow-y:auto;padding:.5rem}
+.group-header{display:flex;align-items:center;justify-content:space-between;padding:.65rem .75rem;margin-top:.2rem;font-weight:600;cursor:pointer;border-radius:.5rem}
+.group-header:hover{background:var(--bs-tertiary-bg)}
+.industry-list{padding-left:.5rem}
+.industry-item{width:100%;text-align:left;border:0;background:transparent;padding:.55rem .75rem;border-radius:.45rem;color:var(--bs-body-color);display:flex;align-items:center;gap:.5rem;cursor:pointer}
+.industry-item:hover{background:var(--bs-tertiary-bg)}
+.industry-item.active{background:var(--bs-primary-bg-subtle);color:var(--bs-primary);font-weight:600}
+.industry-count{margin-left:auto;font-size:.68rem}
+#main-area{min-width:0;flex:1;height:100%;display:flex;flex-direction:column;overflow:hidden}
+#main-tabs{flex:0 0 auto}
+#tab-content-wrapper{min-height:0;flex:1;overflow:hidden}
+.tab-pane-custom{height:100%;overflow:auto}
+#detail-panel{width:var(--right-width);min-width:var(--right-width);height:100%;border-left:1px solid var(--bs-border-color);background:var(--bs-body-bg);display:flex;flex-direction:column;overflow:hidden}
+.detail-header{padding:.85rem 1rem;border-bottom:1px solid var(--bs-border-color);display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
+#detail-content{flex:1;overflow-y:auto;padding:1rem}
+.empty-state{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--bs-secondary-color)}
+.empty-state-icon{font-size:4rem;margin-bottom:1rem}
+#map-toolbar{padding:.65rem 1rem;border-bottom:1px solid var(--bs-border-color);position:sticky;top:0;background:var(--bs-body-bg);z-index:20}
+#map-scroll{padding:1.75rem}
+.industry-title{font-weight:700;letter-spacing:-.02em}
+.industry-description{max-width:1100px;line-height:1.8}
+.tag{display:inline-block;padding:.3rem .6rem;border-radius:999px;background:var(--bs-tertiary-bg);font-size:.78rem;margin-right:.25rem;margin-bottom:.25rem}
+.relation-section{margin-top:2rem}
+.relation-title{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;font-weight:700}
+.relation-grid{display:grid;grid-template-columns:repeat(3,minmax(200px,1fr));gap:1.5rem;align-items:start}
+.relation-column-title{font-size:.9rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+.relation-cards{display:flex;flex-direction:column;gap:.65rem}
+.relation-card{border:1px solid var(--bs-border-color);background:var(--bs-body-bg);border-radius:.75rem;padding:.8rem;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,background .12s ease}
+.relation-card:hover{transform:translateY(-2px);box-shadow:0 .3rem 1rem rgba(0,0,0,.08);background:var(--bs-tertiary-bg)}
+.relation-card-name{font-weight:600;line-height:1.4}
+.relation-card-id{font-size:.7rem;opacity:.6;margin-top:.2rem}
+.relation-empty{border:1px dashed var(--bs-border-color);border-radius:.75rem;padding:1rem;text-align:center;opacity:.6;font-size:.85rem}
+.detail-block{margin-top:2rem}
+.detail-block-title{font-weight:700;margin-bottom:1rem}
+.metric-card{height:100%;border:1px solid var(--bs-border-color);border-radius:.75rem;padding:1rem;background:var(--bs-tertiary-bg)}
+.metric-value{font-size:1.05rem;font-weight:700}
+.metric-label{font-size:.76rem;opacity:.65;margin-bottom:.2rem}
+.supply-chain-wrapper{overflow-x:auto;padding-bottom:1rem}
+.supply-chain{display:flex;gap:1.25rem;align-items:stretch;min-width:max-content}
+.supply-segment{width:260px;border:1px solid var(--bs-border-color);border-radius:.75rem;padding:.9rem;background:var(--bs-tertiary-bg)}
+.supply-segment-title{font-weight:700;margin-bottom:.25rem}
+.supply-segment-subtitle{font-size:.78rem;opacity:.7;margin-bottom:.75rem}
+.supply-child{background:var(--bs-body-bg);border:1px solid var(--bs-border-color);border-radius:.6rem;padding:.7rem;margin-top:.5rem;cursor:pointer}
+.supply-child:hover{border-color:var(--bs-primary);background:var(--bs-primary-bg-subtle)}
+.supply-child-name{font-weight:600;font-size:.86rem}
+.supply-child-subtitle{font-size:.72rem;opacity:.7;margin-top:.2rem}
+.role-section{margin-top:1.5rem}
+.role-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.role-name{font-weight:700}
+.role-count{font-size:.75rem}
+.role-treemap{width:100%;height:330px;border:1px solid var(--bs-border-color);border-radius:.75rem;overflow:hidden;background:var(--bs-tertiary-bg)}
+.role-loading{height:330px;display:flex;align-items:center;justify-content:center;color:var(--bs-secondary-color)}
+.company-card{border:1px solid var(--bs-border-color);border-radius:.65rem;padding:.75rem;height:100%;cursor:pointer;transition:.15s}
+.company-card:hover{background:var(--bs-tertiary-bg);border-color:var(--bs-primary);transform:translateY(-1px)}
+.company-code{font-weight:700;font-size:.9rem}
+.company-name{font-size:.85rem;margin-top:.25rem}
+.company-price{font-size:.75rem;margin-top:.45rem}
+.text-up{color:#dc3545!important}
+.text-down{color:#198754!important}
+.company-info-card{border:1px solid var(--bs-border-color);border-radius:.75rem;padding:1rem;background:var(--bs-tertiary-bg);margin-bottom:1rem}
+.company-info-title{font-weight:700}
+.company-info-label{font-size:.72rem;color:var(--bs-secondary-color);margin-bottom:.15rem}
+.company-info-value{font-size:.9rem;font-weight:600}
+.position-badge{display:inline-flex;align-items:center;gap:.25rem;border-radius:999px;padding:.35rem .65rem;background:var(--bs-primary-bg-subtle);font-size:.8rem}
+.company-description{font-size:.85rem;line-height:1.75;color:var(--bs-secondary-color)}
+.ai-summary{font-size:.85rem;line-height:1.75}
+#heatmap-page{padding:1.25rem 1.5rem 2rem}
+.heatmap-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+.heatmap-title{font-size:1.3rem;font-weight:700}
+.heatmap-subtitle{font-size:.78rem;color:var(--bs-secondary-color)}
+.period-buttons .btn{min-width:65px}
+.heatmap-breadcrumb{font-size:.8rem;color:var(--bs-secondary-color);margin-bottom:1rem}
+.ranking-section{margin-bottom:1.25rem}
+.ranking-title{font-size:.95rem;font-weight:700;margin-bottom:.7rem}
+.ranking-list{display:flex;flex-wrap:wrap;gap:.5rem}
+.ranking-item{display:flex;align-items:center;gap:.55rem;border:1px solid var(--bs-border-color);border-radius:.55rem;padding:.5rem .7rem;background:var(--bs-body-bg);cursor:pointer}
+.ranking-item:hover{background:var(--bs-tertiary-bg);border-color:var(--bs-primary)}
+.ranking-number{font-weight:700;opacity:.55;min-width:20px}
+.ranking-name{font-weight:600;font-size:.82rem}
+.ranking-change{font-weight:700;font-size:.82rem}
+.treemap-wrapper{width:100%;border:1px solid var(--bs-border-color);border-radius:.75rem;overflow:hidden;background:var(--bs-tertiary-bg)}
+#group-treemap{height:500px}
+#sub-treemap{height:500px}
+.treemap-node{position:absolute;overflow:hidden;border:1px solid rgba(255,255,255,.7);cursor:pointer;transition:filter .12s ease}
+.treemap-node:hover{filter:brightness(1.08)}
+.treemap-node-label{position:absolute;left:8px;right:8px;top:7px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);line-height:1.25;pointer-events:none}
+.treemap-node-change{position:absolute;left:8px;right:8px;top:31px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none}
+.treemap-node-marketcap{position:absolute;left:8px;right:8px;bottom:6px;font-size:.65rem;color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none}
+.treemap-node-company{position:absolute;left:7px;right:7px;top:6px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.65);font-weight:700;line-height:1.2;pointer-events:none}
+.treemap-node-company-change{position:absolute;left:7px;right:7px;bottom:7px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.65);font-weight:800;pointer-events:none}
+.heatmap-empty{border:1px dashed var(--bs-border-color);padding:2rem;text-align:center;color:var(--bs-secondary-color);border-radius:.75rem}
+.legend{display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--bs-secondary-color)}
+.legend-bar{width:180px;height:10px;border-radius:99px;background:linear-gradient(90deg,#198754,#6c757d,#dc3545)}
+.stock-heatmap-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+@media(max-width:1199.98px){#detail-panel{width:330px;min-width:330px}}
+@media(max-width:991.98px){html,body{overflow:auto}#app{height:auto;min-height:100vh}.app-body{display:block;overflow:visible}#sidebar{width:100%;min-width:0;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--bs-border-color)}#sidebar.collapsed{width:100%;min-width:0;max-height:0;border-bottom:0}#main-area{height:auto;min-height:70vh;overflow:visible}#tab-content-wrapper{overflow:visible}.tab-pane-custom{height:auto;overflow:visible}#detail-panel{display:none}.relation-grid{grid-template-columns:1fr}#map-scroll{padding:1rem}#group-treemap,#sub-treemap{height:420px}.heatmap-header{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
@@ -518,30 +120,20 @@ body{
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom app-navbar">
 <div class="container-fluid">
 <div class="d-flex align-items-center gap-2">
-<button class="btn btn-outline-secondary btn-sm" id="sidebarToggle" title="收合/展開產業列表">
-<i class="bi bi-layout-sidebar"></i>
-</button>
-<span class="navbar-brand fw-bold mb-0">
-<i class="bi bi-diagram-3 me-2"></i>產業地圖
-</span>
+<button class="btn btn-outline-secondary btn-sm" id="sidebarToggle" title="開啟/收合產業列表"><i class="bi bi-layout-sidebar-inset"></i></button>
+<span class="navbar-brand fw-bold mb-0"><i class="bi bi-diagram-3 me-2"></i>產業地圖</span>
 </div>
 <div class="d-flex align-items-center gap-2">
-<button class="btn btn-outline-secondary btn-sm" id="reloadBtn" title="重新載入資料">
-<i class="bi bi-arrow-clockwise"></i>
-</button>
-<button class="btn btn-outline-secondary btn-sm" id="themeBtn" title="切換深色模式">
-<i class="bi bi-moon"></i>
-</button>
+<button class="btn btn-outline-secondary btn-sm" id="reloadBtn" title="重新載入資料"><i class="bi bi-arrow-clockwise"></i></button>
+<button class="btn btn-outline-secondary btn-sm" id="themeBtn" title="切換深色模式"><i class="bi bi-moon"></i></button>
 </div>
 </div>
 </nav>
 <div class="app-body">
-<aside id="sidebar">
+<aside id="sidebar" class="collapsed">
 <div class="sidebar-header">
 <div class="input-group input-group-sm">
-<span class="input-group-text">
-<i class="bi bi-search"></i>
-</span>
+<span class="input-group-text"><i class="bi bi-search"></i></span>
 <input id="industrySearch" type="search" class="form-control" placeholder="搜尋產業...">
 </div>
 </div>
@@ -550,20 +142,12 @@ body{
 </div>
 </aside>
 <main id="main-area">
-<ul class="nav nav-tabs px-3 pt-2 bg-body-tertiary" id="mainTabs">
-<li class="nav-item">
-<button class="nav-link active" data-tab="map">
-<i class="bi bi-diagram-3 me-1"></i>產業關聯圖
-</button>
-</li>
-<li class="nav-item">
-<button class="nav-link" data-tab="heatmap">
-<i class="bi bi-grid-3x3-gap me-1"></i>產業 Heatmap
-</button>
-</li>
+<ul class="nav nav-tabs px-3 pt-2 bg-body-tertiary" id="main-tabs">
+<li class="nav-item"><button class="nav-link" data-tab="map"><i class="bi bi-diagram-3 me-1"></i>產業關聯圖</button></li>
+<li class="nav-item"><button class="nav-link active" data-tab="heatmap"><i class="bi bi-grid-3x3-gap me-1"></i>產業 Heatmap</button></li>
 </ul>
 <div id="tab-content-wrapper">
-<div id="map-tab" class="tab-pane-custom">
+<div id="map-tab" class="tab-pane-custom d-none">
 <div id="map-toolbar" class="d-none">
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
 <div id="breadcrumb"></div>
@@ -580,18 +164,15 @@ body{
 <div>
 <div class="empty-state-icon"><i class="bi bi-diagram-3"></i></div>
 <h4>產業地圖</h4>
-<p class="text-body-secondary mb-0">從左側選擇一個產業開始</p>
+<p class="mb-0">從 Heatmap 或左側產業列表選擇產業</p>
 </div>
 </div>
 </div>
 </div>
-<div id="heatmap-tab" class="tab-pane-custom d-none">
+<div id="heatmap-tab" class="tab-pane-custom">
 <div id="heatmap-page">
 <div id="heatmap-content">
-<div class="text-center text-body-secondary p-5">
-<div class="spinner-border spinner-border-sm me-2"></div>
-正在載入 Heatmap...
-</div>
+<div class="text-center text-body-secondary p-5"><div class="spinner-border spinner-border-sm me-2"></div>正在載入 Heatmap...</div>
 </div>
 </div>
 </div>
@@ -599,842 +180,593 @@ body{
 </main>
 <aside id="detail-panel">
 <div class="detail-header">
-<strong>詳細資訊</strong>
-<button class="btn btn-sm btn-outline-secondary" id="closeDetailBtn">
-<i class="bi bi-x-lg"></i>
-</button>
+<strong id="detail-panel-title">詳細資訊</strong>
+<button class="btn btn-sm btn-outline-secondary" id="closeDetailBtn"><i class="bi bi-x-lg"></i></button>
 </div>
 <div id="detail-content">
-<div class="text-center text-body-secondary p-4">
-選擇產業或個股查看詳細資訊
-</div>
+<div class="text-center text-body-secondary p-4">點擊產業或個股查看詳細資訊</div>
 </div>
 </aside>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3"></script>
 <script>
-const CONFIG={
-    files:{
-        relations:"imsrc/industry-relations.json",
-        stockIndustries:"imsrc/stock-industries.json",
-        industries:"imsrc/industries.json",
-        heatmap:"imsrc/heatmap-data.json"
-    },
-    detailPath:"https://aistockmap.com/live/topics/"
-};
-const state={
-    relations:{},
-    stockIndustries:{},
-    industries:{},
-    industriesArray:[],
-    heatmapData:null,
-    selectedIndustry:null,
-    selectedStock:null,
-    currentIndustryDetail:null,
-    relationFilter:"all",
-    currentTab:"map",
-    sidebarCollapsed:false
-};
+const CONFIG={files:{relations:"imsrc/industry-relations.json",stockIndustries:"imsrc/stock-industries.json",industries:"imsrc/industries.json",heatmap:"imsrc/heatmap-data.json"},detailPath:"https://aistockmap.com/live/topics/",api:{batch:"https://aistockmap.com/api/data/company-topics-batch?topicId=",company:"https://aistockmap.com/api/data/company-topic?code={code}&topicId={industryId}"}};
+const state={relations:{},stockIndustries:{},industries:{},industriesArray:[],heatmapData:null,selectedIndustry:null,selectedStock:null,currentIndustryDetail:null,relationFilter:"all",currentTab:"heatmap",heatmapPeriod:"change1D",heatmapLevel:"group",selectedGroup:null,selectedSubIndustry:null,apiBatchCache:{},apiCompanyCache:{}};
 const $=selector=>document.querySelector(selector);
 const $$=selector=>[...document.querySelectorAll(selector)];
 document.addEventListener("DOMContentLoaded",init);
 async function init(){
-    bindEvents();
-    await loadData();
+bindEvents();
+await loadData();
 }
 function bindEvents(){
-    $("#industrySearch").addEventListener("input",e=>renderIndustryGroups(e.target.value));
-    $("#themeBtn").addEventListener("click",toggleTheme);
-    $("#reloadBtn").addEventListener("click",loadData);
-    $("#sidebarToggle").addEventListener("click",toggleSidebar);
-    $("#closeDetailBtn").addEventListener("click",clearDetailPanel);
-    $("#showAllBtn").addEventListener("click",()=>setRelationFilter("all"));
-    $("#showUpstreamBtn").addEventListener("click",()=>setRelationFilter("upstream"));
-    $("#showDownstreamBtn").addEventListener("click",()=>setRelationFilter("downstream"));
-    $("#showPeersBtn").addEventListener("click",()=>setRelationFilter("peers"));
-    $$("#mainTabs .nav-link").forEach(button=>{
-        button.addEventListener("click",()=>switchTab(button.dataset.tab));
-    });
+$("#industrySearch").addEventListener("input",e=>renderIndustryGroups(e.target.value));
+$("#themeBtn").addEventListener("click",toggleTheme);
+$("#reloadBtn").addEventListener("click",loadData);
+$("#sidebarToggle").addEventListener("click",toggleSidebar);
+$("#closeDetailBtn").addEventListener("click",clearDetailPanel);
+$("#showAllBtn").addEventListener("click",()=>setRelationFilter("all"));
+$("#showUpstreamBtn").addEventListener("click",()=>setRelationFilter("upstream"));
+$("#showDownstreamBtn").addEventListener("click",()=>setRelationFilter("downstream"));
+$("#showPeersBtn").addEventListener("click",()=>setRelationFilter("peers"));
+$$("#main-tabs .nav-link").forEach(button=>button.addEventListener("click",()=>switchTab(button.dataset.tab)));
 }
 async function loadData(){
-    try{
-        showLoading();
-        const [relations,stockIndustries,industries,heatmapData]=await Promise.all([
-            fetchJSON(CONFIG.files.relations),
-            fetchJSON(CONFIG.files.stockIndustries),
-            fetchJSON(CONFIG.files.industries),
-            fetchJSON(CONFIG.files.heatmap)
-        ]);
-        state.relations=normalizeObject(relations);
-        state.stockIndustries=normalizeObject(stockIndustries);
-        state.industriesArray=normalizeIndustries(industries);
-        state.industries={};
-        state.industriesArray.forEach(industry=>{
-            state.industries[industry.id]=industry;
-        });
-        state.heatmapData=heatmapData||{topics:{}};
-        renderIndustryGroups();
-        renderHeatmap();
-        if(state.selectedIndustry){
-            await selectIndustry(state.selectedIndustry);
-        }else{
-            showEmptyState();
-        }
-    }catch(error){
-        console.error(error);
-        showLoadError(error);
-    }
+try{
+showLoading();
+const [relations,stockIndustries,industries,heatmapData]=await Promise.all([fetchJSON(CONFIG.files.relations),fetchJSON(CONFIG.files.stockIndustries),fetchJSON(CONFIG.files.industries),fetchJSON(CONFIG.files.heatmap)]);
+state.relations=normalizeObject(relations);
+state.stockIndustries=normalizeObject(stockIndustries);
+state.industriesArray=normalizeIndustries(industries);
+state.industries={};
+state.industriesArray.forEach(industry=>state.industries[industry.id]=industry);
+state.heatmapData=heatmapData||{topics:{}};
+renderIndustryGroups();
+renderHeatmap();
+if(state.selectedIndustry)await selectIndustry(state.selectedIndustry);
+}catch(error){
+console.error(error);
+showLoadError(error);
+}
 }
 async function fetchJSON(url){
-    const response=await fetch(url+"?_="+Date.now());
-    if(!response.ok){
-        throw new Error(`${url} HTTP ${response.status}`);
-    }
-    return await response.json();
+const response=await fetch(url+"?_="+Date.now());
+if(!response.ok)throw new Error(`${url} HTTP ${response.status}`);
+return await response.json();
+}
+async function fetchAPI(url){
+const response=await fetch(url);
+if(!response.ok)throw new Error(`${url} HTTP ${response.status}`);
+return await response.json();
 }
 async function fetchIndustryDetail(industryId){
-    const url=CONFIG.detailPath+encodeURIComponent(industryId)+".json";
-    return await fetchJSON(url);
+return await fetchJSON(CONFIG.detailPath+encodeURIComponent(industryId)+".json");
+}
+async function fetchCompanyTopicsBatch(industryId){
+if(state.apiBatchCache[industryId])return state.apiBatchCache[industryId];
+const url=CONFIG.api.batch+encodeURIComponent(industryId);
+const data=await fetchAPI(url);
+state.apiBatchCache[industryId]=data;
+return data;
+}
+async function fetchCompanyTopic(code,industryId){
+const key=`${code}|${industryId}`;
+if(state.apiCompanyCache[key])return state.apiCompanyCache[key];
+const url=CONFIG.api.company.replace("{code}",encodeURIComponent(code)).replace("{industryId}",encodeURIComponent(industryId));
+const data=await fetchAPI(url);
+state.apiCompanyCache[key]=data;
+return data;
 }
 function normalizeObject(value){
-    if(value&&typeof value==="object"&&!Array.isArray(value))return value;
-    return {};
+return value&&typeof value==="object"&&!Array.isArray(value)?value:{};
 }
 function normalizeIndustries(data){
-    if(Array.isArray(data)){
-        return data.filter(x=>x&&x.id);
-    }
-    if(data&&typeof data==="object"){
-        return Object.entries(data).map(([id,value])=>{
-            if(typeof value==="string"){
-                return {id,name:value,shortname:value,group:"其他"};
-            }
-            return {id,...value};
-        });
-    }
-    return [];
+if(Array.isArray(data))return data.filter(x=>x&&x.id);
+if(data&&typeof data==="object")return Object.entries(data).map(([id,value])=>typeof value==="string"?{id,name:value,shortname:value,group:"其他"}:{id,...value});
+return [];
 }
 function getGroup(industry){
-    return industry?.group||industry?.category||industry?.parent||"其他";
-}
-function countStocks(industryId){
-    const topic=state.heatmapData?.topics?.[industryId];
-    if(Array.isArray(topic?.companies))return topic.companies.length;
-    return Object.values(state.stockIndustries).filter(ids=>Array.isArray(ids)&&ids.includes(industryId)).length;
-}
-function renderIndustryGroups(filter=""){
-    const container=$("#industryGroups");
-    const keyword=filter.trim().toLowerCase();
-    const filtered=state.industriesArray.filter(industry=>{
-        if(!keyword)return true;
-        return [
-            industry.id,
-            industry.name,
-            industry.shortname,
-            industry.description,
-            getGroup(industry)
-        ].filter(Boolean).join(" ").toLowerCase().includes(keyword);
-    });
-    const groups={};
-    filtered.forEach(industry=>{
-        const group=getGroup(industry);
-        if(!groups[group])groups[group]=[];
-        groups[group].push(industry);
-    });
-    const groupNames=Object.keys(groups).sort();
-    if(!groupNames.length){
-        container.innerHTML=`<div class="text-center text-body-secondary p-4">找不到符合條件的產業</div>`;
-        return;
-    }
-    container.innerHTML=groupNames.map((group,index)=>{
-        const industries=groups[group];
-        const collapseId="group-"+index;
-        return `
-<div class="group">
-<div class="group-header" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
-<span><i class="bi bi-folder2 me-2"></i>${escapeHTML(group)}</span>
-<span class="text-body-secondary">${industries.length}<i class="bi bi-chevron-down ms-1"></i></span>
-</div>
-<div id="${collapseId}" class="collapse show">
-<div class="industry-list">
-${industries.map(renderIndustryItem).join("")}
-</div>
-</div>
-</div>`;
-    }).join("");
-    $$(".industry-item").forEach(button=>{
-        button.addEventListener("click",()=>selectIndustry(button.dataset.id));
-    });
-    updateSidebarActive();
-}
-function renderIndustryItem(industry){
-    const active=industry.id===state.selectedIndustry?"active":"";
-    const count=industry.companyCount??countStocks(industry.id);
-    return `
-<button class="industry-item ${active}" data-id="${escapeAttr(industry.id)}">
-<i class="bi bi-chevron-right"></i>
-<span class="text-truncate">${escapeHTML(industry.shortname||industry.name||industry.id)}</span>
-${count?`<span class="badge text-bg-secondary industry-count">${count}</span>`:""}
-</button>`;
-}
-function updateSidebarActive(){
-    $$(".industry-item").forEach(button=>{
-        button.classList.toggle("active",button.dataset.id===state.selectedIndustry);
-    });
-}
-async function selectIndustry(industryId){
-    if(!industryId)return;
-    state.selectedIndustry=industryId;
-    state.selectedStock=null;
-    state.relationFilter="all";
-    state.currentIndustryDetail=null;
-    updateSidebarActive();
-    switchTab("map",false);
-    renderMap();
-    renderIndustryDetailLoading();
-    try{
-        const detail=await fetchIndustryDetail(industryId);
-        if(state.selectedIndustry!==industryId)return;
-        state.currentIndustryDetail=detail;
-        renderIndustryDetailBelowMap(detail,industryId);
-        renderIndustrySidePanel(detail,industryId);
-    }catch(error){
-        console.error("產業詳細資料載入失敗：",error);
-        renderIndustryDetailError(industryId,error);
-    }
-}
-function setRelationFilter(filter){
-    state.relationFilter=filter;
-    renderMap();
-    if(state.currentIndustryDetail){
-        renderIndustryDetailBelowMap(state.currentIndustryDetail,state.selectedIndustry);
-    }
-}
-function renderMap(){
-    const industry=getIndustry(state.selectedIndustry);
-    if(!industry)return;
-    $("#map-toolbar").classList.remove("d-none");
-    renderBreadcrumb(industry);
-    const relation=state.relations[state.selectedIndustry]||{};
-    let upstream=uniqueArray(relation.upstream);
-    let downstream=uniqueArray(relation.downstream);
-    let peers=uniqueArray(relation.peers);
-    if(!upstream.length&&!downstream.length&&!peers.length){
-        const reverse=buildReverseRelations(state.selectedIndustry);
-        upstream=reverse.upstream;
-        downstream=reverse.downstream;
-        peers=reverse.peers;
-    }
-    if(state.relationFilter==="upstream"){
-        downstream=[];
-        peers=[];
-    }
-    if(state.relationFilter==="downstream"){
-        upstream=[];
-        peers=[];
-    }
-    if(state.relationFilter==="peers"){
-        upstream=[];
-        downstream=[];
-    }
-    $("#map-content").className="";
-    $("#map-content").innerHTML=`
-<div class="container-fluid px-0">
-${renderIndustryHero(industry)}
-${renderRelationMap(upstream,downstream,peers)}
-<div id="industry-detail-below-map"></div>
-</div>`;
-    bindMapCards();
-}
-function renderIndustryHero(industry){
-    return `
-<div class="mb-4">
-<div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-<span class="badge text-bg-success">${escapeHTML(getGroup(industry))}</span>
-${industry.active===false?`<span class="badge text-bg-secondary">非啟用</span>`:""}
-</div>
-<h1 class="h3 industry-title">${escapeHTML(industry.name||industry.shortname||industry.id)}</h1>
-${industry.description?`<p class="industry-description text-body-secondary mb-3">${escapeHTML(industry.description)}</p>`:""}
-</div>`;
-}
-function renderRelationMap(upstream,downstream,peers){
-    return `
-<section class="relation-section">
-<div class="relation-title"><i class="bi bi-diagram-3"></i>產業關係</div>
-<div class="relation-grid">
-<div class="relation-column">
-<div class="relation-column-title text-primary">
-<i class="bi bi-arrow-up-circle"></i>上游
-<span class="badge text-bg-primary">${upstream.length}</span>
-</div>
-<div class="relation-cards">${renderRelationCards(upstream)}</div>
-</div>
-<div class="relation-column">
-<div class="relation-column-title text-success">
-<i class="bi bi-bullseye"></i>目前產業
-</div>
-<div class="relation-cards">
-<div class="relation-card border-success">
-<div class="relation-card-name">${escapeHTML(getIndustryName(state.selectedIndustry))}</div>
-<div class="relation-card-id">${escapeHTML(state.selectedIndustry)}</div>
-</div>
-</div>
-</div>
-<div class="relation-column">
-<div class="relation-column-title text-danger">
-<i class="bi bi-arrow-down-circle"></i>下游
-<span class="badge text-bg-danger">${downstream.length}</span>
-</div>
-<div class="relation-cards">${renderRelationCards(downstream)}</div>
-</div>
-</div>
-${peers.length?`
-<div class="mt-4">
-<div class="relation-column-title text-warning-emphasis">
-<i class="bi bi-people"></i>同業
-<span class="badge text-bg-warning">${peers.length}</span>
-</div>
-<div class="row row-cols-1 row-cols-md-3 g-3">
-${peers.map(id=>`<div class="col">${renderRelationCard(id)}</div>`).join("")}
-</div>
-</div>`:""}
-</section>`;
-}
-function renderRelationCards(ids){
-    if(!ids||!ids.length)return `<div class="relation-empty">無資料</div>`;
-    return ids.map(id=>renderRelationCard(id)).join("");
-}
-function renderRelationCard(id){
-    return `
-<div class="relation-card" data-industry-id="${escapeAttr(id)}">
-<div class="relation-card-name">${escapeHTML(getIndustryName(id))}</div>
-<div class="relation-card-id">${escapeHTML(id)}</div>
-</div>`;
-}
-function bindMapCards(){
-    $$("[data-industry-id]").forEach(card=>{
-        card.addEventListener("click",()=>{
-            selectIndustry(card.dataset.industryId);
-        });
-    });
-    $$("[data-company-code]").forEach(card=>{
-        card.addEventListener("click",()=>{
-            selectCompany(card.dataset.companyCode);
-        });
-    });
-}
-function renderIndustryDetailLoading(){
-    const container=$("#industry-detail-below-map");
-    if(!container)return;
-    container.innerHTML=`
-<section class="relation-section">
-<div class="d-flex align-items-center gap-2 text-body-secondary">
-<div class="spinner-border spinner-border-sm"></div>
-<span>正在載入產業詳細資料...</span>
-</div>
-</section>`;
-}
-function renderIndustryDetailBelowMap(detail,industryId){
-    const container=$("#industry-detail-below-map");
-    if(!container)return;
-    const companies=getHeatmapCompanies(industryId);
-    container.innerHTML=`
-<section class="relation-section">
-<div class="relation-title"><i class="bi bi-info-circle"></i>產業介紹</div>
-${detail.description?`<p class="industry-description text-body-secondary">${escapeHTML(detail.description)}</p>`:""}
-${detail.tags?.length?`<div class="mb-4">${detail.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join("")}</div>`:""}
-${detail.keyMetrics?.length?renderDetailMetrics(detail.keyMetrics):""}
-${detail.metrics?.drivers?.length?renderDrivers(detail.metrics.drivers):""}
-${detail.keyTrends?.length?renderKeyTrends(detail.keyTrends):""}
-${detail.supplyChain?renderSupplyChain(detail):""}
-${renderIndustryCompanies(companies,industryId)}
-</section>`;
-    bindMapCards();
-}
-function renderDetailMetrics(metrics){
-    return `
-<div class="detail-block">
-<h5 class="detail-block-title">核心指標</h5>
-<div class="row g-3">
-${metrics.map(metric=>`
-<div class="col-12 col-md-6">
-<div class="metric-card">
-<div class="metric-label">${escapeHTML(metric.label||"")}</div>
-<div class="metric-value">${escapeHTML(metric.value||"")}</div>
-</div>
-</div>`).join("")}
-</div>
-</div>`;
-}
-function renderDrivers(drivers){
-    return `
-<div class="detail-block">
-<h5 class="detail-block-title">主要驅動因素</h5>
-<ul class="mb-0">${drivers.map(driver=>`<li class="mb-2">${escapeHTML(driver)}</li>`).join("")}</ul>
-</div>`;
-}
-function renderKeyTrends(trends){
-    return `
-<div class="detail-block">
-<h5 class="detail-block-title">關鍵趨勢</h5>
-<ul class="mb-0">${trends.map(trend=>`<li class="mb-2">${escapeHTML(trend)}</li>`).join("")}</ul>
-</div>`;
-}
-function renderSupplyChain(detail){
-    if(!detail?.supplyChain?.nodes)return "";
-    return `
-<div class="detail-block">
-<h5 class="detail-block-title">產業分層</h5>
-<div class="supply-chain-wrapper">
-<div class="supply-chain">
-${detail.supplyChain.nodes.map(renderSupplySegment).join("")}
-</div>
-</div>
-</div>`;
-}
-function renderSupplySegment(node){
-    const children=Array.isArray(node.children)?node.children:[];
-    return `
-<div class="supply-segment">
-<div class="supply-segment-title">${escapeHTML(node.name||node.id)}</div>
-${node.subtitle?`<div class="supply-segment-subtitle">${escapeHTML(node.subtitle)}</div>`:""}
-${children.map(child=>`
-<div class="supply-child" data-industry-id="${escapeAttr(child.id)}">
-<div class="supply-child-name">${escapeHTML(child.name||child.id)}</div>
-${child.subtitle?`<div class="supply-child-subtitle">${escapeHTML(child.subtitle)}</div>`:""}
-</div>`).join("")}
-</div>`;
-}
-function renderIndustryCompanies(companies,industryId){
-    return `
-<div class="detail-block">
-<div class="d-flex justify-content-between align-items-center mb-3">
-<h5 class="detail-block-title mb-0">相關個股</h5>
-<span class="badge text-bg-secondary">${companies.length}</span>
-</div>
-${companies.length?`
-<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-2">
-${companies.map(company=>renderCompanyCard(company)).join("")}
-</div>`:`<div class="text-body-secondary">heatmap-data.json 中沒有此產業的個股資料</div>`}
-</div>`;
-}
-function renderCompanyCard(company){
-    const change=Number(company.change1D);
-    const cls=change>0?"text-up":change<0?"text-down":"text-body-secondary";
-    const sign=change>0?"+":"";
-    return `
-<div class="col">
-<div class="company-card" data-company-code="${escapeAttr(company.code)}">
-<div class="d-flex justify-content-between align-items-start gap-2">
-<div>
-<div class="company-code">${escapeHTML(company.code)}</div>
-<div class="company-name">${escapeHTML(company.name)}</div>
-</div>
-<i class="bi bi-chevron-right text-body-secondary"></i>
-</div>
-${Number.isFinite(change)?`<div class="company-price ${cls}">${sign}${change.toFixed(2)}%</div>`:""}
-</div>
-</div>`;
-}
-function renderIndustrySidePanel(detail,industryId){
-    const industry=getIndustry(industryId);
-    const companies=getHeatmapCompanies(industryId);
-    $("#detail-content").innerHTML=`
-<div class="mb-4">
-<div class="small text-body-secondary mb-1">${escapeHTML(getGroup(industry))}</div>
-<h5 class="fw-bold">${escapeHTML(industry.name||industry.shortname||industry.id)}</h5>
-<div class="small text-body-secondary">${escapeHTML(industry.id)}</div>
-</div>
-${detail.description?`<p class="small text-body-secondary mb-4">${escapeHTML(detail.description)}</p>`:""}
-${detail.tags?.length?`<div class="mb-4">${detail.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join("")}</div>`:""}
-<div>
-<div class="d-flex justify-content-between align-items-center mb-3">
-<h6 class="fw-bold mb-0">相關個股</h6>
-<span class="badge text-bg-secondary">${companies.length}</span>
-</div>
-${companies.length?companies.map(company=>renderCompanyCard(company)).join(""):`<div class="small text-body-secondary">尚無個股資料</div>`}
-</div>`;
-    $$("#detail-content [data-company-code]").forEach(card=>{
-        card.addEventListener("click",()=>selectCompany(card.dataset.companyCode));
-    });
-}
-function selectCompany(code){
-    state.selectedStock=code;
-    const company=findCompany(code);
-    const industryIds=findIndustriesForCompany(code);
-    $("#detail-content").innerHTML=`
-<div class="mb-4">
-<div class="small text-body-secondary">股票代號</div>
-<h4 class="fw-bold mb-1">${escapeHTML(company?.code||code)}</h4>
-<div class="fs-5">${escapeHTML(company?.name||"")}</div>
-</div>
-${company?`
-<div class="row g-2 mb-4">
-<div class="col-6"><div class="metric-card"><div class="metric-label">股價</div><div class="metric-value">${formatNumber(company.price)}</div></div></div>
-<div class="col-6"><div class="metric-card"><div class="metric-label">今日</div><div class="metric-value ${getChangeClass(company.change1D)}">${formatChange(company.change1D)}</div></div></div>
-<div class="col-6"><div class="metric-card"><div class="metric-label">一週</div><div class="metric-value ${getChangeClass(company.change1W)}">${formatChange(company.change1W)}</div></div></div>
-<div class="col-6"><div class="metric-card"><div class="metric-label">一月</div><div class="metric-value ${getChangeClass(company.change1M)}">${formatChange(company.change1M)}</div></div></div>
-</div>`:""}
-<div>
-<h6 class="fw-bold mb-3">所屬產業</h6>
-${industryIds.length?industryIds.map(id=>`
-<div class="stock-card" data-industry-id="${escapeAttr(id)}">
-<div class="fw-semibold">${escapeHTML(getIndustryName(id))}</div>
-<div class="small text-body-secondary">${escapeHTML(id)}</div>
-</div>`).join(""):`<div class="text-body-secondary">尚無產業分類</div>`}
-</div>`;
-    $$("#detail-content [data-industry-id]").forEach(card=>{
-        card.addEventListener("click",()=>selectIndustry(card.dataset.industryId));
-    });
-}
-function getHeatmapCompanies(industryId){
-    const companies=state.heatmapData?.topics?.[industryId]?.companies;
-    return Array.isArray(companies)?companies:[];
-}
-function findCompany(code){
-    for(const topic of Object.values(state.heatmapData?.topics||{})){
-        const company=(topic.companies||[]).find(c=>String(c.code)===String(code));
-        if(company)return company;
-    }
-    return null;
-}
-function findIndustriesForCompany(code){
-    const result=[];
-    Object.entries(state.heatmapData?.topics||{}).forEach(([industryId,topic])=>{
-        if((topic.companies||[]).some(c=>String(c.code)===String(code))){
-            result.push(industryId);
-        }
-    });
-    if(result.length)return result;
-    return Object.entries(state.stockIndustries).filter(([stockCode])=>String(stockCode)===String(code)).flatMap(([,ids])=>ids||[]);
-}
-function buildReverseRelations(industryId){
-    const result={upstream:[],downstream:[],peers:[]};
-    Object.entries(state.relations).forEach(([source,relation])=>{
-        if(relation.upstream?.includes(industryId))result.downstream.push(source);
-        if(relation.downstream?.includes(industryId))result.upstream.push(source);
-        if(relation.peers?.includes(industryId))result.peers.push(source);
-    });
-    return{
-        upstream:uniqueArray(result.upstream),
-        downstream:uniqueArray(result.downstream),
-        peers:uniqueArray(result.peers)
-    };
-}
-function renderBreadcrumb(industry){
-    $("#breadcrumb").innerHTML=`
-<nav aria-label="breadcrumb">
-<ol class="breadcrumb mb-0 small">
-<li class="breadcrumb-item">${escapeHTML(getGroup(industry))}</li>
-<li class="breadcrumb-item active">${escapeHTML(industry.shortname||industry.name||industry.id)}</li>
-</ol>
-</nav>`;
+return industry?.group||industry?.category||industry?.parent||"其他";
 }
 function getIndustry(industryId){
-    if(!industryId)return null;
-    return state.industries[industryId]||{
-        id:industryId,
-        name:industryId,
-        shortname:industryId,
-        group:"其他"
-    };
+return state.industries[industryId]||{id:industryId,name:industryId,shortname:industryId,group:"其他"};
 }
 function getIndustryName(industryId){
-    const industry=getIndustry(industryId);
-    return industry?.shortname||industry?.name||industryId;
+const industry=getIndustry(industryId);
+return industry.shortname||industry.name||industryId;
 }
-function handleSearch(event){
-    renderIndustryGroups(event.target.value);
+function countStocks(industryId){
+const companies=getHeatmapCompanies(industryId);
+if(companies.length)return companies.length;
+return Object.values(state.stockIndustries).filter(ids=>Array.isArray(ids)&&ids.includes(industryId)).length;
 }
-function toggleTheme(){
-    const html=document.documentElement;
-    const current=html.getAttribute("data-bs-theme");
-    const next=current==="dark"?"light":"dark";
-    html.setAttribute("data-bs-theme",next);
-    $("#themeBtn").innerHTML=next==="dark"?`<i class="bi bi-sun"></i>`:`<i class="bi bi-moon"></i>`;
+function getHeatmapCompanies(industryId){
+const companies=state.heatmapData?.topics?.[industryId]?.companies;
+return Array.isArray(companies)?companies:[];
 }
-function toggleSidebar(){
-    state.sidebarCollapsed=!state.sidebarCollapsed;
-    $("#sidebar").classList.toggle("collapsed",state.sidebarCollapsed);
-    $("#sidebarToggle").innerHTML=state.sidebarCollapsed?`<i class="bi bi-layout-sidebar-inset"></i>`:`<i class="bi bi-layout-sidebar"></i>`;
+function renderIndustryGroups(filter=""){
+const container=$("#industryGroups");
+const keyword=filter.trim().toLowerCase();
+const filtered=state.industriesArray.filter(industry=>!keyword||[industry.id,industry.name,industry.shortname,industry.description,getGroup(industry)].filter(Boolean).join(" ").toLowerCase().includes(keyword));
+const groups={};
+filtered.forEach(industry=>{
+const group=getGroup(industry);
+if(!groups[group])groups[group]=[];
+groups[group].push(industry);
+});
+const groupNames=Object.keys(groups).sort();
+if(!groupNames.length){
+container.innerHTML=`<div class="text-center text-body-secondary p-4">找不到符合條件的產業</div>`;
+return;
 }
-function switchTab(tab,updateState=true){
-    if(updateState)state.currentTab=tab;
-    $$("#mainTabs .nav-link").forEach(button=>{
-        button.classList.toggle("active",button.dataset.tab===tab);
-    });
-    $("#map-tab").classList.toggle("d-none",tab!=="map");
-    $("#heatmap-tab").classList.toggle("d-none",tab!=="heatmap");
-    if(tab==="heatmap")renderHeatmap();
+container.innerHTML=groupNames.map((group,index)=>{
+const industries=groups[group];
+const collapseId=`industry-group-${index}`;
+return `<div class="group"><div class="group-header" data-bs-toggle="collapse" data-bs-target="#${collapseId}"><span><i class="bi bi-folder2 me-2"></i>${escapeHTML(group)}</span><span class="text-body-secondary">${industries.length}<i class="bi bi-chevron-down ms-1"></i></span></div><div id="${collapseId}" class="collapse show"><div class="industry-list">${industries.map(renderIndustryItem).join("")}</div></div></div>`;
+}).join("");
+$$(".industry-item").forEach(button=>button.addEventListener("click",()=>selectIndustry(button.dataset.id)));
+updateSidebarActive();
 }
-function clearDetailPanel(){
-    $("#detail-content").innerHTML=`
-<div class="text-center text-body-secondary p-4">
-選擇產業或個股查看詳細資訊
-</div>`;
+function renderIndustryItem(industry){
+const active=industry.id===state.selectedIndustry?"active":"";
+const count=industry.companyCount??countStocks(industry.id);
+return `<button class="industry-item ${active}" data-id="${escapeAttr(industry.id)}"><i class="bi bi-chevron-right"></i><span class="text-truncate">${escapeHTML(industry.shortname||industry.name||industry.id)}</span>${count?`<span class="badge text-bg-secondary industry-count">${count}</span>`:""}</button>`;
 }
-function showEmptyState(){
-    $("#map-content").className="empty-state";
-    $("#map-content").innerHTML=`
-<div>
-<div class="empty-state-icon"><i class="bi bi-diagram-3"></i></div>
-<h4>產業地圖</h4>
-<p class="text-body-secondary mb-0">從左側選擇一個產業開始</p>
-</div>`;
-    $("#map-toolbar").classList.add("d-none");
+function updateSidebarActive(){
+$$(".industry-item").forEach(button=>button.classList.toggle("active",button.dataset.id===state.selectedIndustry));
 }
-function showLoading(){
-    $("#industryGroups").innerHTML=`
-<div class="text-center p-4">
-<div class="spinner-border spinner-border-sm text-primary mb-2"></div>
-<div class="small text-body-secondary">載入產業資料...</div>
-</div>`;
+async function selectIndustry(industryId){
+if(!industryId)return;
+state.selectedIndustry=industryId;
+state.selectedStock=null;
+state.currentIndustryDetail=null;
+state.relationFilter="all";
+updateSidebarActive();
+switchTab("map");
+renderMap();
+renderIndustryDetailLoading();
+try{
+const [detail,batch]=await Promise.all([fetchIndustryDetail(industryId),fetchCompanyTopicsBatch(industryId).catch(error=>({items:[],error:error.message}))]);
+if(state.selectedIndustry!==industryId)return;
+state.currentIndustryDetail=detail;
+state.currentBatch=batch;
+renderIndustryDetailBelowMap(detail,industryId,batch);
+renderIndustrySidePanel(detail,industryId);
+}catch(error){
+console.error(error);
+renderIndustryDetailError(industryId,error);
 }
-function renderIndustryDetailError(industryId,error){
-    const container=$("#industry-detail-below-map");
-    if(!container)return;
-    container.innerHTML=`
-<section class="relation-section">
-<div class="alert alert-danger">
-<div class="fw-bold">無法載入產業詳細資料</div>
-<div class="small mt-2">檔案：${escapeHTML(CONFIG.detailPath+industryId+".json")}</div>
-<div class="small mt-1">${escapeHTML(error.message)}</div>
-</div>
-</section>`;
 }
-function showLoadError(error){
-    $("#industryGroups").innerHTML=`
-<div class="alert alert-danger m-2">
-<div class="fw-bold mb-2">JSON 載入失敗</div>
-<div class="small">${escapeHTML(error.message)}</div>
-<hr>
-<div class="small">
-請確認以下檔案：
-<ul class="mt-2 mb-0">
-<li>imsrc/industry-relations.json</li>
-<li>imsrc/stock-industries.json</li>
-<li>imsrc/industries.json</li>
-<li>imsrc/heatmap-data.json</li>
-<li>data/{industry-id}.json</li>
-</ul>
-</div>
-</div>`;
+function setRelationFilter(filter){
+state.relationFilter=filter;
+renderMap();
+if(state.currentIndustryDetail)renderIndustryDetailBelowMap(state.currentIndustryDetail,state.selectedIndustry,state.currentBatch);
 }
-function uniqueArray(array){
-    if(!Array.isArray(array))return [];
-    return [...new Set(array.filter(Boolean))];
+function renderMap(){
+const industry=getIndustry(state.selectedIndustry);
+if(!industry)return;
+$("#map-toolbar").classList.remove("d-none");
+renderBreadcrumb(industry);
+const relation=state.relations[state.selectedIndustry]||{};
+let upstream=uniqueArray(relation.upstream);
+let downstream=uniqueArray(relation.downstream);
+let peers=uniqueArray(relation.peers);
+if(!upstream.length&&!downstream.length&&!peers.length){
+const reverse=buildReverseRelations(state.selectedIndustry);
+upstream=reverse.upstream;
+downstream=reverse.downstream;
+peers=reverse.peers;
 }
-function escapeHTML(value){
-    return String(value??"").replace(/[&<>"']/g,char=>({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        '"':"&quot;",
-        "'":"&#039;"
-    })[char]);
+if(state.relationFilter==="upstream"){downstream=[];peers=[]}
+if(state.relationFilter==="downstream"){upstream=[];peers=[]}
+if(state.relationFilter==="peers"){upstream=[];downstream=[]}
+$("#map-content").className="";
+$("#map-content").innerHTML=`<div class="container-fluid px-0">${renderIndustryHero(industry)}${renderRelationMap(upstream,downstream,peers)}<div id="industry-detail-below-map"></div></div>`;
+bindMapCards();
 }
-function escapeAttr(value){
-    return escapeHTML(value);
+function renderIndustryHero(industry){
+return `<div class="mb-4"><div class="d-flex flex-wrap align-items-center gap-2 mb-2"><span class="badge text-bg-success">${escapeHTML(getGroup(industry))}</span>${industry.active===false?`<span class="badge text-bg-secondary">非啟用</span>`:""}</div><h1 class="h3 industry-title">${escapeHTML(industry.name||industry.shortname||industry.id)}</h1>${industry.description?`<p class="industry-description text-body-secondary mb-3">${escapeHTML(industry.description)}</p>`:""}</div>`;
 }
-function formatNumber(value){
-    const number=Number(value);
-    if(!Number.isFinite(number))return "-";
-    return number.toLocaleString("zh-TW",{maximumFractionDigits:2});
+function renderRelationMap(upstream,downstream,peers){
+return `<section class="relation-section"><div class="relation-title"><i class="bi bi-diagram-3"></i>產業關係</div><div class="relation-grid"><div><div class="relation-column-title text-primary"><i class="bi bi-arrow-up-circle"></i>上游 <span class="badge text-bg-primary">${upstream.length}</span></div><div class="relation-cards">${renderRelationCards(upstream)}</div></div><div><div class="relation-column-title text-success"><i class="bi bi-bullseye"></i>目前產業</div><div class="relation-cards"><div class="relation-card border-success"><div class="relation-card-name">${escapeHTML(getIndustryName(state.selectedIndustry))}</div><div class="relation-card-id">${escapeHTML(state.selectedIndustry)}</div></div></div></div><div><div class="relation-column-title text-danger"><i class="bi bi-arrow-down-circle"></i>下游 <span class="badge text-bg-danger">${downstream.length}</span></div><div class="relation-cards">${renderRelationCards(downstream)}</div></div></div>${peers.length?`<div class="mt-4"><div class="relation-column-title text-warning-emphasis"><i class="bi bi-people"></i>同業 <span class="badge text-bg-warning">${peers.length}</span></div><div class="row row-cols-1 row-cols-md-3 g-3">${peers.map(id=>`<div class="col">${renderRelationCard(id)}</div>`).join("")}</div></div>`:""}</section>`;
 }
-function formatChange(value){
-    const number=Number(value);
-    if(!Number.isFinite(number))return "-";
-    return `${number>0?"+":""}${number.toFixed(2)}%`;
+function renderRelationCards(ids){
+if(!ids.length)return `<div class="relation-empty">無資料</div>`;
+return ids.map(renderRelationCard).join("");
 }
-function getChangeClass(value){
-    const number=Number(value);
-    if(number>0)return "text-up";
-    if(number<0)return "text-down";
-    return "text-body-secondary";
+function renderRelationCard(id){
+return `<div class="relation-card" data-industry-id="${escapeAttr(id)}"><div class="relation-card-name">${escapeHTML(getIndustryName(id))}</div><div class="relation-card-id">${escapeHTML(id)}</div></div>`;
 }
-function weightedAverage(companies,field="change1D"){
-    let weightedSum=0;
-    let totalWeight=0;
-    companies.forEach(company=>{
-        const value=Number(company[field]);
-        const weight=Number(company.marketCap);
-        if(Number.isFinite(value)&&Number.isFinite(weight)&&weight>0){
-            weightedSum+=value*weight;
-            totalWeight+=weight;
-        }
-    });
-    return totalWeight?weightedSum/totalWeight:null;
+function bindMapCards(){
+$$("[data-industry-id]").forEach(card=>{
+if(card.dataset.bound)return;
+card.dataset.bound="1";
+card.addEventListener("click",()=>selectIndustry(card.dataset.industryId));
+});
+$$("[data-company-code]").forEach(card=>{
+if(card.dataset.bound)return;
+card.dataset.bound="1";
+card.addEventListener("click",()=>selectCompany(card.dataset.companyCode,state.selectedIndustry));
+});
 }
-function sumMarketCap(companies){
-    return companies.reduce((sum,company)=>{
-        const value=Number(company.marketCap);
-        return sum+(Number.isFinite(value)&&value>0?value:0);
-    },0);
+function renderIndustryDetailLoading(){
+const container=$("#industry-detail-below-map");
+if(!container)return;
+container.innerHTML=`<section class="relation-section"><div class="d-flex align-items-center gap-2 text-body-secondary"><div class="spinner-border spinner-border-sm"></div><span>正在載入產業介紹與產業分層...</span></div></section>`;
+}
+function renderIndustryDetailBelowMap(detail,industryId,batch){
+const container=$("#industry-detail-below-map");
+if(!container)return;
+const companies=getHeatmapCompanies(industryId);
+container.innerHTML=`<section class="relation-section"><div class="relation-title"><i class="bi bi-info-circle"></i>產業介紹</div>${detail.description?`<p class="industry-description text-body-secondary">${escapeHTML(detail.description)}</p>`:""}${detail.tags?.length?`<div class="mb-4">${detail.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join("")}</div>`:""}${detail.keyMetrics?.length?renderDetailMetrics(detail.keyMetrics):""}${detail.metrics?.drivers?.length?renderDrivers(detail.metrics.drivers):""}${detail.keyTrends?.length?renderKeyTrends(detail.keyTrends):""}${detail.supplyChain?renderSupplyChain(detail,batch,industryId):""}${renderIndustryCompanies(companies,industryId)}</section>`;
+bindMapCards();
+}
+function renderDetailMetrics(metrics){
+return `<div class="detail-block"><h5 class="detail-block-title">核心指標</h5><div class="row g-3">${metrics.map(metric=>`<div class="col-12 col-md-6"><div class="metric-card"><div class="metric-label">${escapeHTML(metric.label||"")}</div><div class="metric-value">${escapeHTML(metric.value||"")}</div></div></div>`).join("")}</div></div>`;
+}
+function renderDrivers(drivers){
+return `<div class="detail-block"><h5 class="detail-block-title">主要驅動因素</h5><ul class="mb-0">${drivers.map(driver=>`<li class="mb-2">${escapeHTML(driver)}</li>`).join("")}</ul></div>`;
+}
+function renderKeyTrends(trends){
+return `<div class="detail-block"><h5 class="detail-block-title">關鍵趨勢</h5><ul class="mb-0">${trends.map(trend=>`<li class="mb-2">${escapeHTML(trend)}</li>`).join("")}</ul></div>`;
+}
+function renderSupplyChain(detail,batch,industryId){
+if(!detail?.supplyChain?.nodes)return "";
+const items=Array.isArray(batch?.items)?batch.items:[];
+return `<div class="detail-block"><h5 class="detail-block-title">產業分層</h5><div class="supply-chain-wrapper"><div class="supply-chain">${detail.supplyChain.nodes.map(node=>renderSupplySegment(node,items,industryId)).join("")}</div></div></div>`;
+}
+function renderSupplySegment(node,items,industryId){
+const children=Array.isArray(node.children)?node.children:[];
+return `<div class="supply-segment"><div class="supply-segment-title">${escapeHTML(node.name||node.id)}</div>${node.subtitle?`<div class="supply-segment-subtitle">${escapeHTML(node.subtitle)}</div>`:""}${children.map(child=>renderSupplyChild(child,items,industryId)).join("")}</div>`;
+}
+function renderSupplyChild(child,items,industryId){
+const roleItems=items.filter(item=>Array.isArray(item.relation?.roles)&&item.relation.roles.includes(child.id));
+return `<div class="supply-child" data-role-id="${escapeAttr(child.id)}" data-parent-industry="${escapeAttr(industryId)}"><div class="supply-child-name">${escapeHTML(child.name||child.id)}</div>${child.subtitle?`<div class="supply-child-subtitle">${escapeHTML(child.subtitle)}</div>`:""}<div class="d-flex align-items-center justify-content-between mt-2"><span class="small text-body-secondary">對應個股</span><span class="badge text-bg-secondary">${roleItems.length}</span></div></div>`;
+}
+function renderIndustryCompanies(companies,industryId){
+return `<div class="detail-block"><div class="stock-heatmap-title"><h5 class="detail-block-title mb-0">相關個股</h5><span class="badge text-bg-secondary">${companies.length}</span></div>${companies.length?`<div id="industry-stock-treemap" class="treemap-wrapper" style="height:420px"></div>`:`<div class="text-body-secondary">heatmap-data.json 中沒有此產業的個股資料</div>`}</div>`;
+}
+function renderIndustrySidePanel(detail,industryId){
+const industry=getIndustry(industryId);
+$("#detail-panel-title").textContent="產業資訊";
+$("#detail-content").innerHTML=`<div class="mb-4"><div class="small text-body-secondary mb-1">${escapeHTML(getGroup(industry))}</div><h5 class="fw-bold">${escapeHTML(industry.name||industry.shortname||industry.id)}</h5><div class="small text-body-secondary">${escapeHTML(industry.id)}</div></div>${detail.description?`<p class="small text-body-secondary mb-4">${escapeHTML(detail.description)}</p>`:""}${detail.tags?.length?`<div class="mb-4">${detail.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join("")}</div>`:""}<div><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="fw-bold mb-0">相關個股</h6><span class="badge text-bg-secondary">${getHeatmapCompanies(industryId).length}</span></div><div class="small text-body-secondary">點擊下方產業分層或個股查看詳細資訊</div></div>`;
+renderIndustryStockTreemap(industryId);
+}
+async function renderIndustryStockTreemap(industryId){
+const container=$("#industry-stock-treemap");
+if(!container)return;
+const companies=getHeatmapCompanies(industryId);
+renderCompanyTreemap(container,companies,state.heatmapPeriod,company=>selectCompany(company.code,industryId));
+}
+async function handleSupplyChildClick(roleId,industryId){
+const container=$("#role-detail-container");
+if(container)container.remove();
+const section=document.createElement("section");
+section.id="role-detail-container";
+section.className="detail-block role-section";
+section.innerHTML=`<div class="role-header"><div><div class="role-name">${escapeHTML(getRoleDisplayName(roleId))}</div><div class="small text-body-secondary">角色：${escapeHTML(roleId)}</div></div><span class="badge text-bg-secondary">載入中</span></div><div class="role-loading"><div class="spinner-border spinner-border-sm me-2"></div>正在取得角色對應個股...</div>`;
+const detailContainer=$("#industry-detail-below-map");
+if(!detailContainer)return;
+detailContainer.appendChild(section);
+const batch=state.currentBatch||{items:[]};
+const items=(batch.items||[]).filter(item=>item.relation?.roles?.includes(roleId));
+section.innerHTML=`<div class="role-header"><div><div class="role-name">${escapeHTML(getRoleDisplayName(roleId))}</div><div class="small text-body-secondary">角色：${escapeHTML(roleId)}</div></div><span class="badge text-bg-secondary">${items.length} 家</span></div><div id="role-treemap-${sanitizeId(roleId)}" class="role-treemap"></div>`;
+const companies=items.map(item=>{
+const marketCompany=findCompany(item.companyCode)||{};
+return {...item,...marketCompany,code:item.companyCode,name:item.companyName};
+});
+renderCompanyTreemap(document.getElementById(`role-treemap-${sanitizeId(roleId)}`),companies,state.heatmapPeriod,company=>selectCompany(company.code,industryId));
+}
+function getRoleDisplayName(roleId){
+for(const node of state.currentIndustryDetail?.supplyChain?.nodes||[]){
+for(const child of node.children||[]){
+if(child.id===roleId)return child.name||roleId;
+}
+}
+return roleId;
+}
+function findCompany(code){
+for(const topic of Object.values(state.heatmapData?.topics||{})){
+const company=(topic.companies||[]).find(c=>String(c.code)===String(code));
+if(company)return company;
+}
+return null;
+}
+function renderCompanyTreemap(container,companies,period,onClick){
+if(!container)return;
+if(!companies?.length){
+container.innerHTML=`<div class="role-loading">沒有符合此角色的股票</div>`;
+return;
+}
+const field=period||"change1D";
+const root=d3.hierarchy({children:companies}).sum(d=>Math.max(0,Number(d.marketCap)||0)).sort((a,b)=>b.value-a.value);
+const width=container.clientWidth||800;
+const height=container.clientHeight||350;
+const treemap=d3.treemap().size([width,height]).paddingInner(2).round(true);
+treemap(root);
+container.innerHTML="";
+root.leaves().forEach(leaf=>{
+const company=leaf.data;
+const node=document.createElement("div");
+node.className="treemap-node";
+node.style.left=leaf.x0+"px";
+node.style.top=leaf.y0+"px";
+node.style.width=Math.max(1,leaf.x1-leaf.x0)+"px";
+node.style.height=Math.max(1,leaf.y1-leaf.y0)+"px";
+node.style.background=getHeatmapColor(company[field]);
+node.dataset.companyCode=company.code;
+node.innerHTML=`<div class="treemap-node-company">${escapeHTML(company.name||company.companyName||company.code)}</div><div class="treemap-node-company-change">${formatChange(company[field])}</div>`;
+node.title=`${company.code} ${company.name||company.companyName||""}｜${periodLabel(field)} ${formatChange(company[field])}｜市值 ${formatMarketCap(company.marketCap)}`;
+node.addEventListener("click",()=>onClick(company));
+container.appendChild(node);
+});
+}
+function renderCompanyCard(company,industryId){
+const change=Number(company.change1D);
+return `<div class="col"><div class="company-card" data-company-code="${escapeAttr(company.code)}" data-company-industry="${escapeAttr(industryId)}"><div class="d-flex justify-content-between align-items-start gap-2"><div><div class="company-code">${escapeHTML(company.code)}</div><div class="company-name">${escapeHTML(company.name)}</div></div><i class="bi bi-chevron-right text-body-secondary"></i></div><div class="company-price ${getChangeClass(change)}">${formatChange(change)}</div></div></div>`;
+}
+async function selectCompany(code,industryId){
+state.selectedStock=String(code);
+const company=findCompany(code);
+const marketCompany=company||{code,name:code};
+$("#detail-panel-title").textContent="個股資訊";
+$("#detail-content").innerHTML=`<div class="company-info-card"><div class="company-info-label">股票</div><div class="company-info-title fs-4">${escapeHTML(marketCompany.code)}</div><div class="fs-5">${escapeHTML(marketCompany.name||"")}</div></div>${renderMarketMetrics(marketCompany)}<div id="company-api-detail"><div class="text-center text-body-secondary p-3"><div class="spinner-border spinner-border-sm me-2"></div>正在取得產業相關資訊...</div></div>`;
+if(!industryId)industryId=state.selectedIndustry;
+try{
+const data=await fetchCompanyTopic(code,industryId);
+if(String(state.selectedStock)!==String(code))return;
+renderCompanyAPIDetail(data);
+}catch(error){
+console.error(error);
+$("#company-api-detail").innerHTML=`<div class="alert alert-warning small">無法取得個股產業詳細資料：${escapeHTML(error.message)}</div>`;
+}
+}
+function renderMarketMetrics(company){
+return `<div class="row g-2 mb-3"><div class="col-6"><div class="metric-card"><div class="metric-label">股價</div><div class="metric-value">${formatNumber(company.price)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">今日</div><div class="metric-value ${getChangeClass(company.change1D)}">${formatChange(company.change1D)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">一週</div><div class="metric-value ${getChangeClass(company.change1W)}">${formatChange(company.change1W)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">一月</div><div class="metric-value ${getChangeClass(company.change1M)}">${formatChange(company.change1M)}</div></div></div><div class="col-12"><div class="metric-card"><div class="metric-label">Market Cap</div><div class="metric-value">${formatMarketCap(company.marketCap)}</div></div></div></div>`;
+}
+function renderCompanyAPIDetail(data){
+if(!data){
+$("#company-api-detail").innerHTML=`<div class="text-body-secondary small">沒有額外產業資訊</div>`;
+return;
+}
+const relation=data.relation||{};
+const position=data.marketPosition||{};
+$("#company-api-detail").innerHTML=`<div class="company-info-card"><div class="d-flex align-items-center justify-content-between gap-2 mb-3"><div class="company-info-title">產業角色</div>${relation.exposure?`<span class="position-badge">關聯度：${escapeHTML(relation.exposure)}</span>`:""}</div>${relation.roles?.length?`<div class="mb-3">${relation.roles.map(role=>`<span class="tag">${escapeHTML(getRoleDisplayName(role))}</span>`).join("")}</div>`:""}${position.level?`<div class="mb-2"><div class="company-info-label">市場定位</div><div class="company-info-value">${escapeHTML(position.level)}</div></div>`:""}${position.rationale?`<div class="company-description">${escapeHTML(position.rationale)}</div>`:""}</div>${data.aiSummary?`<div class="company-info-card"><div class="company-info-title mb-2">AI 摘要</div><div class="ai-summary">${escapeHTML(data.aiSummary)}</div></div>`:""}${data.description?`<div class="company-info-card"><div class="company-info-title mb-2">產業相關介紹</div><div class="company-description">${escapeHTML(data.description)}</div></div>`:""}${data.lastUpdated?`<div class="small text-body-secondary">資料更新：${escapeHTML(data.lastUpdated)}</div>`:""}`;
+}
+function renderGroupHeatmapPage(){
+const data=buildHeatmapData();
+state.heatmapLevel="group";
+state.selectedGroup=null;
+state.selectedSubIndustry=null;
+renderHeatmap();
 }
 function buildHeatmapData(){
-    const topics=state.heatmapData?.topics||{};
-    const subIndustries=[];
-    Object.entries(topics).forEach(([industryId,topic])=>{
-        const companies=Array.isArray(topic.companies)?topic.companies:[];
-        if(!companies.length)return;
-        const industry=getIndustry(industryId);
-        const marketCap=sumMarketCap(companies);
-        const change=weightedAverage(companies,"change1D");
-        subIndustries.push({
-            id:industryId,
-            name:topic.displayName||industry?.shortname||industry?.name||industryId,
-            group:getGroup(industry),
-            companies,
-            marketCap,
-            change
-        });
-    });
-    const groupMap={};
-    subIndustries.forEach(item=>{
-        if(!groupMap[item.group])groupMap[item.group]=[];
-        groupMap[item.group].push(item);
-    });
-    const groups=Object.entries(groupMap).map(([name,items])=>{
-        const allCompanies=items.flatMap(item=>item.companies);
-        return{
-            name,
-            items,
-            marketCap:sumMarketCap(allCompanies),
-            change:weightedAverage(allCompanies,"change1D")
-        };
-    }).sort((a,b)=>(b.change??-Infinity)-(a.change??-Infinity));
-    return{
-        subIndustries:subIndustries.sort((a,b)=>(b.change??-Infinity)-(a.change??-Infinity)),
-        groups
-    };
+const topics=state.heatmapData?.topics||{};
+const subIndustries=[];
+Object.entries(topics).forEach(([industryId,topic])=>{
+const companies=Array.isArray(topic.companies)?topic.companies:[];
+if(!companies.length)return;
+const industry=getIndustry(industryId);
+subIndustries.push({id:industryId,name:topic.displayName||industry.shortname||industry.name||industryId,group:getGroup(industry),companies,marketCap:sumMarketCap(companies),change1D:weightedAverage(companies,"change1D"),change1W:weightedAverage(companies,"change1W"),change1M:weightedAverage(companies,"change1M")});
+});
+const groupMap={};
+subIndustries.forEach(item=>{
+if(!groupMap[item.group])groupMap[item.group]=[];
+groupMap[item.group].push(item);
+});
+const groups=Object.entries(groupMap).map(([name,items])=>{
+const companies=items.flatMap(item=>item.companies);
+return{name,items,companies,marketCap:sumMarketCap(companies),change1D:weightedAverage(companies,"change1D"),change1W:weightedAverage(companies,"change1W"),change1M:weightedAverage(companies,"change1M")};
+});
+return{subIndustries,groups};
 }
 function renderHeatmap(){
-    const container=$("#heatmap-content");
-    if(!state.heatmapData){
-        container.innerHTML=`<div class="heatmap-empty">尚未載入 Heatmap 資料</div>`;
-        return;
-    }
-    const data=buildHeatmapData();
-    if(!data.groups.length){
-        container.innerHTML=`<div class="heatmap-empty">heatmap-data.json 沒有可用的 topics 資料</div>`;
-        return;
-    }
-    container.innerHTML=`
-<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-<div>
-<h2 class="h4 fw-bold mb-1">產業 Heatmap</h2>
-<div class="small text-body-secondary">以個股 Market Cap 為權重計算產業加權平均漲跌幅</div>
-</div>
-<div class="heatmap-legend">
-<span>跌</span>
-<div class="heatmap-legend-bar"></div>
-<span>漲</span>
-</div>
-</div>
-${renderGroupRanking(data.groups)}
-${renderSubIndustryRanking(data.subIndustries)}
-${renderHeatmapGroups(data.groups)}
-`;
-    bindHeatmapEvents();
+const container=$("#heatmap-content");
+if(!state.heatmapData){
+container.innerHTML=`<div class="heatmap-empty">尚未載入 Heatmap 資料</div>`;
+return;
 }
-function renderGroupRanking(groups){
-    return `
-<section class="heatmap-ranking-section">
-<div class="ranking-title">一、大產業漲跌幅排名</div>
-<div class="ranking-list">
-${groups.map((group,index)=>`
-<div class="ranking-item" data-group-name="${escapeAttr(group.name)}">
-<div class="ranking-number">${index+1}</div>
-<div class="ranking-name">${escapeHTML(group.name)}</div>
-<div class="ranking-change ${getChangeClass(group.change)}">${formatChange(group.change)}</div>
-</div>`).join("")}
-</div>
-</section>`;
+if(state.heatmapLevel==="sub"&&state.selectedGroup){
+renderSubHeatmap(container);
+return;
 }
-function renderSubIndustryRanking(items){
-    return `
-<section class="heatmap-ranking-section">
-<div class="ranking-title">二、子產業漲跌幅排名</div>
-<div class="ranking-list">
-${items.map((item,index)=>`
-<div class="ranking-item" data-industry-id="${escapeAttr(item.id)}">
-<div class="ranking-number">${index+1}</div>
-<div class="ranking-name">${escapeHTML(item.name)}</div>
-<div class="ranking-change ${getChangeClass(item.change)}">${formatChange(item.change)}</div>
-</div>`).join("")}
-</div>
-</section>`;
+renderGroupHeatmap(container);
 }
-function renderHeatmapGroups(groups){
-    return `
-<section class="heatmap-section">
-<div class="d-flex align-items-center justify-content-between mb-3">
-<h5 class="fw-bold mb-0">二層產業 Heatmap</h5>
-<span class="small text-body-secondary">方塊大小 = Market Cap</span>
-</div>
-${groups.map(group=>`
-<div class="heatmap-group">
-<div class="heatmap-group-header">
-<div class="heatmap-group-name">${escapeHTML(group.name)}</div>
-<div class="heatmap-group-change ${getChangeClass(group.change)}">${formatChange(group.change)}</div>
-</div>
-<div class="heatmap-grid">
-${group.items.map(item=>renderHeatmapCell(item)).join("")}
-</div>
-</div>`).join("")}
-</section>`;
+function renderGroupHeatmap(container){
+const data=buildHeatmapData();
+const field=state.heatmapPeriod;
+const groups=[...data.groups].sort((a,b)=>(b[field]??-Infinity)-(a[field]??-Infinity));
+container.innerHTML=`<div class="heatmap-header"><div><div class="heatmap-title">產業 Heatmap</div><div class="heatmap-subtitle">第一層：大產業｜方塊面積依 Market Cap 計算</div></div><div class="d-flex flex-wrap align-items-center gap-3"><div class="btn-group btn-group-sm period-buttons"><button class="btn ${field==="change1D"?"btn-primary":"btn-outline-primary"}" data-period="change1D">1日</button><button class="btn ${field==="change1W"?"btn-primary":"btn-outline-primary"}" data-period="change1W">1週</button><button class="btn ${field==="change1M"?"btn-primary":"btn-outline-primary"}" data-period="change1M">1個月</button></div><div class="legend"><span>跌</span><div class="legend-bar"></div><span>漲</span></div></div></div><div class="ranking-section"><div class="ranking-title">大產業漲跌幅排名</div><div class="ranking-list">${groups.map((group,index)=>`<div class="ranking-item" data-group-name="${escapeAttr(group.name)}"><span class="ranking-number">${index+1}</span><span class="ranking-name">${escapeHTML(group.name)}</span><span class="ranking-change ${getChangeClass(group[field])}">${formatChange(group[field])}</span></div>`).join("")}</div></div><div class="mb-2 d-flex justify-content-between"><span class="fw-bold">大產業地毯圖</span><span class="small text-body-secondary">點擊進入子產業</span></div><div id="group-treemap" class="treemap-wrapper"></div>`;
+renderPeriodButtons();
+renderTreemap($("#group-treemap"),groups,field,group=>selectHeatmapGroup(group.name));
+bindHeatmapEvents();
 }
-function renderHeatmapCell(item){
-    const size=Math.max(1,Math.log10(item.marketCap+1));
-    const color=getHeatmapColor(item.change);
-    return `
-<div class="heatmap-cell" data-industry-id="${escapeAttr(item.id)}" style="background:${color};grid-column:span ${size>11?2:1};min-height:${Math.min(180,90+size*5)}px;">
-<div class="heatmap-cell-name">${escapeHTML(item.name)}</div>
-<div class="heatmap-cell-change">${formatChange(item.change)}</div>
-<div class="heatmap-cell-meta">市值 ${formatMarketCap(item.marketCap)}</div>
-</div>`;
+function renderSubHeatmap(container){
+const data=buildHeatmapData();
+const group=data.groups.find(group=>group.name===state.selectedGroup);
+if(!group){state.heatmapLevel="group";renderHeatmap();return}
+const field=state.heatmapPeriod;
+const items=[...group.items].sort((a,b)=>(b[field]??-Infinity)-(a[field]??-Infinity));
+container.innerHTML=`<div class="heatmap-header"><div><div class="heatmap-breadcrumb"><button class="btn btn-link btn-sm p-0" id="backGroupHeatmap">全部大產業</button> / ${escapeHTML(group.name)}</div><div class="heatmap-title">${escapeHTML(group.name)}</div><div class="heatmap-subtitle">第二層：子產業｜點擊子產業進入產業關聯圖</div></div><div class="d-flex flex-wrap align-items-center gap-3"><div class="btn-group btn-group-sm period-buttons"><button class="btn ${field==="change1D"?"btn-primary":"btn-outline-primary"}" data-period="change1D">1日</button><button class="btn ${field==="change1W"?"btn-primary":"btn-outline-primary"}" data-period="change1W">1週</button><button class="btn ${field==="change1M"?"btn-primary":"btn-outline-primary"}" data-period="change1M">1個月</button></div><div class="legend"><span>跌</span><div class="legend-bar"></div><span>漲</span></div></div></div><div class="ranking-section"><div class="ranking-title">子產業漲跌幅排名</div><div class="ranking-list">${items.map((item,index)=>`<div class="ranking-item" data-industry-id="${escapeAttr(item.id)}"><span class="ranking-number">${index+1}</span><span class="ranking-name">${escapeHTML(item.name)}</span><span class="ranking-change ${getChangeClass(item[field])}">${formatChange(item[field])}</span></div>`).join("")}</div></div><div class="mb-2 d-flex justify-content-between"><span class="fw-bold">${escapeHTML(group.name)}｜子產業地毯圖</span><span class="small text-body-secondary">點擊進入產業關聯圖</span></div><div id="sub-treemap" class="treemap-wrapper"></div>`;
+renderPeriodButtons();
+renderTreemap($("#sub-treemap"),items,field,item=>selectIndustry(item.id));
+$("#backGroupHeatmap").addEventListener("click",()=>{state.heatmapLevel="group";state.selectedGroup=null;renderHeatmap()});
+bindHeatmapEvents();
 }
-function getHeatmapColor(change){
-    const value=Number(change);
-    if(!Number.isFinite(value))return "#6c757d";
-    const max=8;
-    const ratio=Math.min(Math.abs(value)/max,1);
-    if(value>0){
-        const r=Math.round(220-(220-120)*ratio);
-        const g=Math.round(53+(180-53)*ratio);
-        const b=Math.round(69+(90-69)*ratio);
-        return `rgb(${r},${g},${b})`;
-    }
-    if(value<0){
-        const r=Math.round(25+(220-25)*(1-ratio));
-        const g=Math.round(135-(135-53)*ratio);
-        const b=Math.round(84-(84-69)*ratio);
-        return `rgb(${r},${g},${b})`;
-    }
-    return "#6c757d";
+function renderPeriodButtons(){
+$$("[data-period]").forEach(button=>{
+button.addEventListener("click",()=>{
+state.heatmapPeriod=button.dataset.period;
+renderHeatmap();
+});
+});
 }
-function formatMarketCap(value){
-    const number=Number(value);
-    if(!Number.isFinite(number))return "-";
-    if(number>=1e12)return `${(number/1e12).toFixed(2)}T`;
-    if(number>=1e9)return `${(number/1e9).toFixed(1)}B`;
-    if(number>=1e6)return `${(number/1e6).toFixed(0)}M`;
-    return number.toLocaleString("zh-TW");
+function renderTreemap(container,items,field,onClick){
+if(!container)return;
+if(!items.length){container.innerHTML=`<div class="heatmap-empty">沒有資料</div>`;return}
+const width=container.clientWidth||900;
+const height=container.clientHeight||500;
+const root=d3.hierarchy({children:items}).sum(d=>Math.max(0,Number(d.marketCap)||0)).sort((a,b)=>b.value-a.value);
+d3.treemap().size([width,height]).paddingInner(2).paddingOuter(1).round(true)(root);
+container.innerHTML="";
+root.leaves().forEach(leaf=>{
+const item=leaf.data;
+const node=document.createElement("div");
+node.className="treemap-node";
+node.style.left=leaf.x0+"px";
+node.style.top=leaf.y0+"px";
+node.style.width=Math.max(1,leaf.x1-leaf.x0)+"px";
+node.style.height=Math.max(1,leaf.y1-leaf.y0)+"px";
+node.style.background=getHeatmapColor(item[field]);
+const size=Math.min(1,Math.max(0,(leaf.x1-leaf.x0)*(leaf.y1-leaf.y0)/60000));
+const font=Math.max(10,Math.min(18,10+size*8));
+node.innerHTML=`<div class="treemap-node-label" style="font-size:${font}px">${escapeHTML(item.name)}</div><div class="treemap-node-change" style="font-size:${Math.max(10,font-1)}px">${formatChange(item[field])}</div><div class="treemap-node-marketcap">${formatMarketCap(item.marketCap)}</div>`;
+node.title=`${item.name}｜${periodLabel(field)} ${formatChange(item[field])}｜Market Cap ${formatMarketCap(item.marketCap)}`;
+node.addEventListener("click",()=>onClick(item));
+container.appendChild(node);
+});
+}
+function selectHeatmapGroup(groupName){
+state.selectedGroup=groupName;
+state.heatmapLevel="sub";
+renderHeatmap();
 }
 function bindHeatmapEvents(){
-    $$("#heatmap-content [data-industry-id]").forEach(element=>{
-        element.addEventListener("click",()=>{
-            selectIndustry(element.dataset.industryId);
-        });
-    });
-    $$("#heatmap-content [data-group-name]").forEach(element=>{
-        element.addEventListener("click",()=>{
-            const group=element.dataset.groupName;
-            const first=state.industriesArray.find(industry=>getGroup(industry)===group);
-            if(first)selectIndustry(first.id);
-        });
-    });
+$$("[data-group-name]").forEach(element=>{
+if(element.dataset.bound)return;
+element.dataset.bound="1";
+element.addEventListener("click",()=>selectHeatmapGroup(element.dataset.groupName));
+});
+$$("[data-industry-id]").forEach(element=>{
+if(element.dataset.bound)return;
+element.dataset.bound="1";
+element.addEventListener("click",()=>selectIndustry(element.dataset.industryId));
+});
+}
+function weightedAverage(companies,field){
+let weightedSum=0,totalWeight=0;
+companies.forEach(company=>{
+const value=Number(company[field]);
+const weight=Number(company.marketCap);
+if(Number.isFinite(value)&&Number.isFinite(weight)&&weight>0){
+weightedSum+=value*weight;
+totalWeight+=weight;
+}
+});
+return totalWeight?weightedSum/totalWeight:null;
+}
+function sumMarketCap(companies){
+return companies.reduce((sum,company)=>{
+const value=Number(company.marketCap);
+return sum+(Number.isFinite(value)&&value>0?value:0);
+},0);
+}
+function getHeatmapColor(change){
+const value=Number(change);
+if(!Number.isFinite(value))return "#6c757d";
+const max=8;
+const ratio=Math.min(Math.abs(value)/max,1);
+if(value>0){
+const r=Math.round(220-(220-120)*ratio);
+const g=Math.round(53+(180-53)*ratio);
+const b=Math.round(69+(90-69)*ratio);
+return `rgb(${r},${g},${b})`;
+}
+if(value<0){
+const r=Math.round(25+(220-25)*(1-ratio));
+const g=Math.round(135-(135-53)*ratio);
+const b=Math.round(84-(84-69)*ratio);
+return `rgb(${r},${g},${b})`;
+}
+return "#6c757d";
+}
+function formatMarketCap(value){
+const number=Number(value);
+if(!Number.isFinite(number))return "-";
+if(number>=1e12)return `${(number/1e12).toFixed(2)}T`;
+if(number>=1e9)return `${(number/1e9).toFixed(1)}B`;
+if(number>=1e6)return `${(number/1e6).toFixed(0)}M`;
+return number.toLocaleString("zh-TW");
+}
+function formatNumber(value){
+const number=Number(value);
+return Number.isFinite(number)?number.toLocaleString("zh-TW",{maximumFractionDigits:2}):"-";
+}
+function formatChange(value){
+const number=Number(value);
+return Number.isFinite(number)?`${number>0?"+":""}${number.toFixed(2)}%`:"-";
+}
+function getChangeClass(value){
+const number=Number(value);
+if(number>0)return"text-up";
+if(number<0)return"text-down";
+return"text-body-secondary";
+}
+function periodLabel(field){
+if(field==="change1W")return"1週";
+if(field==="change1M")return"1個月";
+return"1日";
+}
+function buildReverseRelations(industryId){
+const result={upstream:[],downstream:[],peers:[]};
+Object.entries(state.relations).forEach(([source,relation])=>{
+if(relation.upstream?.includes(industryId))result.downstream.push(source);
+if(relation.downstream?.includes(industryId))result.upstream.push(source);
+if(relation.peers?.includes(industryId))result.peers.push(source);
+});
+return{upstream:uniqueArray(result.upstream),downstream:uniqueArray(result.downstream),peers:uniqueArray(result.peers)};
+}
+function renderBreadcrumb(industry){
+$("#breadcrumb").innerHTML=`<nav aria-label="breadcrumb"><ol class="breadcrumb mb-0 small"><li class="breadcrumb-item">${escapeHTML(getGroup(industry))}</li><li class="breadcrumb-item active">${escapeHTML(industry.shortname||industry.name||industry.id)}</li></ol></nav>`;
+}
+function clearDetailPanel(){
+$("#detail-panel-title").textContent="詳細資訊";
+$("#detail-content").innerHTML=`<div class="text-center text-body-secondary p-4">點擊產業或個股查看詳細資訊</div>`;
+}
+function toggleSidebar(){
+const sidebar=$("#sidebar");
+const collapsed=sidebar.classList.toggle("collapsed");
+state.sidebarCollapsed=collapsed;
+$("#sidebarToggle").innerHTML=collapsed?`<i class="bi bi-layout-sidebar-inset"></i>`:`<i class="bi bi-layout-sidebar"></i>`;
+}
+function toggleTheme(){
+const html=document.documentElement;
+const next=html.getAttribute("data-bs-theme")==="dark"?"light":"dark";
+html.setAttribute("data-bs-theme",next);
+$("#themeBtn").innerHTML=next==="dark"?`<i class="bi bi-sun"></i>`:`<i class="bi bi-moon"></i>`;
+}
+function switchTab(tab){
+state.currentTab=tab;
+$$("#main-tabs .nav-link").forEach(button=>button.classList.toggle("active",button.dataset.tab===tab));
+$("#map-tab").classList.toggle("d-none",tab!=="map");
+$("#heatmap-tab").classList.toggle("d-none",tab!=="heatmap");
+if(tab==="heatmap")renderHeatmap();
+}
+function showLoading(){
+$("#industryGroups").innerHTML=`<div class="text-center p-4"><div class="spinner-border spinner-border-sm text-primary mb-2"></div><div class="small text-body-secondary">載入產業資料...</div></div>`;
+}
+function showLoadError(error){
+$("#industryGroups").innerHTML=`<div class="alert alert-danger m-2"><div class="fw-bold mb-2">JSON 載入失敗</div><div class="small">${escapeHTML(error.message)}</div></div>`;
+$("#heatmap-content").innerHTML=`<div class="alert alert-danger m-3">${escapeHTML(error.message)}</div>`;
+}
+function renderIndustryDetailError(industryId,error){
+const container=$("#industry-detail-below-map");
+if(!container)return;
+container.innerHTML=`<section class="relation-section"><div class="alert alert-danger"><div class="fw-bold">無法載入產業詳細資料</div><div class="small mt-2">檔案：${escapeHTML(CONFIG.detailPath+industryId+".json")}</div><div class="small mt-1">${escapeHTML(error.message)}</div></div></section>`;
+}
+function uniqueArray(array){
+return Array.isArray(array)?[...new Set(array.filter(Boolean))]:[];
+}
+function sanitizeId(value){
+return String(value).replace(/[^a-zA-Z0-9_-]/g,"_");
+}
+function escapeHTML(value){
+return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[char]));
+}
+function escapeAttr(value){
+return escapeHTML(value);
 }
 </script>
 </body>
