@@ -192,8 +192,30 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3"></script>
 <script>
-const CONFIG={files:{relations:"imsrc/industry-relations.json",stockIndustries:"imsrc/stock-industries.json",industries:"imsrc/industries.json",heatmap:"imsrc/heatmap-data.json"},detailPath:"https://aistockmap.com/live/topics/",api:{batch:"https://aistockmap.com/api/data/company-topics-batch?topicId=",company:`https://newsbeiter.onrender.com/api/fetch?url=${encodeURIComponent(
-  `https://aistockmap.com/api/data/company-topic?code=${code}&topicId=${industryId}`)}`}};
+
+const CONFIG={
+  files:{
+    relations:"imsrc/industry-relations.json",
+    stockIndustries:"imsrc/stock-industries.json",
+    industries:"imsrc/industries.json",
+    heatmap:"imsrc/heatmap-data.json"
+  },
+  detailPath:"https://aistockmap.com/live/topics/",
+  api:{
+    proxy:"https://newsbeiter.onrender.com/api/fetch?url=",
+    batch:topicId =>
+      "https://newsbeiter.onrender.com/api/fetch?url="+
+      encodeURIComponent(
+        "https://aistockmap.com/api/data/company-topics-batch?topicId="+topicId
+      ),
+    company:(code,industryId) =>
+      "https://newsbeiter.onrender.com/api/fetch?url="+
+      encodeURIComponent(
+        `https://aistockmap.com/api/data/company-topic?code=${code}&topicId=${industryId}`
+      )
+  }
+};
+
 const state={relations:{},stockIndustries:{},industries:{},industriesArray:[],heatmapData:null,selectedIndustry:null,selectedStock:null,currentIndustryDetail:null,relationFilter:"all",currentTab:"heatmap",heatmapPeriod:"change1D",heatmapLevel:"group",selectedGroup:null,selectedSubIndustry:null,apiBatchCache:{},apiCompanyCache:{}};
 const $=selector=>document.querySelector(selector);
 const $$=selector=>[...document.querySelectorAll(selector)];
@@ -247,7 +269,8 @@ return await fetchJSON(CONFIG.detailPath+encodeURIComponent(industryId)+".json")
 }
 async function fetchCompanyTopicsBatch(industryId){
 if(state.apiBatchCache[industryId])return state.apiBatchCache[industryId];
-const url=CONFIG.api.batch+encodeURIComponent(industryId);
+const url=CONFIG.api.batch(industryId);
+// const url=CONFIG.api.batch+encodeURIComponent(industryId);
 const data=await fetchAPI(url);
 state.apiBatchCache[industryId]=data;
 return data;
@@ -255,7 +278,8 @@ return data;
 async function fetchCompanyTopic(code,industryId){
 const key=`${code}|${industryId}`;
 if(state.apiCompanyCache[key])return state.apiCompanyCache[key];
-const url=CONFIG.api.company.replace("{code}",encodeURIComponent(code)).replace("{industryId}",encodeURIComponent(industryId));
+const url=CONFIG.api.company(code, industryId);
+// const url=CONFIG.api.company.replace("{code}",encodeURIComponent(code)).replace("{industryId}",encodeURIComponent(industryId));
 const data=await fetchAPI(url);
 state.apiCompanyCache[key]=data;
 return data;
