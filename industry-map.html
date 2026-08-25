@@ -194,10 +194,16 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 <script>
 const CONFIG={
   files:{
-    relations:"imsrc/industry-relations.json",
-    stockIndustries:"imsrc/stock-industries.json",
-    industries:"imsrc/industries.json",
-    heatmap:"imsrc/heatmap-data.json"
+    relations:"https://aistockmap.com/live/graph/global-chains.json",
+    stockIndustries:"https://aistockmap.com/live/company-topics-index.json",
+    industries:[
+      "https://aistockmap.com/live/topic-index-tw.json",
+      "https://aistockmap.com/live/topic-index-etf.json",
+      "https://aistockmap.com/live/topic-index-us.json",
+      "https://aistockmap.com/live/topic-index-jp.json",
+      "https://aistockmap.com/live/topic-index-kr.json"
+    ],
+    heatmap:"https://aistockmap.com/live/heatmap-data.json"
   },
   detailPath:"https://aistockmap.com/live/topics/",
   api:{
@@ -237,7 +243,13 @@ $$("#main-tabs .nav-link").forEach(button=>button.addEventListener("click",()=>s
 async function loadData(){
 try{
 showLoading();
-const [relations,stockIndustries,industries,heatmapData]=await Promise.all([fetchJSON(CONFIG.files.relations),fetchJSON(CONFIG.files.stockIndustries),fetchJSON(CONFIG.files.industries),fetchJSON(CONFIG.files.heatmap)]);
+const [relations,stockIndustries,industryArrays,heatmapData]=await Promise.all([
+  fetchJSON(CONFIG.files.relations),
+  fetchJSON(CONFIG.files.stockIndustries),
+  Promise.all(CONFIG.files.industries.map(url=>fetchJSON(url))),
+  fetchJSON(CONFIG.files.heatmap)
+]);
+const industries=industryArrays.flat();
 state.relations=normalizeObject(relations);
 state.stockIndustries=normalizeObject(stockIndustries);
 state.industriesArray=normalizeIndustries(industries);
