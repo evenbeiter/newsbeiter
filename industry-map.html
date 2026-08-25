@@ -531,6 +531,11 @@ container.innerHTML=`<div class="role-loading">沒有符合此角色的股票</d
 return;
 }
 const field=period||"change1D";
+
+const changes=companies.map(company=>Number(company[field])).filter(Number.isFinite);
+const maxPositive=Math.max(...changes.filter(value=>value>0),0);
+const maxNegative=Math.max(...changes.filter(value=>value<0).map(value=>Math.abs(value)),0);
+
 const root=d3.hierarchy({children:companies}).sum(d=>Math.max(0,Number(d.marketCap)||0)).sort((a,b)=>b.value-a.value);
 const width=container.clientWidth||800;
 const height=container.clientHeight||350;
@@ -545,7 +550,11 @@ node.style.left=leaf.x0+"px";
 node.style.top=leaf.y0+"px";
 node.style.width=Math.max(1,leaf.x1-leaf.x0)+"px";
 node.style.height=Math.max(1,leaf.y1-leaf.y0)+"px";
-node.style.background=getHeatmapColor(company[field]);
+// node.style.background=getHeatmapColor(company[field]);
+
+const maxChange=Number(company[field])>0?maxPositive:maxNegative;
+node.style.background=getHeatmapColor(company[field],maxChange);
+
 node.dataset.companyCode=company.code;
 node.innerHTML=`<div class="treemap-node-company">${escapeHTML(company.name||company.companyName||company.code)}</div><div class="treemap-node-company-change">${formatChange(company[field])}</div>`;
 node.title=`${company.code} ${company.name||company.companyName||""}｜${periodLabel(field)} ${formatChange(company[field])}｜市值 ${formatMarketCap(company.marketCap)}`;
@@ -662,6 +671,11 @@ if(!container)return;
 if(!items.length){container.innerHTML=`<div class="heatmap-empty">沒有資料</div>`;return}
 const width=container.clientWidth||900;
 const height=container.clientHeight||500;
+
+const changes=items.map(item=>Number(item[field])).filter(Number.isFinite);
+const maxPositive=Math.max(...changes.filter(value=>value>0),0);
+const maxNegative=Math.max(...changes.filter(value=>value<0).map(value=>Math.abs(value)),0);
+
 const root=d3.hierarchy({children:items}).sum(d=>Math.max(0,Number(d.marketCap)||0)).sort((a,b)=>b.value-a.value);
 d3.treemap().size([width,height]).paddingInner(2).paddingOuter(1).round(true)(root);
 container.innerHTML="";
@@ -673,7 +687,11 @@ node.style.left=leaf.x0+"px";
 node.style.top=leaf.y0+"px";
 node.style.width=Math.max(1,leaf.x1-leaf.x0)+"px";
 node.style.height=Math.max(1,leaf.y1-leaf.y0)+"px";
-node.style.background=getHeatmapColor(item[field]);
+// node.style.background=getHeatmapColor(item[field]);
+
+const maxChange=Number(item[field])>0?maxPositive:maxNegative;
+node.style.background=getHeatmapColor(item[field],maxChange);
+
 const size=Math.min(1,Math.max(0,(leaf.x1-leaf.x0)*(leaf.y1-leaf.y0)/60000));
 const font=Math.max(10,Math.min(18,10+size*8));
 node.innerHTML=`<div class="treemap-node-label" style="font-size:${font}px">${escapeHTML(item.name)}</div><div class="treemap-node-change" style="font-size:${Math.max(10,font-1)}px">${formatChange(item[field])}</div><div class="treemap-node-marketcap">${formatMarketCap(item.marketCap)}</div>`;
@@ -717,10 +735,10 @@ const value=Number(company.marketCap);
 return sum+(Number.isFinite(value)&&value>0?value:0);
 },0);
 }
-function getHeatmapColor(change){
+function getHeatmapColor(change,maxChange){
 const value=Number(change);
-if(!Number.isFinite(value))return "#6c757d";
-const max=8;
+if(!Number.isFinite(value))return "#adb5bd";
+const max=Math.max(Number(maxChange)||0.01,0.01);
 const ratio=Math.min(Math.abs(value)/max,1);
 if(value>0){
 const r=Math.round(220-(220-25)*ratio);
@@ -729,9 +747,9 @@ const b=Math.round(220-(220-84)*ratio);
 return `rgb(${r},${g},${b})`;
 }
 if(value<0){
-const r=Math.round(220+(180-220)*ratio);
-const g=Math.round(80-(80-35)*ratio);
-const b=Math.round(80-(80-40)*ratio);
+const r=Math.round(220-(220-180)*ratio);
+const g=Math.round(120-(120-35)*ratio);
+const b=Math.round(120-(120-40)*ratio);
 return `rgb(${r},${g},${b})`;
 }
 return "#adb5bd";
