@@ -1,0 +1,1960 @@
+{
+    "us-eda": {
+        "upstream": [],
+        "downstream": [
+            "asic-ip-design",
+            "hpc-network-ic",
+            "jp-chip-design"
+        ],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 4
+    },
+    "asic-ip-design": {
+        "upstream": [
+            "us-eda"
+        ],
+        "downstream": [],
+        "peers": [
+            "jp-chip-design",
+            "us-custom-asic-ip",
+            "kr-foundry"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "us-custom-asic-ip": {
+        "upstream": [],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "asic-ip-design",
+            "jp-chip-design"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "hpc-network-ic": {
+        "upstream": [
+            "us-eda"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-gpu-ai-chip"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 2
+    },
+    "jp-chip-design": {
+        "upstream": [
+            "us-eda"
+        ],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "asic-ip-design",
+            "us-custom-asic-ip"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "silicon-wafer": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-silicon-wafer"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "jp-silicon-wafer": {
+        "upstream": [],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "silicon-wafer"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "wafer-fab-equipment": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-wafer-fab-equipment",
+            "jp-wafer-fab-equipment",
+            "jp-semi-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "us-wafer-fab-equipment": {
+        "upstream": [],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "wafer-fab-equipment",
+            "jp-wafer-fab-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "jp-wafer-fab-equipment": {
+        "upstream": [],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "wafer-fab-equipment",
+            "us-wafer-fab-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "jp-semi-equipment": {
+        "upstream": [],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "wafer-fab-equipment",
+            "kr-semi-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "semi-process-materials": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-semi-process-materials",
+            "us-semiconductor-materials",
+            "kr-semi-materials"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "jp-semi-process-materials": {
+        "upstream": [],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "semi-process-materials",
+            "us-semiconductor-materials",
+            "kr-semi-materials"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "us-semiconductor-materials": {
+        "upstream": [],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "semi-process-materials",
+            "jp-semi-process-materials",
+            "kr-semi-materials"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "wafer-foundry": {
+        "upstream": [
+            "us-custom-asic-ip",
+            "jp-wafer-fab-equipment",
+            "us-wafer-fab-equipment"
+        ],
+        "downstream": [
+            "us-gpu-ai-chip"
+        ],
+        "peers": [
+            "us-foundry",
+            "kr-foundry"
+        ],
+        "upstreamTotal": 7,
+        "downstreamTotal": 4
+    },
+    "cowos-advanced-packaging": {
+        "upstream": [
+            "jp-backend-equipment",
+            "kr-memory"
+        ],
+        "downstream": [
+            "us-gpu-ai-chip"
+        ],
+        "peers": [
+            "us-advanced-packaging"
+        ],
+        "upstreamTotal": 6,
+        "downstreamTotal": 2
+    },
+    "advanced-packaging-test": {
+        "upstream": [
+            "jp-backend-equipment",
+            "us-semi-test-equipment"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-advanced-packaging",
+            "kr-substrate-osat"
+        ],
+        "upstreamTotal": 6,
+        "downstreamTotal": 3
+    },
+    "high-end-testing": {
+        "upstream": [],
+        "downstream": [
+            "us-gpu-ai-chip"
+        ],
+        "peers": [
+            "us-semi-test-equipment"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "advanced-packaging-process": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-backend-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "advanced-packaging-automation": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-backend-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "jp-backend-equipment": {
+        "upstream": [],
+        "downstream": [
+            "cowos-advanced-packaging",
+            "advanced-packaging-test"
+        ],
+        "peers": [
+            "advanced-packaging-process",
+            "advanced-packaging-automation",
+            "kr-semi-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "us-advanced-packaging": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "cowos-advanced-packaging",
+            "advanced-packaging-test",
+            "kr-substrate-osat"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 1
+    },
+    "ic-substrate": {
+        "upstream": [
+            "jp-copper-foil",
+            "jp-glass-substrate-materials"
+        ],
+        "downstream": [],
+        "peers": [
+            "jp-advanced-substrate",
+            "kr-substrate-osat",
+            "kr-electronic-components"
+        ],
+        "upstreamTotal": 3,
+        "downstreamTotal": 2
+    },
+    "fiberglass-cloth": {
+        "upstream": [],
+        "downstream": [
+            "kr-pcb"
+        ],
+        "peers": [
+            "jp-glass-substrate-materials"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "glass-core-substrate": {
+        "upstream": [
+            "jp-glass-substrate",
+            "jp-glass-substrate-materials"
+        ],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 2,
+        "downstreamTotal": 1
+    },
+    "jp-advanced-substrate": {
+        "upstream": [],
+        "downstream": [
+            "cowos-advanced-packaging"
+        ],
+        "peers": [
+            "ic-substrate"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "jp-copper-foil": {
+        "upstream": [],
+        "downstream": [
+            "ic-substrate",
+            "pcb-manufacturing",
+            "kr-electronic-components",
+            "kr-pcb"
+        ],
+        "peers": [
+            "kr-battery-materials"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 5
+    },
+    "jp-glass-substrate": {
+        "upstream": [],
+        "downstream": [
+            "glass-core-substrate",
+            "display-panel",
+            "kr-display-oled"
+        ],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "jp-glass-substrate-materials": {
+        "upstream": [],
+        "downstream": [
+            "ic-substrate",
+            "glass-core-substrate",
+            "kr-electronic-components"
+        ],
+        "peers": [
+            "fiberglass-cloth"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "packaging-materials": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "leadframe": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "hbm": {
+        "upstream": [],
+        "downstream": [
+            "us-gpu-ai-chip"
+        ],
+        "peers": [
+            "us-memory-storage",
+            "kr-memory"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 3
+    },
+    "memory-modules": {
+        "upstream": [
+            "us-memory-storage",
+            "jp-memory-chain",
+            "kr-memory",
+            "kr-pcb"
+        ],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 4,
+        "downstreamTotal": 2
+    },
+    "niche-memory": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-memory-chain"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "cxl-technology": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "us-memory-storage": {
+        "upstream": [],
+        "downstream": [
+            "memory-modules",
+            "ai-server-odm"
+        ],
+        "peers": [
+            "hbm",
+            "jp-memory-chain",
+            "kr-memory"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 2
+    },
+    "jp-memory-chain": {
+        "upstream": [],
+        "downstream": [
+            "memory-modules"
+        ],
+        "peers": [
+            "us-memory-storage",
+            "kr-memory",
+            "niche-memory"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "us-gpu-ai-chip": {
+        "upstream": [
+            "wafer-foundry",
+            "cowos-advanced-packaging",
+            "hbm",
+            "high-end-testing",
+            "kr-electronic-components",
+            "kr-memory",
+            "kr-pcb"
+        ],
+        "downstream": [
+            "ai-server-odm",
+            "robotics_physical_ai"
+        ],
+        "peers": [
+            "hpc-network-ic"
+        ],
+        "upstreamTotal": 9,
+        "downstreamTotal": 4
+    },
+    "us-cpu-agentic-ai": {
+        "upstream": [
+            "wafer-foundry"
+        ],
+        "downstream": [
+            "ai-server-odm"
+        ],
+        "peers": [
+            "cpu-agentic-ai"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "cpu-agentic-ai": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-cpu-agentic-ai"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "ai-server-odm": {
+        "upstream": [
+            "us-gpu-ai-chip",
+            "us-cpu-agentic-ai",
+            "kr-memory",
+            "kr-pcb"
+        ],
+        "downstream": [
+            "us-hyperscaler",
+            "us-ai-server-cloud",
+            "us-datacenter-reit"
+        ],
+        "peers": [],
+        "upstreamTotal": 9,
+        "downstreamTotal": 3
+    },
+    "ai-server-chassis-rails": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "thermal_components_air": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-server-liquid-cooling"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "liquid_cooling_advanced": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-server-liquid-cooling",
+            "us-ai-power-cooling"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "jp-server-liquid-cooling": {
+        "upstream": [],
+        "downstream": [
+            "ai-server-odm"
+        ],
+        "peers": [
+            "liquid_cooling_advanced",
+            "thermal_components_air"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "psu": {
+        "upstream": [
+            "us-power-management"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-ai-power-cooling",
+            "jp-dc-power-infra",
+            "jp-power-module"
+        ],
+        "upstreamTotal": 5,
+        "downstreamTotal": 1
+    },
+    "bbu": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "connector-highspeed": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-connector-highspeed"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "us-connector-highspeed": {
+        "upstream": [],
+        "downstream": [
+            "ai-server-odm"
+        ],
+        "peers": [
+            "connector-highspeed"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "ems-smt": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-pcb-ems"
+        ],
+        "upstreamTotal": 4,
+        "downstreamTotal": 2
+    },
+    "networking-equipment": {
+        "upstream": [
+            "jp-optical-comm"
+        ],
+        "downstream": [
+            "us-hyperscaler"
+        ],
+        "peers": [
+            "us-network-infrastructure"
+        ],
+        "upstreamTotal": 3,
+        "downstreamTotal": 2
+    },
+    "us-network-infrastructure": {
+        "upstream": [
+            "high-speed-optics",
+            "silicon-photonics",
+            "kr-pcb"
+        ],
+        "downstream": [],
+        "peers": [
+            "networking-equipment"
+        ],
+        "upstreamTotal": 3,
+        "downstreamTotal": 1
+    },
+    "high-speed-optics": {
+        "upstream": [],
+        "downstream": [
+            "us-network-infrastructure"
+        ],
+        "peers": [
+            "us-optical-communication",
+            "jp-optical-comm"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "silicon-photonics": {
+        "upstream": [],
+        "downstream": [
+            "us-network-infrastructure"
+        ],
+        "peers": [
+            "us-optical-communication"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "us-optical-communication": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "high-speed-optics",
+            "silicon-photonics",
+            "jp-optical-comm"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "jp-optical-comm": {
+        "upstream": [],
+        "downstream": [
+            "networking-equipment"
+        ],
+        "peers": [
+            "high-speed-optics",
+            "us-optical-communication"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "us-hyperscaler": {
+        "upstream": [
+            "ai-server-odm",
+            "networking-equipment",
+            "kr-nuclear-power"
+        ],
+        "downstream": [
+            "enterprise-saas",
+            "cloud-msp"
+        ],
+        "peers": [],
+        "upstreamTotal": 5,
+        "downstreamTotal": 3
+    },
+    "us-ai-server-cloud": {
+        "upstream": [
+            "ai-server-odm"
+        ],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "us-datacenter-reit": {
+        "upstream": [
+            "ai-server-odm",
+            "jp-dc-power-infra"
+        ],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 3,
+        "downstreamTotal": 0
+    },
+    "us-ai-power-cooling": {
+        "upstream": [
+            "electrical_equipment",
+            "kr-power-grid",
+            "kr-battery-cell",
+            "kr-nuclear-power"
+        ],
+        "downstream": [],
+        "peers": [
+            "liquid_cooling_advanced",
+            "psu",
+            "jp-dc-power-infra"
+        ],
+        "upstreamTotal": 4,
+        "downstreamTotal": 2
+    },
+    "jp-dc-power-infra": {
+        "upstream": [],
+        "downstream": [
+            "us-datacenter-reit"
+        ],
+        "peers": [
+            "us-ai-power-cooling",
+            "electrical_equipment",
+            "psu"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "electrical_equipment": {
+        "upstream": [],
+        "downstream": [
+            "us-ai-power-cooling",
+            "us-smart-grid-energy"
+        ],
+        "peers": [
+            "jp-dc-power-infra",
+            "kr-power-grid",
+            "kr-nuclear-power"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 4
+    },
+    "solar-energy": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-solar-clean-energy",
+            "jp-nextgen-solar-process",
+            "jp-perovskite-materials"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "us-solar-clean-energy": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "solar-energy",
+            "ess-storage"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "jp-perovskite-materials": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "solar-energy"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "jp-nextgen-solar-process": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "solar-energy"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 0
+    },
+    "offshore-wind": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 2,
+        "downstreamTotal": 0
+    },
+    "battery-materials": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "kr-battery-materials"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "battery-cell-module": {
+        "upstream": [],
+        "downstream": [
+            "us-ev-autonomous"
+        ],
+        "peers": [
+            "jp-battery-dc-power",
+            "kr-battery-cell"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 3
+    },
+    "ess-storage": {
+        "upstream": [
+            "kr-power-grid",
+            "kr-battery-cell"
+        ],
+        "downstream": [
+            "us-smart-grid-energy"
+        ],
+        "peers": [
+            "us-solar-clean-energy",
+            "jp-battery-dc-power"
+        ],
+        "upstreamTotal": 5,
+        "downstreamTotal": 1
+    },
+    "jp-battery-dc-power": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "ess-storage",
+            "battery-cell-module",
+            "kr-battery-cell"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "us-smart-grid-energy": {
+        "upstream": [
+            "electrical_equipment",
+            "kr-power-grid",
+            "ess-storage"
+        ],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 5,
+        "downstreamTotal": 0
+    },
+    "us-nuclear-smr": {
+        "upstream": [
+            "kr-nuclear-power"
+        ],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 1,
+        "downstreamTotal": 2
+    },
+    "epc_engineering": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-fab-facilities",
+            "kr-nuclear-power"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "jp-fab-facilities": {
+        "upstream": [],
+        "downstream": [
+            "wafer-foundry"
+        ],
+        "peers": [
+            "epc_engineering"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "robotics_physical_ai": {
+        "upstream": [
+            "us-gpu-ai-chip",
+            "jp-physical-ai-components"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-humanoid-robotics",
+            "kr-robotics"
+        ],
+        "upstreamTotal": 5,
+        "downstreamTotal": 1
+    },
+    "us-humanoid-robotics": {
+        "upstream": [
+            "jp-physical-ai-components",
+            "precision-metal-casing",
+            "kr-electronic-components"
+        ],
+        "downstream": [],
+        "peers": [
+            "robotics_physical_ai",
+            "kr-robotics"
+        ],
+        "upstreamTotal": 4,
+        "downstreamTotal": 0
+    },
+    "jp-physical-ai-components": {
+        "upstream": [],
+        "downstream": [
+            "robotics_physical_ai",
+            "us-humanoid-robotics"
+        ],
+        "peers": [
+            "precision-metal-casing",
+            "kr-robotics"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "industrial-automation": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-industrial-automation",
+            "jp-fa-sensing-platform"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 0
+    },
+    "us-industrial-automation": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "industrial-automation",
+            "jp-fa-sensing-platform"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "jp-fa-sensing-platform": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "industrial-automation",
+            "us-industrial-automation"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "cnc-machine-tool": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 1,
+        "downstreamTotal": 2
+    },
+    "edge-ai": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 2,
+        "downstreamTotal": 1
+    },
+    "precision-metal-casing": {
+        "upstream": [],
+        "downstream": [
+            "us-humanoid-robotics"
+        ],
+        "peers": [
+            "jp-physical-ai-components"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 3
+    },
+    "sic-gan-power": {
+        "upstream": [],
+        "downstream": [
+            "us-ev-autonomous"
+        ],
+        "peers": [
+            "us-sic-gan-power",
+            "jp-power-discrete"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 3
+    },
+    "us-sic-gan-power": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "sic-gan-power",
+            "jp-power-discrete"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "power-discrete-tw": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-power-discrete"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "jp-power-discrete": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "sic-gan-power",
+            "power-discrete-tw",
+            "us-sic-gan-power"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "jp-power-module": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "psu"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 0
+    },
+    "us-ev-autonomous": {
+        "upstream": [
+            "sic-gan-power",
+            "battery-cell-module",
+            "connector-automotive",
+            "automotive-electronics",
+            "kr-battery-cell"
+        ],
+        "downstream": [],
+        "peers": [
+            "kr-auto"
+        ],
+        "upstreamTotal": 6,
+        "downstreamTotal": 0
+    },
+    "us-industrial-auto-semi": {
+        "upstream": [],
+        "downstream": [
+            "automotive-electronics"
+        ],
+        "peers": [
+            "mcu"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "mcu": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-industrial-auto-semi"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "analog-power-ic": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-power-management",
+            "jp-analog-ic"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "us-power-management": {
+        "upstream": [],
+        "downstream": [
+            "psu"
+        ],
+        "peers": [
+            "analog-power-ic",
+            "jp-analog-ic"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "jp-analog-ic": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "analog-power-ic",
+            "us-power-management"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "connector-automotive": {
+        "upstream": [],
+        "downstream": [
+            "us-ev-autonomous",
+            "kr-auto"
+        ],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "automotive-electronics": {
+        "upstream": [
+            "us-industrial-auto-semi"
+        ],
+        "downstream": [
+            "us-ev-autonomous",
+            "kr-auto"
+        ],
+        "peers": [],
+        "upstreamTotal": 5,
+        "downstreamTotal": 2
+    },
+    "auto-precision-parts": {
+        "upstream": [],
+        "downstream": [
+            "us-ev-autonomous",
+            "kr-auto"
+        ],
+        "peers": [],
+        "upstreamTotal": 2,
+        "downstreamTotal": 3
+    },
+    "steel-special": {
+        "upstream": [],
+        "downstream": [
+            "kr-defense",
+            "kr-shipbuilding"
+        ],
+        "peers": [
+            "kr-materials-metals"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 4
+    },
+    "mlcc-capacitor": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-passive-components",
+            "kr-electronic-components"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "jp-passive-components": {
+        "upstream": [],
+        "downstream": [
+            "ai-server-odm",
+            "mobile"
+        ],
+        "peers": [
+            "mlcc-capacitor",
+            "passive-inductor",
+            "passive-resistor"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "passive-inductor": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-passive-components"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "passive-resistor": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-passive-components"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "quartz-components": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-quartz-device"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "jp-quartz-device": {
+        "upstream": [],
+        "downstream": [
+            "mobile"
+        ],
+        "peers": [
+            "quartz-components"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "pcb-manufacturing": {
+        "upstream": [
+            "jp-copper-foil"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-pcb-ems",
+            "kr-substrate-osat",
+            "kr-pcb"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 2
+    },
+    "us-pcb-ems": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "pcb-manufacturing",
+            "ems-smt",
+            "kr-pcb"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "fpc": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "connector": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "ic-distribution": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 3,
+        "downstreamTotal": 1
+    },
+    "optical-lens-camera": {
+        "upstream": [],
+        "downstream": [
+            "us-ai-pc-devices"
+        ],
+        "peers": [
+            "kr-electronic-components"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 4
+    },
+    "optical-sensors": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "display-panel": {
+        "upstream": [
+            "jp-glass-substrate"
+        ],
+        "downstream": [],
+        "peers": [
+            "kr-display-oled"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 2
+    },
+    "ddic": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "kr-display-oled"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "microled-display": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "ar-vr-xr-optics": {
+        "upstream": [],
+        "downstream": [
+            "us-ai-pc-devices"
+        ],
+        "peers": [],
+        "upstreamTotal": 2,
+        "downstreamTotal": 1
+    },
+    "pc-nb-tablet": {
+        "upstream": [
+            "kr-display-oled"
+        ],
+        "downstream": [
+            "us-ai-pc-devices"
+        ],
+        "peers": [],
+        "upstreamTotal": 4,
+        "downstreamTotal": 1
+    },
+    "mobile": {
+        "upstream": [
+            "kr-electronic-components",
+            "kr-display-oled"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-ai-pc-devices"
+        ],
+        "upstreamTotal": 5,
+        "downstreamTotal": 0
+    },
+    "us-ai-pc-devices": {
+        "upstream": [
+            "pc-nb-tablet",
+            "ar-vr-xr-optics",
+            "optical-lens-camera",
+            "kr-display-oled"
+        ],
+        "downstream": [],
+        "peers": [
+            "mobile"
+        ],
+        "upstreamTotal": 4,
+        "downstreamTotal": 0
+    },
+    "leo-satellite": {
+        "upstream": [],
+        "downstream": [
+            "us-space-satellite"
+        ],
+        "peers": [
+            "jp-leo-satellite"
+        ],
+        "upstreamTotal": 3,
+        "downstreamTotal": 1
+    },
+    "us-space-satellite": {
+        "upstream": [
+            "leo-satellite"
+        ],
+        "downstream": [],
+        "peers": [
+            "jp-leo-satellite",
+            "jp-space-startup"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 0
+    },
+    "jp-leo-satellite": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "leo-satellite",
+            "us-space-satellite"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "jp-space-startup": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-space-satellite"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "defense_industry": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-defense-dronetech",
+            "us-aerospace-manufacturing",
+            "jp-defense-heavy-industry",
+            "kr-defense"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "us-defense-dronetech": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "defense_industry",
+            "jp-defense-heavy-industry",
+            "kr-defense"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "us-aerospace-manufacturing": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "defense_industry",
+            "jp-defense-heavy-industry",
+            "kr-defense"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "cybersecurity": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-cybersecurity"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "us-cybersecurity": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "cybersecurity"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "enterprise-saas": {
+        "upstream": [
+            "us-hyperscaler"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-cloud-ai-software"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 0
+    },
+    "us-cloud-ai-software": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "enterprise-saas",
+            "cloud-msp"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 0
+    },
+    "cloud-msp": {
+        "upstream": [
+            "us-hyperscaler"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-cloud-ai-software"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "medical-electronics": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-medical-devices"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "medical-consumables": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-medical-devices"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "ivd-diagnostics": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-medical-devices"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "us-medical-devices": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "medical-electronics",
+            "medical-consumables",
+            "ivd-diagnostics"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "biotech-newdrug": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-biotech-ai",
+            "us-glp1-obesity"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 0
+    },
+    "biotech-cdmo-api": {
+        "upstream": [],
+        "downstream": [
+            "us-glp1-obesity"
+        ],
+        "peers": [
+            "us-biotech-ai",
+            "kr-biotech-cdmo"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "us-biotech-ai": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "biotech-newdrug",
+            "biotech-cdmo-api"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "us-glp1-obesity": {
+        "upstream": [
+            "biotech-cdmo-api",
+            "kr-biotech-cdmo"
+        ],
+        "downstream": [],
+        "peers": [
+            "biotech-newdrug",
+            "biotech-generic-biosimilar"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 0
+    },
+    "jp-quantum-chain": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-quantum-computing"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "jp-quantum-software": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-quantum-computing"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "us-quantum-computing": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-quantum-chain",
+            "jp-quantum-software"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "banking-finance": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-fintech-payments"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "us-fintech-payments": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "banking-finance"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "biotech-generic-biosimilar": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-glp1-obesity",
+            "kr-biotech-cdmo"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 0
+    },
+    "sic-gan-substrate": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-sic-gan-substrate",
+            "jp-sic-gan-substrate"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "us-sic-gan-substrate": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "sic-gan-substrate",
+            "jp-sic-gan-substrate"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "jp-sic-gan-substrate": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "sic-gan-substrate",
+            "us-sic-gan-substrate"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "jp-defense-heavy-industry": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "defense_industry",
+            "us-defense-dronetech",
+            "us-aerospace-manufacturing",
+            "kr-defense"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "us-foundry": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "wafer-foundry",
+            "kr-foundry"
+        ],
+        "upstreamTotal": 3,
+        "downstreamTotal": 2
+    },
+    "kr-memory": {
+        "upstream": [],
+        "downstream": [
+            "memory-modules",
+            "cowos-advanced-packaging",
+            "us-gpu-ai-chip",
+            "ai-server-odm"
+        ],
+        "peers": [
+            "us-memory-storage",
+            "jp-memory-chain",
+            "hbm"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 5
+    },
+    "kr-foundry": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "wafer-foundry",
+            "us-foundry",
+            "asic-ip-design"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 1
+    },
+    "kr-semi-equipment": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-semi-equipment",
+            "jp-backend-equipment",
+            "us-semi-test-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "kr-semi-materials": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "semi-process-materials",
+            "jp-semi-process-materials",
+            "us-semiconductor-materials"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "kr-substrate-osat": {
+        "upstream": [],
+        "downstream": [
+            "memory-modules"
+        ],
+        "peers": [
+            "advanced-packaging-test",
+            "ic-substrate",
+            "us-advanced-packaging",
+            "pcb-manufacturing",
+            "kr-pcb"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 1
+    },
+    "kr-power-grid": {
+        "upstream": [],
+        "downstream": [
+            "us-ai-power-cooling",
+            "us-smart-grid-energy",
+            "ess-storage"
+        ],
+        "peers": [
+            "electrical_equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 4
+    },
+    "us-semi-test-equipment": {
+        "upstream": [],
+        "downstream": [
+            "advanced-packaging-test"
+        ],
+        "peers": [
+            "high-end-testing",
+            "kr-semi-equipment"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 1
+    },
+    "us-critical-minerals": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "jp-rare-minerals",
+            "kr-materials-metals"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "jp-rare-minerals": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "us-critical-minerals",
+            "kr-materials-metals"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 0
+    },
+    "kr-shipbuilding": {
+        "upstream": [
+            "steel-special"
+        ],
+        "downstream": [
+            "container-shipping",
+            "dry-bulk-shipping"
+        ],
+        "peers": [
+            "jp-shipbuilding"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 4
+    },
+    "jp-shipbuilding": {
+        "upstream": [],
+        "downstream": [
+            "container-shipping",
+            "dry-bulk-shipping"
+        ],
+        "peers": [
+            "kr-shipbuilding"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "container-shipping": {
+        "upstream": [
+            "kr-shipbuilding",
+            "jp-shipbuilding"
+        ],
+        "downstream": [],
+        "peers": [
+            "kr-shipping"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 0
+    },
+    "dry-bulk-shipping": {
+        "upstream": [
+            "kr-shipbuilding",
+            "jp-shipbuilding"
+        ],
+        "downstream": [],
+        "peers": [
+            "kr-shipping"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 0
+    },
+    "kr-electronic-components": {
+        "upstream": [
+            "jp-glass-substrate-materials",
+            "jp-copper-foil"
+        ],
+        "downstream": [
+            "us-gpu-ai-chip",
+            "ai-server-odm",
+            "mobile",
+            "us-humanoid-robotics"
+        ],
+        "peers": [
+            "mlcc-capacitor",
+            "optical-lens-camera",
+            "ic-substrate"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 5
+    },
+    "kr-battery-materials": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "battery-materials",
+            "jp-copper-foil"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 1
+    },
+    "kr-battery-cell": {
+        "upstream": [],
+        "downstream": [
+            "ess-storage",
+            "us-ev-autonomous",
+            "us-ai-power-cooling"
+        ],
+        "peers": [
+            "battery-cell-module",
+            "jp-battery-dc-power"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 4
+    },
+    "kr-display-oled": {
+        "upstream": [
+            "jp-glass-substrate"
+        ],
+        "downstream": [
+            "mobile",
+            "pc-nb-tablet",
+            "us-ai-pc-devices"
+        ],
+        "peers": [
+            "display-panel",
+            "ddic"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 3
+    },
+    "kr-pcb": {
+        "upstream": [
+            "jp-copper-foil",
+            "fiberglass-cloth"
+        ],
+        "downstream": [
+            "us-gpu-ai-chip",
+            "ai-server-odm",
+            "us-network-infrastructure",
+            "memory-modules"
+        ],
+        "peers": [
+            "pcb-manufacturing",
+            "us-pcb-ems",
+            "kr-substrate-osat"
+        ],
+        "upstreamTotal": 2,
+        "downstreamTotal": 4
+    },
+    "kr-defense": {
+        "upstream": [
+            "steel-special"
+        ],
+        "downstream": [],
+        "peers": [
+            "defense_industry",
+            "us-defense-dronetech",
+            "jp-defense-heavy-industry",
+            "us-aerospace-manufacturing"
+        ],
+        "upstreamTotal": 3,
+        "downstreamTotal": 0
+    },
+    "kr-nuclear-power": {
+        "upstream": [],
+        "downstream": [
+            "us-nuclear-smr",
+            "us-ai-power-cooling",
+            "us-hyperscaler"
+        ],
+        "peers": [
+            "electrical_equipment",
+            "epc_engineering"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 3
+    },
+    "kr-auto": {
+        "upstream": [
+            "connector-automotive",
+            "auto-precision-parts",
+            "automotive-electronics"
+        ],
+        "downstream": [],
+        "peers": [
+            "us-ev-autonomous"
+        ],
+        "upstreamTotal": 4,
+        "downstreamTotal": 0
+    },
+    "kr-biotech-cdmo": {
+        "upstream": [],
+        "downstream": [
+            "us-big-pharma",
+            "us-glp1-obesity"
+        ],
+        "peers": [
+            "biotech-cdmo-api",
+            "biotech-generic-biosimilar"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 2
+    },
+    "us-big-pharma": {
+        "upstream": [
+            "kr-biotech-cdmo"
+        ],
+        "downstream": [],
+        "peers": [],
+        "upstreamTotal": 1,
+        "downstreamTotal": 0
+    },
+    "kr-materials-metals": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "steel-special",
+            "us-critical-minerals",
+            "jp-rare-minerals"
+        ],
+        "upstreamTotal": 0,
+        "downstreamTotal": 3
+    },
+    "kr-robotics": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "robotics_physical_ai",
+            "us-humanoid-robotics",
+            "jp-physical-ai-components"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 0
+    },
+    "kr-shipping": {
+        "upstream": [],
+        "downstream": [],
+        "peers": [
+            "container-shipping",
+            "dry-bulk-shipping"
+        ],
+        "upstreamTotal": 1,
+        "downstreamTotal": 0
+    }
+}
