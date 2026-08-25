@@ -109,8 +109,7 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 .treemap-node-company-change{position:absolute;left:7px;right:7px;bottom:7px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.65);font-weight:800;pointer-events:none}
 .heatmap-empty{border:1px dashed var(--bs-border-color);padding:2rem;text-align:center;color:var(--bs-secondary-color);border-radius:.75rem}
 .legend{display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--bs-secondary-color)}
-.legend-bar{width:180px;height:10px;border-radius:99px;background:linear-gradient(90deg,#dc3545,#6c757d,#198754)}
-.stock-heatmap-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.legend-bar{width:180px;height:10px;border-radius:99px;background:linear-gradient(90deg,#dc3545,#f8d7da,#d1e7dd,#198754)}.stock-heatmap-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
 @media(max-width:1199.98px){#detail-panel{width:330px;min-width:330px}}
 @media(max-width:991.98px){html,body{overflow:auto}#app{height:auto;min-height:100vh}.app-body{display:block;overflow:visible}#sidebar{width:100%;min-width:0;height:auto;max-height:42vh;border-right:0;border-bottom:1px solid var(--bs-border-color)}#sidebar.collapsed{width:100%;min-width:0;max-height:0;border-bottom:0}#main-area{height:auto;min-height:70vh;overflow:visible}#tab-content-wrapper{overflow:visible}.tab-pane-custom{height:auto;overflow:visible}#detail-panel{display:none}.relation-grid{grid-template-columns:1fr}#map-scroll{padding:1rem}#group-treemap,#sub-treemap{height:420px}.heatmap-header{align-items:flex-start;flex-direction:column}}
 </style>
@@ -720,17 +719,17 @@ const max=8;
 const ratio=Math.min(Math.abs(value)/max,1);
 if(value>0){
 const r=Math.round(220-(220-25)*ratio);
-const g=Math.round(53+(135-53)*ratio);
-const b=Math.round(69+(84-69)*ratio);
+const g=Math.round(245-(245-135)*ratio);
+const b=Math.round(220-(220-84)*ratio);
 return `rgb(${r},${g},${b})`;
 }
 if(value<0){
-const r=Math.round(25+(220-25)*(1-ratio));
-const g=Math.round(135-(135-53)*ratio);
-const b=Math.round(84-(84-69)*ratio);
+const r=Math.round(220+(180-220)*ratio);
+const g=Math.round(80-(80-35)*ratio);
+const b=Math.round(80-(80-40)*ratio);
 return `rgb(${r},${g},${b})`;
 }
-return "#6c757d";
+return "#adb5bd";
 }
 function formatMarketCap(value){
 const number=Number(value);
