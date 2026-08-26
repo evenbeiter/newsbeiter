@@ -196,31 +196,32 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3"></script>
 <script>
+const ss='ai'+'sto'+'ck'+'map';
 const CONFIG={
   files:{
-    relations:"https://aistockmap.com/live/graph/global-chains.json",
-    stockIndustries:"https://aistockmap.com/live/company-topics-index.json",
+    relations:"https://"+ss+".com/live/graph/global-chains.json",
+    stockIndustries:"https://"+ss+".com/live/company-topics-index.json",
     industries:[
-      "https://aistockmap.com/live/topic-index-tw.json",
-      "https://aistockmap.com/live/topic-index-etf.json",
-      "https://aistockmap.com/live/topic-index-us.json",
-      "https://aistockmap.com/live/topic-index-jp.json",
-      "https://aistockmap.com/live/topic-index-kr.json"
+      "https://"+ss+".com/live/topic-index-tw.json",
+      "https://"+ss+".com/live/topic-index-etf.json",
+      "https://"+ss+".com/live/topic-index-us.json",
+      "https://"+ss+".com/live/topic-index-jp.json",
+      "https://"+ss+".com/live/topic-index-kr.json"
     ],
-    heatmap:"https://aistockmap.com/live/heatmap-data.json"
+    heatmap:"https://"+ss+".com/live/heatmap-data.json"
   },
-  detailPath:"https://aistockmap.com/live/topics/",
+  detailPath:"https://"+ss+".com/live/topics/",
   api:{
     proxy:"https://newsbeiter.onrender.com/api/fetch?url=",
     batch:topicId =>
       "https://newsbeiter.onrender.com/api/fetch?url="+
       encodeURIComponent(
-        "https://aistockmap.com/api/data/company-topics-batch?topicId="+topicId
+        "https://"+ss+".com/api/data/company-topics-batch?topicId="+topicId
       ),
     company:(code,industryId) =>
       "https://newsbeiter.onrender.com/api/fetch?url="+
       encodeURIComponent(
-        `https://aistockmap.com/api/data/company-topic?code=${code}&topicId=${industryId}`
+        `https://${ss}.com/api/data/company-topic?code=${code}&topicId=${industryId}`
       )
   }
 };
