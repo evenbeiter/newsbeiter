@@ -367,11 +367,24 @@ const stockIndustries=results[1].status==="fulfilled"?results[1].value:{};
 const industryArrays=results[2].status==="fulfilled"?results[2].value:[];
 const heatmapData=results[3].status==="fulfilled"?results[3].value:{topics:{}};
 const news=results[4].status==="fulfilled"?results[4].value:[];
+
+const marketNames=["tw","etf","us","jp","kr"];
+const industries=industryArrays.flatMap((array,index)=>normalizeIndustries(array).map(industry=>({...industry,market:marketNames[index]})));
+state.relations=normalizeObject(relations);
+state.stockIndustries=normalizeObject(stockIndustries);
+state.industriesArray=industries;
+
+// const industries=industryArrays.flat();
+// state.relations=normalizeObject(relations);
+// state.stockIndustries=normalizeObject(stockIndustries);
+// state.industriesArray=normalizeIndustries(industries);
+
 state.relations=normalizeObject(relations);
 state.stockIndustries=normalizeObject(stockIndustries);
 state.industriesArray=normalizeIndustries(industryArrays.flat());
 state.industries={};
 state.industriesArray.forEach(industry=>state.industries[industry.id]=industry);
+
 state.heatmapData=heatmapData||{topics:{}};
 state.news=Array.isArray(news)?news:[];
 buildCompanySearchIndex();
