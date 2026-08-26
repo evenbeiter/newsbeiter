@@ -256,7 +256,7 @@ html,body{overflow:auto}
 </main>
 <aside id="detail-panel">
 <div class="detail-header">
-<strong id="detail-panel-title">相關個股</strong>
+<strong id="detail-panel-title">詳細資訊</strong>
 <button class="btn btn-sm btn-outline-secondary" id="closeDetailBtn"><i class="bi bi-x-lg"></i></button>
 </div>
 <div id="detail-content">
@@ -267,19 +267,20 @@ html,body{overflow:auto}
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3.1.2/dist/d3-hierarchy.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3"></script>
 <script>
+/* ==================== 基本設定與資料結構 ==================== */
 const ss="ai"+"sto"+"ck"+"map";
 const CONFIG={
 files:{
 relations:"https://"+ss+".com/live/graph/global-chains.json",
 stockIndustries:"https://"+ss+".com/live/company-topics-index.json",
 industries:[
-{market:"tw",url:"https://"+ss+".com/live/topic-index-tw.json"},
-{market:"etf",url:"https://"+ss+".com/live/topic-index-etf.json"},
-{market:"us",url:"https://"+ss+".com/live/topic-index-us.json"},
-{market:"jp",url:"https://"+ss+".com/live/topic-index-jp.json"},
-{market:"kr",url:"https://"+ss+".com/live/topic-index-kr.json"}
+"https://"+ss+".com/live/topic-index-tw.json",
+"https://"+ss+".com/live/topic-index-etf.json",
+"https://"+ss+".com/live/topic-index-us.json",
+"https://"+ss+".com/live/topic-index-jp.json",
+"https://"+ss+".com/live/topic-index-kr.json"
 ],
 heatmap:"https://"+ss+".com/live/heatmap-data.json",
 news:"https://"+ss+".com/live/daily_news.json"
@@ -295,7 +296,6 @@ const state={
 relations:{},
 stockIndustries:{},
 industries:{},
-industryVariants:{},
 industriesArray:[],
 heatmapData:null,
 news:[],
@@ -312,8 +312,7 @@ selectedSubIndustry:null,
 apiBatchCache:{},
 apiCompanyCache:{},
 companySearchIndex:[],
-market:"all",
-sidebarCollapsed:true
+market:"all"
 };
 const $=selector=>document.querySelector(selector);
 const $$=selector=>[...document.querySelectorAll(selector)];
@@ -322,6 +321,7 @@ async function init(){
 bindEvents();
 await loadData();
 }
+/* ==================== 事件綁定 ==================== */
 function bindEvents(){
 $("#industrySearch").addEventListener("input",e=>renderIndustryGroups(e.target.value));
 $("#themeBtn").addEventListener("click",toggleTheme);
@@ -336,44 +336,42 @@ $("#showPeersBtn").addEventListener("click",()=>setRelationFilter("peers"));
 $("#stockSearch").addEventListener("input",handleStockSearchInput);
 $("#stockSearch").addEventListener("keydown",e=>{if(e.key==="Enter")performStockSearch()});
 $("#stockSearchBtn").addEventListener("click",performStockSearch);
+$("#marketSelector").addEventListener("change",e=>{
+state.market=e.target.value;
+state.selectedIndustry=null;
+state.selectedGroup=null;
+state.heatmapLevel="group";
+renderIndustryGroups();
+renderHeatmap();
+clearDetailPanel();
+});
 document.addEventListener("click",e=>{
 if(!e.target.closest(".navbar-search"))hideStockSearchResults();
 });
 $$(".market-btn").forEach(button=>button.addEventListener("click",()=>selectMarket(button.dataset.market)));
 $$("#main-tabs .nav-link").forEach(button=>button.addEventListener("click",()=>switchTab(button.dataset.tab)));
 }
+/* ==================== 載入所有資料 ==================== */
 async function loadData(){
 try{
 showLoading();
 const results=await Promise.allSettled([
 fetchJSON(CONFIG.files.relations),
 fetchJSON(CONFIG.files.stockIndustries),
-Promise.all(CONFIG.files.industries.map(item=>fetchJSON(item.url).then(data=>({market:item.market,data})))),
+Promise.all(CONFIG.files.industries.map(url=>fetchJSON(url))),
 fetchJSON(CONFIG.files.heatmap),
 fetchJSON(CONFIG.files.news)
 ]);
 const relations=results[0].status==="fulfilled"?results[0].value:{};
 const stockIndustries=results[1].status==="fulfilled"?results[1].value:{};
-const industrySources=results[2].status==="fulfilled"?results[2].value:[];
+const industryArrays=results[2].status==="fulfilled"?results[2].value:[];
 const heatmapData=results[3].status==="fulfilled"?results[3].value:{topics:{}};
 const news=results[4].status==="fulfilled"?results[4].value:[];
 state.relations=normalizeObject(relations);
 state.stockIndustries=normalizeObject(stockIndustries);
-state.industriesArray=[];
+state.industriesArray=normalizeIndustries(industryArrays.flat());
 state.industries={};
-state.industryVariants={};
-industrySources.forEach(source=>{
-const normalized=normalizeIndustries(source.data,source.market);
-normalized.forEach(industry=>{
-state.industriesArray.push(industry);
-if(!state.industryVariants[industry.id])state.industryVariants[industry.id]=[];
-state.industryVariants[industry.id].push(industry);
-});
-});
-state.industriesArray.forEach(industry=>{
-const key=`${industry.market||"all"}|${industry.id}`;
-state.industries[key]=industry;
-});
+state.industriesArray.forEach(industry=>state.industries[industry.id]=industry);
 state.heatmapData=heatmapData||{topics:{}};
 state.news=Array.isArray(news)?news:[];
 buildCompanySearchIndex();
@@ -401,62 +399,59 @@ async function fetchIndustryDetail(industryId){
 return await fetchJSON(CONFIG.detailPath+encodeURIComponent(industryId)+".json");
 }
 async function fetchCompanyTopicsBatch(industryId){
-const key=`${state.market}|${industryId}`;
-if(state.apiBatchCache[key])return state.apiBatchCache[key];
+if(state.apiBatchCache[industryId])return state.apiBatchCache[industryId];
 const url=CONFIG.api.batch(industryId);
 const data=await fetchAPI(url);
-state.apiBatchCache[key]=data;
+state.apiBatchCache[industryId]=data;
 return data;
 }
 async function fetchCompanyTopic(code,industryId){
-const key=`${state.market}|${code}|${industryId}`;
+const key=`${code}|${industryId}`;
 if(state.apiCompanyCache[key])return state.apiCompanyCache[key];
 const url=CONFIG.api.company(code,industryId);
 const data=await fetchAPI(url);
 state.apiCompanyCache[key]=data;
 return data;
 }
+/* ==================== 資料標準化與市場判斷 ==================== */
 function normalizeObject(value){
 return value&&typeof value==="object"&&!Array.isArray(value)?value:{};
 }
-function normalizeIndustries(data,market="all"){
-if(Array.isArray(data))return data.filter(x=>x&&x.id).map(x=>({...x,market:x.market||market}));
-if(data&&typeof data==="object")return Object.entries(data).map(([id,value])=>typeof value==="string"?{id,name:value,shortname:value,group:"其他",market}: {id,...value,market:value.market||market});
-return[];
+function normalizeIndustries(data){
+if(Array.isArray(data))return data.filter(x=>x&&x.id);
+if(data&&typeof data==="object")return Object.entries(data).map(([id,value])=>typeof value==="string"?{id,name:value,shortname:value,group:"其他"}:{id,...value});
+return [];
 }
 function getGroup(industry){
 return industry?.group||industry?.category||industry?.parent||"其他";
 }
-function getIndustry(industryId,marketHint=null){
-const variants=state.industryVariants[industryId]||[];
-const market=marketHint||state.market;
-if(market!=="all"){
-const exact=variants.find(item=>item.market===market);
-if(exact)return exact;
+function getIndustry(industryId){
+return state.industries[industryId]||{id:industryId,name:industryId,shortname:industryId,group:"其他"};
 }
-if(state.industries[`${market}|${industryId}`])return state.industries[`${market}|${industryId}`];
-return variants[0]||{id:industryId,name:industryId,shortname:industryId,group:"其他",market:"all"};
-}
-function getIndustryName(industryId,marketHint=null){
-const industry=getIndustry(industryId,marketHint);
+function getIndustryName(industryId){
+const industry=getIndustry(industryId);
 return industry.shortname||industry.name||industryId;
 }
 function getIndustryMarket(industry){
-if(!industry)return"all";
-const value=String(industry.market||industry.marketCode||industry.exchange||"").toLowerCase();
-if(value==="tw"||value.includes("taiwan")||value.includes("台"))return"tw";
-if(value==="us"||value.includes("america")||value.includes("美"))return"us";
-if(value==="etf")return"etf";
-if(value==="jp"||value.includes("japan")||value.includes("日"))return"jp";
-if(value==="kr"||value.includes("korea")||value.includes("韓"))return"kr";
+const value=String(industry?.market||industry?.marketCode||industry?.exchange||"").toLowerCase();
+if(value.includes("tw")||value.includes("taiwan")||value.includes("台"))return"tw";
+if(value.includes("us")||value.includes("america")||value.includes("美"))return"us";
+if(value.includes("etf"))return"etf";
+if(value.includes("jp")||value.includes("japan")||value.includes("日"))return"jp";
+if(value.includes("kr")||value.includes("korea")||value.includes("韓"))return"kr";
+const id=String(industry?.id||"").toLowerCase();
+if(/(^|[-_])tw([-_]|$)|taiwan/.test(id))return"tw";
+if(/(^|[-_])us([-_]|$)|usa|america/.test(id))return"us";
+if(/(^|[-_])etf([-_]|$)/.test(id))return"etf";
+if(/(^|[-_])jp([-_]|$)|japan/.test(id))return"jp";
+if(/(^|[-_])kr([-_]|$)|korea/.test(id))return"kr";
 return"all";
 }
 function marketLabel(market){
 return({all:"全部",tw:"台股",us:"美股",etf:"ETF",jp:"日股",kr:"韓股"})[market]||market;
 }
 function industryMatchesMarket(industry){
-if(state.market==="all")return true;
-return getIndustryMarket(industry)===state.market;
+return state.market==="all"||getIndustryMarket(industry)===state.market||getIndustryMarket(industry)==="all";
 }
 function countStocks(industryId){
 const companies=getHeatmapCompanies(industryId);
@@ -467,23 +462,7 @@ function getHeatmapCompanies(industryId){
 const companies=state.heatmapData?.topics?.[industryId]?.companies;
 return Array.isArray(companies)?companies:[];
 }
-function getTopicMarket(industryId){
-const topic=state.heatmapData?.topics?.[industryId];
-if(topic){
-const value=String(topic.market||topic.marketCode||topic.exchange||"").toLowerCase();
-if(value==="tw"||value.includes("taiwan")||value.includes("台"))return"tw";
-if(value==="us"||value.includes("america")||value.includes("美"))return"us";
-if(value==="etf")return"etf";
-if(value==="jp"||value.includes("japan")||value.includes("日"))return"jp";
-if(value==="kr"||value.includes("korea")||value.includes("韓"))return"kr";
-}
-const variants=state.industryVariants[industryId]||[];
-if(state.market!=="all"){
-const exact=variants.find(item=>item.market===state.market);
-if(exact)return state.market;
-}
-return variants.length===1?variants[0].market:"all";
-}
+/* ==================== 市場切換 ==================== */
 function selectMarket(market){
 state.market=market;
 $$(".market-btn").forEach(button=>{
@@ -493,17 +472,15 @@ button.classList.toggle("btn-outline-primary",!active);
 });
 renderIndustryGroups($("#industrySearch").value||"");
 state.selectedGroup=null;
-state.selectedSubIndustry=null;
 state.heatmapLevel="group";
 if(state.selectedIndustry&&!industryMatchesMarket(getIndustry(state.selectedIndustry))){
 state.selectedIndustry=null;
 state.selectedStock=null;
 clearDetailPanel();
 }
-buildCompanySearchIndex();
 renderHeatmap();
-renderNews();
 }
+/* ==================== 左側產業列表 ==================== */
 function renderIndustryGroups(filter=""){
 const container=$("#industryGroups");
 const keyword=filter.trim().toLowerCase();
@@ -535,34 +512,56 @@ return `<button class="industry-item ${active}" data-id="${escapeAttr(industry.i
 function updateSidebarActive(){
 $$(".industry-item").forEach(button=>button.classList.toggle("active",button.dataset.id===state.selectedIndustry));
 }
+/* ==================== 產業關聯圖 ==================== */
+// async function selectIndustry(industryId){
+// if(!industryId)return;
+// const industry=getIndustry(industryId);
+// if(state.market!=="all"&&!industryMatchesMarket(industry))return;
+// state.selectedIndustry=industryId;
+// state.selectedStock=null;
+// state.currentIndustryDetail=null;
+// state.relationFilter="all";
+// updateSidebarActive();
+// switchTab("map");
+// renderMap();
+// renderIndustryDetailLoading();
+// try{
+// const [detail,batchResult]=await Promise.all([
+// fetchIndustryDetail(industryId),
+// fetchCompanyTopicsBatch(industryId).catch(error=>({items:[],error:error.message}))
+// ]);
+// if(state.selectedIndustry!==industryId)return;
+// state.currentIndustryDetail=detail||{};
+// state.currentBatch=batchResult||{items:[]};
+// renderIndustryDetailBelowMap(state.currentIndustryDetail,industryId,state.currentBatch);
+// renderIndustrySidePanel(state.currentIndustryDetail,industryId);
+// }catch(error){
+// console.error(error);
+// renderIndustryDetailError(industryId,error);
+// }
+// }
+
 async function selectIndustry(industryId){
 if(!industryId)return;
-const industry=getIndustry(industryId);
-if(state.market!=="all"&&!industryMatchesMarket(industry))return;
 state.selectedIndustry=industryId;
-state.selectedStock=null;
 state.currentIndustryDetail=null;
 state.relationFilter="all";
 updateSidebarActive();
 switchTab("map");
 renderMap();
 renderIndustryDetailLoading();
-renderIndustryStockSidePanel(industryId);
 try{
-const [detail,batchResult]=await Promise.all([
-fetchIndustryDetail(industryId),
-fetchCompanyTopicsBatch(industryId).catch(error=>({items:[],error:error.message}))
-]);
+const [detail,batch]=await Promise.all([fetchIndustryDetail(industryId),fetchCompanyTopicsBatch(industryId).catch(error=>({items:[],error:error.message}))]);
 if(state.selectedIndustry!==industryId)return;
-state.currentIndustryDetail=detail||{};
-state.currentBatch=batchResult||{items:[]};
-renderIndustryDetailBelowMap(state.currentIndustryDetail,industryId,state.currentBatch);
-renderIndustryStockSidePanel(industryId);
+state.currentIndustryDetail=detail;
+state.currentBatch=batch;
+renderIndustryDetailBelowMap(detail,industryId,batch);
 }catch(error){
 console.error(error);
 renderIndustryDetailError(industryId,error);
 }
 }
+
 function setRelationFilter(filter){
 state.relationFilter=filter;
 renderMap();
@@ -574,14 +573,25 @@ if(!industry)return;
 $("#map-toolbar").classList.remove("d-none");
 renderBreadcrumb(industry);
 const relation=state.relations[state.selectedIndustry]||{};
-let upstream=uniqueArray(relation.upstream).filter(id=>industryMatchesMarket(getIndustry(id)));
-let downstream=uniqueArray(relation.downstream).filter(id=>industryMatchesMarket(getIndustry(id)));
-let peers=uniqueArray(relation.peers).filter(id=>industryMatchesMarket(getIndustry(id)));
+
+let upstream=filterIndustriesByMarket(relation.upstream);
+let downstream=filterIndustriesByMarket(relation.downstream);
+let peers=filterIndustriesByMarket(relation.peers);
+
+// let upstream=uniqueArray(relation.upstream).filter(id=>industryMatchesMarket(getIndustry(id)));
+// let downstream=uniqueArray(relation.downstream).filter(id=>industryMatchesMarket(getIndustry(id)));
+// let peers=uniqueArray(relation.peers).filter(id=>industryMatchesMarket(getIndustry(id)));
 if(!upstream.length&&!downstream.length&&!peers.length){
+// const reverse=buildReverseRelations(state.selectedIndustry);
+// upstream=reverse.upstream;
+// downstream=reverse.downstream;
+// peers=reverse.peers;
+
 const reverse=buildReverseRelations(state.selectedIndustry);
-upstream=reverse.upstream;
-downstream=reverse.downstream;
-peers=reverse.peers;
+upstream=filterIndustriesByMarket(reverse.upstream);
+downstream=filterIndustriesByMarket(reverse.downstream);
+peers=filterIndustriesByMarket(reverse.peers);
+
 }
 if(state.relationFilter==="upstream"){downstream=[];peers=[]}
 if(state.relationFilter==="downstream"){upstream=[];peers=[]}
@@ -589,6 +599,12 @@ if(state.relationFilter==="peers"){upstream=[];downstream=[]}
 $("#map-content").className="";
 $("#map-content").innerHTML=`<div class="container-fluid px-0">${renderIndustryHero(industry)}${renderRelationMap(upstream,downstream,peers)}<div id="industry-detail-below-map"></div></div>`;
 bindMapCards();
+}
+function filterIndustriesByMarket(ids){
+return uniqueArray(ids).filter(id=>{
+if(state.market==="all")return true;
+return getIndustry(id).market===state.market;
+});
 }
 function renderIndustryHero(industry){
 return `<div class="mb-4"><div class="d-flex flex-wrap align-items-center gap-2 mb-2"><span class="badge text-bg-success">${escapeHTML(getGroup(industry))}</span>${industry.active===false?`<span class="badge text-bg-secondary">非啟用</span>`:""}</div><h1 class="h3 industry-title">${escapeHTML(industry.name||industry.shortname||industry.id)}</h1>${industry.description?`<p class="industry-description text-body-secondary mb-3">${escapeHTML(industry.description)}</p>`:""}</div>`;
@@ -625,13 +641,23 @@ const container=$("#industry-detail-below-map");
 if(!container)return;
 container.innerHTML=`<section class="relation-section"><div class="d-flex align-items-center gap-2 text-body-secondary"><div class="spinner-border spinner-border-sm"></div><span>正在載入產業介紹與產業分層...</span></div></section>`;
 }
+// function renderIndustryDetailBelowMap(detail,industryId,batch){
+// const container=$("#industry-detail-below-map");
+// if(!container)return;
+// const companies=getHeatmapCompanies(industryId);
+// container.innerHTML=`<section class="relation-section"><div class="relation-title"><i class="bi bi-info-circle"></i>產業介紹</div>${detail?.description?`<p class="industry-description text-body-secondary">${escapeHTML(detail.description)}</p>`:""}${detail?.tags?.length?`<div class="mb-4">${detail.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join("")}</div>`:""}${detail?.keyMetrics?.length?renderDetailMetrics(detail.keyMetrics):""}${detail?.metrics?.drivers?.length?renderDrivers(detail.metrics.drivers):""}${detail?.keyTrends?.length?renderKeyTrends(detail.keyTrends):""}${detail?.supplyChain?renderSupplyChain(detail,batch,industryId):""}${renderIndustryCompanies(companies,industryId)}</section>`;
+// bindMapCards();
+// }
+
 function renderIndustryDetailBelowMap(detail,industryId,batch){
 const container=$("#industry-detail-below-map");
 if(!container)return;
 const companies=getHeatmapCompanies(industryId);
-container.innerHTML=`<section class="relation-section"><div class="relation-title"><i class="bi bi-info-circle"></i>產業介紹</div>${detail?.description?`<p class="industry-description text-body-secondary">${escapeHTML(detail.description)}</p>`:""}${detail?.tags?.length?`<div class="mb-4">${detail.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join("")}</div>`:""}${detail?.keyMetrics?.length?renderDetailMetrics(detail.keyMetrics):""}${detail?.metrics?.drivers?.length?renderDrivers(detail.metrics.drivers):""}${detail?.keyTrends?.length?renderKeyTrends(detail.keyTrends):""}${detail?.supplyChain?renderSupplyChain(detail,batch,industryId):""}${renderIndustryCompanies(companies,industryId)}</section>`;
+container.innerHTML=`<section class="relation-section"><div class="relation-title"><i class="bi bi-info-circle"></i>產業介紹</div>${detail.description?`<p class="industry-description text-body-secondary">${escapeHTML(detail.description)}</p>`:""}${detail.tags?.length?`<div class="mb-4">${detail.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join("")}</div>`:""}${detail.keyMetrics?.length?renderDetailMetrics(detail.keyMetrics):""}${detail.metrics?.drivers?.length?renderDrivers(detail.metrics.drivers):""}${detail.keyTrends?.length?renderKeyTrends(detail.keyTrends):""}${detail.supplyChain?renderSupplyChain(detail,batch,industryId):""}${renderIndustryCompanies(companies,industryId)}</section>`;
 bindMapCards();
+renderIndustryStockTreemap(industryId);
 }
+
 function renderDetailMetrics(metrics){
 return `<div class="detail-block"><h5 class="detail-block-title">核心指標</h5><div class="row g-3">${metrics.map(metric=>`<div class="col-12 col-md-6"><div class="metric-card"><div class="metric-label">${escapeHTML(metric.label||"")}</div><div class="metric-value">${escapeHTML(metric.value||"")}</div></div></div>`).join("")}</div></div>`;
 }
@@ -657,16 +683,14 @@ return `<div class="supply-child" data-role-id="${escapeAttr(child.id)}" data-pa
 function renderIndustryCompanies(companies,industryId){
 return `<div class="detail-block"><div class="stock-heatmap-title"><h5 class="detail-block-title mb-0">相關個股</h5><span class="badge text-bg-secondary">${companies.length}</span></div>${companies.length?`<div id="industry-stock-treemap" class="treemap-wrapper" style="height:420px"></div><div id="industry-stock-cards" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-2 mt-2">${companies.map(company=>renderCompanyCard(company,industryId)).join("")}</div>`:`<div class="text-body-secondary">heatmap-data.json 中沒有此產業的個股資料</div>`}</div>`;
 }
-function renderIndustryStockSidePanel(industryId){
+function renderIndustrySidePanel(detail,industryId){
 const industry=getIndustry(industryId);
 const companies=getHeatmapCompanies(industryId);
-$("#detail-panel-title").textContent="相關個股";
-$("#detail-content").innerHTML=`<div class="mb-3"><div class="small text-body-secondary mb-1">${escapeHTML(marketLabel(getIndustryMarket(industry)))}</div><h5 class="fw-bold mb-1">${escapeHTML(industry.name||industry.shortname||industry.id)}</h5><div class="small text-body-secondary">${escapeHTML(industry.id)}</div></div><div class="d-flex justify-content-between align-items-center mb-2"><strong>相關個股</strong><span class="badge text-bg-secondary">${companies.length}</span></div>${companies.length?`<div id="side-industry-stock-treemap" class="treemap-wrapper" style="height:360px"></div><div class="row row-cols-1 g-2 mt-1">${companies.map(company=>renderCompanyCard(company,industryId)).join("")}</div>`:`<div class="heatmap-empty">此產業目前沒有個股資料</div>`}`;
-const treemap=$("#side-industry-stock-treemap");
-if(treemap)renderCompanyTreemap(treemap,companies,state.heatmapPeriod,company=>selectCompany(company.code,industryId));
-bindMapCards();
+$("#detail-panel-title").textContent="產業資訊";
+$("#detail-content").innerHTML=`<div class="mb-4"><div class="small text-body-secondary mb-1">${escapeHTML(getGroup(industry))}</div><h5 class="fw-bold">${escapeHTML(industry.name||industry.shortname||industry.id)}</h5><div class="small text-body-secondary">${escapeHTML(industry.id)}</div></div>${detail?.description?`<p class="small text-body-secondary mb-4">${escapeHTML(detail.description)}</p>`:""}${detail?.tags?.length?`<div class="mb-4">${detail.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join("")}</div>`:""}<div><div class="d-flex justify-content-between align-items-center mb-3"><h6 class="fw-bold mb-0">相關個股</h6><span class="badge text-bg-secondary">${companies.length}</span></div><div class="small text-body-secondary">點擊產業分層或個股查看詳細資訊</div></div>`;
+renderIndustryStockTreemap(industryId);
 }
-function renderIndustryStockTreemap(industryId){
+async function renderIndustryStockTreemap(industryId){
 const container=$("#industry-stock-treemap");
 if(!container)return;
 const companies=getHeatmapCompanies(industryId);
@@ -709,10 +733,11 @@ if(company)return company;
 }
 return null;
 }
+/* ==================== 個股搜尋 ==================== */
 function buildCompanySearchIndex(){
 const map={};
 Object.values(state.heatmapData?.topics||{}).forEach(topic=>{
-(topic.companies||[]).forEach(company=>{
+(state.market==="all"?topic.companies||[]:topic.companies||[]).forEach(company=>{
 if(!company?.code)return;
 const key=String(company.code);
 if(!map[key])map[key]={...company,topics:[]};
@@ -733,10 +758,7 @@ return Array.isArray(company?.topics)?uniqueArray(company.topics):[];
 function companyMatchesMarket(company){
 if(state.market==="all")return true;
 const topics=getCompanyTopics(company.code);
-if(topics.some(id=>{
-const industry=getIndustry(id);
-return getIndustryMarket(industry)===state.market||getTopicMarket(id)===state.market;
-}))return true;
+if(topics.some(id=>industryMatchesMarket(getIndustry(id))))return true;
 const found=findCompany(company.code);
 if(found?.market&&String(found.market).toLowerCase()===state.market)return true;
 return false;
@@ -761,7 +783,7 @@ $$("[data-search-code]").forEach(item=>item.addEventListener("click",()=>selectS
 function getCompanyMarketLabel(company){
 const topics=getCompanyTopics(company.code);
 for(const topicId of topics){
-const market=getTopicMarket(topicId);
+const market=getIndustryMarket(getIndustry(topicId));
 if(market!=="all")return marketLabel(market);
 }
 return"";
@@ -770,7 +792,7 @@ async function selectSearchedCompany(code){
 hideStockSearchResults();
 $("#stockSearch").value="";
 const company=state.companySearchIndex.find(item=>String(item.code)===String(code))||findCompany(code)||{code,name:code};
-const topics=getCompanyTopics(code).filter(topicId=>state.market==="all"||getTopicMarket(topicId)===state.market||getIndustryMarket(getIndustry(topicId))===state.market);
+const topics=getCompanyTopics(code).filter(topicId=>industryMatchesMarket(getIndustry(topicId)));
 const industryId=topics[0]||state.selectedIndustry||"";
 await selectCompany(code,industryId,company);
 }
@@ -784,6 +806,7 @@ else renderStockSearchResults([]);
 function hideStockSearchResults(){
 $("#stockSearchResults").classList.remove("show");
 }
+/* ==================== 個股資訊 ==================== */
 function renderRoleCompanyCard(company,industryId){
 const change=Number(company.change1D);
 return `<div class="col"><div class="company-card" data-company-code="${escapeAttr(company.code)}" data-company-industry="${escapeAttr(industryId)}"><div class="d-flex align-items-start justify-content-between gap-2"><div><div class="company-code">${escapeHTML(company.code)}</div><div class="company-name">${escapeHTML(company.name||company.companyName||company.code)}</div></div><i class="bi bi-chevron-right text-body-secondary"></i></div><div class="company-price ${getChangeClass(change)}">${formatChange(change)}</div>${company.price!=null?`<div class="small text-body-secondary mt-1">股價 ${formatNumber(company.price)}</div>`:""}</div></div>`;
@@ -797,13 +820,13 @@ state.selectedStock=String(code);
 const company=companyOverride||findCompany(code)||state.companySearchIndex.find(item=>String(item.code)===String(code));
 const marketCompany=company||{code,name:code};
 if(!industryId){
-const topics=getCompanyTopics(code).filter(topicId=>state.market==="all"||getTopicMarket(topicId)===state.market||getIndustryMarket(getIndustry(topicId))===state.market);
+const topics=getCompanyTopics(code).filter(topicId=>industryMatchesMarket(getIndustry(topicId)));
 industryId=topics[0]||state.selectedIndustry;
 }
 $("#detail-panel-title").textContent="個股資訊";
 $("#detail-content").innerHTML=`<div class="company-info-card"><div class="company-info-label">股票</div><div class="company-info-title fs-4">${escapeHTML(marketCompany.code)}</div><div class="fs-5">${escapeHTML(marketCompany.name||marketCompany.companyName||"")}</div>${getCompanyMarketLabel(marketCompany)?`<div class="small text-body-secondary mt-1">${escapeHTML(getCompanyMarketLabel(marketCompany))}</div>`:""}</div>${renderMarketMetrics(marketCompany)}<div id="company-api-detail"><div class="text-center text-body-secondary p-3"><div class="spinner-border spinner-border-sm me-2"></div>正在取得產業相關資訊...</div></div>`;
 openMobileDetail();
-const topicIds=getCompanyTopics(code).filter(topicId=>state.market==="all"||getTopicMarket(topicId)===state.market||getIndustryMarket(getIndustry(topicId))===state.market);
+const topicIds=getCompanyTopics(code).filter(topicId=>industryMatchesMarket(getIndustry(topicId)));
 if(topicIds.length){
 const fallbackTopics=topicIds.map(topicId=>`<span class="tag clickable-tag" data-company-topic="${escapeAttr(topicId)}">${escapeHTML(getIndustryName(topicId))}</span>`).join("");
 $("#company-api-detail").innerHTML=`<div class="company-info-card"><div class="stock-topic-title">所屬 Topics</div><div class="stock-topic-tags">${fallbackTopics}</div><div class="small text-body-secondary mt-2">點擊 Topic 可進入產業關聯圖</div></div><div id="company-api-loading" class="text-center text-body-secondary p-3"><div class="spinner-border spinner-border-sm me-2"></div>正在取得產業角色...</div>`;
@@ -851,22 +874,45 @@ tag.dataset.bound="1";
 tag.addEventListener("click",()=>selectIndustry(tag.dataset.companyTopic));
 });
 }
+/* ==================== Heatmap ==================== */
 function renderGroupHeatmapPage(){
+const data=buildHeatmapData();
 state.heatmapLevel="group";
 state.selectedGroup=null;
 state.selectedSubIndustry=null;
 renderHeatmap();
 }
+// function buildHeatmapData(){
+// const topics=state.heatmapData?.topics||{};
+// const subIndustries=[];
+// Object.entries(topics).forEach(([industryId,topic])=>{
+// const industry=getIndustry(industryId);
+// if(!industryMatchesMarket(industry))return;
+// const companies=Array.isArray(topic.companies)?topic.companies:[];
+// if(!companies.length)return;
+// subIndustries.push({id:industryId,name:topic.displayName||industry.shortname||industry.name||industryId,group:getGroup(industry),companies,marketCap:sumMarketCap(companies),change1D:weightedAverage(companies,"change1D"),change1W:weightedAverage(companies,"change1W"),change1M:weightedAverage(companies,"change1M")});
+// });
+// const groupMap={};
+// subIndustries.forEach(item=>{
+// if(!groupMap[item.group])groupMap[item.group]=[];
+// groupMap[item.group].push(item);
+// });
+// const groups=Object.entries(groupMap).map(([name,items])=>{
+// const companies=items.flatMap(item=>item.companies);
+// return{name,items,companies,marketCap:sumMarketCap(companies),change1D:weightedAverage(companies,"change1D"),change1W:weightedAverage(companies,"change1W"),change1M:weightedAverage(companies,"change1M")};
+// });
+// return{subIndustries,groups};
+// }
+
 function buildHeatmapData(){
 const topics=state.heatmapData?.topics||{};
 const subIndustries=[];
 Object.entries(topics).forEach(([industryId,topic])=>{
-const topicMarket=getTopicMarket(industryId);
-const industry=getIndustry(industryId,topicMarket);
-if(state.market!=="all"&&topicMarket!==state.market&&getIndustryMarket(industry)!==state.market)return;
 const companies=Array.isArray(topic.companies)?topic.companies:[];
 if(!companies.length)return;
-subIndustries.push({id:industryId,name:topic.displayName||industry.shortname||industry.name||industryId,group:getGroup(industry),market:topicMarket,companies,marketCap:sumMarketCap(companies),change1D:weightedAverage(companies,"change1D"),change1W:weightedAverage(companies,"change1W"),change1M:weightedAverage(companies,"change1M")});
+const industry=getIndustry(industryId);
+if(state.market!=="all"&&industry.market!==state.market)return;
+subIndustries.push({id:industryId,name:topic.displayName||industry.shortname||industry.name||industryId,group:getGroup(industry),companies,marketCap:sumMarketCap(companies),change1D:weightedAverage(companies,"change1D"),change1W:weightedAverage(companies,"change1W"),change1M:weightedAverage(companies,"change1M")});
 });
 const groupMap={};
 subIndustries.forEach(item=>{
@@ -879,6 +925,7 @@ return{name,items,companies,marketCap:sumMarketCap(companies),change1D:weightedA
 });
 return{subIndustries,groups};
 }
+
 function renderHeatmap(){
 const container=$("#heatmap-content");
 if(!state.heatmapData){
@@ -923,13 +970,11 @@ renderHeatmap();
 function renderTreemap(container,items,field,onClick){
 if(!container)return;
 if(!items.length){container.innerHTML=`<div class="heatmap-empty">沒有資料</div>`;return}
-if(typeof d3==="undefined"||!d3.hierarchy||!d3.treemap){
-container.innerHTML=`<div class="heatmap-empty">Treemap 元件載入失敗</div>`;
-return;
-}
-requestAnimationFrame(()=>{
 const width=container.clientWidth||900;
 const height=container.clientHeight||500;
+const changes=items.map(item=>Number(item[field])).filter(Number.isFinite);
+const maxPositive=Math.max(...changes.filter(value=>value>0),0);
+const maxNegative=Math.max(...changes.filter(value=>value<0).map(value=>Math.abs(value)),0);
 const root=d3.hierarchy({children:items}).sum(d=>Math.max(0,Number(d.marketCap)||0)).sort((a,b)=>b.value-a.value);
 d3.treemap().size([width,height]).paddingInner(2).paddingOuter(1).round(true)(root);
 container.innerHTML="";
@@ -941,9 +986,11 @@ node.style.left=leaf.x0+"px";
 node.style.top=leaf.y0+"px";
 node.style.width=Math.max(1,leaf.x1-leaf.x0)+"px";
 node.style.height=Math.max(1,leaf.y1-leaf.y0)+"px";
-node.style.background=getHeatmapColor(item[field],Number(item[field])>0?Math.max(...items.map(x=>Number(x[field])).filter(x=>x>0),0):Math.max(...items.map(x=>Math.abs(Number(x[field]))).filter(x=>x>0),0));
+const maxChange=Number(item[field])>0?maxPositive:maxNegative;
+node.style.background=getHeatmapColor(item[field],maxChange);
 const cellWidth=Math.max(1,leaf.x1-leaf.x0);
 const cellHeight=Math.max(1,leaf.y1-leaf.y0);
+const cellArea=cellWidth*cellHeight;
 const fontByWidth=Math.max(9,Math.min(22,cellWidth*.12));
 const fontByHeight=Math.max(9,Math.min(22,cellHeight*.25));
 const font=Math.max(9,Math.min(fontByWidth,fontByHeight));
@@ -953,43 +1000,8 @@ node.title=`${item.name}｜${periodLabel(field)} ${formatChange(item[field])}｜
 node.addEventListener("click",()=>onClick(item));
 container.appendChild(node);
 });
-});
 }
-function renderCompanyTreemap(container,companies,field,onClick){
-if(!container)return;
-if(!companies.length){container.innerHTML=`<div class="heatmap-empty">沒有個股資料</div>`;return}
-if(typeof d3==="undefined"||!d3.hierarchy||!d3.treemap){
-container.innerHTML=`<div class="heatmap-empty">Treemap 元件載入失敗</div>`;
-return;
-}
-requestAnimationFrame(()=>{
-const width=container.clientWidth||900;
-const height=container.clientHeight||420;
-const root=d3.hierarchy({children:companies}).sum(d=>Math.max(0,Number(d.marketCap)||0)).sort((a,b)=>b.value-a.value);
-d3.treemap().size([width,height]).paddingInner(2).paddingOuter(1).round(true)(root);
-const changes=companies.map(c=>Number(c[field])).filter(Number.isFinite);
-const maxPositive=Math.max(...changes.filter(v=>v>0),0);
-const maxNegative=Math.max(...changes.filter(v=>v<0).map(v=>Math.abs(v)),0);
-container.innerHTML="";
-root.leaves().forEach(leaf=>{
-const company=leaf.data;
-const node=document.createElement("div");
-node.className="treemap-node";
-node.style.left=leaf.x0+"px";
-node.style.top=leaf.y0+"px";
-node.style.width=Math.max(1,leaf.x1-leaf.x0)+"px";
-node.style.height=Math.max(1,leaf.y1-leaf.y0)+"px";
-node.style.background=getHeatmapColor(company[field],Number(company[field])>0?maxPositive:maxNegative);
-const w=Math.max(1,leaf.x1-leaf.x0);
-const h=Math.max(1,leaf.y1-leaf.y0);
-const font=Math.max(9,Math.min(20,w*.14,h*.25));
-node.innerHTML=`<div class="treemap-node-company" style="font-size:${font}px">${escapeHTML(company.code||company.name||"")}</div><div class="treemap-node-company-change" style="font-size:${Math.max(9,font*.9)}px">${formatChange(company[field])}</div>`;
-node.title=`${company.code||""} ${company.name||""}｜${periodLabel(field)} ${formatChange(company[field])}｜Market Cap ${formatMarketCap(company.marketCap)}`;
-node.addEventListener("click",()=>onClick(company));
-container.appendChild(node);
-});
-});
-}
+/* ==================== Heatmap 事件 ==================== */
 function selectHeatmapGroup(groupName){
 state.selectedGroup=groupName;
 state.heatmapLevel="sub";
@@ -1007,6 +1019,7 @@ element.dataset.bound="1";
 element.addEventListener("click",()=>selectIndustry(element.dataset.industryId));
 });
 }
+/* ==================== 新聞 ==================== */
 function renderNews(){
 const container=$("#news-content");
 if(!Array.isArray(state.news)||!state.news.length){
@@ -1016,7 +1029,7 @@ return;
 const filtered=state.news.filter(news=>{
 if(state.market==="all")return true;
 const topics=Array.isArray(news.relatedTopicIds)?news.relatedTopicIds:[];
-return topics.some(topicId=>getTopicMarket(topicId)===state.market||getIndustryMarket(getIndustry(topicId))===state.market);
+return topics.some(topicId=>industryMatchesMarket(getIndustry(topicId)));
 });
 $("#newsUpdated").textContent=`${marketLabel(state.market)}｜共 ${filtered.length} 則`;
 container.innerHTML=filtered.map(renderNewsCard).join("");
@@ -1026,9 +1039,10 @@ button.addEventListener("click",()=>selectIndustry(button.dataset.newsTopic));
 }
 function renderNewsCard(news){
 const topics=Array.isArray(news.relatedTopicIds)?news.relatedTopicIds:[];
-const validTopics=topics.filter(topicId=>state.market==="all"||getTopicMarket(topicId)===state.market||getIndustryMarket(getIndustry(topicId))===state.market);
+const validTopics=topics.filter(topicId=>industryMatchesMarket(getIndustry(topicId)));
 return `<article class="card shadow-sm mb-3"><div class="card-body"><div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2"><h5 class="card-title mb-0">${escapeHTML(news.title||"未命名新聞")}</h5><span class="small text-body-secondary text-nowrap">${escapeHTML(news.pubDate||"")}</span></div>${news.source?`<div class="small text-primary mb-2"><i class="bi bi-journal-text me-1"></i>${escapeHTML(news.source)}</div>`:""}${news.summary?`<p class="card-text small lh-lg mb-3">${escapeHTML(news.summary)}</p>`:""}${validTopics.length?`<div><div class="small text-body-secondary mb-1">相關產業</div><div class="d-flex flex-wrap gap-1">${validTopics.map(topicId=>`<button class="btn btn-sm btn-outline-primary" data-news-topic="${escapeAttr(topicId)}">${escapeHTML(getIndustryName(topicId))}</button>`).join("")}</div></div>`:""}${news.link?`<div class="mt-3"><a class="btn btn-sm btn-outline-secondary" href="${escapeAttr(news.link)}" target="_blank" rel="noopener noreferrer">閱讀原文 <i class="bi bi-box-arrow-up-right ms-1"></i></a></div>`:""}</div></article>`;
 }
+/* ==================== 通用計算與格式化 ==================== */
 function weightedAverage(companies,field){
 let weightedSum=0,totalWeight=0;
 companies.forEach(company=>{
@@ -1096,18 +1110,19 @@ return"1日";
 function buildReverseRelations(industryId){
 const result={upstream:[],downstream:[],peers:[]};
 Object.entries(state.relations).forEach(([source,relation])=>{
-if(state.market!=="all"&&!industryMatchesMarket(getIndustry(source)))return;
+if(!industryMatchesMarket(getIndustry(source)))return;
 if(relation.upstream?.includes(industryId))result.downstream.push(source);
 if(relation.downstream?.includes(industryId))result.upstream.push(source);
 if(relation.peers?.includes(industryId))result.peers.push(source);
 });
 return{upstream:uniqueArray(result.upstream),downstream:uniqueArray(result.downstream),peers:uniqueArray(result.peers)};
 }
+/* ==================== UI 控制 ==================== */
 function renderBreadcrumb(industry){
 $("#breadcrumb").innerHTML=`<nav aria-label="breadcrumb"><ol class="breadcrumb mb-0 small"><li class="breadcrumb-item">${escapeHTML(getGroup(industry))}</li><li class="breadcrumb-item active">${escapeHTML(industry.shortname||industry.name||industry.id)}</li></ol></nav>`;
 }
 function clearDetailPanel(){
-$("#detail-panel-title").textContent="相關個股";
+$("#detail-panel-title").textContent="詳細資訊";
 $("#detail-content").innerHTML=`<div class="text-center text-body-secondary p-4">點擊產業或個股查看詳細資訊</div>`;
 closeMobileDetail();
 }
@@ -1142,6 +1157,7 @@ $("#news-tab").classList.toggle("d-none",tab!=="news");
 if(tab==="heatmap")renderHeatmap();
 if(tab==="news")renderNews();
 }
+/* ==================== 載入錯誤與工具 ==================== */
 function showLoading(){
 $("#industryGroups").innerHTML=`<div class="text-center p-4"><div class="spinner-border spinner-border-sm text-primary mb-2"></div><div class="small text-body-secondary">載入產業資料...</div></div>`;
 }
