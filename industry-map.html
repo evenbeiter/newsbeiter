@@ -19,15 +19,6 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 #app{height:100vh;display:flex;flex-direction:column}
 .app-navbar{flex:0 0 auto;z-index:1000}
 .market-selector{min-width:120px}
-.navbar-search{width:300px;position:relative}
-.navbar-search-results{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:2000;max-height:420px;overflow-y:auto;background:var(--bs-body-bg);border:1px solid var(--bs-border-color);border-radius:.6rem;box-shadow:0 .5rem 1.5rem rgba(0,0,0,.15);display:none}
-.navbar-search-results.show{display:block}
-.stock-search-item{padding:.65rem .8rem;cursor:pointer;border-bottom:1px solid var(--bs-border-color)}
-.stock-search-item:last-child{border-bottom:0}
-.stock-search-item:hover{background:var(--bs-tertiary-bg)}
-.stock-search-code{font-weight:700}
-.stock-search-name{font-size:.82rem}
-.stock-search-market{font-size:.7rem;color:var(--bs-secondary-color)}
 .app-body{min-height:0;flex:1;display:flex;overflow:hidden}
 #sidebar{width:var(--sidebar-width);min-width:var(--sidebar-width);height:100%;border-right:1px solid var(--bs-border-color);background:var(--bs-body-bg);display:flex;flex-direction:column;overflow:hidden;transition:width .2s ease,min-width .2s ease}
 #sidebar.collapsed{width:0;min-width:0;border-right:0}
@@ -44,8 +35,7 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 #main-tabs{flex:0 0 auto}
 #tab-content-wrapper{min-height:0;flex:1;overflow:hidden}
 .tab-pane-custom{height:100%;overflow:auto}
-/* #detail-panel{width:var(--right-width);min-width:var(--right-width);height:100%;border-left:1px solid var(--bs-border-color);background:var(--bs-body-bg);display:flex;flex-direction:column;overflow:hidden;z-index:2000} */
-#detail-panel{width:var(--right-width);min-width:var(--right-width);height:100%;border-left:1px solid var(--bs-border-color);background:var(--bs-body-bg);display:flex;flex-direction:column;overflow:hidden}
+#detail-panel{width:var(--right-width);min-width:var(--right-width);height:100%;border-left:1px solid var(--bs-border-color);background:var(--bs-body-bg);display:flex;flex-direction:column;overflow:hidden;z-index:2000}
 .detail-header{padding:.85rem 1rem;border-bottom:1px solid var(--bs-border-color);display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
 #detail-content{flex:1;overflow-y:auto;padding:1rem}
 .empty-state{min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--bs-secondary-color)}
@@ -55,8 +45,6 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 .industry-title{font-weight:700;letter-spacing:-.02em}
 .industry-description{max-width:1100px;line-height:1.8}
 .tag{display:inline-block;padding:.3rem .6rem;border-radius:999px;background:var(--bs-tertiary-bg);font-size:.78rem;margin-right:.25rem;margin-bottom:.25rem}
-.clickable-tag{cursor:pointer}
-.clickable-tag:hover{background:var(--bs-primary-bg-subtle);color:var(--bs-primary)}
 .relation-section{margin-top:2rem}
 .relation-title{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;font-weight:700}
 .relation-grid{display:grid;grid-template-columns:repeat(3,minmax(200px,1fr));gap:1.5rem;align-items:start}
@@ -87,8 +75,7 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 .role-count{font-size:.75rem}
 .role-treemap{width:100%;height:420px;position:relative;border:1px solid var(--bs-border-color);border-radius:.75rem;overflow:hidden;background:var(--bs-tertiary-bg)}
 .role-loading{height:420px;display:flex;align-items:center;justify-content:center;color:var(--bs-secondary-color)}
-/* .company-card{border:1px solid var(--bs-border-color);border-radius:.65rem;padding:.75rem;height:100%;cursor:pointer;transition:.15s;background:var(--bs-body-bg)} */
-.company-card{border:1px solid var(--bs-border-color);border-radius:.65rem;padding:.75rem;height:100%;cursor:pointer;transition:.15s}
+.company-card{border:1px solid var(--bs-border-color);border-radius:.65rem;padding:.75rem;height:100%;cursor:pointer;transition:.15s;background:var(--bs-body-bg)}
 .company-card:hover{background:var(--bs-tertiary-bg);border-color:var(--bs-primary);transform:translateY(-1px)}
 .company-code{font-weight:700;font-size:.9rem}
 .company-name{font-size:.85rem;margin-top:.25rem}
@@ -102,9 +89,6 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 .position-badge{display:inline-flex;align-items:center;gap:.25rem;border-radius:999px;padding:.35rem .65rem;background:var(--bs-primary-bg-subtle);font-size:.8rem}
 .company-description{font-size:.85rem;line-height:1.75;color:var(--bs-secondary-color)}
 .ai-summary{font-size:.85rem;line-height:1.75}
-.stock-topic-section{margin-top:1rem}
-.stock-topic-title{font-weight:700;font-size:.9rem;margin-bottom:.5rem}
-.stock-topic-tags{display:flex;flex-wrap:wrap;gap:.25rem}
 #heatmap-page{padding:1.25rem 1.5rem 2rem}
 .heatmap-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}
 .heatmap-title{font-size:1.3rem;font-weight:700}
@@ -182,14 +166,6 @@ html,body{overflow:auto}
 <div class="d-flex align-items-center gap-2">
 <button class="btn btn-outline-secondary btn-sm" id="sidebarToggle" title="開啟/收合產業列表"><i class="bi bi-layout-sidebar-inset"></i></button>
 <span class="navbar-brand fw-bold mb-0"><i class="bi bi-diagram-3 me-2"></i>產業地圖</span>
-</div>
-<div class="navbar-search">
-<div class="input-group input-group-sm">
-<span class="input-group-text"><i class="bi bi-search"></i></span>
-<input id="stockSearch" type="search" class="form-control" placeholder="搜尋股票代號或名稱...">
-<button class="btn btn-primary" id="stockSearchBtn">搜尋</button>
-</div>
-<div id="stockSearchResults" class="navbar-search-results"></div>
 </div>
 <div class="d-flex align-items-center gap-2">
 <select id="marketSelector" class="form-select form-select-sm market-selector" title="選擇市場">
@@ -270,7 +246,7 @@ html,body{overflow:auto}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/d3-hierarchy@3"></script>
 <script>
-/* ==================== 基本設定與資料結構 ==================== */
+// ===== 設定與全域狀態 =====
 const ss="ai"+"sto"+"ck"+"map";
 const CONFIG={
 files:{
@@ -315,30 +291,21 @@ async function init(){
 bindEvents();
 await loadData();
 }
-/* ==================== 事件綁定 ==================== */
 function bindEvents(){
 $("#industrySearch").addEventListener("input",e=>renderIndustryGroups(e.target.value));
 $("#themeBtn").addEventListener("click",toggleTheme);
 $("#reloadBtn").addEventListener("click",loadData);
 $("#sidebarToggle").addEventListener("click",toggleSidebar);
 $("#closeDetailBtn").addEventListener("click",clearDetailPanel);
-// $("#mobileDetailBackdrop").addEventListener("click",clearDetailPanel);
-$("#mobileDetailBackdrop").addEventListener("click",closeMobileDetail);
+$("#mobileDetailBackdrop").addEventListener("click",clearDetailPanel);
 $("#showAllBtn").addEventListener("click",()=>setRelationFilter("all"));
 $("#showUpstreamBtn").addEventListener("click",()=>setRelationFilter("upstream"));
 $("#showDownstreamBtn").addEventListener("click",()=>setRelationFilter("downstream"));
 $("#showPeersBtn").addEventListener("click",()=>setRelationFilter("peers"));
 $("#marketSelector").addEventListener("change",e=>changeMarket(e.target.value));
-$("#stockSearch").addEventListener("input",handleStockSearchInput);
-$("#stockSearch").addEventListener("keydown",e=>{if(e.key==="Enter")performStockSearch()});
-$("#stockSearchBtn").addEventListener("click",performStockSearch);
-document.addEventListener("click",e=>{
-if(!e.target.closest(".navbar-search"))hideStockSearchResults();
-});
-$$(".market-btn").forEach(button=>button.addEventListener("click",()=>selectMarket(button.dataset.market)));
 $$("#main-tabs .nav-link").forEach(button=>button.addEventListener("click",()=>switchTab(button.dataset.tab)));
 }
-/* ==================== 載入所有資料 ==================== */
+// ===== 資料載入與 API =====
 async function loadData(){
 try{
 showLoading();
