@@ -330,10 +330,10 @@ console.warn("無法正確比較 heatmap-data.json.lastUpdated 與 heatmap-live.
 return heatmapData;
 }
 if(liveTime<=dataTime){
-updateTime=dataTime.slice(0,16).replace("T"," ");
+updateTime=new Date(dataTime).slice(0,16).replace("T"," ");
 return heatmapData;
 }
-updateTime=liveTime.slice(0,16).replace("T"," ");
+updateTime=new Date(liveTime).slice(0,16).replace("T"," ");
 return mergeHeatmapLive(heatmapData,heatmapLive);
 }
 function mergeHeatmapLive(heatmapData,heatmapLive){
