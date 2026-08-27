@@ -330,8 +330,10 @@ console.warn("無法正確比較 heatmap-data.json.lastUpdated 與 heatmap-live.
 return heatmapData;
 }
 if(liveTime<=dataTime){
+document.querySelector("#updateTime").textContent=dataTime.slice(0,16).replace("T"," ");
 return heatmapData;
 }
+document.querySelector("#updateTime").textContent=liveTime.slice(0,16).replace("T"," ");
 return mergeHeatmapLive(heatmapData,heatmapLive);
 }
 function mergeHeatmapLive(heatmapData,heatmapLive){
@@ -1075,7 +1077,7 @@ function renderGroupHeatmap(container){
 const data=buildHeatmapData();
 const field=state.heatmapPeriod;
 const groups=[...data.groups].sort((a,b)=>(b[field]??-Infinity)-(a[field]??-Infinity));
-container.innerHTML=`<div class="heatmap-header"><div><div class="heatmap-title">產業 Heatmap</div><div class="heatmap-subtitle">${escapeHTML(getMarketLabel(state.market))}｜第一層：大產業｜方塊面積依 Market Cap 計算</div></div><div class="d-flex flex-wrap align-items-center gap-3"><div class="btn-group btn-group-sm period-buttons"><button class="btn ${field==="change1D"?"btn-primary":"btn-outline-primary"}" data-period="change1D">1日</button><button class="btn ${field==="change1W"?"btn-primary":"btn-outline-primary"}" data-period="change1W">1週</button><button class="btn ${field==="change1M"?"btn-primary":"btn-outline-primary"}" data-period="change1M">1個月</button></div><div class="legend"><span>跌</span><div class="legend-bar"></div><span>漲</span></div></div></div><div class="ranking-section"><div class="ranking-title">大產業漲跌幅排名</div><div class="ranking-list">${groups.map((group,index)=>`<div class="ranking-item" data-group-name="${escapeAttr(group.name)}"><span class="ranking-number">${index+1}</span><span class="ranking-name">${escapeHTML(group.name)}</span><span class="ranking-change ${getChangeClass(group[field])}">${formatChange(group[field])}</span></div>`).join("")}</div></div><div class="mb-2 d-flex justify-content-between"><span class="fw-bold">大產業地毯圖</span><span class="small text-body-secondary">點擊進入子產業</span></div><div id="group-treemap" class="treemap-wrapper"></div>`;
+container.innerHTML=`<div class="heatmap-header"><div><div class="heatmap-title">產業 Heatmap</div><div class="heatmap-subtitle">${escapeHTML(getMarketLabel(state.market))}｜第一層：大產業｜方塊面積依 Market Cap 計算</div></div><div class="d-flex flex-wrap align-items-center gap-3"><div class="btn-group btn-group-sm period-buttons"><button class="btn ${field==="change1D"?"btn-primary":"btn-outline-primary"}" data-period="change1D">1日</button><button class="btn ${field==="change1W"?"btn-primary":"btn-outline-primary"}" data-period="change1W">1週</button><button class="btn ${field==="change1M"?"btn-primary":"btn-outline-primary"}" data-period="change1M">1個月</button></div><div class="legend"><span>跌</span><div class="legend-bar"></div><span>漲</span></div></div></div><div class="ranking-section"><div class="ranking-title">大產業漲跌幅排名 <span id="updateTime" class="update-time"></span></div><div class="ranking-list">${groups.map((group,index)=>`<div class="ranking-item" data-group-name="${escapeAttr(group.name)}"><span class="ranking-number">${index+1}</span><span class="ranking-name">${escapeHTML(group.name)}</span><span class="ranking-change ${getChangeClass(group[field])}">${formatChange(group[field])}</span></div>`).join("")}</div></div><div class="mb-2 d-flex justify-content-between"><span class="fw-bold">大產業地毯圖</span><span class="small text-body-secondary">點擊進入子產業</span></div><div id="group-treemap" class="treemap-wrapper"></div>`;
 renderPeriodButtons();
 renderTreemap($("#group-treemap"),groups,field,group=>selectHeatmapGroup(group.name));
 bindHeatmapEvents();
