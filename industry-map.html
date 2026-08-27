@@ -433,7 +433,7 @@ async function loadData(){
 try{
 showLoading();
 const industryResults=await Promise.allSettled(CONFIG.files.industries.map(url=>fetchJSON(url)));
-const [relationsResult,stockIndustriesResult,heatmapResult,newsResult]=await Promise.allSettled([fetchJSON(CONFIG.files.relations),fetchJSON(CONFIG.files.stockIndustries),fetchJSON(CONFIG.files.heatmap),fetchJSON(CONFIG.files.news)]);
+const [relationsResult,stockIndustriesResult,heatmapResult,newsResult]=await Promise.allSettled([fetchJSON(CONFIG.files.relations),fetchJSON(CONFIG.files.stockIndustries),fetchHeatmapData(),fetchJSON(CONFIG.files.news)]);
 const industryArrays=[];
 industryResults.forEach((result,index)=>{
 if(result.status==="fulfilled")industryArrays.push({data:result.value,market:MARKET_DEFS[index]?.key||"other"});
