@@ -320,9 +320,9 @@ $("#sidebarToggle").addEventListener("click",toggleSidebar);
 $("#closeDetailBtn").addEventListener("click",clearDetailPanel);
 $("#mobileDetailBackdrop").addEventListener("click",clearDetailPanel);
 // $("#showAllBtn").addEventListener("click",()=>setRelationFilter("all"));
-$("#showUpstreamBtn").addEventListener("click",()=>setRelationFilter("upstream"));
-$("#showDownstreamBtn").addEventListener("click",()=>setRelationFilter("downstream"));
-$("#showPeersBtn").addEventListener("click",()=>setRelationFilter("peers"));
+// $("#showUpstreamBtn").addEventListener("click",()=>setRelationFilter("upstream"));
+// $("#showDownstreamBtn").addEventListener("click",()=>setRelationFilter("downstream"));
+// $("#showPeersBtn").addEventListener("click",()=>setRelationFilter("peers"));
 $("#marketSelector").addEventListener("change",e=>changeMarket(e.target.value));
 $$("#main-tabs .nav-link").forEach(button=>button.addEventListener("click",()=>switchTab(button.dataset.tab)));
 document.addEventListener("click",e=>{
