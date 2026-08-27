@@ -18,7 +18,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden}
 body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 #app{height:100vh;display:flex;flex-direction:column}
 .app-navbar{flex:0 0 auto;z-index:1000}
-.market-selector{min-width:120px}
+.market-selector{min-width:120px}.stock-search{width:min(360px,34vw)}.stock-search .form-control{min-width:140px}.stock-search .btn{white-space:nowrap}
 .app-body{min-height:0;flex:1;display:flex;overflow:hidden}
 #sidebar{width:var(--sidebar-width);min-width:var(--sidebar-width);height:100%;border-right:1px solid var(--bs-border-color);background:var(--bs-body-bg);display:flex;flex-direction:column;overflow:hidden;transition:width .2s ease,min-width .2s ease}
 #sidebar.collapsed{width:0;min-width:0;border-right:0}
@@ -126,6 +126,7 @@ body{background:var(--bs-body-bg);color:var(--bs-body-color)}
 .mobile-detail-backdrop{display:none}
 @media(max-width:1199.98px){#detail-panel{width:330px;min-width:330px}}
 @media(max-width:991.98px){
+.stock-search{width:min(300px,45vw)}
 html,body{overflow:auto}
 #app{height:auto;min-height:100vh}
 .app-body{display:block;overflow:visible}
@@ -146,6 +147,7 @@ html,body{overflow:auto}
 .market-selector{min-width:100px}
 }
 @media(max-width:575.98px){
+.stock-search{width:150px}.stock-search .btn{padding-left:.5rem;padding-right:.5rem}.stock-search .form-control{min-width:0}
 .navbar-brand{font-size:1rem}
 .navbar-brand i{display:none}
 .market-selector{min-width:105px;width:auto;max-width:120px}
@@ -168,6 +170,7 @@ html,body{overflow:auto}
 <span class="navbar-brand fw-bold mb-0"><i class="bi bi-diagram-3 me-2"></i>產業地圖</span>
 </div>
 <div class="d-flex align-items-center gap-2">
+<div class="input-group input-group-sm stock-search"><span class="input-group-text"><i class="bi bi-search"></i></span><input id="stockSearch" type="search" class="form-control" placeholder="股票代號或名稱" autocomplete="off"><button class="btn btn-primary" id="stockSearchBtn" type="button">搜尋</button></div>
 <select id="marketSelector" class="form-select form-select-sm market-selector" title="選擇市場">
 <option value="all">全部市場</option>
 </select>
@@ -303,6 +306,8 @@ $("#showUpstreamBtn").addEventListener("click",()=>setRelationFilter("upstream")
 $("#showDownstreamBtn").addEventListener("click",()=>setRelationFilter("downstream"));
 $("#showPeersBtn").addEventListener("click",()=>setRelationFilter("peers"));
 $("#marketSelector").addEventListener("change",e=>changeMarket(e.target.value));
+$("#stockSearchBtn").addEventListener("click",searchStock);
+$("#stockSearch").addEventListener("keydown",e=>{if(e.key==="Enter")searchStock();});
 $$("#main-tabs .nav-link").forEach(button=>button.addEventListener("click",()=>switchTab(button.dataset.tab)));
 }
 // ===== 資料載入與 API =====
@@ -467,7 +472,6 @@ async function selectIndustry(industryId,options={}){
 if(!industryId||!isIndustryInCurrentMarket(industryId))return;
 const fromHeatmap=options.fromHeatmap===true;
 state.selectedIndustry=industryId;
-state.selectedStock=null;
 state.currentIndustryDetail=null;
 state.currentBatch=null;
 state.relationFilter="all";
@@ -483,7 +487,6 @@ const batch=batchResult.status==="fulfilled"?batchResult.value:{items:[],error:b
 state.currentIndustryDetail=detail;
 state.currentBatch=batch;
 renderIndustryDetailBelowMap(detail,industryId,batch);
-renderIndustrySidePanel(detail,industryId);
 if(detailResult.status==="rejected")console.error("Industry detail failed:",detailResult.reason);
 if(batchResult.status==="rejected")console.error("Batch API failed:",batchResult.reason);
 }catch(error){
@@ -684,23 +687,65 @@ function renderCompanyCard(company,industryId){
 const change=Number(company.change1D);
 return `<div><div class="company-card" data-company-code="${escapeAttr(company.code)}" data-company-industry="${escapeAttr(industryId)}"><div class="d-flex justify-content-between align-items-start gap-2"><div><div class="company-code">${escapeHTML(company.code)}</div><div class="company-name">${escapeHTML(company.name||company.companyName||company.code)}</div></div><i class="bi bi-chevron-right text-body-secondary"></i></div><div class="company-price ${getChangeClass(change)}">${formatChange(change)}</div>${company.price!=null?`<div class="small text-body-secondary mt-1">股價 ${formatNumber(company.price)}</div>`:""}</div></div>`;
 }
+// ===== 個股搜尋 =====
+function getCompanyTopicIds(code){
+const value=state.stockIndustries?.[code]??state.stockIndustries?.[String(code)];
+if(Array.isArray(value))return uniqueArray(value);
+if(value&&typeof value==="object")return uniqueArray(value.topicIds||value.topics||value.industries||value.industryIds||[]);
+return[];
+}
+function getAllSearchCompanies(){
+const map=new Map();
+Object.values(state.heatmapData?.topics||{}).forEach(topic=>{
+(topic.companies||[]).forEach(company=>{
+if(company?.code&&!map.has(String(company.code)))map.set(String(company.code),company);
+});
+});
+Object.keys(state.stockIndustries||{}).forEach(code=>{
+if(!map.has(String(code)))map.set(String(code),{code:String(code),name:String(code)});
+});
+return[...map.values()];
+}
+async function searchStock(){
+const input=$("#stockSearch");
+const keyword=input.value.trim().toLowerCase();
+if(!keyword){
+input.focus();
+return;
+}
+const companies=getAllSearchCompanies();
+const matches=companies.filter(company=>[company.code,company.name,company.companyName].filter(Boolean).join(" ").toLowerCase().includes(keyword));
+if(!matches.length){
+input.classList.add("is-invalid");
+setTimeout(()=>input.classList.remove("is-invalid"),1600);
+return;
+}
+input.classList.remove("is-invalid");
+const exact=matches.find(company=>String(company.code).toLowerCase()===keyword)||matches[0];
+const topicIds=getCompanyTopicIds(exact.code);
+await selectCompany(exact.code,topicIds[0]||null);
+}
 // ===== 個股資訊 =====
 async function selectCompany(code,industryId){
 state.selectedStock=String(code);
 const company=findCompany(code);
 const marketCompany=company||{code,name:code};
+const topicIds=getCompanyTopicIds(code);
+if(!industryId)industryId=topicIds[0]||state.selectedIndustry||null;
 $("#detail-panel-title").textContent="個股資訊";
-$("#detail-content").innerHTML=`<div class="company-info-card"><div class="company-info-label">股票</div><div class="company-info-title fs-4">${escapeHTML(marketCompany.code)}</div><div class="fs-5">${escapeHTML(marketCompany.name||marketCompany.companyName||"")}</div></div>${renderMarketMetrics(marketCompany)}<div id="company-api-detail"><div class="text-center text-body-secondary p-3"><div class="spinner-border spinner-border-sm me-2"></div>正在取得產業相關資訊...</div></div>`;
+$("#detail-content").innerHTML=`<div class="company-info-card"><div class="company-info-label">股票</div><div class="company-info-title fs-4">${escapeHTML(marketCompany.code)}</div><div class="fs-5">${escapeHTML(marketCompany.name||marketCompany.companyName||"")}</div></div>${renderMarketMetrics(marketCompany)}<div id="company-api-detail"><div class="text-center text-body-secondary p-3"><div class="spinner-border spinner-border-sm me-2"></div>正在取得角色與產業資訊...</div></div>`;
 openDetailPanel();
-if(!industryId)industryId=state.selectedIndustry;
 try{
-if(!industryId){
-$("#company-api-detail").innerHTML=`<div class="text-body-secondary small">找不到此個股所屬產業，僅顯示目前已取得的市場資料。</div>`;
-return;
+const topicResults=await Promise.all(topicIds.map(async topicId=>{
+try{
+return{topicId,data:await fetchCompanyTopic(code,topicId)};
+}catch(error){
+console.error("Company topic failed:",topicId,error);
+return{topicId,data:null};
 }
-const data=await fetchCompanyTopic(code,industryId);
+}));
 if(String(state.selectedStock)!==String(code))return;
-renderCompanyAPIDetail(data);
+renderCompanyAPIDetail(topicResults,marketCompany);
 }catch(error){
 console.error(error);
 $("#company-api-detail").innerHTML=`<div class="alert alert-warning small">無法取得個股產業詳細資料，但上方已取得的個股市場資訊仍可使用。<br>${escapeHTML(error.message)}</div>`;
@@ -709,14 +754,54 @@ $("#company-api-detail").innerHTML=`<div class="alert alert-warning small">無�
 function renderMarketMetrics(company){
 return `<div class="row g-2 mb-3"><div class="col-6"><div class="metric-card"><div class="metric-label">股價</div><div class="metric-value">${formatNumber(company.price)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">今日</div><div class="metric-value ${getChangeClass(company.change1D)}">${formatChange(company.change1D)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">一週</div><div class="metric-value ${getChangeClass(company.change1W)}">${formatChange(company.change1W)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">一月</div><div class="metric-value ${getChangeClass(company.change1M)}">${formatChange(company.change1M)}</div></div></div><div class="col-12"><div class="metric-card"><div class="metric-label">Market Cap</div><div class="metric-value">${formatMarketCap(company.marketCap)}</div></div></div></div>`;
 }
-function renderCompanyAPIDetail(data){
-if(!data){
-$("#company-api-detail").innerHTML=`<div class="text-body-secondary small">沒有額外產業資訊</div>`;
+function renderCompanyAPIDetail(results,company){
+const valid=Array.isArray(results)?results.filter(item=>item.data):[];
+if(!valid.length){
+$("#company-api-detail").innerHTML=`<div class="company-info-card"><div class="company-info-title mb-2">產業關聯</div><div class="text-body-secondary small">目前找不到此股票的 roles / topics 資料。</div></div>`;
 return;
 }
-const relation=data.relation||{};
-const position=data.marketPosition||{};
-$("#company-api-detail").innerHTML=`<div class="company-info-card"><div class="d-flex align-items-center justify-content-between gap-2 mb-3"><div class="company-info-title">產業角色</div>${relation.exposure?`<span class="position-badge">關聯度：${escapeHTML(relation.exposure)}</span>`:""}</div>${relation.roles?.length?`<div class="mb-3">${relation.roles.map(role=>`<span class="tag">${escapeHTML(getRoleDisplayName(role))}</span>`).join("")}</div>`:""}${position.level?`<div class="mb-2"><div class="company-info-label">市場定位</div><div class="company-info-value">${escapeHTML(position.level)}</div></div>`:""}${position.rationale?`<div class="company-description">${escapeHTML(position.rationale)}</div>`:""}</div>${data.aiSummary?`<div class="company-info-card"><div class="company-info-title mb-2">AI 摘要</div><div class="ai-summary">${escapeHTML(data.aiSummary)}</div></div>`:""}${data.description?`<div class="company-info-card"><div class="company-info-title mb-2">產業相關介紹</div><div class="company-description">${escapeHTML(data.description)}</div></div>`:""}${data.lastUpdated?`<div class="small text-body-secondary">資料更新：${escapeHTML(data.lastUpdated)}</div>`:""}`;
+const topicMap=new Map();
+const roleMap=new Map();
+valid.forEach(item=>{
+const relation=item.data?.relation||{};
+const topicId=item.topicId;
+const topicName=getIndustryName(topicId);
+if(topicId)topicMap.set(String(topicId),topicName);
+(relation.roles||[]).forEach(role=>{
+const key=String(role);
+if(!roleMap.has(key))roleMap.set(key,{id:key,name:getRoleDisplayNameForTopic(role,topicId)});
+});
+});
+const topics=[...topicMap.entries()];
+const roles=[...roleMap.values()];
+$("#company-api-detail").innerHTML=`<div class="company-info-card"><div class="company-info-title mb-2">Topics</div><div class="d-flex flex-wrap gap-1">${topics.map(([id,name])=>`<button type="button" class="tag border-0 topic-link" data-company-topic-id="${escapeAttr(id)}">${escapeHTML(name)}</button>`).join("")}</div>${!topics.length?`<div class="text-body-secondary small">無 Topics 資料</div>`:""}</div><div class="company-info-card"><div class="company-info-title mb-2">Roles</div><div class="d-flex flex-wrap gap-1">${roles.map(role=>`<button type="button" class="tag border-0 role-link" data-company-role-id="${escapeAttr(role.id)}" data-company-role-topic="${escapeAttr(findTopicForRole(results,role.id)||"")}">${escapeHTML(role.name)}</button>`).join("")}</div>${!roles.length?`<div class="text-body-secondary small">無 Roles 資料</div>`:""}</div>${valid.map(item=>{const data=item.data||{};const relation=data.relation||{};const position=data.marketPosition||{};return `<div class="company-info-card"><div class="d-flex align-items-center justify-content-between gap-2 mb-3"><div class="company-info-title">${escapeHTML(getIndustryName(item.topicId))}</div>${relation.exposure?`<span class="position-badge">關聯度：${escapeHTML(relation.exposure)}</span>`:""}</div>${position.level?`<div class="mb-2"><div class="company-info-label">市場定位</div><div class="company-info-value">${escapeHTML(position.level)}</div></div>`:""}${position.rationale?`<div class="company-description">${escapeHTML(position.rationale)}</div>`:""}${data.aiSummary?`<div class="ai-summary mt-3">${escapeHTML(data.aiSummary)}</div>`:""}</div>`}).join("")}`;
+$$("[data-company-topic-id]").forEach(button=>button.addEventListener("click",()=>openIndustryFromStock(button.dataset.companyTopicId)));
+$$("[data-company-role-id]").forEach(button=>button.addEventListener("click",()=>{
+const topicId=button.dataset.companyRoleTopic;
+if(topicId)openIndustryFromStock(topicId);
+}));
+}
+function openIndustryFromStock(industryId){
+const industry=getIndustry(industryId);
+if(!industry||!state.industries[industryId])return;
+if(state.market!=="all"&&industry.market!==state.market){
+state.market=industry.market;
+$("#marketSelector").value=state.market;
+renderIndustryGroups();
+renderHeatmap();
+}
+selectIndustry(industryId);
+}
+function findTopicForRole(results,roleId){
+const item=(results||[]).find(result=>(result.data?.relation?.roles||[]).map(String).includes(String(roleId)));
+return item?.topicId||null;
+}
+function getRoleDisplayNameForTopic(roleId,topicId){
+const oldIndustry=state.currentIndustryDetail;
+if(String(topicId)===String(state.selectedIndustry)&&oldIndustry){
+for(const node of oldIndustry.supplyChain?.nodes||[])for(const child of node.children||[])if(String(child.id)===String(roleId))return child.name||roleId;
+}
+return getRoleDisplayName(roleId);
 }
 // ===== 新聞 Tab =====
 function getNewsForCurrentMarket(){
