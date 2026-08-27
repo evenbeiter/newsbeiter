@@ -217,12 +217,12 @@ html,body{overflow:auto}
 <div id="map-toolbar" class="d-none">
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
 <div id="breadcrumb"></div>
-<div class="btn-group btn-group-sm">
+<!-- <div class="btn-group btn-group-sm">
 <button class="btn btn-outline-secondary" id="showAllBtn">全部</button>
 <button class="btn btn-outline-secondary" id="showUpstreamBtn">上游</button>
 <button class="btn btn-outline-secondary" id="showDownstreamBtn">下游</button>
 <button class="btn btn-outline-secondary" id="showPeersBtn">同業</button>
-</div>
+</div> -->
 </div>
 </div>
 <div id="map-scroll">
@@ -528,6 +528,9 @@ renderIndustryGroups();
 renderHeatmap();
 if(state.currentTab==="news")renderNews();
 }
+
+
+
 // ===== 市場選單與產業列表 =====
 function renderIndustryGroups(filter=""){
 const container=$("#industryGroups");
@@ -708,7 +711,7 @@ if(!detailContainer)return;
 const section=document.createElement("section");
 section.id="role-detail-container";
 section.className="detail-block role-section";
-section.innerHTML=`<div class="role-header"><div><div class="role-name">${escapeHTML(getRoleDisplayName(roleId))}</div><div class="small text-body-secondary">角色：${escapeHTML(roleId)}</div></div><span class="badge text-bg-secondary">載入中</span></div><div class="role-loading"><div class="spinner-border spinner-border-sm me-2"></div>正在取得角色對應個股...</div>`;
+section.innerHTML=`<div class="role-header"><div><div class="role-name">${escapeHTML(getRoleDisplayNameForIndustry(roleId,industryId))}</div><div class="small text-body-secondary">角色：${escapeHTML(roleId)}</div></div><span class="badge text-bg-secondary">載入中</span></div><div class="role-loading"><div class="spinner-border spinner-border-sm me-2"></div>正在取得角色對應個股...</div>`;
 detailContainer.appendChild(section);
 const batch=state.currentBatch||{items:[]};
 const items=(batch.items||[]).filter(item=>Array.isArray(item.relation?.roles)&&item.relation.roles.includes(roleId));
@@ -716,18 +719,22 @@ const companies=items.map(item=>{
 const marketCompany=findCompany(item.companyCode)||{};
 return {...marketCompany,...item,code:item.companyCode||marketCompany.code,name:item.companyName||marketCompany.name||item.companyCode};
 });
-section.innerHTML=`<div class="role-header"><div><div class="role-name">${escapeHTML(getRoleDisplayName(roleId))}</div><div class="small text-body-secondary">角色：${escapeHTML(roleId)}</div></div><span class="badge text-bg-secondary">${companies.length} 家</span></div><div id="role-treemap-${sanitizeId(roleId)}" class="treemap-wrapper role-treemap"></div>${companies.length?`<div class="stock-card-grid">${companies.map(company=>renderRoleCompanyCard(company,industryId)).join("")}</div>`:`<div class="text-body-secondary small mt-2">batch API 中沒有找到此角色對應的個股</div>`}`;
+section.innerHTML=`<div class="role-header"><div><div class="role-name">${escapeHTML(getRoleDisplayNameForIndustry(roleId,industryId))}</div><div class="small text-body-secondary">角色：${escapeHTML(roleId)}</div></div><span class="badge text-bg-secondary">${companies.length} 家</span></div><div id="role-treemap-${sanitizeId(roleId)}" class="treemap-wrapper role-treemap"></div>${companies.length?`<div class="stock-card-grid">${companies.map(company=>renderRoleCompanyCard(company,industryId)).join("")}</div>`:`<div class="text-body-secondary small mt-2">batch API 中沒有找到此角色對應的個股</div>`}`;
 const treemap=document.getElementById(`role-treemap-${sanitizeId(roleId)}`);
 renderCompanyTreemap(treemap,companies,state.heatmapPeriod,company=>selectCompany(company.code,industryId));
 bindMapCards();
 }
 function getRoleDisplayName(roleId){
-for(const node of state.currentIndustryDetail?.supplyChain?.nodes||[]){
+return getRoleDisplayNameForIndustry(roleId,state.selectedIndustry);
+}
+function getRoleDisplayNameForIndustry(roleId,industryId){
+const detail=String(industryId)===String(state.selectedIndustry)?state.currentIndustryDetail:null;
+for(const node of detail?.supplyChain?.nodes||[]){
 for(const child of node.children||[]){
-if(child.id===roleId)return child.name||roleId;
+if(String(child.id)===String(roleId))return child.name||roleId;
 }
 }
-return roleId;
+return getIndustryName(roleId)||roleId;
 }
 function findCompany(code){
 for(const topic of Object.values(state.heatmapData?.topics||{})){
@@ -780,64 +787,93 @@ function renderCompanyCard(company,industryId){
 const change=Number(company.change1D);
 return `<div><div class="company-card" data-company-code="${escapeAttr(company.code)}" data-company-industry="${escapeAttr(industryId)}"><div class="d-flex justify-content-between align-items-start gap-2"><div><div class="company-code">${escapeHTML(company.code)}</div><div class="company-name">${escapeHTML(company.name||company.companyName||company.code)}</div></div><i class="bi bi-chevron-right text-body-secondary"></i></div><div class="company-price ${getChangeClass(change)}">${formatChange(change)}</div>${company.price!=null?`<div class="small text-body-secondary mt-1">股價 ${formatNumber(company.price)}</div>`:""}</div></div>`;
 }
-// ===== 個股資訊 =====
+// ===== 個股資訊：統一由同一個函數渲染 =====
 async function selectCompany(code,industryId){
 state.selectedStock=String(code);
 const company=findCompany(code)||state.stockSearchIndex.find(item=>String(item.code)===String(code))||{code,name:code};
 const industryIds=getCompanyIndustryIds(code);
 const validIndustryIds=industryIds.filter(id=>state.industries[id]);
 if(!industryId||!state.industries[industryId])industryId=validIndustryIds.find(id=>state.market==="all"||isIndustryInCurrentMarket(id))||validIndustryIds[0]||null;
-$("#detail-panel-title").textContent="個股資訊";
-$("#detail-content").innerHTML=`<div class="company-info-card"><div class="company-info-label">股票</div><div class="company-info-title fs-4">${escapeHTML(company.code)}</div><div class="fs-5">${escapeHTML(company.name||company.companyName||"")}</div></div>${renderMarketMetrics(company)}<div id="company-industry-topics">${renderCompanyTopics(company,validIndustryIds)}</div><div id="company-api-detail"><div class="text-center text-body-secondary p-3"><div class="spinner-border spinner-border-sm me-2"></div>正在取得角色資訊...</div></div>`;
+state.selectedCompanyIndustry=industryId;
+renderCompanySidePanel(company,validIndustryIds,[],{loading:true});
 openDetailPanel();
 try{
 if(!industryIds.length){
-$("#company-api-detail").innerHTML=`<div class="text-body-secondary small">找不到此個股所屬的產業。</div>`;
+renderCompanySidePanel(company,validIndustryIds,[],{error:"找不到此個股所屬的產業。"});
 return;
 }
 const results=await Promise.allSettled(validIndustryIds.map(id=>fetchCompanyTopic(code,id)));
 if(String(state.selectedStock)!==String(code))return;
 const roleMap=[];
+const apiDetails=[];
 results.forEach((result,index)=>{
 if(result.status!=="fulfilled"||!result.value)return;
 const data=result.value;
+apiDetails.push({industryId:validIndustryIds[index],data});
 const roles=Array.isArray(data.relation?.roles)?data.relation.roles:[];
-roles.forEach(role=>roleMap.push({role,industryId:validIndustryIds[index]}));
+roles.forEach(role=>roleMap.push({role,industryId:validIndustryIds[index],data}));
 });
-renderCompanyRoles(roleMap);
+renderCompanySidePanel(company,validIndustryIds,roleMap,{apiDetails});
 }catch(error){
 console.error(error);
-$("#company-api-detail").innerHTML=`<div class="alert alert-warning small">無法取得個股產業角色資料，但上方已取得的個股資訊仍可使用。</div>`;
+if(String(state.selectedStock)!==String(code))return;
+renderCompanySidePanel(company,validIndustryIds,[],{error:"無法取得個股產業角色資料，但上方已取得的個股資訊仍可使用。"});
 }
+}
+function renderCompanySidePanel(company,industryIds,roleMap=[],options={}){
+const uniqueIndustryIds=[...new Set((industryIds||[]).filter(Boolean))];
+const uniqueRoles=[];
+const seenRoles=new Set();
+(roleMap||[]).forEach(item=>{
+const key=`${item.industryId}|${item.role}`;
+if(seenRoles.has(key))return;
+seenRoles.add(key);
+uniqueRoles.push(item);
+});
+const apiDetails=Array.isArray(options.apiDetails)?options.apiDetails:[];
+const apiError=options.error||"";
+const loading=options.loading===true;
+$("#detail-panel-title").textContent="個股資訊";
+$("#detail-content").innerHTML=`${renderCompanyBaseInfo(company)}${renderMarketMetrics(company)}${renderCompanyTopics(company,uniqueIndustryIds)}${apiError?`<div class="alert alert-warning small">${escapeHTML(apiError)}</div>`:""}${renderCompanyIndustryDetails(apiDetails,uniqueRoles,loading)}`;
+bindStockIndustryLinks();
+openDetailPanel();
+}
+function renderCompanyBaseInfo(company){
+return `<div class="company-info-card"><div class="company-info-label">股票</div><div class="company-info-title fs-4">${escapeHTML(company.code||"")}</div><div class="fs-5">${escapeHTML(company.name||company.companyName||"")}</div></div>`;
 }
 function renderCompanyTopics(company,industryIds){
-const uniqueIds=[...new Set(industryIds)];
+const uniqueIds=[...new Set(industryIds||[])];
 if(!uniqueIds.length)return `<div class="company-info-card"><div class="company-info-title mb-2">Topics</div><div class="text-body-secondary small">沒有找到所屬產業</div></div>`;
 return `<div class="company-info-card"><div class="company-info-title mb-2">Topics</div><div class="d-flex flex-wrap gap-1">${uniqueIds.map(id=>`<button type="button" class="tag stock-topic-link" data-stock-topic-id="${escapeAttr(id)}">${escapeHTML(getIndustryName(id))}</button>`).join("")}</div></div>`;
 }
+function renderCompanyIndustryDetails(apiDetails,roleMap,loading){
+if(loading){
+return `<div id="company-api-detail"><div class="company-info-card"><div class="text-center text-body-secondary p-3"><div class="spinner-border spinner-border-sm me-2"></div>正在取得角色與產業資訊...</div></div></div>`;
+}
+const roleSection=renderCompanyRoles(roleMap);
+const detailSections=apiDetails.map(item=>renderCompanyAPIDetail(item.data,item.industryId)).filter(Boolean).join("");
+if(!roleSection&&!detailSections){
+return `<div id="company-api-detail"><div class="company-info-card"><div class="company-info-title mb-2">產業資訊</div><div class="text-body-secondary small">沒有取得此股票的產業角色資料</div></div></div>`;
+}
+return `<div id="company-api-detail">${roleSection}${detailSections}</div>`;
+}
 function renderCompanyRoles(roleMap){
-const container=$("#company-api-detail");
-if(!container)return;
 const unique=[];
 const seen=new Set();
-roleMap.forEach(item=>{
+(roleMap||[]).forEach(item=>{
 const key=`${item.industryId}|${item.role}`;
 if(seen.has(key))return;
 seen.add(key);
 unique.push(item);
 });
-if(!unique.length){
-container.innerHTML=`<div class="company-info-card"><div class="company-info-title mb-2">Roles</div><div class="text-body-secondary small">沒有取得此股票的產業角色資料</div></div>`;
-return;
-}
-container.innerHTML=`<div class="company-info-card"><div class="company-info-title mb-2">Roles</div><div class="d-flex flex-wrap gap-1">${unique.map(item=>`<button type="button" class="tag stock-role-link" data-stock-role-industry="${escapeAttr(item.industryId)}" title="進入${escapeAttr(getIndustryName(item.industryId))}產業關聯圖">${escapeHTML(getRoleDisplayNameForIndustry(item.role,item.industryId))}</button>`).join("")}</div></div>`;
-bindStockIndustryLinks();
+if(!unique.length)return "";
+return `<div class="company-info-card"><div class="company-info-title mb-2">Roles</div><div class="d-flex flex-wrap gap-1">${unique.map(item=>`<button type="button" class="tag stock-role-link" data-stock-role-industry="${escapeAttr(item.industryId)}" data-stock-role-id="${escapeAttr(item.role)}" title="進入${escapeAttr(getIndustryName(item.industryId))}產業關聯圖">${escapeHTML(getRoleDisplayNameForIndustry(item.role,item.industryId))}</button>`).join("")}</div></div>`;
 }
 function getRoleDisplayNameForIndustry(roleId,industryId){
-const detail=state.currentIndustryDetail;
-for(const node of detail?.supplyChain?.nodes||[]){
+const currentDetail=String(industryId)===String(state.selectedIndustry)?state.currentIndustryDetail:null;
+for(const node of currentDetail?.supplyChain?.nodes||[]){
 for(const child of node.children||[]){
-if(child.id===roleId)return child.name||roleId;
+if(String(child.id)===String(roleId))return child.name||roleId;
 }
 }
 return getIndustryName(roleId)||roleId;
@@ -857,15 +893,17 @@ button.addEventListener("click",()=>selectIndustry(button.dataset.stockRoleIndus
 function renderMarketMetrics(company){
 return `<div class="row g-2 mb-3"><div class="col-6"><div class="metric-card"><div class="metric-label">股價</div><div class="metric-value">${formatNumber(company.price)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">今日</div><div class="metric-value ${getChangeClass(company.change1D)}">${formatChange(company.change1D)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">一週</div><div class="metric-value ${getChangeClass(company.change1W)}">${formatChange(company.change1W)}</div></div></div><div class="col-6"><div class="metric-card"><div class="metric-label">一月</div><div class="metric-value ${getChangeClass(company.change1M)}">${formatChange(company.change1M)}</div></div></div><div class="col-12"><div class="metric-card"><div class="metric-label">Market Cap</div><div class="metric-value">${formatMarketCap(company.marketCap)}</div></div></div></div>`;
 }
-function renderCompanyAPIDetail(data){
-if(!data){
-$("#company-api-detail").innerHTML=`<div class="text-body-secondary small">沒有額外產業資訊</div>`;
-return;
-}
+function renderCompanyAPIDetail(data,industryId){
+if(!data)return "";
 const relation=data.relation||{};
 const position=data.marketPosition||{};
-$("#company-api-detail").innerHTML=`<div class="company-info-card"><div class="d-flex align-items-center justify-content-between gap-2 mb-3"><div class="company-info-title">產業角色</div>${relation.exposure?`<span class="position-badge">關聯度：${escapeHTML(relation.exposure)}</span>`:""}</div>${relation.roles?.length?`<div class="mb-3">${relation.roles.map(role=>`<span class="tag">${escapeHTML(getRoleDisplayName(role))}</span>`).join("")}</div>`:""}${position.level?`<div class="mb-2"><div class="company-info-label">市場定位</div><div class="company-info-value">${escapeHTML(position.level)}</div></div>`:""}${position.rationale?`<div class="company-description">${escapeHTML(position.rationale)}</div>`:""}</div>${data.aiSummary?`<div class="company-info-card"><div class="company-info-title mb-2">AI 摘要</div><div class="ai-summary">${escapeHTML(data.aiSummary)}</div></div>`:""}${data.description?`<div class="company-info-card"><div class="company-info-title mb-2">產業相關介紹</div><div class="company-description">${escapeHTML(data.description)}</div></div>`:""}${data.lastUpdated?`<div class="small text-body-secondary">資料更新：${escapeHTML(data.lastUpdated)}</div>`:""}`;
+const roles=Array.isArray(relation.roles)?relation.roles:[];
+const industryName=industryId?getIndustryName(industryId):"";
+return `<div class="company-info-card"><div class="d-flex align-items-center justify-content-between gap-2 mb-3"><div class="company-info-title">${escapeHTML(industryName||"產業資訊")}</div>${relation.exposure?`<span class="position-badge">關聯度：${escapeHTML(relation.exposure)}</span>`:""}</div>${roles.length?`<div class="mb-3">${roles.map(role=>`<span class="tag">${escapeHTML(getRoleDisplayNameForIndustry(role,industryId))}</span>`).join("")}</div>`:""}${position.level?`<div class="mb-2"><div class="company-info-label">市場定位</div><div class="company-info-value">${escapeHTML(position.level)}</div></div>`:""}${position.rationale?`<div class="company-description">${escapeHTML(position.rationale)}</div>`:""}${data.aiSummary?`<div class="mt-3"><div class="company-info-label">AI 摘要</div><div class="ai-summary">${escapeHTML(data.aiSummary)}</div></div>`:""}${data.description?`<div class="mt-3"><div class="company-info-label">產業相關介紹</div><div class="company-description">${escapeHTML(data.description)}</div></div>`:""}${data.lastUpdated?`<div class="small text-body-secondary mt-3">資料更新：${escapeHTML(data.lastUpdated)}</div>`:""}</div>`;
 }
+
+
+
 // ===== 新聞 Tab =====
 function getNewsForCurrentMarket(){
 return state.news.filter(news=>{
