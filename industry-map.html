@@ -284,9 +284,105 @@ detailPath:"https://"+ss+".com/live/topics/",
 api:{
 proxy:"https://newsbeiter.onrender.com/api/fetch?url=",
 batch:topicId=>"https://newsbeiter.onrender.com/api/fetch?url="+encodeURIComponent("https://"+ss+".com/api/data/company-topics-batch?topicId="+topicId),
-company:(code,industryId)=>"https://newsbeiter.onrender.com/api/fetch?url="+encodeURIComponent(`https://${ss}.com/api/data/company-topic?code=${encodeURIComponent(code)}&topicId=${encodeURIComponent(industryId)}`)
+company:(code,industryId)=>"https://newsbeiter.onrender.com/api/fetch?url="+encodeURIComponent(`https://${ss}.com/api/data/company-topic?code=${encodeURIComponent(code)}&topicId=${encodeURIComponent(industryId)}`),
+heatmapLive:"https://newsbeiter.onrender.com/api/fetch?url="+encodeURIComponent("https://"+ss+".com/api/heatmap-live")
 }
 };
+async function fetchJSON(url,options){
+const response=await fetch(url,options);
+if(!response.ok)throw new Error(`HTTP ${response.status}: ${url}`);
+return response.json();
+}
+async function fetchHeatmapData(){
+const heatmapDataURL=CONFIG.files.heatmap;
+const heatmapLiveURL=CONFIG.api.heatmapLive;
+let heatmapData=null;
+let heatmapLive=null;
+try{
+heatmapData=await fetchJSON(heatmapDataURL);
+}catch(error){
+console.error("heatmap-data.json 載入失敗:",error);
+}
+try{
+heatmapLive=await fetchJSON(heatmapLiveURL,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({cacheKey:"all"})
+});
+}catch(error){
+console.warn("heatmap-live 載入失敗，改用 heatmap-data.json:",error);
+}
+if(!heatmapData){
+if(heatmapLive){
+return convertHeatmapLiveToDataStructure(heatmapLive);
+}
+throw new Error("heatmap-data.json 與 heatmap-live 都無法取得");
+}
+if(!heatmapLive||!heatmapLive.fetchedAt){
+return heatmapData;
+}
+const dataTime=Date.parse(heatmapData.lastUpdated);
+const liveTime=Date.parse(heatmapLive.fetchedAt);
+if(!Number.isFinite(dataTime)||!Number.isFinite(liveTime)){
+console.warn("無法正確比較 heatmap-data.json.lastUpdated 與 heatmap-live.fetchedAt，使用 heatmap-data.json");
+return heatmapData;
+}
+if(liveTime<=dataTime){
+return heatmapData;
+}
+return mergeHeatmapLive(heatmapData,heatmapLive);
+}
+function mergeHeatmapLive(heatmapData,heatmapLive){
+const result=structuredClone(heatmapData);
+if(!result.topics||!heatmapLive.prices){
+return result;
+}
+Object.values(result.topics).forEach(topic=>{
+if(!Array.isArray(topic.companies))return;
+topic.companies.forEach(company=>{
+const live=heatmapLive.prices[String(company.code)];
+if(!live)return;
+if(live.price!==undefined&&live.price!==null){
+company.price=live.price;
+}
+if(live.change1D!==undefined&&live.change1D!==null){
+company.change1D=live.change1D;
+}
+});
+});
+result.lastUpdated=heatmapLive.fetchedAt;
+return result;
+}
+function convertHeatmapLiveToDataStructure(heatmapLive){
+return{
+lastUpdated:heatmapLive.fetchedAt||null,
+topics:{}
+};
+}
+/*const ss="ai"+"sto"+"ck"+"map";
+const CONFIG={
+files:{
+relations:"https://"+ss+".com/live/graph/global-chains.json",
+stockIndustries:"https://"+ss+".com/live/company-topics-index.json",
+industries:[
+"https://"+ss+".com/live/topic-index-tw.json",
+"https://"+ss+".com/live/topic-index-etf.json",
+"https://"+ss+".com/live/topic-index-us.json",
+"https://"+ss+".com/live/topic-index-jp.json",
+"https://"+ss+".com/live/topic-index-kr.json"
+],
+heatmap:"https://"+ss+".com/live/heatmap-data.json",
+news:"https://"+ss+".com/live/daily_news.json"
+},
+detailPath:"https://"+ss+".com/live/topics/",
+api:{
+proxy:"https://newsbeiter.onrender.com/api/fetch?url=",
+batch:topicId=>"https://newsbeiter.onrender.com/api/fetch?url="+encodeURIComponent("https://"+ss+".com/api/data/company-topics-batch?topicId="+topicId),
+company:(code,industryId)=>"https://newsbeiter.onrender.com/api/fetch?url="+encodeURIComponent(`https://${ss}.com/api/data/company-topic?code=${encodeURIComponent(code)}&topicId=${encodeURIComponent(industryId)}`)
+}
+};*/
 const MARKET_DEFS=[
 {key:"tw",label:"台股",urlKey:"topic-index-tw"},
 {key:"etf",label:"ETF",urlKey:"topic-index-etf"},
@@ -363,11 +459,11 @@ console.error(error);
 showLoadError(error);
 }
 }
-async function fetchJSON(url){
-const response=await fetch(url+"?_="+Date.now());
-if(!response.ok)throw new Error(`${url} HTTP ${response.status}`);
-return await response.json();
-}
+// async function fetchJSON(url){
+// const response=await fetch(url+"?_="+Date.now());
+// if(!response.ok)throw new Error(`${url} HTTP ${response.status}`);
+// return await response.json();
+// }
 async function fetchAPI(url){
 const response=await fetch(url);
 if(!response.ok)throw new Error(`${url} HTTP ${response.status}`);
