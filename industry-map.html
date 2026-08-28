@@ -582,7 +582,7 @@ button.addEventListener("click",()=>{
 const code=button.dataset.searchStockCode;
 const company=findCompany(code)||state.stockSearchIndex.find(item=>String(item.code)===String(code));
 // $("#stockSearch").value=company?.name?`${company.code} ${company.name}`:String(code);
-$("#stockSearch").value="搜尋股票";
+$("#stockSearch").value="";
 hideStockSearchResults();
 selectCompanyFromSearch(code);
 });
