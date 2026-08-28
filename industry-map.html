@@ -934,6 +934,7 @@ const apiError=options.error||"";
 const loading=options.loading===true;
 $("#detail-panel-title").textContent="個股資訊";
 $("#detail-content").innerHTML=`${renderCompanyBaseInfo(company)}${renderMarketMetrics(company)}${renderCompanyTopics(company,uniqueIndustryIds)}${apiError?`<div class="alert alert-warning small">${escapeHTML(apiError)}</div>`:""}${renderCompanyIndustryDetails(apiDetails,uniqueRoles,loading)}`;
+if (/^[a-zA-Z]+$/.test(company.code)){renderUsStockInfo(company.code)};
 bindStockIndustryLinks();
 openDetailPanel();
 }
@@ -1003,44 +1004,144 @@ return `<div class="company-info-card"><div class="d-flex align-items-center jus
 
 // ===== 美股個股資訊 =====
 async function renderUsStockInfo(code){
-  const ff='for'+'ecas'+'tock';
-  const detailContent=document.querySelector("#detail-content");
-  if(!detailContent)return;
-  try{
-      const url=`https://newsbeiter.onrender.com/api/fetch?url=https://www.${ff}.tw/stock/${encodeURIComponent(code)}/info`;
-      const html=await fetch(url).then(res=>{
-          if(!res.ok)throw new Error(`HTTP ${res.status}`);
-          return res.text();
-      });
-      const doc=new DOMParser().parseFromString(html,"text/html");
-      const intro=doc.querySelector(".stockProfile__intro");
-
-      const renderAnalysis=(item)=>{
-          const obj=item.data;
-          const summary=renderValue(obj.summary);
-          const pro=renderValue(obj.pro);
-          const con=renderValue(obj.con);
-          if(!summary&&!pro&&!con)return "";
-          return `<div class="mb-4"><h6 class="fw-bold mb-2">${escapeHTML(formatTitle(item.key))}</h6>${summary?`<div class="mb-2"><div class="small text-body-secondary mb-1">Summary</div><div>${escapeHTML(summary)}</div></div>`:""}${pro?`<div class="mb-2"><div class="small text-body-secondary mb-1">Pro</div><div>${escapeHTML(pro)}</div></div>`:""}${con?`<div><div class="small text-body-secondary mb-1">Con</div><div>${escapeHTML(con)}</div></div>`:""}</div>`;
-      };
-      let analysisHTML="";
-      sectionNames.forEach(sectionName=>{
-          const sectionItems=analyses.filter(item=>item.section===sectionName);
-          if(!sectionItems.length)return;
-          analysisHTML+=`<div class="mb-4"><h5 class="fw-bold mb-3">${escapeHTML(sectionLabels[sectionName])}</h5>${sectionItems.map(renderAnalysis).join("")}</div>`;
-      });
-      // detailContent.innerHTML=`<div class="stock-forecastock-info">${intro?`<div class="mb-4">${intro.innerHTML}</div>`:""}${analysisHTML}</div>`;
-      return `<div class="stock-forecastock-info">${intro?`<div class="mb-4">${intro.innerHTML}</div>`:""}${analysisHTML}</div>`;
-      // return {
-      //     code,
-      //     intro:intro?intro.innerHTML:"",
-      //     analyses
-      // };
-  }catch(error){
-      console.error("Forecastock 資料抓取失敗:",error);
-      detailContent.innerHTML=`<div class="text-danger">無法取得 ${escapeHTML(code)} 的 Forecastock 資料</div>`;
-      return null;
-  }
+    const detailContent=document.querySelector("#detail-content");
+    if(!detailContent)return;
+    try{
+        const url=`https://newsbeiter.onrender.com/api/fetch?url=https://www.forecastock.tw/stock/${encodeURIComponent(code)}/info`;
+        const html=await fetch(url).then(res=>{
+            if(!res.ok)throw new Error(`HTTP ${res.status}`);
+            return res.text();
+        });
+        const doc=new DOMParser().parseFromString(html,"text/html");
+        const intro=doc.querySelector(".stockProfile__intro");
+        const nuxtData=doc.querySelector("#__NUXT_DATA__");
+        if(!nuxtData)throw new Error("找不到 __NUXT_DATA__");
+        const data=JSON.parse(nuxtData.textContent);
+        const resolveRef=(value)=>{
+            if(typeof value==="number"&&value>=0&&value<data.length)return data[value];
+            return value;
+        };
+        const resolveDeep=(value,seen=new Set())=>{
+            if(typeof value!=="number")return value;
+            if(seen.has(value))return value;
+            seen.add(value);
+            const resolved=resolveRef(value);
+            if(resolved===value)return value;
+            return resolveDeep(resolved,seen);
+        };
+        const findObjectWithKey=(key)=>{
+            for(let i=0;i<data.length;i++){
+                const item=data[i];
+                if(item&&typeof item==="object"&&!Array.isArray(item)&&Object.prototype.hasOwnProperty.call(item,key)){
+                    return item;
+                }
+            }
+            return null;
+        };
+        const root=findObjectWithKey("incomeStatement");
+        if(!root)throw new Error("找不到包含 incomeStatement 的資料");
+        const sectionNames=["incomeStatement","cashFlow","balanceSheet","financialRatio"];
+        const sectionLabels={
+            incomeStatement:"Income Statement",
+            cashFlow:"Cash Flow",
+            balanceSheet:"Balance Sheet",
+            financialRatio:"Financial Ratio"
+        };
+        const visited=new Set();
+        const analyses=[];
+        const resolveObject=(value)=>{
+            const resolved=resolveDeep(value);
+            if(resolved&&typeof resolved==="object"&&!Array.isArray(resolved))return resolved;
+            return null;
+        };
+        const hasAnalysisFields=(obj)=>{
+            return obj&&typeof obj==="object"&&!Array.isArray(obj)&&(
+                Object.prototype.hasOwnProperty.call(obj,"summary")||
+                Object.prototype.hasOwnProperty.call(obj,"pro")||
+                Object.prototype.hasOwnProperty.call(obj,"con")
+            );
+        };
+        const walk=(value,path,sectionName)=>{
+            if(typeof value==="number"){
+                if(value<0||value>=data.length)return;
+                if(visited.has(value))return;
+                visited.add(value);
+                walk(data[value],path,sectionName);
+                return;
+            }
+            if(!value||typeof value!=="object")return;
+            if(Array.isArray(value)){
+                value.forEach((item,index)=>{
+                    walk(item,`${path}[${index}]`,sectionName);
+                });
+                return;
+            }
+            if(hasAnalysisFields(value)){
+                analyses.push({
+                    section:sectionName,
+                    key:path.split(".").pop()||path,
+                    path,
+                    data:value
+                });
+                return;
+            }
+            Object.entries(value).forEach(([key,item])=>{
+                if(key==="summary"||key==="pro"||key==="con")return;
+                walk(item,path?`${path}.${key}`:key,sectionName);
+            });
+        };
+        sectionNames.forEach(sectionName=>{
+            if(root[sectionName]!==undefined){
+                walk(root[sectionName],sectionName,sectionName);
+            }
+        });
+        const renderValue=(value)=>{
+            const resolved=resolveDeep(value);
+            if(resolved===null||resolved===undefined)return "";
+            if(typeof resolved==="string"||typeof resolved==="number"||typeof resolved==="boolean"){
+                return String(resolved);
+            }
+            if(Array.isArray(resolved)){
+                return resolved.map(item=>renderValue(item)).filter(Boolean).join("");
+            }
+            if(typeof resolved==="object"){
+                if(resolved.text!==undefined)return renderValue(resolved.text);
+                if(resolved.content!==undefined)return renderValue(resolved.content);
+                return Object.values(resolved).map(item=>renderValue(item)).filter(Boolean).join("");
+            }
+            return "";
+        };
+        const formatTitle=(key)=>{
+            return String(key)
+                .replace(/([a-z])([A-Z])/g,"$1 $2")
+                .replace(/[_-]+/g," ")
+                .replace(/\b\w/g,char=>char.toUpperCase());
+        };
+        const renderAnalysis=(item)=>{
+            const obj=item.data;
+            const summary=renderValue(obj.summary);
+            const pro=renderValue(obj.pro);
+            const con=renderValue(obj.con);
+            if(!summary&&!pro&&!con)return "";
+            return `<div class="company-info-card mb-4"><h6 class="fw-bold mb-2">${escapeHTML(formatTitle(item.key))}</h6>${summary?`<div class="company-info-card mb-2"><div class="small text-body-secondary mb-1">Summary</div><div>${escapeHTML(summary)}</div></div>`:""}${pro?`<div class="company-info-card mb-2"><div class="small text-body-secondary mb-1">Pro</div><div>${escapeHTML(pro)}</div></div>`:""}${con?`<div class="company-info-card"><div class="small text-body-secondary mb-1">Con</div><div>${escapeHTML(con)}</div></div>`:""}</div>`;
+        };
+        let analysisHTML="";
+        sectionNames.forEach(sectionName=>{
+            const sectionItems=analyses.filter(item=>item.section===sectionName);
+            if(!sectionItems.length)return;
+            analysisHTML+=`<div class="mb-4"><h5 class="fw-bold mb-3">${escapeHTML(sectionLabels[sectionName])}</h5>${sectionItems.map(renderAnalysis).join("")}</div>`;
+        });
+        detailContent.innerHTML+=`<div class="stock-forecastock-info">${intro?`<div class="company-info-card mb-4">${intro.innerHTML}</div>`:""}${analysisHTML}</div>`;
+        return {
+            code,
+            intro:intro?intro.innerHTML:"",
+            analyses
+        };
+    }catch(error){
+        console.error("Forecastock 資料抓取失敗:",error);
+        detailContent.innerHTML+=`<div class="text-danger">無法取得 ${escapeHTML(code)} 的 Forecastock 資料</div>`;
+        return null;
+    }
 }
 
 
