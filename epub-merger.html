@@ -364,7 +364,15 @@ const source=item.custom?"自訂項目":state.books[item.bookIndex]?.title||"";
 tr.innerHTML=`<td class="text-center toc-number">${index+1}</td><td class="text-center"><input class="form-check-input include-check" type="checkbox" ${item.include!==false?"checked":""}></td><td><input class="form-control form-control-sm toc-title" value="${escapeHTML(item.title)}"></td><td><select class="form-select form-select-sm level-select">${[1,2,3,4,5,6].map(n=>`<option value="${n}" ${item.level===n?"selected":""}>${n} 層</option>`).join("")}</select></td><td class="small-muted">${escapeHTML(source)}</td><td><div class="btn-group btn-group-sm"><button class="btn btn-outline-primary content-btn" type="button">內容</button><button class="btn btn-outline-secondary up-btn" type="button">↑</button><button class="btn btn-outline-secondary down-btn" type="button">↓</button><button class="btn btn-outline-danger delete-btn" type="button">×</button></div></td>`;
 tr.querySelector(".content-btn").onclick=()=>toggleChapterEditor(tr,item);
 tr.querySelector(".include-check").onchange=e=>item.include=e.target.checked;
-tr.querySelector(".toc-title").oninput=e=>item.title=e.target.value;
+// tr.querySelector(".toc-title").oninput=e=>{item.title=e.target.value;syncTOCTitleToXHTML(item,e.target.value)};
+const titleInput=tr.querySelector(".toc-title");
+titleInput.oninput=e=>{
+item.title=e.target.value;
+};
+titleInput.onchange=e=>{
+item.title=e.target.value;
+syncTOCTitleToXHTML(item,e.target.value);
+};
 tr.querySelector(".level-select").onchange=e=>item.level=Number(e.target.value);
 tr.querySelector(".up-btn").onclick=()=>moveTOC(index,-1);
 tr.querySelector(".down-btn").onclick=()=>moveTOC(index,1);
@@ -385,6 +393,24 @@ renderTOC();
 });
 body.appendChild(tr);
 });
+}
+function syncTOCTitleToXHTML(item,newTitle){
+if(!item||item.custom)return;
+const content=state.chapterContents.get(item.id);
+if(typeof content!=="string")return;
+const title=newTitle.trim();
+if(!title)return;
+let result=content;
+result=result.replace(/(<title\b[^>]*>)[\s\S]*?(<\/title>)/i,(match,start,end)=>start+escapeXMLText(title)+end);
+if(/<h1\b[^>]*>[\s\S]*?<\/h1>/i.test(result)){
+result=result.replace(/(<h1\b[^>]*>)[\s\S]*?(<\/h1>)/i,(match,start,end)=>start+escapeXMLText(title)+end);
+}else if(/<h2\b[^>]*>[\s\S]*?<\/h2>/i.test(result)){
+result=result.replace(/(<h2\b[^>]*>)[\s\S]*?(<\/h2>)/i,(match,start,end)=>start+escapeXMLText(title)+end);
+}
+state.chapterContents.set(item.id,result);
+}
+function escapeXMLText(text){
+return String(text??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 function toggleChapterEditor(tr,item){
 const old=tr.nextElementSibling;
