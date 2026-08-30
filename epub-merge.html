@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kindle EPUB 合併工具</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body{background:#f5f6f8}
+.app-container{max-width:1200px;margin:30px auto}
+.drop-zone{border:2px dashed #adb5bd;border-radius:12px;padding:45px 20px;text-align:center;background:#fff;cursor:pointer;transition:.2s}
+.drop-zone:hover,.drop-zone.dragover{border-color:#0d6efd;background:#f0f6ff}
+.book-card{background:#fff;border:1px solid #dee2e6;border-radius:10px;margin-bottom:12px}
+.book-header{padding:12px 16px;border-bottom:1px solid #dee2e6;display:flex;align-items:center;gap:10px}
+.book-body{padding:12px 16px}
+.book-handle{cursor:grab;font-size:20px;color:#6c757d}
+.toc-table td,.toc-table th{vertical-align:middle}
+.toc-title{min-width:260px}
+.level-select{width:90px}
+.toc-row.dragging{opacity:.5}
+.summary-card{background:#fff;border:1px solid #dee2e6;border-radius:10px}
+.small-muted{font-size:13px;color:#6c757d}
+.status-box{white-space:pre-wrap;max-height:260px;overflow:auto;font-family:monospace;font-size:13px}
+.progress{height:22px}
+.cover-preview{width:70px;height:95px;object-fit:cover;border-radius:4px;background:#eee}
+</style>
+</head>
+<body>
+<div class="container-fluid app-container">
+<div class="card shadow-sm">
+<div class="card-body p-4">
+<h1 class="h3 mb-2">Kindle EPUB 合併工具</h1>
+<p class="text-secondary mb-4">針對 Kindle Paperwhite 與 Send to Kindle 優化的多 EPUB 合併工具，所有檔案均在瀏覽器本機處理。</p>
+<div id="dropZone" class="drop-zone mb-4">
+<div class="fs-1 mb-2">📚</div>
+<div class="fw-semibold">拖曳多個 EPUB 到這裡</div>
+<div class="text-secondary my-2">或</div>
+<button type="button" id="selectFilesBtn" class="btn btn-primary">選擇 EPUB 檔案</button>
+<input id="fileInput" type="file" accept=".epub,application/epub+zip" multiple hidden>
+</div>
+<div id="booksSection" class="d-none">
+<div class="d-flex justify-content-between align-items-center mb-3">
+<h2 class="h5 mb-0">已加入 EPUB</h2>
+<button id="clearBooksBtn" class="btn btn-sm btn-outline-danger">清除全部</button>
+</div>
+<div id="booksList"></div>
+</div>
+<div id="settingsSection" class="d-none">
+<hr class="my-4">
+<h2 class="h5 mb-3">合併後設定</h2>
+<div class="row g-3">
+<div class="col-md-8">
+<label class="form-label">合併後書名</label>
+<input id="bookTitle" class="form-control" placeholder="請輸入合併後書名">
+</div>
+<div class="col-md-4">
+<label class="form-label">輸出檔名</label>
+<div class="input-group">
+<input id="outputFileName" class="form-control" placeholder="merged">
+<span class="input-group-text">.epub</span>
+</div>
+</div>
+</div>
+<div class="form-check mt-3">
+<input id="includeCoverInToc" class="form-check-input" type="checkbox">
+<label class="form-check-label" for="includeCoverInToc">將封面加入目錄</label>
+</div>
+</div>
+<div id="tocSection" class="d-none">
+<hr class="my-4">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+<div>
+<h2 class="h5 mb-1">自訂目錄</h2>
+<div class="small-muted">層級 1 為最上層，層級 2～6 為子層級。可以拖曳、修改名稱、刪除或停用項目。</div>
+</div>
+<div class="btn-group">
+<button id="addTocItemBtn" class="btn btn-sm btn-outline-primary">＋ 新增自訂項目</button>
+<button id="autoLevelBtn" class="btn btn-sm btn-outline-secondary">自動整理層級</button>
+</div>
+</div>
+<div class="table-responsive">
+<table class="table table-sm table-bordered bg-white toc-table">
+<thead class="table-light">
+<tr>
+<th style="width:45px">#</th>
+<th style="width:55px">使用</th>
+<th>目錄名稱</th>
+<th style="width:110px">層級</th>
+<th style="width:230px">來源</th>
+<th style="width:150px">操作</th>
+</tr>
+</thead>
+<tbody id="tocBody"></tbody>
+</table>
+</div>
+</div>
+<div id="buildSection" class="d-none">
+<hr class="my-4">
+<div class="d-flex flex-wrap gap-2">
+<button id="buildBtn" class="btn btn-success btn-lg">建立 Kindle 友善 EPUB</button>
+<button id="validateBtn" class="btn btn-outline-secondary btn-lg">檢查設定</button>
+</div>
+<div id="progressContainer" class="mt-4 d-none">
+<div class="d-flex justify-content-between mb-1">
+<span id="progressText">準備中...</span>
+<span id="progressPercent">0%</span>
+</div>
+<div class="progress">
+<div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%">0%</div>
+</div>
+</div>
+<div id="status" class="status-box bg-dark text-light rounded p-3 mt-3 d-none"></div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script>
+"use strict";
+const state={books:[],toc:[]};
+const $=s=>document.querySelector(s);
+const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const xmlEscape=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&apos;");
+const normalizePath=p=>String(p||"").replace(/\\/g,"/").replace(/^\/+/,"");
+const dirname=p=>{const i=normalizePath(p).lastIndexOf("/");return i>=0?p.slice(0,i):""};
+const joinPath=(a,b)=>normalizePath((a?a+"/":"")+b);
+const stripFragment=u=>String(u||"").split("#")[0];
+const getFragment=u=>String(u||"").includes("#")?String(u).slice(String(u).indexOf("#")):"";
+const makeId=()=>crypto.randomUUID?crypto.randomUUID().replace(/-/g,""):Math.random().toString(36).slice(2)+Date.now().toString(36);
+const resolvePath=(base,rel)=>{
+rel=String(rel||"");
+if(!rel||rel.startsWith("#")||/^[a-z][a-z0-9+.-]*:/i.test(rel))return rel;
+const baseDir=dirname(base);
+const parts=joinPath(baseDir,stripFragment(rel)).split("/");
+const out=[];
+for(const part of parts){
+if(!part||part===".")continue;
+if(part==="..")out.pop();
+else out.push(part);
+}
+return out.join("/");
+};
+const relativePath=(from,to)=>{
+const a=normalizePath(from).split("/");
+a.pop();
+const b=normalizePath(to).split("/");
+let i=0;
+while(i<a.length&&i<b.length&&a[i]===b[i])i++;
+return "../".repeat(a.length-i)+b.slice(i).join("/")||"./";
+};
+const getAttr=(el,name)=>el?.getAttribute(name)||"";
+const parseXML=txt=>new DOMParser().parseFromString(txt,"application/xml");
+function setProgress(percent,text){
+$("#progressContainer").classList.remove("d-none");
+$("#progressBar").style.width=percent+"%";
+$("#progressBar").textContent=Math.round(percent)+"%";
+$("#progressPercent").textContent=Math.round(percent)+"%";
+$("#progressText").textContent=text;
+}
+function logStatus(text){
+$("#status").classList.remove("d-none");
+$("#status").textContent+=text+"\n";
+$("#status").scrollTop=$("#status").scrollHeight;
+}
+function clearStatus(){
+$("#status").textContent="";
+$("#status").classList.add("d-none");
+}
+async function readZipText(zip,path){
+const file=zip.file(path);
+if(!file)throw new Error("找不到檔案："+path);
+return await file.async("string");
+}
+async function findRootFile(zip){
+const text=await readZipText(zip,"META-INF/container.xml");
+const doc=parseXML(text);
+const root=doc.querySelector("rootfile");
+if(!root)throw new Error("container.xml 找不到 rootfile");
+return normalizePath(getAttr(root,"full-path"));
+}
+function getMetadataText(opf,name){
+const normal=opf.querySelector(`dc\\:${name}`);
+if(normal?.textContent?.trim())return normal.textContent.trim();
+const fallback=opf.querySelector(name);
+return fallback?.textContent?.trim()||"";
+}
+async function parseEPUB(file,index){
+const zip=await JSZip.loadAsync(file);
+const opfPath=await findRootFile(zip);
+const opfText=await readZipText(zip,opfPath);
+const opf=parseXML(opfText);
+const opfDir=dirname(opfPath);
+const manifest=new Map();
+opf.querySelectorAll("manifest > item").forEach(item=>{
+const id=getAttr(item,"id");
+if(!id)return;
+manifest.set(id,{
+id,
+href:normalizePath(getAttr(item,"href")),
+mediaType:getAttr(item,"media-type"),
+properties:getAttr(item,"properties")
+});
+});
+const spineItems=[];
+opf.querySelectorAll("spine > itemref").forEach(item=>{
+const id=getAttr(item,"idref");
+if(manifest.has(id))spineItems.push(manifest.get(id));
+});
+let navPath=null;
+let ncxPath=null;
+for(const item of manifest.values()){
+if(item.properties.split(/\s+/).includes("nav"))navPath=joinPath(opfDir,item.href);
+if(item.mediaType==="application/x-dtbncx+xml")ncxPath=joinPath(opfDir,item.href);
+}
+const title=getMetadataText(opf,"title")||file.name.replace(/\.epub$/i,"");
+const language=getMetadataText(opf,"language")||"zh-TW";
+const creator=getMetadataText(opf,"creator");
+const identifier=getMetadataText(opf,"identifier");
+let coverItem=null;
+for(const item of manifest.values()){
+if(item.properties.split(/\s+/).includes("cover-image")){
+coverItem=item;
+break;
+}
+}
+if(!coverItem){
+const meta=Array.from(opf.querySelectorAll("meta")).find(x=>getAttr(x,"name").toLowerCase()==="cover");
+if(meta&&manifest.has(getAttr(meta,"content")))coverItem=manifest.get(getAttr(meta,"content"));
+}
+if(!coverItem){
+coverItem=Array.from(manifest.values()).find(x=>/^image\//.test(x.mediaType)&&/cover/i.test(x.href));
+}
+let cover=null;
+if(coverItem){
+const coverPath=joinPath(opfDir,coverItem.href);
+if(zip.file(coverPath))cover={path:coverPath,mediaType:coverItem.mediaType,bookIndex:index};
+}
+const navTitles=new Map();
+if(navPath&&zip.file(navPath)){
+try{
+const navText=await readZipText(zip,navPath);
+const navDoc=parseXML(navText);
+navDoc.querySelectorAll("nav a").forEach(a=>{
+const href=getAttr(a,"href");
+if(!href)return;
+const path=resolvePath(navPath,href);
+const text=a.textContent.trim();
+if(text&&!navTitles.has(path))navTitles.set(path,text);
+});
+}catch(e){}
+}
+if(ncxPath&&zip.file(ncxPath)){
+try{
+const ncxText=await readZipText(zip,ncxPath);
+const ncx=parseXML(ncxText);
+ncx.querySelectorAll("navPoint").forEach(np=>{
+const content=np.querySelector("content");
+const label=np.querySelector("navLabel text");
+if(content&&label){
+const path=resolvePath(ncxPath,getAttr(content,"src"));
+const text=label.textContent.trim();
+if(text&&!navTitles.has(path))navTitles.set(path,text);
+}
+});
+}catch(e){}
+}
+const chapters=[];
+for(let i=0;i<spineItems.length;i++){
+const item=spineItems[i];
+const path=joinPath(opfDir,item.href);
+if(!zip.file(path))continue;
+let chapterTitle=navTitles.get(path)||"";
+if(!chapterTitle){
+try{
+const text=await readZipText(zip,path);
+const match=text.match(/<title[^>]*>([\s\S]*?)<\/title>/i)||text.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)||text.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
+if(match)chapterTitle=match[1].replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim();
+}catch(e){}
+}
+if(!chapterTitle)chapterTitle=`第 ${i+1} 章`;
+chapters.push({
+id:makeId(),
+bookIndex:index,
+sourcePath:path,
+title:chapterTitle,
+level:1,
+include:true,
+custom:false
+});
+}
+return{id:makeId(),file,zip,index,opfPath,opfDir,title,language,creator,identifier,manifest,spineItems,chapters,cover};
+}
+async function addFiles(fileList){
+const files=Array.from(fileList).filter(f=>/\.epub$/i.test(f.name));
+if(!files.length)return;
+for(const file of files){
+try{
+setProgress(0,"正在解析："+file.name);
+const book=await parseEPUB(file,state.books.length);
+state.books.push(book);
+logStatus(`✓ 已解析：${file.name}，${book.chapters.length} 個章節`);
+}catch(e){
+logStatus(`✗ 無法解析 ${file.name}：${e.message}`);
+}
+}
+if(state.books.length===1&&!$("#bookTitle").value)$("#bookTitle").value=state.books[0].title;
+if(!$("#outputFileName").value)$("#outputFileName").value=sanitizeTitle($("#bookTitle").value||"merged");
+rebuildTOC();
+renderBooks();
+showSections();
+}
+function rebuildTOC(){
+state.toc=[];
+state.books.forEach(book=>{
+book.chapters.forEach(ch=>state.toc.push({...ch}));
+});
+renderTOC();
+}
+function renderBooks(){
+const list=$("#booksList");
+list.innerHTML="";
+state.books.forEach((book,i)=>{
+const card=document.createElement("div");
+card.className="book-card";
+card.draggable=true;
+card.dataset.index=i;
+card.innerHTML=`<div class="book-header"><span class="book-handle">☰</span><strong class="flex-grow-1">${escapeHTML(book.title)}</strong><span class="badge text-bg-secondary">${book.chapters.length} 章</span><button class="btn btn-sm btn-outline-danger remove-book">移除</button></div><div class="book-body"><div class="small-muted">${escapeHTML(book.file.name)}</div></div>`;
+card.querySelector(".remove-book").onclick=()=>{
+state.books.splice(i,1);
+state.books.forEach((b,n)=>b.index=n);
+rebuildTOC();
+renderBooks();
+showSections();
+};
+card.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",String(i)));
+card.addEventListener("dragover",e=>e.preventDefault());
+card.addEventListener("drop",e=>{
+e.preventDefault();
+const from=Number(e.dataTransfer.getData("text/plain"));
+if(from===i)return;
+const [book]=state.books.splice(from,1);
+state.books.splice(i,0,book);
+state.books.forEach((b,n)=>b.index=n);
+rebuildTOC();
+renderBooks();
+});
+list.appendChild(card);
+});
+}
+function renderTOC(){
+const body=$("#tocBody");
+body.innerHTML="";
+state.toc.forEach((item,index)=>{
+const tr=document.createElement("tr");
+tr.className="toc-row";
+tr.draggable=true;
+tr.dataset.index=index;
+const source=item.custom?"自訂項目":state.books[item.bookIndex]?.title||"";
+tr.innerHTML=`<td class="text-center toc-number">${index+1}</td><td class="text-center"><input class="form-check-input include-check" type="checkbox" ${item.include!==false?"checked":""}></td><td><input class="form-control form-control-sm toc-title" value="${escapeHTML(item.title)}"></td><td><select class="form-select form-select-sm level-select">${[1,2,3,4,5,6].map(n=>`<option value="${n}" ${item.level===n?"selected":""}>${n} 層</option>`).join("")}</select></td><td class="small-muted">${escapeHTML(source)}</td><td><div class="btn-group btn-group-sm"><button class="btn btn-outline-secondary up-btn">↑</button><button class="btn btn-outline-secondary down-btn">↓</button><button class="btn btn-outline-danger delete-btn">×</button></div></td>`;
+tr.querySelector(".include-check").onchange=e=>item.include=e.target.checked;
+tr.querySelector(".toc-title").oninput=e=>item.title=e.target.value;
+tr.querySelector(".level-select").onchange=e=>item.level=Number(e.target.value);
+tr.querySelector(".up-btn").onclick=()=>moveTOC(index,-1);
+tr.querySelector(".down-btn").onclick=()=>moveTOC(index,1);
+tr.querySelector(".delete-btn").onclick=()=>{state.toc.splice(index,1);renderTOC();};
+tr.addEventListener("dragstart",e=>{
+e.dataTransfer.setData("text/plain",String(index));
+tr.classList.add("dragging");
+});
+tr.addEventListener("dragend",()=>tr.classList.remove("dragging"));
+tr.addEventListener("dragover",e=>e.preventDefault());
+tr.addEventListener("drop",e=>{
+e.preventDefault();
+const from=Number(e.dataTransfer.getData("text/plain"));
+if(from===index)return;
+const [item]=state.toc.splice(from,1);
+state.toc.splice(index,0,item);
+renderTOC();
+});
+body.appendChild(tr);
+});
+}
+function moveTOC(index,delta){
+const to=index+delta;
+if(to<0||to>=state.toc.length)return;
+[state.toc[index],state.toc[to]]=[state.toc[to],state.toc[index]];
+renderTOC();
+}
+function addCustomTOC(){
+state.toc.push({
+id:makeId(),
+bookIndex:0,
+sourcePath:null,
+title:"新的目錄項目",
+level:1,
+include:true,
+custom:true
+});
+renderTOC();
+}
+function autoLevel(){
+let lastTop=null;
+state.toc.forEach((item,i)=>{
+if(i===0){item.level=1;lastTop=item;return;}
+if(item.custom&&/^(第\s*\d+\s*(卷|篇)|卷\s*\d+|Volume\s*\d+|Book\s*\d+)/i.test(item.title)){
+item.level=1;
+lastTop=item;
+return;
+}
+if(/^第\s*\d+\s*(卷|篇)|^卷\s*\d+|^(Volume|Book)\s*\d+/i.test(item.title)){
+item.level=1;
+lastTop=item;
+}else{
+item.level=2;
+}
+});
+renderTOC();
+}
+function validateSettings(showAlert=true){
+const errors=[];
+const title=$("#bookTitle").value.trim();
+const selected=state.toc.filter(x=>x.include!==false);
+if(!state.books.length)errors.push("尚未加入 EPUB。");
+if(!title)errors.push("請輸入合併後書名。");
+if(!selected.length)errors.push("至少需要一個目錄項目。");
+selected.forEach((item,i)=>{
+if(!item.title.trim())errors.push(`第 ${i+1} 個目錄項目沒有名稱。`);
+if(item.level<1||item.level>6)errors.push(`目錄「${item.title}」層級無效。`);
+});
+for(let i=1;i<selected.length;i++){
+if(selected[i].level>selected[i-1].level+1)errors.push(`目錄「${selected[i].title}」不能從第 ${selected[i-1].level} 層直接跳到第 ${selected[i].level} 層。`);
+}
+if(errors.length){
+if(showAlert)alert(errors.join("\n"));
+return false;
+}
+if(showAlert)alert("設定檢查通過，可以建立 EPUB。");
+return true;
+}
+function getMediaType(path){
+const ext=path.split(".").pop().toLowerCase();
+const map={
+xhtml:"application/xhtml+xml",
+html:"application/xhtml+xml",
+htm:"application/xhtml+xml",
+css:"text/css",
+jpg:"image/jpeg",
+jpeg:"image/jpeg",
+png:"image/png",
+gif:"image/gif",
+webp:"image/webp",
+svg:"image/svg+xml",
+avif:"image/avif",
+woff:"font/woff",
+woff2:"font/woff2",
+ttf:"font/ttf",
+otf:"font/otf",
+eot:"application/vnd.ms-fontobject",
+mp3:"audio/mpeg",
+m4a:"audio/mp4",
+mp4:"video/mp4",
+webm:"video/webm",
+ogg:"audio/ogg",
+oga:"audio/ogg",
+wav:"audio/wav",
+json:"application/json",
+js:"text/javascript"
+};
+return map[ext]||"application/octet-stream";
+}
+function rewriteResourceReferences(text,oldPath,newPath,resourceMap,isCSS=false){
+if(isCSS){
+return text.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/gi,(match,q,url)=>{
+if(!url||url.startsWith("#")||url.startsWith("data:")||/^[a-z][a-z0-9+.-]*:/i.test(url))return match;
+const target=resourceMap.get(resolvePath(oldPath,url));
+if(!target)return match;
+return `url("${relativePath(newPath,target)}")`;
+});
+}
+let result=text;
+result=result.replace(/(\s(?:src|href|poster|xlink:href)\s*=\s*)(["'])([^"']+)\2/gi,(match,prefix,q,url)=>{
+if(!url||url.startsWith("#")||url.startsWith("data:")||/^[a-z][a-z0-9+.-]*:/i.test(url))return match;
+const fragment=getFragment(url);
+const target=resourceMap.get(resolvePath(oldPath,stripFragment(url)));
+if(!target)return match;
+return prefix+q+relativePath(newPath,target)+fragment+q;
+});
+result=result.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/gi,(match,q,url)=>{
+if(!url||url.startsWith("#")||url.startsWith("data:")||/^[a-z][a-z0-9+.-]*:/i.test(url))return match;
+const target=resourceMap.get(resolvePath(oldPath,url));
+return target?`url("${relativePath(newPath,target)}")`:match;
+});
+return result;
+}
+async function copyBookResources(out,book,bookNumber,resourceMap){
+const prefix=`OEBPS/books/book${bookNumber}/`;
+const entries=Object.values(book.zip.files).filter(x=>!x.dir);
+for(const entry of entries){
+const oldPath=normalizePath(entry.name);
+if(oldPath==="mimetype"||oldPath==="META-INF/container.xml")continue;
+resourceMap.set(`${bookNumber}:${oldPath}`,prefix+oldPath);
+}
+for(const entry of entries){
+const oldPath=normalizePath(entry.name);
+if(oldPath==="mimetype"||oldPath==="META-INF/container.xml")continue;
+const newPath=resourceMap.get(`${bookNumber}:${oldPath}`);
+if(!newPath)continue;
+const isXHTML=/\.(xhtml?|html?)$/i.test(oldPath);
+const isCSS=/\.css$/i.test(oldPath);
+if(isXHTML||isCSS){
+const text=await entry.async("string");
+const mapped=new Map();
+for(const [key,target] of resourceMap.entries()){
+if(key.startsWith(bookNumber+":"))mapped.set(key.slice(String(bookNumber).length+1),target);
+}
+const rewritten=rewriteResourceReferences(text,oldPath,newPath,mapped,isCSS);
+out.file(newPath,rewritten);
+}else{
+out.file(newPath,await entry.async("uint8array"));
+}
+}
+}
+function createCustomPage(title){
+return `<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<title>${xmlEscape(title)}</title>
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+</head>
+<body>
+<h1>${xmlEscape(title)}</h1>
+</body>
+</html>`;
+}
+function createCoverPage(title,coverImagePath){
+return `<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<title>${xmlEscape(title)}</title>
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+</head>
+<body style="margin:0;padding:0;text-align:center;">
+<div style="margin:0;padding:0;text-align:center;">
+<img src="${xmlEscape(relativePath("OEBPS/cover.xhtml",coverImagePath))}" alt="${xmlEscape(title)}" style="max-width:100%;max-height:100vh;"/>
+</div>
+</body>
+</html>`;
+}
+function buildNavTree(items){
+function levelHTML(start,level){
+let html="";
+let i=start;
+while(i<items.length){
+const item=items[i];
+if(item.level<level)break;
+if(item.level>level){i++;continue;}
+html+="<li>";
+if(item.href)html+=`<a href="${xmlEscape(item.href)}">${xmlEscape(item.title)}</a>`;
+else html+=`<span>${xmlEscape(item.title)}</span>`;
+i++;
+if(i<items.length&&items[i].level>level){
+const child=levelHTML(i,level+1);
+html+=`<ol>${child.html}</ol>`;
+i=child.index;
+}
+html+="</li>";
+}
+return{html,index:i};
+}
+return levelHTML(0,1).html;
+}
+function buildNavXHTML(items,title){
+return `<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="zh-Hant">
+<head>
+<meta charset="utf-8"/>
+<title>${xmlEscape(title)}</title>
+<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+</head>
+<body>
+<nav epub:type="toc" id="toc">
+<h1>${xmlEscape(title)}</h1>
+<ol>${buildNavTree(items)}</ol>
+</nav>
+</body>
+</html>`;
+}
+function buildNCX(items,title,uid){
+let playOrder=0;
+function levelXML(start,level){
+let xml="";
+let i=start;
+while(i<items.length){
+const item=items[i];
+if(item.level<level)break;
+if(item.level>level){i++;continue;}
+playOrder++;
+const order=playOrder;
+i++;
+let nested="";
+if(i<items.length&&items[i].level>level){
+const child=levelXML(i,level+1);
+nested=child.xml;
+i=child.index;
+}
+xml+=`<navPoint id="navPoint-${order}" playOrder="${order}"><navLabel><text>${xmlEscape(item.title)}</text></navLabel><content src="${xmlEscape(item.href)}"/>${nested}</navPoint>`;
+}
+return{xml,index:i};
+}
+const result=levelXML(0,1);
+return `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+<head>
+<meta name="dtb:uid" content="${xmlEscape(uid)}"/>
+<meta name="dtb:depth" content="6"/>
+<meta name="dtb:totalPageCount" content="0"/>
+<meta name="dtb:maxPageNumber" content="0"/>
+</head>
+<docTitle><text>${xmlEscape(title)}</text></docTitle>
+<navMap>${result.xml}</navMap>
+</ncx>`;
+}
+function buildOPF(title,language,creator,uid,manifest,spine,coverId){
+const manifestXML=manifest.map(item=>`<item id="${xmlEscape(item.id)}" href="${xmlEscape(item.href)}" media-type="${xmlEscape(item.mediaType)}"${item.properties?` properties="${xmlEscape(item.properties)}"`:""}/>`).join("");
+const spineXML=spine.map(id=>`<itemref idref="${xmlEscape(id)}"/>`).join("");
+return `<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="book-id" prefix="dcterms: http://purl.org/dc/terms/">
+<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dc:identifier id="book-id">${xmlEscape(uid)}</dc:identifier>
+<dc:title>${xmlEscape(title)}</dc:title>
+<dc:language>${xmlEscape(language||"zh-TW")}</dc:language>
+${creator?`<dc:creator>${xmlEscape(creator)}</dc:creator>`:""}
+<meta property="dcterms:modified">${new Date().toISOString().replace(/\.\d{3}Z$/,"Z")}</meta>
+${coverId?`<meta name="cover" content="${xmlEscape(coverId)}"/>`:""}
+</metadata>
+<manifest>${manifestXML}</manifest>
+<spine toc="ncx">${spineXML}</spine>
+</package>`;
+}
+function sanitizeTitle(title){
+return String(title||"").replace(/[\\/:*?"<>|]/g,"_").replace(/\s+/g," ").trim()||"merged";
+}
+async function buildEPUB(){
+if(!validateSettings())return;
+clearStatus();
+$("#buildBtn").disabled=true;
+try{
+const title=$("#bookTitle").value.trim();
+const outputName=sanitizeTitle($("#outputFileName").value.trim().replace(/\.epub$/i,""))+".epub";
+const selected=state.toc.filter(x=>x.include!==false).map(x=>({...x}));
+const out=new JSZip();
+out.file("mimetype","application/epub+zip",{compression:"STORE"});
+out.file("META-INF/container.xml",`<?xml version="1.0" encoding="UTF-8"?>
+<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+<rootfiles>
+<rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
+</rootfiles>
+</container>`);
+setProgress(5,"建立 EPUB 結構...");
+const resourceMap=new Map();
+for(let i=0;i<state.books.length;i++){
+setProgress(8+Math.floor((i/state.books.length)*30),`複製第 ${i+1} 本 EPUB：${state.books[i].file.name}`);
+await copyBookResources(out,state.books[i],i+1,resourceMap);
+}
+const manifest=[];
+const spine=[];
+const added=new Set();
+let idCounter=1;
+function addManifest(href,mediaType,properties=""){
+if(added.has(href))return added.get(href);
+const id="item"+idCounter++;
+const obj={id,href,mediaType,properties};
+manifest.push(obj);
+added.add(href);
+return obj;
+}
+let coverImagePath=null;
+if(state.books[0]?.cover){
+const key=`1:${state.books[0].cover.path}`;
+coverImagePath=resourceMap.get(key)||null;
+}
+if(coverImagePath){
+const coverType=state.books[0].cover.mediaType||getMediaType(coverImagePath);
+addManifest(coverImagePath.replace(/^OEBPS\//,""),coverType,"cover-image");
+out.file("OEBPS/cover.xhtml",createCoverPage(title,coverImagePath));
+const coverPage=addManifest("cover.xhtml","application/xhtml+xml");
+spine.push(coverPage.id);
+logStatus("✓ 已使用第一本 EPUB 的封面");
+}else{
+logStatus("⚠ 第一本文 EPUB 沒有找到可辨識的封面");
+}
+for(const item of selected){
+if(item.custom){
+const customPath=`OEBPS/custom/${item.id}.xhtml`;
+out.file(customPath,createCustomPage(item.title));
+const manifestItem=addManifest(`custom/${item.id}.xhtml`,"application/xhtml+xml");
+item.href=relativePath("OEBPS/nav.xhtml",customPath);
+spine.push(manifestItem.id);
+continue;
+}
+const bookNumber=item.bookIndex+1;
+const newPath=resourceMap.get(`${bookNumber}:${item.sourcePath}`);
+if(!newPath){
+logStatus(`⚠ 找不到章節檔案：${item.title}`);
+continue;
+}
+const href=newPath.replace(/^OEBPS\//,"");
+item.href=relativePath("OEBPS/nav.xhtml",newPath);
+const manifestItem=addManifest(href,getMediaType(newPath));
+spine.push(manifestItem.id);
+}
+if($("#includeCoverInToc").checked&&coverImagePath){
+const coverItem={
+id:makeId(),
+title:"封面",
+level:1,
+href:"cover.xhtml",
+include:true,
+custom:true
+};
+selected.unshift(coverItem);
+}
+for(const path of Object.keys(out.files)){
+if(!path.startsWith("OEBPS/books/"))continue;
+if(path.endsWith("/"))continue;
+const href=path.replace(/^OEBPS\//,"");
+addManifest(href,getMediaType(path));
+}
+const navManifest=addManifest("nav.xhtml","application/xhtml+xml","nav");
+const ncxManifest=addManifest("toc.ncx","application/x-dtbncx+xml");
+const uid="urn:uuid:"+makeId();
+out.file("OEBPS/nav.xhtml",buildNavXHTML(selected,title));
+out.file("OEBPS/toc.ncx",buildNCX(selected,title,uid));
+const opf=buildOPF(title,state.books[0]?.language||"zh-TW",state.books[0]?.creator||"",uid,manifest,spine,"cover-image");
+out.file("OEBPS/content.opf",opf);
+setProgress(75,"正在壓縮 EPUB...");
+const blob=await out.generateAsync({
+type:"blob",
+mimeType:"application/epub+zip",
+compression:"DEFLATE",
+compressionOptions:{level:6}
+},metadata=>{
+const percent=75+Math.floor(metadata.percent*.24);
+setProgress(percent,"正在壓縮 EPUB...");
+});
+setProgress(100,"完成");
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
+a.href=url;
+a.download=outputName;
+document.body.appendChild(a);
+a.click();
+a.remove();
+setTimeout(()=>URL.revokeObjectURL(url),10000);
+logStatus(`✓ 合併完成：${outputName}`);
+logStatus(`✓ 目錄項目：${selected.length}`);
+logStatus(`✓ Spine 項目：${spine.length}`);
+logStatus(`✓ 檔案大小：${(blob.size/1024/1024).toFixed(2)} MB`);
+logStatus("✓ 已建立 EPUB 3 nav.xhtml");
+logStatus("✓ 已建立 EPUB 2 toc.ncx");
+logStatus("✓ 已建立 Kindle 友善 content.opf");
+}catch(e){
+console.error(e);
+logStatus("✗ 建立 EPUB 失敗："+e.message);
+alert("建立 EPUB 失敗：\n"+e.message);
+}finally{
+$("#buildBtn").disabled=false;
+}
+}
+function showSections(){
+const has=state.books.length>0;
+$("#booksSection").classList.toggle("d-none",!has);
+$("#settingsSection").classList.toggle("d-none",!has);
+$("#tocSection").classList.toggle("d-none",!has);
+$("#buildSection").classList.toggle("d-none",!has);
+}
+$("#selectFilesBtn").onclick=e=>{
+e.stopPropagation();
+$("#fileInput").click();
+};
+$("#fileInput").addEventListener("change",e=>{
+addFiles(e.target.files);
+e.target.value="";
+});
+$("#dropZone").addEventListener("click",e=>{
+if(e.target.id!=="selectFilesBtn")$("#fileInput").click();
+});
+$("#dropZone").addEventListener("dragover",e=>{
+e.preventDefault();
+$("#dropZone").classList.add("dragover");
+});
+$("#dropZone").addEventListener("dragleave",()=>{
+$("#dropZone").classList.remove("dragover");
+});
+$("#dropZone").addEventListener("drop",e=>{
+e.preventDefault();
+$("#dropZone").classList.remove("dragover");
+addFiles(e.dataTransfer.files);
+});
+$("#clearBooksBtn").onclick=()=>{
+if(!confirm("確定要清除所有 EPUB？"))return;
+state.books=[];
+state.toc=[];
+$("#bookTitle").value="";
+$("#outputFileName").value="";
+renderBooks();
+renderTOC();
+showSections();
+clearStatus();
+};
+$("#addTocItemBtn").onclick=addCustomTOC;
+$("#autoLevelBtn").onclick=autoLevel;
+$("#validateBtn").onclick=()=>validateSettings(true);
+$("#buildBtn").onclick=buildEPUB;
+$("#bookTitle").addEventListener("input",()=>{
+if(!$("#outputFileName").dataset.manual)$("#outputFileName").value=sanitizeTitle($("#bookTitle").value);
+});
+$("#outputFileName").addEventListener("input",()=>$("#outputFileName").dataset.manual="1");
+showSections();
+</script>
+</body>
+</html>
