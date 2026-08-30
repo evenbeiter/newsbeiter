@@ -117,7 +117,7 @@ body{background:#f5f6f8}
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
 "use strict";
-const state={books:[],toc:[]};
+const state={books:[],toc:[],chapterContents:new Map()};
 const $=s=>document.querySelector(s);
 const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const xmlEscape=s=>String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&apos;");
@@ -270,16 +270,21 @@ const item=spineItems[i];
 const path=joinPath(opfDir,item.href);
 if(!zip.file(path))continue;
 let chapterTitle=navTitles.get(path)||"";
-if(!chapterTitle){
+let chapterText="";
 try{
-const text=await readZipText(zip,path);
-const match=text.match(/<title[^>]*>([\s\S]*?)<\/title>/i)||text.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)||text.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
+chapterText=await readZipText(zip,path);
+}catch(e){
+chapterText="";
+}
+if(!chapterTitle){
+const match=chapterText.match(/<title[^>]*>([\s\S]*?)<\/title>/i)||chapterText.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i)||chapterText.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
 if(match)chapterTitle=match[1].replace(/<[^>]+>/g,"").replace(/\s+/g," ").trim();
-}catch(e){}
 }
 if(!chapterTitle)chapterTitle=`第 ${i+1} 章`;
+const chapterId=makeId();
+state.chapterContents.set(chapterId,chapterText);
 chapters.push({
-id:makeId(),
+id:chapterId,
 bookIndex:index,
 sourcePath:path,
 title:chapterTitle,
@@ -356,7 +361,8 @@ tr.className="toc-row";
 tr.draggable=true;
 tr.dataset.index=index;
 const source=item.custom?"自訂項目":state.books[item.bookIndex]?.title||"";
-tr.innerHTML=`<td class="text-center toc-number">${index+1}</td><td class="text-center"><input class="form-check-input include-check" type="checkbox" ${item.include!==false?"checked":""}></td><td><input class="form-control form-control-sm toc-title" value="${escapeHTML(item.title)}"></td><td><select class="form-select form-select-sm level-select">${[1,2,3,4,5,6].map(n=>`<option value="${n}" ${item.level===n?"selected":""}>${n} 層</option>`).join("")}</select></td><td class="small-muted">${escapeHTML(source)}</td><td><div class="btn-group btn-group-sm"><button class="btn btn-outline-secondary up-btn">↑</button><button class="btn btn-outline-secondary down-btn">↓</button><button class="btn btn-outline-danger delete-btn">×</button></div></td>`;
+tr.innerHTML=`<td class="text-center toc-number">${index+1}</td><td class="text-center"><input class="form-check-input include-check" type="checkbox" ${item.include!==false?"checked":""}></td><td><input class="form-control form-control-sm toc-title" value="${escapeHTML(item.title)}"></td><td><select class="form-select form-select-sm level-select">${[1,2,3,4,5,6].map(n=>`<option value="${n}" ${item.level===n?"selected":""}>${n} 層</option>`).join("")}</select></td><td class="small-muted">${escapeHTML(source)}</td><td><div class="btn-group btn-group-sm"><button class="btn btn-outline-primary content-btn" type="button">內容</button><button class="btn btn-outline-secondary up-btn" type="button">↑</button><button class="btn btn-outline-secondary down-btn" type="button">↓</button><button class="btn btn-outline-danger delete-btn" type="button">×</button></div></td>`;
+tr.querySelector(".content-btn").onclick=()=>toggleChapterEditor(tr,item);
 tr.querySelector(".include-check").onchange=e=>item.include=e.target.checked;
 tr.querySelector(".toc-title").oninput=e=>item.title=e.target.value;
 tr.querySelector(".level-select").onchange=e=>item.level=Number(e.target.value);
@@ -380,6 +386,28 @@ renderTOC();
 body.appendChild(tr);
 });
 }
+function toggleChapterEditor(tr,item){
+const old=tr.nextElementSibling;
+if(old?.classList.contains("chapter-editor-row")){
+old.remove();
+return;
+}
+const editorRow=document.createElement("tr");
+editorRow.className="chapter-editor-row";
+const td=document.createElement("td");
+td.colSpan=6;
+const content=state.chapterContents.get(item.id)||"";
+td.innerHTML=`<div class="card border-0 bg-light"><div class="card-body"><div class="d-flex justify-content-between align-items-center mb-2"><strong>編輯章節內容</strong><span class="small-muted">${item.custom?"自訂目錄項目":"原始 XHTML/XML"}</span></div><textarea class="form-control font-monospace chapter-editor" rows="18" spellcheck="false"></textarea><div class="d-flex justify-content-between align-items-center mt-2"><span class="small-muted">修改後會直接用於重新產生 EPUB。</span><button type="button" class="btn btn-sm btn-primary save-content-btn">套用修改</button></div></div></div>`;
+editorRow.appendChild(td);
+tr.after(editorRow);
+const textarea=td.querySelector(".chapter-editor");
+textarea.value=content;
+td.querySelector(".save-content-btn").onclick=()=>{
+state.chapterContents.set(item.id,textarea.value);
+textarea.classList.add("border-success");
+setTimeout(()=>textarea.classList.remove("border-success"),800);
+};
+}
 function moveTOC(index,delta){
 const to=index+delta;
 if(to<0||to>=state.toc.length)return;
@@ -387,8 +415,9 @@ if(to<0||to>=state.toc.length)return;
 renderTOC();
 }
 function addCustomTOC(){
+const id=makeId();
 state.toc.push({
-id:makeId(),
+id,
 bookIndex:0,
 sourcePath:null,
 title:"新的目錄項目",
@@ -396,6 +425,7 @@ level:1,
 include:true,
 custom:true
 });
+state.chapterContents.set(id,createCustomPage("新的目錄項目"));
 renderTOC();
 }
 function autoLevel(){
@@ -519,7 +549,6 @@ return map;
 }
 async function copyBookResources(out,book,bookNumber,resourceMap){
 const entries=Object.values(book.zip.files).filter(entry=>!entry.dir);
-const prefix=`OEBPS/books/book${bookNumber}/`;
 for(const entry of entries){
 const originalPath=normalizePath(entry.name);
 if(originalPath==="mimetype"||originalPath==="META-INF/container.xml")continue;
@@ -528,9 +557,13 @@ if(!newPath)continue;
 const isXHTML=/\.(xhtml?|html?)$/i.test(originalPath);
 const isCSS=/\.css$/i.test(originalPath);
 if(isXHTML){
-const text=await entry.async("string");
-const rewritten=rewriteXHTMLResources(text,originalPath,newPath,resourceMap);
-out.file(newPath,rewritten);
+let text=await entry.async("string");
+const chapter=book.chapters.find(ch=>ch.sourcePath===originalPath);
+if(chapter&&state.chapterContents.has(chapter.id)){
+text=state.chapterContents.get(chapter.id);
+}
+text=rewriteXHTMLResources(text,originalPath,newPath,resourceMap);
+out.file(newPath,text);
 }else if(isCSS){
 const text=await entry.async("string");
 const rewritten=rewriteCSSResources(text,originalPath,newPath,resourceMap);
@@ -720,7 +753,8 @@ logStatus("⚠ 第一本文 EPUB 沒有找到可辨識的封面");
 for(const item of selected){
 if(item.custom){
 const customPath=`OEBPS/custom/${item.id}.xhtml`;
-out.file(customPath,createCustomPage(item.title));
+const customContent=state.chapterContents.get(item.id)||createCustomPage(item.title);
+out.file(customPath,customContent);
 const manifestItem=addManifest(`custom/${item.id}.xhtml`,"application/xhtml+xml");
 item.href=relativePath("OEBPS/nav.xhtml",customPath);
 spine.push(manifestItem.id);
