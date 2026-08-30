@@ -289,7 +289,8 @@ bookIndex:index,
 sourcePath:path,
 title:chapterTitle,
 level:1,
-include:true,
+includeInTOC:true,
+removed:false,
 custom:false
 });
 }
@@ -361,9 +362,9 @@ tr.className="toc-row";
 tr.draggable=true;
 tr.dataset.index=index;
 const source=item.custom?"自訂項目":state.books[item.bookIndex]?.title||"";
-tr.innerHTML=`<td class="text-center toc-number">${index+1}</td><td class="text-center"><input class="form-check-input include-check" type="checkbox" ${item.include!==false?"checked":""}></td><td><input class="form-control form-control-sm toc-title" value="${escapeHTML(item.title)}"></td><td><select class="form-select form-select-sm level-select">${[1,2,3,4,5,6].map(n=>`<option value="${n}" ${item.level===n?"selected":""}>${n} 層</option>`).join("")}</select></td><td class="small-muted">${escapeHTML(source)}</td><td><div class="btn-group btn-group-sm"><button class="btn btn-outline-primary content-btn" type="button">內容</button><button class="btn btn-outline-secondary up-btn" type="button">↑</button><button class="btn btn-outline-secondary down-btn" type="button">↓</button><button class="btn btn-outline-danger delete-btn" type="button">×</button></div></td>`;
+tr.innerHTML=`<td class="text-center toc-number">${index+1}</td><td class="text-center"><input class="form-check-input toc-check" type="checkbox" ${item.includeInTOC!==false?"checked":""}></td><td><input class="form-control form-control-sm toc-title" value="${escapeHTML(item.title)}"></td><td><select class="form-select form-select-sm level-select">${[1,2,3,4,5,6].map(n=>`<option value="${n}" ${item.level===n?"selected":""}>${n} 層</option>`).join("")}</select></td><td class="small-muted">${escapeHTML(source)}</td><td><div class="btn-group btn-group-sm"><button class="btn btn-outline-primary content-btn" type="button">內容</button><button class="btn btn-outline-secondary up-btn" type="button">↑</button><button class="btn btn-outline-secondary down-btn" type="button">↓</button><button class="btn btn-outline-danger delete-btn" type="button">×</button></div></td>`;
 tr.querySelector(".content-btn").onclick=()=>toggleChapterEditor(tr,item);
-tr.querySelector(".include-check").onchange=e=>item.include=e.target.checked;
+tr.querySelector(".toc-check").onchange=e=>item.includeInTOC=e.target.checked;
 // tr.querySelector(".toc-title").oninput=e=>{item.title=e.target.value;syncTOCTitleToXHTML(item,e.target.value)};
 const titleInput=tr.querySelector(".toc-title");
 titleInput.oninput=e=>{
@@ -376,7 +377,16 @@ syncTOCTitleToXHTML(item,e.target.value);
 tr.querySelector(".level-select").onchange=e=>item.level=Number(e.target.value);
 tr.querySelector(".up-btn").onclick=()=>moveTOC(index,-1);
 tr.querySelector(".down-btn").onclick=()=>moveTOC(index,1);
-tr.querySelector(".delete-btn").onclick=()=>{state.toc.splice(index,1);renderTOC();};
+// tr.querySelector(".delete-btn").onclick=()=>{state.toc.splice(index,1);renderTOC();};
+// tr.querySelector(".delete-btn").onclick=()=>{item.removed=true;state.toc.splice(index,1);renderTOC()};
+tr.querySelector(".delete-btn").onclick=()=>{
+item.removed=true;
+const book=state.books[item.bookIndex];
+const chapter=book?.chapters.find(ch=>ch.id===item.id);
+if(chapter)chapter.removed=true;
+state.toc.splice(index,1);
+renderTOC();
+};
 tr.addEventListener("dragstart",e=>{
 e.dataTransfer.setData("text/plain",String(index));
 tr.classList.add("dragging");
@@ -475,7 +485,7 @@ renderTOC();
 function validateSettings(showAlert=true){
 const errors=[];
 const title=$("#bookTitle").value.trim();
-const selected=state.toc.filter(x=>x.include!==false);
+const selected=state.toc.filter(item=>item.includeInTOC!==false&&!item.removed);
 if(!state.books.length)errors.push("尚未加入 EPUB。");
 if(!title)errors.push("請輸入合併後書名。");
 if(!selected.length)errors.push("至少需要一個目錄項目。");
@@ -585,6 +595,7 @@ const isCSS=/\.css$/i.test(originalPath);
 if(isXHTML){
 let text=await entry.async("string");
 const chapter=book.chapters.find(ch=>ch.sourcePath===originalPath);
+if(chapter?.removed)continue;
 if(chapter&&state.chapterContents.has(chapter.id)){
 text=state.chapterContents.get(chapter.id);
 }
@@ -732,7 +743,7 @@ $("#buildBtn").disabled=true;
 try{
 const title=$("#bookTitle").value.trim();
 const outputName=sanitizeTitle($("#outputFileName").value.trim().replace(/\.epub$/i,""))+".epub";
-const selected=state.toc.filter(x=>x.include!==false).map(x=>({...x}));
+const selected=state.toc.filter(item=>item.includeInTOC!==false&&!item.removed).map(x=>({...x}));
 const out=new JSZip();
 out.file("mimetype","application/epub+zip",{compression:"STORE"});
 out.file("META-INF/container.xml",`<?xml version="1.0" encoding="UTF-8"?>
@@ -787,16 +798,25 @@ spine.push(manifestItem.id);
 continue;
 }
 const bookNumber=item.bookIndex+1;
+
+if(item.removed)continue;
 const resourceMap=bookResourceMaps.get(item.bookIndex);
 const newPath=resourceMap?.get(item.sourcePath);
-if(!newPath){
-logStatus(`⚠ 找不到章節檔案：${item.title}`);
-continue;
-}
+if(!newPath)continue;
 const href=newPath.replace(/^OEBPS\//,"");
-item.href=relativePath("OEBPS/nav.xhtml",newPath);
-const manifestItem=addManifest(href,getMediaType(newPath));
+const manifestItem=addManifest(href,"application/xhtml+xml");
 spine.push(manifestItem.id);
+
+// const resourceMap=bookResourceMaps.get(item.bookIndex);
+// const newPath=resourceMap?.get(item.sourcePath);
+// if(!newPath){
+// logStatus(`⚠ 找不到章節檔案：${item.title}`);
+// continue;
+// }
+// const href=newPath.replace(/^OEBPS\//,"");
+// item.href=relativePath("OEBPS/nav.xhtml",newPath);
+// const manifestItem=addManifest(href,getMediaType(newPath));
+// spine.push(manifestItem.id);
 }
 if($("#includeCoverInToc").checked&&coverImagePath){
 const coverItem={
