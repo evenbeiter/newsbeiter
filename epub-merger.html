@@ -468,52 +468,72 @@ js:"text/javascript"
 };
 return map[ext]||"application/octet-stream";
 }
-function rewriteResourceReferences(text,oldPath,newPath,resourceMap,isCSS=false){
-if(isCSS){
-return text.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/gi,(match,q,url)=>{
-if(!url||url.startsWith("#")||url.startsWith("data:")||/^[a-z][a-z0-9+.-]*:/i.test(url))return match;
-const target=resourceMap.get(resolvePath(oldPath,url));
-if(!target)return match;
-return `url("${relativePath(newPath,target)}")`;
-});
+function isExternalResource(url){
+return !url||url.startsWith("#")||url.startsWith("data:")||url.startsWith("blob:")||/^[a-z][a-z0-9+.-]*:/i.test(url)||url.startsWith("//");
 }
+function resolveOriginalResourcePath(basePath,url){
+return resolvePath(basePath,stripFragment(url));
+}
+function resolveResourcePath(resourceMap,basePath,url,newPath){
+if(isExternalResource(url))return null;
+const originalPath=resolveOriginalResourcePath(basePath,url);
+const targetPath=resourceMap.get(originalPath);
+if(!targetPath)return null;
+return relativePath(newPath,targetPath)+getFragment(url);
+}
+function rewriteXHTMLResources(text,originalPath,newPath,resourceMap){
 let result=text;
-result=result.replace(/(\s(?:src|href|poster|xlink:href)\s*=\s*)(["'])([^"']+)\2/gi,(match,prefix,q,url)=>{
-if(!url||url.startsWith("#")||url.startsWith("data:")||/^[a-z][a-z0-9+.-]*:/i.test(url))return match;
-const fragment=getFragment(url);
-const target=resourceMap.get(resolvePath(oldPath,stripFragment(url)));
-if(!target)return match;
-return prefix+q+relativePath(newPath,target)+fragment+q;
+result=result.replace(/(\s(?:src|href|poster|xlink:href)\s*=\s*)(["'])([^"']+)\2/gi,(match,prefix,quote,url)=>{
+const rewritten=resolveResourcePath(resourceMap,originalPath,url,newPath);
+return rewritten===null?match:prefix+quote+rewritten+quote;
 });
-result=result.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/gi,(match,q,url)=>{
-if(!url||url.startsWith("#")||url.startsWith("data:")||/^[a-z][a-z0-9+.-]*:/i.test(url))return match;
-const target=resourceMap.get(resolvePath(oldPath,url));
-return target?`url("${relativePath(newPath,target)}")`:match;
+result=result.replace(/(\s(?:src|href)\s*=\s*)([^"'=\s>]+)(?=\s|>)/gi,(match,prefix,url)=>{
+const rewritten=resolveResourcePath(resourceMap,originalPath,url,newPath);
+return rewritten===null?match:prefix+rewritten;
+});
+result=result.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/gi,(match,quote,url)=>{
+if(isExternalResource(url))return match;
+const rewritten=resolveResourcePath(resourceMap,originalPath,url,newPath);
+return rewritten===null?match:`url("${rewritten}")`;
 });
 return result;
 }
-async function copyBookResources(out,book,bookNumber,resourceMap){
+function rewriteCSSResources(text,originalPath,newPath,resourceMap){
+return text.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/gi,(match,quote,url)=>{
+if(isExternalResource(url))return match;
+const rewritten=resolveResourcePath(resourceMap,originalPath,url,newPath);
+return rewritten===null?match:`url("${rewritten}")`;
+});
+}
+async function buildResourceMap(book,bookNumber){
+const map=new Map();
 const prefix=`OEBPS/books/book${bookNumber}/`;
-const entries=Object.values(book.zip.files).filter(x=>!x.dir);
+const entries=Object.values(book.zip.files).filter(entry=>!entry.dir);
 for(const entry of entries){
-const oldPath=normalizePath(entry.name);
-if(oldPath==="mimetype"||oldPath==="META-INF/container.xml")continue;
-resourceMap.set(`${bookNumber}:${oldPath}`,prefix+oldPath);
+const originalPath=normalizePath(entry.name);
+if(originalPath==="mimetype"||originalPath==="META-INF/container.xml")continue;
+const newPath=prefix+originalPath;
+map.set(originalPath,newPath);
 }
+return map;
+}
+async function copyBookResources(out,book,bookNumber,resourceMap){
+const entries=Object.values(book.zip.files).filter(entry=>!entry.dir);
+const prefix=`OEBPS/books/book${bookNumber}/`;
 for(const entry of entries){
-const oldPath=normalizePath(entry.name);
-if(oldPath==="mimetype"||oldPath==="META-INF/container.xml")continue;
-const newPath=resourceMap.get(`${bookNumber}:${oldPath}`);
+const originalPath=normalizePath(entry.name);
+if(originalPath==="mimetype"||originalPath==="META-INF/container.xml")continue;
+const newPath=resourceMap.get(originalPath);
 if(!newPath)continue;
-const isXHTML=/\.(xhtml?|html?)$/i.test(oldPath);
-const isCSS=/\.css$/i.test(oldPath);
-if(isXHTML||isCSS){
+const isXHTML=/\.(xhtml?|html?)$/i.test(originalPath);
+const isCSS=/\.css$/i.test(originalPath);
+if(isXHTML){
 const text=await entry.async("string");
-const mapped=new Map();
-for(const [key,target] of resourceMap.entries()){
-if(key.startsWith(bookNumber+":"))mapped.set(key.slice(String(bookNumber).length+1),target);
-}
-const rewritten=rewriteResourceReferences(text,oldPath,newPath,mapped,isCSS);
+const rewritten=rewriteXHTMLResources(text,originalPath,newPath,resourceMap);
+out.file(newPath,rewritten);
+}else if(isCSS){
+const text=await entry.async("string");
+const rewritten=rewriteCSSResources(text,originalPath,newPath,resourceMap);
 out.file(newPath,rewritten);
 }else{
 out.file(newPath,await entry.async("uint8array"));
@@ -663,27 +683,29 @@ out.file("META-INF/container.xml",`<?xml version="1.0" encoding="UTF-8"?>
 </rootfiles>
 </container>`);
 setProgress(5,"建立 EPUB 結構...");
-const resourceMap=new Map();
+const bookResourceMaps=new Map();
 for(let i=0;i<state.books.length;i++){
-setProgress(8+Math.floor((i/state.books.length)*30),`複製第 ${i+1} 本 EPUB：${state.books[i].file.name}`);
+setProgress(8+Math.floor((i/state.books.length)*30),`建立第 ${i+1} 本 EPUB 資源路徑：${state.books[i].file.name}`);
+const resourceMap=await buildResourceMap(state.books[i],i+1);
+bookResourceMaps.set(i,resourceMap);
 await copyBookResources(out,state.books[i],i+1,resourceMap);
 }
 const manifest=[];
 const spine=[];
-const added=new Set();
+const added=new Map();
 let idCounter=1;
 function addManifest(href,mediaType,properties=""){
 if(added.has(href))return added.get(href);
 const id="item"+idCounter++;
 const obj={id,href,mediaType,properties};
 manifest.push(obj);
-added.add(href);
+added.set(href,obj);
 return obj;
 }
 let coverImagePath=null;
 if(state.books[0]?.cover){
-const key=`1:${state.books[0].cover.path}`;
-coverImagePath=resourceMap.get(key)||null;
+const firstBookResourceMap=bookResourceMaps.get(0);
+coverImagePath=firstBookResourceMap?.get(state.books[0].cover.path)||null;
 }
 if(coverImagePath){
 const coverType=state.books[0].cover.mediaType||getMediaType(coverImagePath);
@@ -705,7 +727,8 @@ spine.push(manifestItem.id);
 continue;
 }
 const bookNumber=item.bookIndex+1;
-const newPath=resourceMap.get(`${bookNumber}:${item.sourcePath}`);
+const resourceMap=bookResourceMaps.get(item.bookIndex);
+const newPath=resourceMap?.get(item.sourcePath);
 if(!newPath){
 logStatus(`⚠ 找不到章節檔案：${item.title}`);
 continue;
