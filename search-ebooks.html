@@ -43,7 +43,7 @@ body{background:#f5f6f8}
 </div>
 <div class="d-flex flex-wrap gap-3">
 <div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="public" id="platformPublic" checked><label class="form-check-label" for="platformPublic">國資圖</label></div>
-<div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="ebookservice" id="platformEbookservice" checked><label class="form-check-label" for="platformEbookservice">電子書服務平台</label></div>
+<div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="ebookservice" id="platformEbookservice" checked><label class="form-check-label" for="platformEbookservice">雲端書庫</label></div>
 <div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="udn" id="platformUdn" checked><label class="form-check-label" for="platformUdn">UDN</label></div>
 <div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="iread" id="platformIread" checked><label class="form-check-label" for="platformIread">iRead</label></div>
 </div>
@@ -206,7 +206,7 @@ return (await Promise.all(requests)).flat();
 }
 const platformNames={
 public:"國資圖",
-ebookservice:"電子書服務平台",
+ebookservice:"雲端書庫",
 udn:"UDN",
 iread:"iRead"
 };
