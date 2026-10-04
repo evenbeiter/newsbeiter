@@ -1,0 +1,19 @@
+{
+  "name": "도서관",
+  "short_name": "도서관",
+  "start_url": "./search-ebooks.html",
+  "scope": "./",
+  "display": "standalone",
+  "icons": [
+    {
+      "src":"icons/icon-search-ebooks-192.png",
+      "sizes":"192x192",
+      "type":"image/png"
+    },
+    {
+      "src":"icons/icon-search-ebooks-512.png",
+      "sizes":"512x512",
+      "type":"image/png"
+    }
+  ]
+}
