@@ -202,9 +202,9 @@ const res=await fetch(proxyUrl);
 if(!res.ok)throw new Error(`HTTP ${res.status}`);
 const json=await res.json();
 if(!Array.isArray(json))return[];
-return json.map(({title,id})=>({
+return json.map(({title,url})=>({
 title:title,
-link:`${baseUrl}/Detail/Detail?PublicationID=${id}&DetailSourceType=2`,
+link:url,
 library:name,
 platform:"iread"
 }));
@@ -320,6 +320,8 @@ document.getElementById("searchInput").addEventListener("keydown",event=>{
 if(event.key==="Enter")searchAll();
 });
 showStatus("輸入書名後按「搜尋」。","light");
+document.querySelectorAll(".library-check").forEach(input=>input.checked=true);
+updateLibraryCount();
 </script>
 </body>
 </html>
