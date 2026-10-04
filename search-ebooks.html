@@ -8,16 +8,16 @@
 <style>
 body{background:#f5f6f8}
 .search-card{border:0;border-radius:14px}
-.result-card{border:0;border-radius:12px;margin-bottom:12px;transition:box-shadow .15s ease}
+.result-card{border:0;border-radius:12px;margin-bottom:12px}
 .result-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
 .library-group{max-height:500px;overflow-y:auto}
 .library-item{padding:4px 0}
 .result-title{font-weight:600;line-height:1.5}
-.result-library{color:#6c757d;font-size:.9rem}
 .platform-section{margin-bottom:28px}
 .platform-title{font-size:1.15rem;font-weight:700;margin-bottom:12px}
 .sticky-search{position:sticky;top:0;z-index:1000;background:#f5f6f8;padding-top:12px;padding-bottom:12px}
 .form-check-label{cursor:pointer}
+.library-link{font-size:.9rem;margin-right:6px;margin-bottom:5px}
 </style>
 </head>
 <body>
@@ -42,22 +42,10 @@ body{background:#f5f6f8}
 </div>
 </div>
 <div class="d-flex flex-wrap gap-3">
-<div class="form-check">
-<input class="form-check-input platform-check" type="checkbox" value="public" id="platformPublic" checked>
-<label class="form-check-label" for="platformPublic">國資圖</label>
-</div>
-<div class="form-check">
-<input class="form-check-input platform-check" type="checkbox" value="ebookservice" id="platformEbookservice" checked>
-<label class="form-check-label" for="platformEbookservice">電子書服務平台</label>
-</div>
-<div class="form-check">
-<input class="form-check-input platform-check" type="checkbox" value="udn" id="platformUdn" checked>
-<label class="form-check-label" for="platformUdn">UDN</label>
-</div>
-<div class="form-check">
-<input class="form-check-input platform-check" type="checkbox" value="iread" id="platformIread" checked>
-<label class="form-check-label" for="platformIread">iRead</label>
-</div>
+<div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="public" id="platformPublic" checked><label class="form-check-label" for="platformPublic">國資圖</label></div>
+<div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="ebookservice" id="platformEbookservice" checked><label class="form-check-label" for="platformEbookservice">電子書服務平台</label></div>
+<div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="udn" id="platformUdn" checked><label class="form-check-label" for="platformUdn">UDN</label></div>
+<div class="form-check"><input class="form-check-input platform-check" type="checkbox" value="iread" id="platformIread" checked><label class="form-check-label" for="platformIread">iRead</label></div>
 </div>
 </div>
 </div>
@@ -89,98 +77,29 @@ body{background:#f5f6f8}
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-/* ============================================================
-   Render Proxy 設定
-   之後只需要把這個網址換成你的 Render App
-============================================================ */
 const RENDER_PROXY_BASE_URL="https://newsbeiter.onrender.com";
-/* ============================================================
-   國資圖 Vercel Proxy
-============================================================ */
 const PUBLIC_PROXY_BASE_URL="https://public-info-vercel-proxy-b8zlo0jpg-eddies-projects-5657f937.vercel.app";
-/* ============================================================
-   ebookservice 圖書館代碼
-============================================================ */
 const ebookserviceLibCodeMap={
-"嘉義市":"cy",
-"金門縣":"km",
-"屏東縣":"pt",
-"苗栗縣":"ml",
-"雲林縣":"ylc",
-"遠流出版公司雲端書庫":"Z00001",
-"臺北市":"tpe",
-"教育雲電子書":"oidc",
-"新竹縣":"hcc",
-"宜蘭縣":"il",
-"南投縣":"ntc",
-"國臺圖":"ntl2",
-"臺東縣":"tt",
-"臺中市":"tc",
-"花蓮縣":"hl",
-"彰化縣":"chc",
-"新竹市":"hc",
-"高雄市":"ks",
-"新北市":"nt",
-"桃園市":"ty",
-"澎湖縣":"ph",
-"臺南市":"tn",
-"基隆市":"kl",
-"嘉義縣":"cyc"
+"嘉義市":"cy","金門縣":"km","屏東縣":"pt","苗栗縣":"ml","雲林縣":"ylc","遠流出版公司雲端書庫":"Z00001","臺北市":"tpe","教育雲電子書":"oidc","新竹縣":"hcc","宜蘭縣":"il","南投縣":"ntc","國臺圖":"ntl2","臺東縣":"tt","臺中市":"tc","花蓮縣":"hl","彰化縣":"chc","新竹市":"hc","高雄市":"ks","新北市":"nt","桃園市":"ty","澎湖縣":"ph","臺南市":"tn","基隆市":"kl","嘉義縣":"cyc"
 };
-/* ============================================================
-   UDN 圖書館代碼
-============================================================ */
 const udnLibCodeMap={
-"嘉義市政府文化局":"cabcy",
-"國家圖書館":"ncl",
-"國立臺灣圖書館":"cwktrial",
-"彰化雲端電子書庫":"",
-"新北市立圖書館":"tpc",
-"新竹市圖書館":"",
-"新竹縣政府文化局":"",
-"桃園市立圖書館":"tyccc",
-"澎湖縣圖書館":"phhcc",
-"臺中市立圖書館":"taich",
-"臺北市立圖書館":"tpml",
-"臺南市立圖書館":"tnml",
-"臺東縣政府文化處":"ttct",
-"花蓮縣文化局":"hlshcc",
-"苗栗市立圖書館":"",
-"苗栗縣立圖書館":"miaoli",
-"連江縣公共圖書館":"",
-"金門縣文化局":"",
-"高雄市立圖書館":"ksm",
-"基隆市文化局":"klccab"
+"嘉義市政府文化局":"cabcy","國家圖書館":"ncl","國立臺灣圖書館":"cwktrial","基隆市文化局":"klccab","彰化雲端電子書庫":"","新北市立圖書館":"tpc","新竹市圖書館":"","新竹縣政府文化局":"","桃園市立圖書館":"tyccc","澎湖縣圖書館":"phhcc","臺中市立圖書館":"taich","臺北市立圖書館":"tpml","臺南市立圖書館":"tnml","臺東縣政府文化處":"ttct","花蓮縣文化局":"hlshcc","苗栗市立圖書館":"","苗栗縣立圖書館":"miaoli","連江縣公共圖書館":"","金門縣文化局":"","高雄市立圖書館":"ksm"
 };
-/* ============================================================
-   iRead
-============================================================ */
 const ireadLibraries=[
 {name:"基隆市文化局",baseUrl:"https://klccab.airitibooks.com"},
 {name:"臺南市立圖書館",baseUrl:"https://tnml.airitibooks.com"}
 ];
-/* ============================================================
-   建立圖書館清單
-============================================================ */
 const libraryList=document.getElementById("libraryList");
-const allLibraryNames=[...Object.keys(ebookserviceLibCodeMap),...Object.keys(udnLibCodeMap)];
+const allLibraryNames=[...Object.keys(ebookserviceLibCodeMap),...Object.keys(udnLibCodeMap),...ireadLibraries.map(item=>item.name)];
 const uniqueLibraryNames=[...new Set(allLibraryNames)];
 uniqueLibraryNames.forEach(name=>{
-const hasEbookservice=!!ebookserviceLibCodeMap[name];
-const hasUdn=!!udnLibCodeMap[name];
+const hasLibrary=!!ebookserviceLibCodeMap[name]||!!udnLibCodeMap[name]||ireadLibraries.some(item=>item.name===name);
 const div=document.createElement("div");
 div.className="library-item";
-div.innerHTML=`
-<div class="form-check">
-<input class="form-check-input library-check" type="checkbox" value="${escapeHtml(name)}" id="lib-${encodeURIComponent(name)}" ${hasEbookservice||hasUdn?"checked":""}>
-<label class="form-check-label" for="lib-${encodeURIComponent(name)}">${escapeHtml(name)}</label>
-</div>`;
+div.innerHTML=`<div class="form-check"><input class="form-check-input library-check" type="checkbox" value="${escapeHtml(name)}" id="lib-${encodeURIComponent(name)}" ${hasLibrary?"checked":""}><label class="form-check-label" for="lib-${encodeURIComponent(name)}">${escapeHtml(name)}</label></div>`;
 libraryList.appendChild(div);
 });
 updateLibraryCount();
-/* ============================================================
-   工具函式
-============================================================ */
 function escapeHtml(value){
 return String(value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
@@ -193,18 +112,8 @@ return [...document.querySelectorAll(".platform-check:checked")].map(input=>inpu
 function updateLibraryCount(){
 document.getElementById("libraryCount").textContent=document.querySelectorAll(".library-check:checked").length;
 }
-/* ============================================================
-   平台全選
-============================================================ */
-document.getElementById("selectAllPlatforms").addEventListener("click",()=>{
-document.querySelectorAll(".platform-check").forEach(input=>input.checked=true);
-});
-document.getElementById("clearAllPlatforms").addEventListener("click",()=>{
-document.querySelectorAll(".platform-check").forEach(input=>input.checked=false);
-});
-/* ============================================================
-   圖書館全選
-============================================================ */
+document.getElementById("selectAllPlatforms").addEventListener("click",()=>document.querySelectorAll(".platform-check").forEach(input=>input.checked=true));
+document.getElementById("clearAllPlatforms").addEventListener("click",()=>document.querySelectorAll(".platform-check").forEach(input=>input.checked=false));
 document.getElementById("selectAllLibraries").addEventListener("click",()=>{
 document.querySelectorAll(".library-check").forEach(input=>input.checked=true);
 updateLibraryCount();
@@ -216,9 +125,6 @@ updateLibraryCount();
 document.addEventListener("change",event=>{
 if(event.target.classList.contains("library-check"))updateLibraryCount();
 });
-/* ============================================================
-   Public / 國資圖
-============================================================ */
 async function searchPublic(searchBookName){
 const url=`${PUBLIC_PROXY_BASE_URL}/api/nlpi/search?q=${encodeURIComponent(searchBookName)}`;
 const res=await fetch(url);
@@ -232,10 +138,6 @@ library:"國立公共資訊圖書館",
 platform:"public"
 }));
 }
-/* ============================================================
-   ebookservice
-   透過 Render Proxy
-============================================================ */
 async function searchEbookservice(selectedLibraries,searchBookName){
 const activeLibraries=selectedLibraries.map(name=>({name,code:ebookserviceLibCodeMap[name]})).filter(item=>!!item.code);
 const requests=activeLibraries.map(async({name,code})=>{
@@ -256,13 +158,8 @@ console.warn(`ebookservice - ${name}`,err);
 return[];
 }
 });
-const results=await Promise.all(requests);
-return results.flat();
+return (await Promise.all(requests)).flat();
 }
-/* ============================================================
-   UDN
-   透過 Render Proxy
-============================================================ */
 async function searchUdn(selectedLibraries,searchBookName){
 const activeLibraries=selectedLibraries.map(name=>({name,code:udnLibCodeMap[name]})).filter(item=>!!item.code);
 const requests=activeLibraries.map(async({name,code})=>{
@@ -283,15 +180,11 @@ console.warn(`UDN - ${name}`,err);
 return[];
 }
 });
-const results=await Promise.all(requests);
-return results.flat();
+return (await Promise.all(requests)).flat();
 }
-/* ============================================================
-   iRead
-   透過 Render Proxy
-============================================================ */
-async function searchIread(searchBookName){
-const requests=ireadLibraries.map(async({name,baseUrl})=>{
+async function searchIread(searchBookName,selectedLibraries){
+const activeLibraries=ireadLibraries.filter(item=>selectedLibraries.includes(item.name));
+const requests=activeLibraries.map(async({name,baseUrl})=>{
 try{
 const proxyUrl=`${RENDER_PROXY_BASE_URL}/api/iread/search?keyword=${encodeURIComponent(searchBookName)}&baseUrl=${encodeURIComponent(baseUrl)}`;
 const res=await fetch(proxyUrl);
@@ -309,12 +202,8 @@ console.warn(`iRead - ${name}`,err);
 return[];
 }
 });
-const results=await Promise.all(requests);
-return results.flat();
+return (await Promise.all(requests)).flat();
 }
-/* ============================================================
-   平台名稱
-============================================================ */
 const platformNames={
 public:"國資圖",
 ebookservice:"電子書服務平台",
@@ -322,9 +211,30 @@ udn:"UDN",
 iread:"iRead"
 };
 const platformOrder=["public","ebookservice","udn","iread"];
-/* ============================================================
-   搜尋全部平台
-============================================================ */
+function normalizeTitle(title){
+return String(title||"").trim().replace(/\s+/g,"").replace(/[　]/g,"").toLowerCase();
+}
+function mergeResults(results){
+const map=new Map();
+results.forEach(book=>{
+const key=`${book.platform}|||${normalizeTitle(book.title)}`;
+if(!map.has(key)){
+map.set(key,{
+platform:book.platform,
+title:book.title,
+libraries:[]
+});
+}
+const group=map.get(key);
+if(!group.libraries.some(item=>item.name===book.library)){
+group.libraries.push({
+name:book.library,
+link:book.link
+});
+}
+});
+return [...map.values()];
+}
 async function searchAll(){
 const searchBookName=document.getElementById("searchInput").value.trim();
 if(!searchBookName){
@@ -338,8 +248,7 @@ showStatus("請至少選擇一個搜尋平台。","warning");
 return;
 }
 const selectedLibraries=getSelectedLibraries();
-const resultsArea=document.getElementById("resultsArea");
-resultsArea.innerHTML="";
+document.getElementById("resultsArea").innerHTML="";
 showStatus(`<div class="d-flex align-items-center gap-2"><div class="spinner-border spinner-border-sm" role="status"></div><span>正在搜尋「${escapeHtml(searchBookName)}」...</span></div>`,"info");
 const tasks=[];
 if(platforms.includes("public")){
@@ -351,33 +260,24 @@ tasks.push(searchEbookservice(selectedLibraries,searchBookName).then(results=>({
 if(platforms.includes("udn")&&selectedLibraries.length>0){
 tasks.push(searchUdn(selectedLibraries,searchBookName).then(results=>({platform:"udn",results})).catch(error=>({platform:"udn",results:[],error})));
 }
-if(platforms.includes("iread")){
-tasks.push(searchIread(searchBookName).then(results=>({platform:"iread",results})).catch(error=>({platform:"iread",results:[],error})));
+if(platforms.includes("iread")&&selectedLibraries.length>0){
+tasks.push(searchIread(searchBookName,selectedLibraries).then(results=>({platform:"iread",results})).catch(error=>({platform:"iread",results:[],error})));
 }
 const responses=await Promise.all(tasks);
 const allResults=responses.flatMap(item=>item.results);
-renderResults(allResults,searchBookName);
+const mergedResults=mergeResults(allResults);
+renderResults(mergedResults,searchBookName);
 const errors=responses.filter(item=>item.error);
 if(errors.length>0){
-showStatus(`搜尋完成，共找到 <strong>${allResults.length}</strong> 筆結果。部分平台可能因 Proxy、CORS 或 API 暫時無法連線。`,"warning");
+showStatus(`搜尋完成，共找到 <strong>${mergedResults.length}</strong> 筆不同書名。部分平台可能因 Proxy、CORS 或 API 暫時無法連線。`,"warning");
 }else{
-showStatus(`搜尋完成：<strong>${allResults.length}</strong> 筆結果`,"success");
+showStatus(`搜尋完成：<strong>${mergedResults.length}</strong> 筆不同書名`,"success");
 }
 }
-/* ============================================================
-   顯示搜尋結果
-============================================================ */
 function renderResults(results,searchBookName){
 const resultsArea=document.getElementById("resultsArea");
 if(!results.length){
-resultsArea.innerHTML=`
-<div class="card border-0 shadow-sm">
-<div class="card-body text-center py-5 text-muted">
-<div class="fs-1 mb-3">📚</div>
-<h5>找不到「${escapeHtml(searchBookName)}」</h5>
-<p class="mb-0">可以嘗試其他關鍵字、書名或取消部分圖書館篩選。</p>
-</div>
-</div>`;
+resultsArea.innerHTML=`<div class="card border-0 shadow-sm"><div class="card-body text-center py-5 text-muted"><div class="fs-1 mb-3">📚</div><h5>找不到「${escapeHtml(searchBookName)}」</h5><p class="mb-0">可以嘗試其他關鍵字、書名或取消部分圖書館篩選。</p></div></div>`;
 return;
 }
 const grouped={};
@@ -389,48 +289,25 @@ let html="";
 platformOrder.forEach(platform=>{
 const platformResults=grouped[platform]||[];
 if(!platformResults.length)return;
-html+=`
-<div class="platform-section">
-<div class="d-flex justify-content-between align-items-center">
-<div class="platform-title">${platformNames[platform]}</div>
-<span class="badge text-bg-light">${platformResults.length} 筆</span>
-</div>`;
+html+=`<div class="platform-section"><div class="d-flex justify-content-between align-items-center"><div class="platform-title">${platformNames[platform]}</div><span class="badge text-bg-light">${platformResults.length} 本</span></div>`;
 platformResults.forEach(book=>{
-html+=`
-<div class="card result-card shadow-sm">
-<div class="card-body">
-<div class="row align-items-center g-3">
-<div class="col">
-<div class="result-title mb-1">${escapeHtml(book.title||"未命名")}</div>
-<div class="result-library">${escapeHtml(book.library||"")}</div>
-</div>
-<div class="col-auto">
-<a href="${escapeHtml(book.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary">查看</a>
-</div>
-</div>
-</div>
-</div>`;
+html+=`<div class="card result-card shadow-sm"><div class="card-body"><div class="result-title mb-2">${escapeHtml(book.title||"未命名")}</div><div class="small text-muted mb-2">可借閱圖書館：</div><div>`;
+book.libraries.forEach(library=>{
+html+=`<a href="${escapeHtml(library.link)}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary library-link">${escapeHtml(library.name)}</a>`;
+});
+html+=`</div></div></div>`;
 });
 html+=`</div>`;
 });
 resultsArea.innerHTML=html;
 }
-/* ============================================================
-   狀態訊息
-============================================================ */
 function showStatus(message,type="info"){
 document.getElementById("statusArea").innerHTML=`<div class="alert alert-${type} mb-0">${message}</div>`;
 }
-/* ============================================================
-   搜尋按鈕
-============================================================ */
 document.getElementById("searchButton").addEventListener("click",searchAll);
 document.getElementById("searchInput").addEventListener("keydown",event=>{
 if(event.key==="Enter")searchAll();
 });
-/* ============================================================
-   初始化
-============================================================ */
 showStatus("輸入書名後按「搜尋」。","light");
 </script>
 </body>
