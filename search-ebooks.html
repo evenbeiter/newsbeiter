@@ -65,7 +65,7 @@ body{background:#f5f6f8}
 <button id="selectAllLibraries" class="btn btn-sm btn-outline-primary" type="button">全選</button>
 <button id="clearAllLibraries" class="btn btn-sm btn-outline-secondary" type="button">全不選</button>
 </div>
-<div id="libraryList" class="library-group"></div>
+<div id="libraryList" class="library-group d-none"></div>
 </div>
 </div>
 </div>
@@ -87,6 +87,17 @@ const udnLibCodeMap={
 };
 const ireadLibraries=[
 {name:"基隆市文化局",baseUrl:"https://klccab.airitibooks.com"},
+{name:"國立臺灣圖書館",baseUrl:"https://ntl.airitibooks.com"},
+{name:"國家圖書館",baseUrl:"https://ncl.airitibooks.com"},
+{name:"桃園市立圖書館",baseUrl:"https://typl.airitibooks.com"},
+{name:"新竹縣公共圖書館",baseUrl:"https://hchcc.airitibooks.com"},
+{name:"新竹市圖書館",baseUrl:"https://hcccb.airitibooks.com"},
+{name:"苗栗縣公共圖書館",baseUrl:"https://libml.airitibooks.com"},
+{name:"臺中市立圖書館",baseUrl:"https://libtc.airitibooks.com"},
+{name:"雲林縣政府文化處圖書館",baseUrl:"https://ylccb.airitibooks.com"},
+{name:"花蓮縣公共圖書館",baseUrl:"https://hccc.airitibooks.com"},
+{name:"臺東縣政府文化處圖書館",baseUrl:"https://cclttct.airitibooks.com"},
+{name:"屏東縣公共圖書館",baseUrl:"https://culturalpthg.airitibooks.com"},
 {name:"臺南市立圖書館",baseUrl:"https://tnml.airitibooks.com"}
 ];
 const libraryList=document.getElementById("libraryList");
