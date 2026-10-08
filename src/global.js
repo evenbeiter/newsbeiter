@@ -85,7 +85,7 @@ function getFAQSearchResults(siteName,top,t){
 
 async function getList(siteName,t){
   loading.style.display='block';
-  siteNameVar=siteName;rr++;rt=t;cursor='';
+  siteNameVar=siteName;rr++;rt=t;//cursor='';
   if (rr==1){newNews()};
   items=[];html='';
   // if (msnALL.includes(siteName)){list.innerHTML+=await msnGetList(siteName,t)}
@@ -225,7 +225,7 @@ async function getContent(siteName,clickedId,id){
 
 async function getSearchResults(siteName){
   loading.style.display='block';
-  siteNameVar=siteName;rr++;rt='s';cursor='';
+  siteNameVar=siteName;rr++;rt='s';//cursor='';
   if (rr==1){newNews()};
   items=[];html='';
   list.innerHTML+=await window[`${siteName}GetSearchResults`](siteName,document.getElementById('search-term').value);
