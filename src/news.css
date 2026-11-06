@@ -51,24 +51,24 @@ img{display:block !important;margin:auto;width:100%;height:auto;border-radius:0.
 .bbc-2fjy3x{position:relative;height:0;width:5rem;height:5rem;} .bbc-1rvtlej{list-style:none;padding:0;margin:0;}
 #article-side-rail,.bbc-geybui,.bbc-1151pbn.ebmt73l0,button.transcript-title,.caas-attr,.caas-da,.caas-header,.caas-readmore,.coffee-btn-wrapper,div.body-tabs-data,.div-gpt-ad-cnyes_news_article_middle_2,div[data-componentname="Standard Banner"],div[data-componentname="Navigation List"],div[data-componentname="Image Cta"],div[data-componentname="Related Materials"],.edn-ads--inlineAds,form.subscription-widget-subscribe,.gmailNews,.googlenews_Content,.Google-special,.Google-special.d-md-block,.googlenews_Content,h2 svg, img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.wrapper-TJ9ObuLF.skeleton-PsAlMQQF,img.logo-ocURKVwI.xxxsmall-ocURKVwI.skeleton-ocURKVwI.wrapper-TJ9ObuLF,img.logo-PsAlMQQF.xxxsmall-PsAlMQQF.letter-PsAlMQQF,img[src*="face/emoji"],.inline-ads,.inline-ads.inline-ads--desktop,.js-advertise.ad-content,.mw-editsection,.pg.red,.raise_block,div[data-e2e^="youtube-embed"],.reflist,.reflist.columns.references-column-width,section[data-e2e="recommendations-heading"],.social-media-share-container,.SubscriptionInner.mySubscriptionInner,.tooltip-wrap.toggle_button_click,.udn-ads,.user-controls-container.print-no,#bmc-tn-modal,#inside_AD,#pumpkin_159,#references-NoteFoot,#sda-moments-iframe,#sf_div-gpt-ad-1599104924568-0-1{display:none}
 
-/* old sepia
-@media screen and (-webkit-min-device-pixel-ratio: 2) {
-  body{margin:0;background-color:#F4ECD8;color:#3B2D20;font-size:1.5rem;font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;}
-  #container{min-height:100vh;max-width:100%;margin:auto;background-color:#F4ECD8}
-  .sepia{background-color:#F4ECD8;color:#3B2D20}
-  .sepia-contrast{background-color:#3B2D20;color:#F4ECD8}
-  h1,h2,h3,h4,h5,h6,.title{font-size:1.5rem;color:#3B2D20 !important;font-weight:bold}
+/* old for ios */
+/* @media screen and (-webkit-min-device-pixel-ratio: 2) {
+  body{margin:0;background-color:#FFF1E5;color:#33302E;font-size:1.5rem;font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;}
+  #container{min-height:100vh;max-width:100%;margin:auto;background-color:#FFF1E5}
+  .sepia{background-color:#FFF1E5 !important;color:#33302E !important;--bs-table-bg:#FFF1E5 !important;--bs-table-color:#33302E !important;}
+  .sepia-contrast{background-color:#33302E !important;color:#FFF1E5 !important}
+  h1,h2,h3,h4,h5,h6,.title{font-size:1.5rem;color:#33302E !important;font-weight:bold}
   #list, .btn {font-weight:normal}
   #loading{width:3rem;height:3rem}
   .en-us,.fs12{font-size:1.3rem}
 } */
 
 @media screen and (-webkit-min-device-pixel-ratio: 2) {
-  body{margin:0;background-color:#FFF1E5;color:#33302E;font-size:1.5rem;font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;}
-  #container{min-height:100vh;max-width:100%;margin:auto;background-color:#FFF1E5}
-  .sepia{background-color:#FFF1E5 !important;color:#33302E !important;--bs-table-bg:#FFF1E5 !important;--bs-table-color:#33302E !important;}
-  .sepia-contrast{background-color:#33302E !important;color:#FFF1E5 !important}
-  h1,h2,h3,h4,h5,h6,.title{font-size:1.5rem;color:#33302E !important;font-weight:bold}
+  body{margin:0;background-color:#313338;color:#e2e2e2;font-size:1.5rem;font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;}
+  #container{min-height:100vh;max-width:100%;margin:auto;background-color:#313338}
+  .sepia{background-color:#313338 !important;color:#e2e2e2 !important;--bs-table-bg:#313338 !important;--bs-table-color:#e2e2e2 !important;}
+  .sepia-contrast{background-color:#e2e2e2 !important;color:#313338 !important}
+  h1,h2,h3,h4,h5,h6,.title{font-size:1.5rem;color:#e2e2e2 !important;font-weight:bold}
   #list, .btn {font-weight:normal}
   #loading{width:3rem;height:3rem}
   .en-us,.fs12{font-size:1.3rem}
