@@ -1680,7 +1680,7 @@ async function yahooTWGetList(siteName,t){
         "resource": "ApacStreamService",
         "operation": "read",
         "params": {
-          "category": "LISTID"+t,
+          "category": "LISTID:"+t,
           "forceJpg": true,
           "releasesParams": {
             "limit": 50,
