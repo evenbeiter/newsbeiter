@@ -1707,7 +1707,7 @@ async function yahooTWGetList(siteName,t){
     },
     "context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}
   };
-    var url='https://tw.stock.yahoo.com/_td-news/api/resource';
+    var url='https://tw.news.yahoo.com/_td-news/api/resource';
     var res = await fetch(preStr+encodeURIComponent(url), {
       method: 'POST',
       headers: {'Content-Type': 'application/json',},
