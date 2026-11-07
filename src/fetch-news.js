@@ -1684,7 +1684,7 @@ async function yahooTWGetList(siteName,t){
           "forceJpg": true,
           "releasesParams": {
             "limit": 50,
-            "offset": 0
+            "offset": (rr-1)*50
           },
           "ncpParams": {
             "query": {
