@@ -1704,6 +1704,49 @@ async function wscnGetSearchResults(siteName,t){
 //   return html;
 // }
 
+
+// var payload={
+//   "requests": {
+//     "g0": {
+//       "resource": "ApacStreamService",
+//       "operation": "read",
+//       "params": {
+//         "category": "LISTID:f10835b8-98fe-48b4-a506-023937ab0a4b",
+//         "forceJpg": true,
+//         "releasesParams": {
+//           "limit": 50,
+//           "offset": 0
+//         },
+//         "ncpParams": {
+//           "query": {
+//             "adsSlotsEnabled": false,
+//             "id": "editorial-list",
+//             "namespace": "abu"
+//           }
+//         },
+//         "useNCP": true,
+//         "useCG": true,
+//         "useCGV2": true,
+//         "batches": {
+//           "pagination": true,
+//           "size": 50,
+//           "timeout": 1300,
+//           "total": 200
+//         }
+//       }
+//     }
+//   },
+//   "context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}
+// };
+//   var url='https://tw.stock.yahoo.com/_td-news/api/resource';
+//   var res = await fetch(preStr+encodeURIComponent(url), {
+//     method: 'POST',
+//     headers: {'Content-Type': 'application/json',},
+//     body: JSON.stringify(payload),
+//     });
+//   var str=await res.json();
+//   var data=str.g0.data.stream_items;
+
 async function yahooTWGetList(siteName,t){
   try{coun='.atoms';
   if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='.body-wrap'};
