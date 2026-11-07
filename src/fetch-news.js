@@ -1670,104 +1670,57 @@ async function wscnGetSearchResults(siteName,t){
 //    YAHOO TW
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// async function yahooTWGetList(siteName,t){
-//   try{coun='.atoms';
-//   if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='.body-wrap'};
-//   var payload={"requests":{"g0":{"resource":"StreamService","operation":"read","params":{"ui":{"ntk_bypassA3c":true,"pubtime_maxage":0},"category":"LISTID:"+t,"forceJpg":true,"releasesParams":{"limit":20,"offset":0},"useNCP":true,"batches":{"pagination":true,"size":200,"timeout":1300,"total":200}}}},"context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}};
-//   var url='https://tw.news.yahoo.com/_td-news/api/resource';
-//   var res = await fetch(preStr+encodeURIComponent(url), {
-//     method: 'POST',
-//     headers: {'Content-Type': 'application/json',},
-//     body: JSON.stringify(payload),
-//     });
-//   var str=await res.json();
-//   var data=str.g0.data.stream_items.slice((rr-1)*50,rr*50);
-      
-//   if (t!=='00390a14-17cc-49d2-9e32-79365335f0ca'){
-//     for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.url])};
-//     if(coun=='.atoms'){
-//       for (let h of items){
-//         html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}</p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
-//       }
-//     } else {
-//       for (let h of items){
-//         html+=`<div onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="title t-tl pb-0">${h[1]}</p><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"></div><hr>`
-//       }
-//     }
-//   } else {
-//     for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.images.original.url,h.url])};
-//     for (let h of items){
-//       html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10">${h[3]}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"></div><hr>`
-//     }
-//   }
-//   }catch{html='<p>尚無內容</p>'}
-//   return html;
-// }
-
-
-// var payload={
-//   "requests": {
-//     "g0": {
-//       "resource": "ApacStreamService",
-//       "operation": "read",
-//       "params": {
-//         "category": "LISTID:f10835b8-98fe-48b4-a506-023937ab0a4b",
-//         "forceJpg": true,
-//         "releasesParams": {
-//           "limit": 50,
-//           "offset": 0
-//         },
-//         "ncpParams": {
-//           "query": {
-//             "adsSlotsEnabled": false,
-//             "id": "editorial-list",
-//             "namespace": "abu"
-//           }
-//         },
-//         "useNCP": true,
-//         "useCG": true,
-//         "useCGV2": true,
-//         "batches": {
-//           "pagination": true,
-//           "size": 50,
-//           "timeout": 1300,
-//           "total": 200
-//         }
-//       }
-//     }
-//   },
-//   "context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}
-// };
-//   var url='https://tw.stock.yahoo.com/_td-news/api/resource';
-//   var res = await fetch(preStr+encodeURIComponent(url), {
-//     method: 'POST',
-//     headers: {'Content-Type': 'application/json',},
-//     body: JSON.stringify(payload),
-//     });
-//   var str=await res.json();
-//   var data=str.g0.data.stream_items;
-
 async function yahooTWGetList(siteName,t){
   try{coun='.atoms';
   if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='.body-wrap'};
-  var payload={"requests":{"g0":{"resource":"StreamService","operation":"read","params":{"ui":{"ntk_bypassA3c":true,"pubtime_maxage":0},"category":"LISTID:"+t,"forceJpg":true,"releasesParams":{"limit":20,"offset":0},"useNCP":true,"batches":{"pagination":true,"size":200,"timeout":1300,"total":200}}}},"context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}};
+
   var payload={
-    "extensions":{"persistedQuery":{"sha256Hash":"abu_EditorialList_v2.6","version":1}},
-    "variables":{"device":"desktop","lang":"zh-Hant-TW","listAlias":"","listId":t,"listIdStr":t,"region":"TW","site":"news","thumbnailImageTransformEnabled":true,"thumbnailImageTransform":[{"formatType":"WEBP","operationOrder":["smart_crop","format"],"quality":80,"transformLabel":"498x280","smartCropGravity":"faces","smartCropH":280,"smartCropW":498},{"formatType":"WEBP","operationOrder":["smart_crop","format"],"quality":80,"transformLabel":"184x184","smartCropGravity":"faces","smartCropH":184,"smartCropW":184}],"count":30,"start":(rr-1)*30}};
-  var url='https://nexus-gateway-prod.media.yahoo.com/';
-  var res = await fetch(preStr+encodeURIComponent(url), {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json',},
-    body: JSON.stringify(payload),
-    });
-  var str=await res.json();
-  var data=str.data.lightyearList.contentItems.assets;
+    "requests": {
+      "g0": {
+        "resource": "ApacStreamService",
+        "operation": "read",
+        "params": {
+          "category": "LISTID"+t,
+          "forceJpg": true,
+          "releasesParams": {
+            "limit": 50,
+            "offset": 0
+          },
+          "ncpParams": {
+            "query": {
+              "adsSlotsEnabled": false,
+              "id": "editorial-list",
+              "namespace": "abu"
+            }
+          },
+          "useNCP": true,
+          "useCG": true,
+          "useCGV2": true,
+          "batches": {
+            "pagination": true,
+            "size": 50,
+            "timeout": 1300,
+            "total": 200
+          }
+        }
+      }
+    },
+    "context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}
+  };
+    var url='https://tw.stock.yahoo.com/_td-news/api/resource';
+    var res = await fetch(preStr+encodeURIComponent(url), {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json',},
+      body: JSON.stringify(payload),
+      });
+    var str=await res.json();
+    var data=str.g0.data.stream_items;
       
   if (t!=='00390a14-17cc-49d2-9e32-79365335f0ca'){
-    for (let h of data.asset.contentAttributes){items.push([h.uuid,h.title,h.publishTime,h.authors[0].displayName,h.canonicalUrl])};
+    for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.url])};
     if(coun=='.atoms'){
       for (let h of items){
-        html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}</p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="time">${h[2]} | ${h[3]}</p></div><hr>`
+        html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}</p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><hr>`
       }
     } else {
       for (let h of items){
@@ -1775,7 +1728,7 @@ async function yahooTWGetList(siteName,t){
       }
     }
   } else {
-    for (let h of data.asset.contentAttributes){items.push([h.uuid,h.title,h.publishTime,h.authors[0].displayName,h.images.original.url,h.canonicalUrl])};
+    for (let h of data){items.push([h.id,h.title,h.pubtime,h.publisher,h.images.original.url,h.url])};
     for (let h of items){
       html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10">${h[3]}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"></div><hr>`
     }
@@ -1783,6 +1736,59 @@ async function yahooTWGetList(siteName,t){
   }catch{html='<p>尚無內容</p>'}
   return html;
 }
+
+
+
+
+
+
+  // var payload={"requests":{"g0":{"resource":"StreamService","operation":"read","params":{"ui":{"ntk_bypassA3c":true,"pubtime_maxage":0},"category":"LISTID:"+t,"forceJpg":true,"releasesParams":{"limit":20,"offset":0},"useNCP":true,"batches":{"pagination":true,"size":200,"timeout":1300,"total":200}}}},"context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}};
+  // var url='https://tw.news.yahoo.com/_td-news/api/resource';
+  // var res = await fetch(preStr+encodeURIComponent(url), {
+  //   method: 'POST',
+  //   headers: {'Content-Type': 'application/json',},
+  //   body: JSON.stringify(payload),
+  //   });
+  // var str=await res.json();
+  // var data=str.g0.data.stream_items.slice((rr-1)*50,rr*50);
+
+
+// async function yahooTWGetList(siteName,t){
+//   try{coun='.atoms';
+//   if (t.slice(-2)=='__'){t=t.slice(0,-2);coun='.body-wrap'};
+//   var payload={"requests":{"g0":{"resource":"StreamService","operation":"read","params":{"ui":{"ntk_bypassA3c":true,"pubtime_maxage":0},"category":"LISTID:"+t,"forceJpg":true,"releasesParams":{"limit":20,"offset":0},"useNCP":true,"batches":{"pagination":true,"size":200,"timeout":1300,"total":200}}}},"context":{"bkt":"t2-pc-twnews-article-r2","crumb":"/U2xgjMOLVZ","intl":"tw","lang":"zh-Hant-TW","prid":"0hburkpk6bmaf","region":"TW","site":"news","tz":"Asia/Taiwan"}};
+//   var payload={
+//     "extensions":{"persistedQuery":{"sha256Hash":"abu_EditorialList_v2.6","version":1}},
+//     "variables":{"device":"desktop","lang":"zh-Hant-TW","listAlias":"","listId":t,"listIdStr":t,"region":"TW","site":"news","thumbnailImageTransformEnabled":true,"thumbnailImageTransform":[{"formatType":"WEBP","operationOrder":["smart_crop","format"],"quality":80,"transformLabel":"498x280","smartCropGravity":"faces","smartCropH":280,"smartCropW":498},{"formatType":"WEBP","operationOrder":["smart_crop","format"],"quality":80,"transformLabel":"184x184","smartCropGravity":"faces","smartCropH":184,"smartCropW":184}],"count":30,"start":(rr-1)*30}};
+//   var url='https://nexus-gateway-prod.media.yahoo.com/';
+//   var res = await fetch(preStr+encodeURIComponent(url), {
+//     method: 'POST',
+//     headers: {'Content-Type': 'application/json',},
+//     body: JSON.stringify(payload),
+//     });
+//   var str=await res.json();
+//   var data=str.data.lightyearList.contentItems.assets;
+      
+//   if (t!=='00390a14-17cc-49d2-9e32-79365335f0ca'){
+//     for (let h of data.asset.contentAttributes){items.push([h.uuid,h.title,h.publishTime,h.authors[0].displayName,h.canonicalUrl])};
+//     if(coun=='.atoms'){
+//       for (let h of items){
+//         html+=`<p class="title t-tl" onclick="getContent('${siteName}',this.id,'${h[4]}')">${h[1]}</p><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="time">${h[2]} | ${h[3]}</p></div><hr>`
+//       }
+//     } else {
+//       for (let h of items){
+//         html+=`<div onclick="getContent('${siteName}',this.id,'${h[4]}')"><p class="title t-tl pb-0">${h[1]}</p><p class="time">${cvt2Timezone(h[2])} | ${h[3]}</p></div><div id="${h[4]}" class="content" onclick="getContent('${siteName}',this.id,'${h[4]}')"></div><hr>`
+//       }
+//     }
+//   } else {
+//     for (let h of data.asset.contentAttributes){items.push([h.uuid,h.title,h.publishTime,h.authors[0].displayName,h.images.original.url,h.canonicalUrl])};
+//     for (let h of items){
+//       html+=`<div onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"><img src="${h[4]}" class="pb-2"><span class="title">${h[1]}</span><br><span class="fs10">${cvt2Timezone(h[2])} | </span><span class="fs10">${h[3]}</span></div><div id="${h[0]}" class="content" onclick="videoGetContent(this.id,'${h[0]}','${h[5]}','https://video.media.yql.yahoo.com/v1/video/sapi/hlsstreams/${h[0]}.m3u8')"></div><hr>`
+//     }
+//   }
+//   }catch{html='<p>尚無內容</p>'}
+//   return html;
+// }
 
 async function yahooTWGetContent(id){
     try{
