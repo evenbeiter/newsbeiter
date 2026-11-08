@@ -567,7 +567,8 @@ async function eastMoneyGetList(siteName,t){
   const bt=`${(current.getFullYear()-2).toString()}${et.slice(-6)}`;
   while (attempts<maxRetries){
     try {
-      const res=await fetch(`https://reportapi.eastmoney.com/report/jg?pageSize=30&beginTime=${bt}&endTime=${et}&pageNo=${rr}&qType=${t}`);
+      const url=`https://reportapi.eastmoney.com/report/jg?pageSize=30&beginTime=${bt}&endTime=${et}&pageNo=${rr}&qType=${t}`;
+      const res=await fetch(preStr+encodeURIComponent(url));
       if (res.status===200) {
           const raw=await res.text();
           str=JSON.parse(raw).data;
